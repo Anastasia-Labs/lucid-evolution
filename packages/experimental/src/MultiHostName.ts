@@ -1,6 +1,7 @@
-import { Schema, Data, FastCheck } from "effect";
+import { Schema, Data, FastCheck, Effect, ParseResult } from "effect";
 import * as DnsName from "./DnsName.js";
 import * as CBOR from "./CBOR.js";
+import * as Bytes from "./Bytes.js";
 
 /**
  * Error class for MultiHostName related operations.
@@ -17,7 +18,7 @@ import * as CBOR from "./CBOR.js";
  */
 export class MultiHostNameError extends Data.TaggedError("MultiHostNameError")<{
   message?: string;
-  reason?: "InvalidStructure" | "InvalidDnsName";
+  cause?: unknown;
 }> {}
 
 /**
@@ -28,8 +29,7 @@ export class MultiHostNameError extends Data.TaggedError("MultiHostNameError")<{
  * import { MultiHostName, DnsName } from "@lucid-evolution/experimental";
  *
  * const hostName = new MultiHostName({
- *   tag: 2,
- *   dnsName: new DnsName.DnsName({ name: "pool.example.com" })
+ *   dnsName: DnsName.make("pool.example.com")
  * });
  *
  * @since 2.0.0
@@ -38,71 +38,103 @@ export class MultiHostNameError extends Data.TaggedError("MultiHostNameError")<{
 export class MultiHostName extends Schema.TaggedClass<MultiHostName>()(
   "MultiHostName",
   {
-    tag: Schema.Literal(2),
     dnsName: DnsName.DnsName,
   },
-) {}
+) {
+  [Symbol.for("nodejs.util.inspect.custom")]() {
+    return {
+      _tag: "MultiHostName",
+      dnsName: this.dnsName,
+    };
+  }
+}
 
 /**
- * Schema for transforming between CBOR bytes and MultiHostName.
+ * CDDL schema for MultiHostName.
  * multi_host_name = (2, dns_name)
  *
  * @since 2.0.0
- * @category encoding/decoding
+ * @category schemas
  */
-export const CBORBytesSchema = undefined;
+export const MultiHostNameCDDLSchema = Schema.transformOrFail(
+  Schema.Tuple(
+    Schema.Literal(2n), // tag (literal 2)
+    Schema.String, // dns_name (string)
+  ),
+  Schema.typeSchema(MultiHostName),
+  {
+    strict: true,
+    encode: (toA) =>
+      Effect.gen(function* () {
+        const dnsName = yield* ParseResult.encode(DnsName.DnsName)(toA.dnsName);
+        return yield* Effect.succeed([2n, dnsName] as const);
+      }),
+    decode: ([, dnsNameValue]) =>
+      Effect.gen(function* () {
+        const dnsName = yield* ParseResult.decode(DnsName.DnsName)(
+          dnsNameValue,
+        );
+        return yield* Effect.succeed(new MultiHostName({ dnsName }));
+      }),
+  },
+);
 
 /**
- * Schema for transforming between CBOR hex and MultiHostName.
+ * CBOR bytes transformation schema for MultiHostName.
  *
  * @since 2.0.0
- * @category encoding/decoding
+ * @category schemas
  */
-export const CBORHexSchema = undefined;
+export const CBORBytesSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    MultiHostNameCDDLSchema, // CBOR → MultiHostName
+  );
 
 /**
- * Synchronous encoding utilities.
+ * CBOR hex transformation schema for MultiHostName.
  *
  * @since 2.0.0
- * @category encoding/decoding
+ * @category schemas
  */
-export const Encode = {
-  bytes: Schema.encodeSync(CBORBytesSchema),
-  hex: Schema.encodeSync(CBORHexSchema),
-};
+export const CBORHexSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    Bytes.BytesSchema, // string → Uint8Array
+    CBORBytesSchema(options), // Uint8Array → MultiHostName
+  );
 
 /**
- * Synchronous decoding utilities.
+ * Create a MultiHostName instance.
+ *
+ * @example
+ * import { MultiHostName, DnsName } from "@lucid-evolution/experimental";
+ *
+ * const hostName = MultiHostName.make(DnsName.make("pool.example.com"));
  *
  * @since 2.0.0
- * @category encoding/decoding
+ * @category constructors
  */
-export const Decode = {
-  bytes: Schema.decodeUnknownSync(CBORBytesSchema),
-  hex: Schema.decodeUnknownSync(CBORHexSchema),
-};
+export const make = (dnsName: DnsName.DnsName): MultiHostName =>
+  new MultiHostName({ dnsName });
 
 /**
- * Either encoding utilities.
+ * Get the DNS name from a MultiHostName.
+ *
+ * @example
+ * import { MultiHostName } from "@lucid-evolution/experimental";
+ *
+ * const dnsName = MultiHostName.getDnsName(hostName);
+ * console.log(dnsName); // "pool.example.com"
  *
  * @since 2.0.0
- * @category encoding/decoding
+ * @category transformation
  */
-export const EncodeEither = {
-  bytes: Schema.encodeEither(CBORBytesSchema),
-  hex: Schema.encodeEither(CBORHexSchema),
-};
-
-/**
- * Either decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  bytes: Schema.decodeUnknownEither(CBORBytesSchema),
-  hex: Schema.decodeUnknownEither(CBORHexSchema),
-};
+export const getDnsName = (hostName: MultiHostName): DnsName.DnsName =>
+  hostName.dnsName;
 
 /**
  * Check if two MultiHostName instances are equal.
@@ -110,15 +142,15 @@ export const DecodeEither = {
  * @example
  * import { MultiHostName, DnsName } from "@lucid-evolution/experimental";
  *
- * const hostName1 = new MultiHostName({ tag: 2, dnsName: new DnsName.DnsName({ name: "pool.example.com" }) });
- * const hostName2 = new MultiHostName({ tag: 2, dnsName: new DnsName.DnsName({ name: "pool.example.com" }) });
+ * const hostName1 = new MultiHostName({ dnsName: DnsName.make("pool.example.com") });
+ * const hostName2 = new MultiHostName({ dnsName: DnsName.make("pool.example.com") });
  * const isEqual = equals(hostName1, hostName2); // true
  *
  * @since 2.0.0
  * @category equality
  */
 export const equals = (self: MultiHostName, that: MultiHostName): boolean =>
-  self.tag === that.tag && DnsName.equals(self.dnsName, that.dnsName);
+  DnsName.equals(self.dnsName, that.dnsName);
 
 /**
  * FastCheck generator for MultiHostName instances.
@@ -127,6 +159,32 @@ export const equals = (self: MultiHostName, that: MultiHostName): boolean =>
  * @category generators
  */
 export const generator = FastCheck.record({
-  tag: FastCheck.constant(2 as const),
   dnsName: DnsName.generator,
 }).map((props) => new MultiHostName(props));
+
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
+  Encode: {
+    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
+    cborHex: Schema.encodeSync(CBORHexSchema(options)),
+  },
+  Decode: {
+    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
+    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
+  },
+  EncodeEither: {
+    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.encodeEither(CBORHexSchema(options)),
+  },
+  DecodeEither: {
+    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.decodeEither(CBORHexSchema(options)),
+  },
+  EncodeEffect: {
+    cborBytes: Schema.encode(CBORBytesSchema(options)),
+    cborHex: Schema.encode(CBORHexSchema(options)),
+  },
+  DecodeEffect: {
+    cborBytes: Schema.decode(CBORBytesSchema(options)),
+    cborHex: Schema.decode(CBORHexSchema(options)),
+  },
+});

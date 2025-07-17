@@ -1,4 +1,4 @@
-import { Schema, Data, FastCheck, ParseResult, pipe } from "effect";
+import { Schema, Data, FastCheck, ParseResult, Effect } from "effect";
 import * as Url from "./Url.js";
 import * as Hash32 from "./Hash32.js";
 import * as CBOR from "./CBOR.js";
@@ -49,7 +49,21 @@ export class Anchor extends Schema.TaggedClass<Anchor>()("Anchor", {
  * @since 2.0.0
  * @category schemas
  */
-export const AnchorCDDLSchema = Schema.Tuple(Url.Url, Hash32.BytesSchema);
+export const AnchorCDDLSchema = Schema.transformOrFail(
+  Schema.Tuple(CBOR.Text, CBOR.ByteArray),
+  Schema.typeSchema(Anchor),
+  {
+    strict: true,
+    encode: (toA) =>
+      Effect.succeed([toA.anchorUrl as string, toA.anchorDataHash] as const),
+    decode: ([anchorUrl, anchorDataHash]) =>
+      ParseResult.decode(Anchor)({
+        _tag: "Anchor",
+        anchorUrl: Url.make(anchorUrl),
+        anchorDataHash,
+      }),
+  },
+);
 
 /**
  * CBOR bytes transformation schema for Anchor.
@@ -58,28 +72,12 @@ export const AnchorCDDLSchema = Schema.Tuple(Url.Url, Hash32.BytesSchema);
  * @category schemas
  */
 export const CBORBytesSchema = (
-  options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
-  Schema.transformOrFail(Schema.typeSchema(Bytes.BytesSchema), Anchor, {
-    strict: true,
-    encode: (toA) =>
-      ParseResult.succeed(
-        CBOR.Encode.bytes([toA.anchorUrl, toA.anchorDataHash], options),
-      ),
-    decode: (fromA) =>
-      pipe(
-        ParseResult.decode(CBOR.CBORBytesSchema(options))(fromA),
-        ParseResult.flatMap((decoded) => {
-          const [anchorUrl, anchorDataHash] = decoded as [string, Uint8Array];
-          return ParseResult.succeed(
-            new Anchor({
-              anchorUrl: Url.make(anchorUrl),
-              anchorDataHash,
-            }),
-          );
-        }),
-      ),
-  });
+  Schema.compose(
+    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    AnchorCDDLSchema, // CBOR → Anchor
+  );
 
 /**
  * CBOR hex transformation schema for Anchor.
@@ -88,28 +86,12 @@ export const CBORBytesSchema = (
  * @category schemas
  */
 export const CBORHexSchema = (
-  options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
-  Schema.transformOrFail(Bytes.HexSchema, Anchor, {
-    strict: true,
-    encode: (toA) =>
-      ParseResult.succeed(
-        CBOR.Encode.hex([toA.anchorUrl, toA.anchorDataHash], options),
-      ),
-    decode: (fromA) =>
-      pipe(
-        ParseResult.decode(CBOR.CBORHexSchema(options))(fromA),
-        ParseResult.flatMap((decoded) => {
-          const [anchorUrl, anchorDataHash] = decoded as [string, Uint8Array];
-          return ParseResult.succeed(
-            new Anchor({
-              anchorUrl: Url.make(anchorUrl),
-              anchorDataHash,
-            }),
-          );
-        }),
-      ),
-  });
+  Schema.compose(
+    Bytes.BytesSchema, // string → Uint8Array
+    CBORBytesSchema(options), // Uint8Array → Anchor
+  );
 
 /**
  * Create an Anchor from a URL string and hash bytes.
@@ -231,46 +213,29 @@ export const generator = FastCheck.record({
   ({ anchorUrl, anchorDataHash }) => new Anchor({ anchorUrl, anchorDataHash }),
 );
 
-/**
- * Synchronous encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Encode = {
-  cborBytes: Schema.encodeSync(CBORBytesSchema()),
-  cborHex: Schema.encodeSync(CBORHexSchema()),
-};
-
-/**
- * Synchronous decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Decode = {
-  cborBytes: Schema.decodeUnknownSync(CBORBytesSchema()),
-  cborHex: Schema.decodeUnknownSync(CBORHexSchema()),
-};
-
-/**
- * Either encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  cborBytes: Schema.encodeEither(CBORBytesSchema()),
-  cborHex: Schema.encodeEither(CBORHexSchema()),
-};
-
-/**
- * Either decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  cborBytes: Schema.decodeUnknownEither(CBORBytesSchema()),
-  cborHex: Schema.decodeUnknownEither(CBORHexSchema()),
-};
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
+  Encode: {
+    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
+    cborHex: Schema.encodeSync(CBORHexSchema(options)),
+  },
+  Decode: {
+    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
+    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
+  },
+  EncodeEither: {
+    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.encodeEither(CBORHexSchema(options)),
+  },
+  DecodeEither: {
+    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.decodeEither(CBORHexSchema(options)),
+  },
+  EncodeEffect: {
+    cborBytes: Schema.encode(CBORBytesSchema(options)),
+    cborHex: Schema.encode(CBORHexSchema(options)),
+  },
+  DecodeEffect: {
+    cborBytes: Schema.decode(CBORBytesSchema(options)),
+    cborHex: Schema.decode(CBORHexSchema(options)),
+  },
+});

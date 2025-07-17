@@ -1,6 +1,8 @@
-import { Schema, Data, FastCheck, Option } from "effect";
+import { Schema, Data, FastCheck, Option, Effect, ParseResult } from "effect";
 import * as Port from "./Port.js";
 import * as DnsName from "./DnsName.js";
+import * as CBOR from "./CBOR.js";
+import * as Bytes from "./Bytes.js";
 
 /**
  * Error class for SingleHostName related operations.
@@ -19,7 +21,7 @@ export class SingleHostNameError extends Data.TaggedError(
   "SingleHostNameError",
 )<{
   message?: string;
-  reason?: "InvalidStructure" | "MissingDnsName" | "InvalidPort";
+  cause?: unknown;
 }> {}
 
 /**
@@ -33,7 +35,6 @@ export class SingleHostNameError extends Data.TaggedError(
  * import { Option } from "effect";
  *
  * const hostName = new SingleHostName({
- *   tag: 1,
  *   port: Option.some(Port.make(8080)),
  *   dnsName: new DnsName({ name: "relay.example.com" })
  * });
@@ -44,7 +45,6 @@ export class SingleHostNameError extends Data.TaggedError(
 export class SingleHostName extends Schema.TaggedClass<SingleHostName>()(
   "SingleHostName",
   {
-    tag: Schema.Literal(1),
     port: Schema.OptionFromNullOr(Port.PortSchema),
     dnsName: DnsName.DnsName,
   },
@@ -52,7 +52,6 @@ export class SingleHostName extends Schema.TaggedClass<SingleHostName>()(
   [Symbol.for("nodejs.util.inspect.custom")]() {
     return {
       _tag: "SingleHostName",
-      tag: this.tag,
       port: this.port,
       dnsName: this.dnsName,
     };
@@ -77,7 +76,6 @@ export const withPort = (
   dnsName: DnsName.DnsName,
 ): SingleHostName =>
   new SingleHostName({
-    tag: 1,
     port: Option.some(port),
     dnsName,
   });
@@ -96,7 +94,6 @@ export const withPort = (
  */
 export const withoutPort = (dnsName: DnsName.DnsName): SingleHostName =>
   new SingleHostName({
-    tag: 1,
     port: Option.none(),
     dnsName,
   });
@@ -155,7 +152,6 @@ export const getPort = (hostName: SingleHostName): Option.Option<Port.Port> =>
  * @category equality
  */
 export const equals = (a: SingleHostName, b: SingleHostName): boolean =>
-  a.tag === b.tag &&
   Option.getEquivalence(Port.equals)(a.port, b.port) &&
   DnsName.equals(a.dnsName, b.dnsName);
 
@@ -171,36 +167,103 @@ export const generator = FastCheck.record({
 }).map(
   ({ port, dnsName }) =>
     new SingleHostName({
-      tag: 1 as const,
       port: port ? Option.some(port) : Option.none(),
       dnsName,
     }),
 );
 
 /**
- * Synchronous encoding/decoding utilities.
+ * CDDL schema for SingleHostName.
+ * single_host_name = (1, port / nil, dns_name)
  *
  * @since 2.0.0
- * @category encoding/decoding
+ * @category schemas
  */
-export const Encode = {
-  sync: Schema.encodeSync(SingleHostName),
-};
+export const SingleHostNameCDDLSchema = Schema.transformOrFail(
+  Schema.Tuple(
+    Schema.Literal(1n), // tag (literal 1)
+    Schema.NullOr(CBOR.Integer), // port (number or null)
+    Schema.String, // dns_name (string)
+  ),
+  Schema.typeSchema(SingleHostName),
+  {
+    strict: true,
+    encode: (toA) =>
+      Effect.gen(function* () {
+        const port = Option.isSome(toA.port) ? BigInt(toA.port.value) : null;
+        const dnsName = yield* ParseResult.encode(DnsName.DnsName)(toA.dnsName);
 
-export const Decode = {
-  sync: Schema.decodeUnknownSync(SingleHostName),
-};
+        return yield* Effect.succeed([1n, port, dnsName] as const);
+      }),
+    decode: ([, portValue, dnsNameValue]) =>
+      Effect.gen(function* () {
+        const port =
+          portValue === null || portValue === undefined
+            ? Option.none()
+            : Option.some(
+                yield* ParseResult.decode(Port.PortSchema)(Number(portValue)),
+              );
+
+        const dnsName = yield* ParseResult.decode(DnsName.DnsName)(
+          dnsNameValue,
+        );
+
+        return yield* Effect.succeed(new SingleHostName({ port, dnsName }));
+      }),
+  },
+);
 
 /**
- * Effect-based encoding/decoding utilities.
+ * CBOR bytes transformation schema for SingleHostName.
  *
  * @since 2.0.0
- * @category encoding/decoding
+ * @category schemas
  */
-export const EncodeEffect = {
-  effect: Schema.encode(SingleHostName),
-};
+export const CBORBytesSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    SingleHostNameCDDLSchema, // CBOR → SingleHostName
+  );
 
-export const DecodeEffect = {
-  effect: Schema.decodeUnknown(SingleHostName),
-};
+/**
+ * CBOR hex transformation schema for SingleHostName.
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const CBORHexSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    Bytes.BytesSchema, // string → Uint8Array
+    CBORBytesSchema(options), // Uint8Array → SingleHostName
+  );
+
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
+  Encode: {
+    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
+    cborHex: Schema.encodeSync(CBORHexSchema(options)),
+  },
+  Decode: {
+    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
+    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
+  },
+  EncodeEither: {
+    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.encodeEither(CBORHexSchema(options)),
+  },
+  DecodeEither: {
+    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.decodeEither(CBORHexSchema(options)),
+  },
+  EncodeEffect: {
+    cborBytes: Schema.encode(CBORBytesSchema(options)),
+    cborHex: Schema.encode(CBORHexSchema(options)),
+  },
+  DecodeEffect: {
+    cborBytes: Schema.decode(CBORBytesSchema(options)),
+    cborHex: Schema.decode(CBORHexSchema(options)),
+  },
+});

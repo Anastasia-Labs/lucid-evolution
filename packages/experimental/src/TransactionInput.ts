@@ -1,4 +1,4 @@
-import { Data, Effect, FastCheck, ParseResult, pipe, Schema } from "effect";
+import { Data, Effect, FastCheck, ParseResult, Schema } from "effect";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
 import * as TransactionHash from "./TransactionHash.js";
@@ -10,28 +10,14 @@ import * as Numeric from "./Numeric.js";
  */
 
 /**
- * Transaction input with transaction id and index
+ * Error class for TransactionInput related operations.
  *
- * @since 2.0.0
- * @category schemas
- */
-export class TransactionInput extends Schema.TaggedClass<TransactionInput>(
-  "TransactionInput",
-)("TransactionInput", {
-  transactionId: TransactionHash.TransactionHash,
-  index: Numeric.Uint16Schema,
-}) {
-  [Symbol.for("nodejs.util.inspect.custom")]() {
-    return {
-      _tag: "TransactionInput",
-      transactionId: this.transactionId,
-      index: this.index,
-    };
-  }
-}
-
-/**
- * Error thrown when transaction input operations fail
+ * @example
+ * import { TransactionInput } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
+ * const error = new TransactionInput.TransactionInputError({ message: "Invalid transaction input" });
+ * assert(error.message === "Invalid transaction input");
  *
  * @since 2.0.0
  * @category errors
@@ -39,12 +25,51 @@ export class TransactionInput extends Schema.TaggedClass<TransactionInput>(
 export class TransactionInputError extends Data.TaggedError(
   "TransactionInputError",
 )<{
-  message: string;
+  message?: string;
   cause?: unknown;
 }> {}
 
 /**
- * Check if the given value is a valid TransactionInput
+ * Schema for TransactionInput representing a transaction input with transaction id and index.
+ * transaction_input = [transaction_id : $hash32, index : uint .size 2]
+ *
+ * @example
+ * import { TransactionInput, TransactionHash, Numeric } from "@lucid-evolution/experimental";
+ *
+ * const txHash = TransactionHash.TransactionHash.make("a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235");
+ * const input = new TransactionInput({
+ *   transactionId: txHash,
+ *   index: 0
+ * });
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export class TransactionInput extends Schema.TaggedClass<TransactionInput>()(
+  "TransactionInput",
+  {
+    transactionId: TransactionHash.TransactionHash,
+    index: Numeric.Uint16Schema,
+  },
+) {
+  [Symbol.for("nodejs.util.inspect.custom")]() {
+    return {
+      _tag: this._tag,
+      transactionId: this.transactionId,
+      index: this.index,
+    };
+  }
+}
+
+/**
+ * Check if the given value is a valid TransactionInput.
+ *
+ * @example
+ * import { TransactionInput, TransactionHash } from "@lucid-evolution/experimental";
+ *
+ * const txHash = TransactionHash.TransactionHash.make("a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235");
+ * const input = new TransactionInput({ transactionId: txHash, index: 0 });
+ * console.log(TransactionInput.isTransactionInput(input)); // true
  *
  * @since 2.0.0
  * @category predicates
@@ -52,69 +77,68 @@ export class TransactionInputError extends Data.TaggedError(
 export const isTransactionInput = Schema.is(TransactionInput);
 
 /**
- * Schema for transforming between CBOR bytes and TransactionInput
+ * CDDL schema for TransactionInput.
+ * transaction_input = [transaction_id : $hash32, index : uint .size 2]
  *
  * @since 2.0.0
- * @category encoding/decoding
+ * @category schemas
  */
-export const CBORBytesSchema = Schema.transformOrFail(
-  Schema.Uint8ArrayFromSelf.annotations({
-    identifier: "CBORBytes",
-  }),
+export const TransactionInputCDDLSchema = Schema.transformOrFail(
+  Schema.Tuple(
+    Schema.Uint8ArrayFromSelf, // transaction_id as bytes
+    CBOR.Integer, // index as bigint
+  ),
   Schema.typeSchema(TransactionInput),
   {
     strict: true,
-    encode: (_, __, ___, toA) =>
-      pipe(
-        ParseResult.encode(TransactionHash.BytesSchema)(toA.transactionId),
-        Effect.map((hash) => CBOR.Encode.bytes([toA.index, hash])),
-      ),
-    decode: (fromA) =>
-      pipe(
-        ParseResult.decode(CBOR.CBORBytesSchema())(fromA),
-        Effect.flatMap((a) =>
-          ParseResult.decodeUnknown(
-            Schema.Tuple(Numeric.Uint16Schema, Schema.Uint8ArrayFromSelf),
-          )(a),
-        ),
-        Effect.flatMap(([index, txHashBytes]) =>
-          pipe(
-            ParseResult.decode(TransactionHash.BytesSchema)(txHashBytes),
-            Effect.map(
-              (transactionId) =>
-                new TransactionInput({
-                  transactionId,
-                  index,
-                }),
-            ),
-          ),
-        ),
-      ),
+    encode: (toA) =>
+      Effect.gen(function* () {
+        const txHashBytes = yield* ParseResult.encode(
+          TransactionHash.BytesSchema,
+        )(toA.transactionId);
+        return [txHashBytes, BigInt(toA.index)] as const;
+      }),
+    decode: ([txHashBytes, indexBigInt]) =>
+      Effect.gen(function* () {
+        const transactionId = yield* ParseResult.decode(
+          TransactionHash.BytesSchema,
+        )(txHashBytes);
+        return yield* ParseResult.decode(TransactionInput)({
+          _tag: "TransactionInput",
+          transactionId,
+          index: Number(indexBigInt),
+        });
+      }),
   },
 );
 
 /**
- * Schema for transforming between CBOR hex and TransactionInput
+ * CBOR bytes transformation schema for TransactionInput.
  *
  * @since 2.0.0
- * @category encoding/decoding
+ * @category schemas
  */
-export const CBORHexSchema = Schema.transformOrFail(
-  Bytes.HexSchema.annotations({
-    identifier: "CBORHex",
-  }),
-  TransactionInput,
-  {
-    strict: true,
-    encode: (_, __, ___, toA) =>
-      pipe(
-        ParseResult.encode(CBORBytesSchema)(toA),
-        Effect.map(Bytes.Encode.hex),
-      ),
-    decode: (fromA) =>
-      pipe(ParseResult.decode(CBORBytesSchema)(Bytes.Decode.hex(fromA))),
-  },
-);
+export const CBORBytesSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    TransactionInputCDDLSchema, // CBOR → TransactionInput
+  );
+
+/**
+ * CBOR hex transformation schema for TransactionInput.
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const CBORHexSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    Bytes.BytesSchema, // string → Uint8Array
+    CBORBytesSchema(options), // Uint8Array → TransactionInput
+  );
 
 /**
  * Check if two TransactionInput instances are equal.
@@ -127,6 +151,12 @@ export const equals = (a: TransactionInput, b: TransactionInput): boolean =>
   a.index === b.index &&
   a.transactionId === b.transactionId;
 
+/**
+ * FastCheck generator for TransactionInput instances.
+ *
+ * @since 2.0.0
+ * @category generators
+ */
 export const generator = FastCheck.tuple(
   TransactionHash.generator,
   Numeric.Uint16Generator,
@@ -138,62 +168,29 @@ export const generator = FastCheck.tuple(
     }),
 );
 
-/**
- * Synchronous encoding utilities for enterprise address.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Encode = {
-  cborHex: Schema.encodeSync(CBORHexSchema),
-  cborBytes: Schema.encodeSync(CBORBytesSchema),
-};
-
-/**
- * Synchronous decoding utilities for enterprise address.
- *
- @since 2.0.0
- * @category encoding/decoding
- */
-export const Decode = {
-  cborHex: Schema.decodeUnknownSync(CBORHexSchema),
-  cborBytes: Schema.decodeUnknownSync(CBORBytesSchema),
-};
-
-/**
- * Either encoding utilities for enterprise address.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  cborHex: Schema.encodeEither(CBORHexSchema),
-  cborBytes: Schema.encodeEither(CBORBytesSchema),
-};
-
-/**
- * Either decoding utilities for enterprise address.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  cborHex: Schema.decodeUnknownEither(CBORHexSchema),
-  cborBytes: Schema.decodeUnknownEither(CBORBytesSchema),
-};
-
-/**
- * Effectful encoding utilities for transaction input.
- */
-export const EncodeEffect = {
-  cborHex: Schema.encode(CBORHexSchema),
-  cborBytes: Schema.encode(CBORBytesSchema),
-};
-
-/**
- * Effectful decoding utilities for transaction input.
- */
-export const DecodeEffect = {
-  cborHex: Schema.decodeUnknown(CBORHexSchema),
-  cborBytes: Schema.decodeUnknown(CBORBytesSchema),
-};
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
+  Encode: {
+    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
+    cborHex: Schema.encodeSync(CBORHexSchema(options)),
+  },
+  Decode: {
+    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
+    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
+  },
+  EncodeEither: {
+    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.encodeEither(CBORHexSchema(options)),
+  },
+  DecodeEither: {
+    cborBytes: Schema.decodeUnknownEither(CBORBytesSchema(options)),
+    cborHex: Schema.decodeUnknownEither(CBORHexSchema(options)),
+  },
+  EncodeEffect: {
+    cborBytes: Schema.encode(CBORBytesSchema(options)),
+    cborHex: Schema.encode(CBORHexSchema(options)),
+  },
+  DecodeEffect: {
+    cborBytes: Schema.decodeUnknown(CBORBytesSchema(options)),
+    cborHex: Schema.decodeUnknown(CBORHexSchema(options)),
+  },
+});

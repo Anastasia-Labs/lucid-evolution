@@ -1,4 +1,4 @@
-import { Effect, Schema, Data, FastCheck, pipe, ParseResult } from "effect";
+import { Effect, Schema, Data, FastCheck, ParseResult } from "effect";
 import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
 import * as CBOR from "./CBOR.js";
@@ -24,7 +24,6 @@ export class CredentialError extends Data.TaggedError("CredentialError")<{
  * @since 2.0.0
  * @category schemas
  */
-//TODO: make it Schema.TaggedClass
 export const Credential = Schema.Union(
   Schema.TaggedStruct("KeyHash", {
     hash: KeyHash.KeyHash,
@@ -51,70 +50,100 @@ export type Credential = typeof Credential.Type;
  */
 export const isCredential = Schema.is(Credential);
 
-export const CBORBytesSchema = Schema.transformOrFail(
-  Schema.Uint8ArrayFromSelf.annotations({
-    identifier: "CBORBytes",
-  }),
+/**
+ * CDDL schema for Credential as defined in the specification:
+ * credential = [0, addr_keyhash // 1, script_hash]
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const CredentialCDDLSchema = Schema.transformOrFail(
+  Schema.Tuple(
+    Schema.Literal(0n, 1n),
+    Schema.Uint8ArrayFromSelf, // hash bytes
+  ),
   Schema.typeSchema(Credential),
   {
     strict: true,
-    encode: (_, __, ___, toA) => {
-      switch (toA._tag) {
-        case "KeyHash":
-          return ParseResult.succeed(
-            CBOR.Encode.bytes([0, Bytes.Decode.hex(toA)]),
-          );
-        case "ScriptHash":
-          return ParseResult.succeed(
-            CBOR.Encode.bytes([1, Bytes.Decode.hex(toA.hash)]),
-          );
-      }
-    },
-    decode: (_, __, ___, fromA) =>
-      pipe(
-        ParseResult.decode(CBOR.CBORBytesSchema())(fromA),
-        Effect.flatMap((a) =>
-          ParseResult.decodeUnknown(
-            Schema.Struct({
-              tag: Schema.Literal(0, 1),
-              value: Schema.Uint8ArrayFromSelf,
-            }),
-          )(a),
-        ),
-        Effect.flatMap(({ tag, value }) =>
-          Effect.gen(function* () {
-            switch (tag) {
-              case 0:
-                return yield* ParseResult.succeed({
-                  _tag: "KeyHash" as const,
-                  hash: KeyHash.Decode.bytes(value),
-                });
-              case 1:
-                return yield* ParseResult.succeed({
-                  _tag: "ScriptHash" as const,
-                  hash: ScriptHash.Decode.bytes(value),
-                });
-            }
-          }),
-        ),
-      ),
+    encode: (toI) =>
+      Effect.gen(function* () {
+        switch (toI._tag) {
+          case "KeyHash": {
+            const keyHashBytes = yield* ParseResult.encode(KeyHash.BytesSchema)(
+              toI.hash,
+            );
+            return [0n, keyHashBytes] as const;
+          }
+          case "ScriptHash": {
+            const scriptHashBytes = yield* ParseResult.encode(
+              ScriptHash.BytesSchema,
+            )(toI.hash);
+            return [1n, scriptHashBytes] as const;
+          }
+        }
+      }),
+    decode: ([tag, hashBytes]) =>
+      Effect.gen(function* () {
+        switch (tag) {
+          case 0n: {
+            const keyHash = yield* ParseResult.decode(KeyHash.BytesSchema)(
+              hashBytes,
+            );
+            return Credential.members[0].make({ hash: keyHash });
+          }
+          case 1n: {
+            const scriptHash = yield* ParseResult.decode(
+              ScriptHash.BytesSchema,
+            )(hashBytes);
+            return Credential.members[1].make({ hash: scriptHash });
+          }
+        }
+      }),
   },
 );
 
-export const CBORHexSchema = Schema.transformOrFail(
-  Schema.typeSchema(Bytes.HexSchema),
-  Credential,
-  {
-    strict: true,
-    encode: (_, __, ___, toA) =>
-      pipe(
-        ParseResult.encode(CBORBytesSchema)(toA),
-        Effect.map(Bytes.Encode.hex),
-      ),
-    decode: (fromA) =>
-      pipe(Bytes.Decode.hex(fromA), ParseResult.decode(CBORBytesSchema)),
+export const CBORBytesSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    CredentialCDDLSchema, // CBOR → Credential
+  );
+
+export const CBORHexSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    Bytes.BytesSchema, // string → Uint8Array
+    CBORBytesSchema(options), // Uint8Array → Credential
+  );
+
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
+  Encode: {
+    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
+    cborHex: Schema.encodeSync(CBORHexSchema(options)),
   },
-);
+  Decode: {
+    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
+    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
+  },
+  EncodeEither: {
+    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.encodeEither(CBORHexSchema(options)),
+  },
+  DecodeEither: {
+    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.decodeEither(CBORHexSchema(options)),
+  },
+  EncodeEffect: {
+    cborBytes: Schema.encode(CBORBytesSchema(options)),
+    cborHex: Schema.encode(CBORHexSchema(options)),
+  },
+  DecodeEffect: {
+    cborBytes: Schema.decode(CBORBytesSchema(options)),
+    cborHex: Schema.decode(CBORHexSchema(options)),
+  },
+});
 
 /**
  * Check if two Credential instances are equal.
@@ -154,47 +183,3 @@ export const generator = FastCheck.oneof(
     hash: ScriptHash.generator,
   }),
 );
-
-/**
- * Synchronous encoding utilities for enterprise address.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Encode = {
-  cborHex: Schema.encodeSync(CBORHexSchema),
-  cborBytes: Schema.encodeSync(CBORBytesSchema),
-};
-
-/**
- * Synchronous decoding utilities for enterprise address.
- *
- @since 2.0.0
- * @category encoding/decoding
- */
-export const Decode = {
-  cborHex: Schema.decodeUnknownSync(CBORHexSchema),
-  cborBytes: Schema.decodeUnknownSync(CBORBytesSchema),
-};
-
-/**
- * Either encoding utilities for enterprise address.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  cborHex: Schema.encodeEither(CBORHexSchema),
-  cborBytes: Schema.encodeEither(CBORBytesSchema),
-};
-
-/**
- * Either decoding utilities for enterprise address.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  cborHex: Schema.decodeUnknownEither(CBORHexSchema),
-  cborBytes: Schema.decodeUnknownEither(CBORBytesSchema),
-};

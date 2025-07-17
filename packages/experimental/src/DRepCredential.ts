@@ -54,10 +54,7 @@ export type DRepCredential = Credential.Credential;
 export const isCredential = Credential.isCredential;
 export const equals = Credential.equals;
 export const generator = Credential.generator;
-export const Encode = Credential.Encode;
-export const Decode = Credential.Decode;
-export const EncodeEither = Credential.EncodeEither;
-export const DecodeEither = Credential.DecodeEither;
+export const Codec = Credential.Codec;
 
 /**
  * CBOR encoding/decoding schemas.

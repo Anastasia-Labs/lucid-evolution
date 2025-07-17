@@ -8,6 +8,7 @@
  */
 
 import * as Credential from "./Credential.js";
+import * as CBOR from "./CBOR.js";
 
 /**
  * Error class for CommitteeColdCredential operations - re-exports CredentialError.
@@ -54,10 +55,7 @@ export type CommitteeColdCredential = Credential.Credential;
 export const isCredential = Credential.isCredential;
 export const equals = Credential.equals;
 export const generator = Credential.generator;
-export const Encode = Credential.Encode;
-export const Decode = Credential.Decode;
-export const EncodeEither = Credential.EncodeEither;
-export const DecodeEither = Credential.DecodeEither;
+export const Codec = (options?: CBOR.CodecOptions) => Credential.Codec(options);
 
 /**
  * CBOR encoding/decoding schemas.

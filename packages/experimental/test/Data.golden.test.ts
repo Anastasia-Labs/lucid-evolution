@@ -1,3 +1,28 @@
+/**
+ * Golden Tests for Data Module
+ *
+ * This module provides comprehensive golden testing for the Data module's CBOR
+ * encoding and decoding functionality. Golden tests validate that the current
+ * implementation maintains compatibility with previously generated test data,
+ * ensuring that CBOR serialization behavior remains consistent across versions.
+ *
+ * The tests cover all major PlutusData types:
+ * - Integer: BigInt values with various ranges
+ * - ByteArray: Hex-encoded byte arrays of different lengths
+ * - List: Arrays containing nested PlutusData structures
+ * - Map: Key-value pairs with PlutusData keys and values
+ * - Constr: Constructor data with index and field arrays
+ * - Data: Complex nested structures combining all types
+ *
+ * Each type is tested for:
+ * - CBOR hex encoding consistency
+ * - CBOR bytes encoding consistency
+ * - CBOR hex decoding consistency
+ * - CBOR bytes decoding consistency
+ * - Round-trip encoding/decoding consistency
+ *
+ */
+
 import { describe, expect, it } from "@effect/vitest";
 import * as fs from "fs";
 import * as path from "path";
@@ -9,10 +34,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 /**
- * Test configuration
+ * Test configuration defining the number of samples to test for each category
+ *
  */
 const TEST_CONFIG = {
-  // Number of samples to test for each test type
   integer: {
     encoding: 4000,
     decoding: 4000,
@@ -46,32 +71,69 @@ const TEST_CONFIG = {
 } as const;
 
 /**
- * Interface for golden test entries
+ * Sample data types for different Plutus data structures
+ *
+ */
+type IntegerSample = {
+  readonly integer: bigint;
+};
+
+type ByteArraySample = {
+  readonly bytearray: string;
+};
+
+type ListSample = {
+  readonly list: readonly unknown[];
+};
+
+type MapSample = {
+  readonly entries: readonly {
+    readonly key: unknown;
+    readonly value: unknown;
+  }[];
+};
+
+type ConstrSample = {
+  readonly index: number;
+  readonly fields: readonly unknown[];
+};
+
+/**
+ * Represents a single test entry in golden files
+ *
  */
 interface GoldenEntry {
-  index: number;
-  sample: any;
-  cborHex: string;
-  cborBytes: number[];
-  roundTripSuccess: boolean;
-  metadata: {
-    type: string;
-    seed: number;
+  readonly index: number;
+  readonly sample:
+    | IntegerSample
+    | ByteArraySample
+    | ListSample
+    | MapSample
+    | ConstrSample
+    | unknown;
+  readonly cborHex: string;
+  readonly cborBytes: readonly number[];
+  readonly roundTripSuccess: boolean;
+  readonly metadata: {
+    readonly type: string;
+    readonly seed: number;
   };
 }
 
 /**
- * Interface for golden test summary
+ * Summary information for golden test data
+ *
  */
 interface GoldenSummary {
-  seed: number;
-  samplesPerType: number;
-  types: string[];
-  totalSamples: number;
+  readonly seed: number;
+  readonly samplesPerType: number;
+  readonly types: readonly string[];
+  readonly totalSamples: number;
 }
 
 /**
  * Reviver function for parsing JSON with BigInt support
+ *
  */
 const bigintReviver = (_key: string, value: unknown): unknown => {
   if (
@@ -88,7 +150,47 @@ const bigintReviver = (_key: string, value: unknown): unknown => {
 };
 
 /**
+ * Type guards for different sample types
+ *
+ */
+const isIntegerSample = (sample: unknown): sample is IntegerSample => {
+  return typeof sample === "object" && sample !== null && "integer" in sample;
+};
+
+const isByteArraySample = (sample: unknown): sample is ByteArraySample => {
+  return typeof sample === "object" && sample !== null && "bytearray" in sample;
+};
+
+const isListSample = (sample: unknown): sample is ListSample => {
+  return (
+    typeof sample === "object" &&
+    sample !== null &&
+    "list" in sample &&
+    Array.isArray((sample as any).list)
+  );
+};
+
+const isMapSample = (sample: unknown): sample is MapSample => {
+  return (
+    typeof sample === "object" &&
+    sample !== null &&
+    "entries" in sample &&
+    Array.isArray((sample as any).entries)
+  );
+};
+
+const isConstrSample = (sample: unknown): sample is ConstrSample => {
+  return (
+    typeof sample === "object" &&
+    sample !== null &&
+    "index" in sample &&
+    "fields" in sample
+  );
+};
+
+/**
  * Load golden files from the test/golden directory
+ *
  */
 const loadGoldenFile = (filename: string): GoldenEntry[] => {
   const filePath = path.join(__dirname, "golden", filename);
@@ -97,16 +199,8 @@ const loadGoldenFile = (filename: string): GoldenEntry[] => {
 };
 
 /**
- * Load golden summary
- */
-const loadGoldenSummary = (): GoldenSummary => {
-  const filePath = path.join(__dirname, "golden", "summary.json");
-  const content = fs.readFileSync(filePath, "utf8");
-  return JSON.parse(content);
-};
-
-/**
- * Cache for loaded golden files to avoid repeated I/O
+ * Cache for loaded golden files to avoid repeated I/O operations
+ *
  */
 const goldenCache = {
   integer: null as GoldenEntry[] | null,
@@ -118,7 +212,8 @@ const goldenCache = {
 };
 
 /**
- * Get golden entries with caching
+ * Get golden entries with caching for performance
+ *
  */
 const getGoldenEntries = (type: keyof typeof goldenCache): GoldenEntry[] => {
   if (!goldenCache[type]) {
@@ -128,7 +223,8 @@ const getGoldenEntries = (type: keyof typeof goldenCache): GoldenEntry[] => {
 };
 
 /**
- * Get test cases for a specific type and test category
+ * Get test cases for a specific type and test category with sample limiting
+ *
  */
 const getTestCases = (
   type: keyof typeof TEST_CONFIG,
@@ -140,11 +236,12 @@ const getTestCases = (
 };
 
 /**
+ * Initialize the codec for CBOR encoding/decoding operations
+ */
+const Codec = Data.Codec();
+
+/**
  * Golden Tests for Data module
- *
- * These tests validate that the current Data implementation maintains
- * compatibility with previously generated golden files, ensuring that
- * CBOR encoding/decoding behavior remains consistent across versions.
  */
 describe("Data Golden Tests", () => {
   describe("Integer Golden Tests", () => {
@@ -152,8 +249,11 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("integer", "encoding");
 
       testCases.forEach((entry) => {
+        if (!isIntegerSample(entry.sample)) {
+          throw new Error(`Invalid integer sample at index ${entry.index}`);
+        }
         const plutusData = Data.int(entry.sample.integer);
-        const encoded = Data.Encode.cborHex(plutusData);
+        const encoded = Codec.Encode.cborHex(plutusData);
         expect(encoded, `Failed at sample index ${entry.index}`).toBe(
           entry.cborHex,
         );
@@ -164,8 +264,11 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("integer", "encoding");
 
       testCases.forEach((entry) => {
+        if (!isIntegerSample(entry.sample)) {
+          throw new Error(`Invalid integer sample at index ${entry.index}`);
+        }
         const plutusData = Data.int(entry.sample.integer);
-        const encoded = Data.Encode.cborBytes(plutusData);
+        const encoded = Codec.Encode.cborBytes(plutusData);
         expect(
           Array.from(encoded),
           `Failed at sample index ${entry.index}`,
@@ -177,7 +280,7 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("integer", "decoding");
 
       testCases.forEach((entry) => {
-        const decoded = Data.Decode.cborHex(entry.cborHex);
+        const decoded = Codec.Decode.cborHex(entry.cborHex);
         expect(
           normalizeDecodedData(decoded),
           `Failed at sample index ${entry.index}`,
@@ -189,7 +292,7 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("integer", "decoding");
 
       testCases.forEach((entry) => {
-        const decoded = Data.Decode.cborBytes(new Uint8Array(entry.cborBytes));
+        const decoded = Codec.Decode.cborBytes(new Uint8Array(entry.cborBytes));
         expect(
           normalizeDecodedData(decoded),
           `Failed at sample index ${entry.index}`,
@@ -201,9 +304,12 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("integer", "roundTrip");
 
       testCases.forEach((entry) => {
+        if (!isIntegerSample(entry.sample)) {
+          throw new Error(`Invalid integer sample at index ${entry.index}`);
+        }
         const plutusData = Data.int(entry.sample.integer);
-        const encoded = Data.Encode.cborHex(plutusData);
-        const decoded = Data.Decode.cborHex(encoded);
+        const encoded = Codec.Encode.cborHex(plutusData);
+        const decoded = Codec.Decode.cborHex(encoded);
 
         expect(
           normalizeDecodedData(decoded),
@@ -218,8 +324,11 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("byteArray", "encoding");
 
       testCases.forEach((entry) => {
+        if (!isByteArraySample(entry.sample)) {
+          throw new Error(`Invalid byte array sample at index ${entry.index}`);
+        }
         const plutusData = Data.bytearray(entry.sample.bytearray);
-        const encoded = Data.Encode.cborHex(plutusData);
+        const encoded = Codec.Encode.cborHex(plutusData);
         expect(encoded, `Failed at sample index ${entry.index}`).toBe(
           entry.cborHex,
         );
@@ -230,8 +339,11 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("byteArray", "encoding");
 
       testCases.forEach((entry) => {
+        if (!isByteArraySample(entry.sample)) {
+          throw new Error(`Invalid byte array sample at index ${entry.index}`);
+        }
         const plutusData = Data.bytearray(entry.sample.bytearray);
-        const encoded = Data.Encode.cborBytes(plutusData);
+        const encoded = Codec.Encode.cborBytes(plutusData);
         expect(
           Array.from(encoded),
           `Failed at sample index ${entry.index}`,
@@ -243,7 +355,7 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("byteArray", "decoding");
 
       testCases.forEach((entry) => {
-        const decoded = Data.Decode.cborHex(entry.cborHex);
+        const decoded = Codec.Decode.cborHex(entry.cborHex);
         expect(
           normalizeDecodedData(decoded),
           `Failed at sample index ${entry.index}`,
@@ -255,7 +367,7 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("byteArray", "decoding");
 
       testCases.forEach((entry) => {
-        const decoded = Data.Decode.cborBytes(new Uint8Array(entry.cborBytes));
+        const decoded = Codec.Decode.cborBytes(new Uint8Array(entry.cborBytes));
         expect(
           normalizeDecodedData(decoded),
           `Failed at sample index ${entry.index}`,
@@ -267,9 +379,12 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("byteArray", "roundTrip");
 
       testCases.forEach((entry) => {
+        if (!isByteArraySample(entry.sample)) {
+          throw new Error(`Invalid byte array sample at index ${entry.index}`);
+        }
         const plutusData = Data.bytearray(entry.sample.bytearray);
-        const encoded = Data.Encode.cborHex(plutusData);
-        const decoded = Data.Decode.cborHex(encoded);
+        const encoded = Codec.Encode.cborHex(plutusData);
+        const decoded = Codec.Decode.cborHex(encoded);
 
         expect(
           normalizeDecodedData(decoded),
@@ -284,9 +399,12 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("list", "encoding");
 
       testCases.forEach((entry) => {
+        if (!isListSample(entry.sample)) {
+          throw new Error(`Invalid list sample at index ${entry.index}`);
+        }
         const plutusDataList = entry.sample.list.map(reconstructPlutusData);
         const plutusData = Data.list(plutusDataList);
-        const encoded = Data.Encode.cborHex(plutusData);
+        const encoded = Codec.Encode.cborHex(plutusData);
         expect(encoded, `Failed at sample index ${entry.index}`).toBe(
           entry.cborHex,
         );
@@ -297,9 +415,12 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("list", "encoding");
 
       testCases.forEach((entry) => {
+        if (!isListSample(entry.sample)) {
+          throw new Error(`Invalid list sample at index ${entry.index}`);
+        }
         const plutusDataList = entry.sample.list.map(reconstructPlutusData);
         const plutusData = Data.list(plutusDataList);
-        const encoded = Data.Encode.cborBytes(plutusData);
+        const encoded = Codec.Encode.cborBytes(plutusData);
         expect(
           Array.from(encoded),
           `Failed at sample index ${entry.index}`,
@@ -311,10 +432,11 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("list", "decoding");
 
       testCases.forEach((entry) => {
-        const decoded = Data.Decode.cborHex(entry.cborHex);
-        expect(decoded, `Failed at sample index ${entry.index}`).toEqual(
-          entry.sample,
-        );
+        const decoded = Codec.Decode.cborHex(entry.cborHex);
+        expect(
+          normalizeDecodedData(decoded),
+          `Failed at sample index ${entry.index}`,
+        ).toEqual(entry.sample);
       });
     });
 
@@ -322,10 +444,11 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("list", "decoding");
 
       testCases.forEach((entry) => {
-        const decoded = Data.Decode.cborBytes(new Uint8Array(entry.cborBytes));
-        expect(decoded, `Failed at sample index ${entry.index}`).toEqual(
-          entry.sample,
-        );
+        const decoded = Codec.Decode.cborBytes(new Uint8Array(entry.cborBytes));
+        expect(
+          normalizeDecodedData(decoded),
+          `Failed at sample index ${entry.index}`,
+        ).toEqual(entry.sample);
       });
     });
 
@@ -333,14 +456,18 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("list", "roundTrip");
 
       testCases.forEach((entry) => {
+        if (!isListSample(entry.sample)) {
+          throw new Error(`Invalid list sample at index ${entry.index}`);
+        }
         const plutusDataList = entry.sample.list.map(reconstructPlutusData);
         const plutusData = Data.list(plutusDataList);
-        const encoded = Data.Encode.cborHex(plutusData);
-        const decoded = Data.Decode.cborHex(encoded);
+        const encoded = Codec.Encode.cborHex(plutusData);
+        const decoded = Codec.Decode.cborHex(encoded);
 
-        expect(decoded, `Failed at sample index ${entry.index}`).toEqual(
-          entry.sample,
-        );
+        expect(
+          normalizeDecodedData(decoded),
+          `Failed at sample index ${entry.index}`,
+        ).toEqual(entry.sample);
       });
     });
   });
@@ -350,14 +477,17 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("map", "encoding");
 
       testCases.forEach((entry) => {
+        if (!isMapSample(entry.sample)) {
+          throw new Error(`Invalid map sample at index ${entry.index}`);
+        }
         const plutusDataEntries = entry.sample.entries.map(
-          (entryObj: { key: any; value: any }) => ({
+          (entryObj: { key: unknown; value: unknown }) => ({
             key: reconstructPlutusData(entryObj.key),
             value: reconstructPlutusData(entryObj.value),
           }),
         );
         const plutusData = Data.map(plutusDataEntries);
-        const encoded = Data.Encode.cborHex(plutusData);
+        const encoded = Codec.Encode.cborHex(plutusData);
         expect(encoded, `Failed at sample index ${entry.index}`).toBe(
           entry.cborHex,
         );
@@ -368,14 +498,17 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("map", "encoding");
 
       testCases.forEach((entry) => {
+        if (!isMapSample(entry.sample)) {
+          throw new Error(`Invalid map sample at index ${entry.index}`);
+        }
         const plutusDataEntries = entry.sample.entries.map(
-          (entryObj: { key: any; value: any }) => ({
+          (entryObj: { key: unknown; value: unknown }) => ({
             key: reconstructPlutusData(entryObj.key),
             value: reconstructPlutusData(entryObj.value),
           }),
         );
         const plutusData = Data.map(plutusDataEntries);
-        const encoded = Data.Encode.cborBytes(plutusData);
+        const encoded = Codec.Encode.cborBytes(plutusData);
         expect(
           Array.from(encoded),
           `Failed at sample index ${entry.index}`,
@@ -387,10 +520,11 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("map", "decoding");
 
       testCases.forEach((entry) => {
-        const decoded = Data.Decode.cborHex(entry.cborHex);
-        expect(decoded, `Failed at sample index ${entry.index}`).toEqual(
-          entry.sample,
-        );
+        const decoded = Codec.Decode.cborHex(entry.cborHex);
+        expect(
+          normalizeDecodedData(decoded),
+          `Failed at sample index ${entry.index}`,
+        ).toEqual(entry.sample);
       });
     });
 
@@ -398,10 +532,11 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("map", "decoding");
 
       testCases.forEach((entry) => {
-        const decoded = Data.Decode.cborBytes(new Uint8Array(entry.cborBytes));
-        expect(decoded, `Failed at sample index ${entry.index}`).toEqual(
-          entry.sample,
-        );
+        const decoded = Codec.Decode.cborBytes(new Uint8Array(entry.cborBytes));
+        expect(
+          normalizeDecodedData(decoded),
+          `Failed at sample index ${entry.index}`,
+        ).toEqual(entry.sample);
       });
     });
 
@@ -409,19 +544,23 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("map", "roundTrip");
 
       testCases.forEach((entry) => {
+        if (!isMapSample(entry.sample)) {
+          throw new Error(`Invalid map sample at index ${entry.index}`);
+        }
         const plutusDataEntries = entry.sample.entries.map(
-          (entryObj: { key: any; value: any }) => ({
+          (entryObj: { key: unknown; value: unknown }) => ({
             key: reconstructPlutusData(entryObj.key),
             value: reconstructPlutusData(entryObj.value),
           }),
         );
         const plutusData = Data.map(plutusDataEntries);
-        const encoded = Data.Encode.cborHex(plutusData);
-        const decoded = Data.Decode.cborHex(encoded);
+        const encoded = Codec.Encode.cborHex(plutusData);
+        const decoded = Codec.Decode.cborHex(encoded);
 
-        expect(decoded, `Failed at sample index ${entry.index}`).toEqual(
-          entry.sample,
-        );
+        expect(
+          normalizeDecodedData(decoded),
+          `Failed at sample index ${entry.index}`,
+        ).toEqual(entry.sample);
       });
     });
   });
@@ -431,9 +570,15 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("constr", "encoding");
 
       testCases.forEach((entry) => {
+        if (!isConstrSample(entry.sample)) {
+          throw new Error(`Invalid constructor sample at index ${entry.index}`);
+        }
         const plutusDataFields = entry.sample.fields.map(reconstructPlutusData);
-        const plutusData = Data.constr(entry.sample.index, plutusDataFields);
-        const encoded = Data.Encode.cborHex(plutusData);
+        const plutusData = Data.constr(
+          BigInt(entry.sample.index),
+          plutusDataFields,
+        );
+        const encoded = Codec.Encode.cborHex(plutusData);
         expect(encoded, `Failed at sample index ${entry.index}`).toBe(
           entry.cborHex,
         );
@@ -444,9 +589,15 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("constr", "encoding");
 
       testCases.forEach((entry) => {
+        if (!isConstrSample(entry.sample)) {
+          throw new Error(`Invalid constructor sample at index ${entry.index}`);
+        }
         const plutusDataFields = entry.sample.fields.map(reconstructPlutusData);
-        const plutusData = Data.constr(entry.sample.index, plutusDataFields);
-        const encoded = Data.Encode.cborBytes(plutusData);
+        const plutusData = Data.constr(
+          BigInt(entry.sample.index),
+          plutusDataFields,
+        );
+        const encoded = Codec.Encode.cborBytes(plutusData);
         expect(
           Array.from(encoded),
           `Failed at sample index ${entry.index}`,
@@ -458,10 +609,11 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("constr", "decoding");
 
       testCases.forEach((entry) => {
-        const decoded = Data.Decode.cborHex(entry.cborHex);
-        expect(decoded, `Failed at sample index ${entry.index}`).toEqual(
-          entry.sample,
-        );
+        const decoded = Codec.Decode.cborHex(entry.cborHex);
+        expect(
+          normalizeDecodedData(decoded),
+          `Failed at sample index ${entry.index}`,
+        ).toEqual(entry.sample);
       });
     });
 
@@ -469,10 +621,11 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("constr", "decoding");
 
       testCases.forEach((entry) => {
-        const decoded = Data.Decode.cborBytes(new Uint8Array(entry.cborBytes));
-        expect(decoded, `Failed at sample index ${entry.index}`).toEqual(
-          entry.sample,
-        );
+        const decoded = Codec.Decode.cborBytes(new Uint8Array(entry.cborBytes));
+        expect(
+          normalizeDecodedData(decoded),
+          `Failed at sample index ${entry.index}`,
+        ).toEqual(entry.sample);
       });
     });
 
@@ -480,14 +633,21 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("constr", "roundTrip");
 
       testCases.forEach((entry) => {
+        if (!isConstrSample(entry.sample)) {
+          throw new Error(`Invalid constructor sample at index ${entry.index}`);
+        }
         const plutusDataFields = entry.sample.fields.map(reconstructPlutusData);
-        const plutusData = Data.constr(entry.sample.index, plutusDataFields);
-        const encoded = Data.Encode.cborHex(plutusData);
-        const decoded = Data.Decode.cborHex(encoded);
-
-        expect(decoded, `Failed at sample index ${entry.index}`).toEqual(
-          entry.sample,
+        const plutusData = Data.constr(
+          BigInt(entry.sample.index),
+          plutusDataFields,
         );
+        const encoded = Codec.Encode.cborHex(plutusData);
+        const decoded = Codec.Decode.cborHex(encoded);
+
+        expect(
+          normalizeDecodedData(decoded),
+          `Failed at sample index ${entry.index}`,
+        ).toEqual(entry.sample);
       });
     });
   });
@@ -498,7 +658,7 @@ describe("Data Golden Tests", () => {
 
       testCases.forEach((entry) => {
         const plutusData = reconstructPlutusData(entry.sample);
-        const encoded = Data.Encode.cborHex(plutusData);
+        const encoded = Codec.Encode.cborHex(plutusData);
         expect(encoded, `Failed at sample index ${entry.index}`).toBe(
           entry.cborHex,
         );
@@ -510,7 +670,7 @@ describe("Data Golden Tests", () => {
 
       testCases.forEach((entry) => {
         const plutusData = reconstructPlutusData(entry.sample);
-        const encoded = Data.Encode.cborBytes(plutusData);
+        const encoded = Codec.Encode.cborBytes(plutusData);
         expect(
           Array.from(encoded),
           `Failed at sample index ${entry.index}`,
@@ -522,10 +682,11 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("data", "decoding");
 
       testCases.forEach((entry) => {
-        const decoded = Data.Decode.cborHex(entry.cborHex);
-        expect(decoded, `Failed at sample index ${entry.index}`).toEqual(
-          entry.sample,
-        );
+        const decoded = Codec.Decode.cborHex(entry.cborHex);
+        expect(
+          normalizeDecodedData(decoded),
+          `Failed at sample index ${entry.index}`,
+        ).toEqual(entry.sample);
       });
     });
 
@@ -533,10 +694,11 @@ describe("Data Golden Tests", () => {
       const testCases = getTestCases("data", "decoding");
 
       testCases.forEach((entry) => {
-        const decoded = Data.Decode.cborBytes(new Uint8Array(entry.cborBytes));
-        expect(decoded, `Failed at sample index ${entry.index}`).toEqual(
-          entry.sample,
-        );
+        const decoded = Codec.Decode.cborBytes(new Uint8Array(entry.cborBytes));
+        expect(
+          normalizeDecodedData(decoded),
+          `Failed at sample index ${entry.index}`,
+        ).toEqual(entry.sample);
       });
     });
 
@@ -545,84 +707,165 @@ describe("Data Golden Tests", () => {
 
       testCases.forEach((entry) => {
         const plutusData = reconstructPlutusData(entry.sample);
-        const encoded = Data.Encode.cborHex(plutusData);
-        const decoded = Data.Decode.cborHex(encoded);
+        const encoded = Codec.Encode.cborHex(plutusData);
+        const decoded = Codec.Decode.cborHex(encoded);
 
-        expect(decoded, `Failed at sample index ${entry.index}`).toEqual(
-          entry.sample,
-        );
+        expect(
+          normalizeDecodedData(decoded),
+          `Failed at sample index ${entry.index}`,
+        ).toEqual(entry.sample);
       });
     });
   });
 });
 
 /**
- * Helper function to reconstruct PlutusData from JSON representation
+ * Reconstruct PlutusData from JSON representation stored in golden files
  */
-const reconstructPlutusData = (sample: any): Data.Data => {
-  switch (sample._tag) {
-    case "Integer":
+const reconstructPlutusData = (sample: unknown): Data.Data => {
+  const typedSample = sample as { _tag: string; [key: string]: unknown };
+
+  switch (typedSample._tag) {
+    case "Integer": {
       // Handle BigInt structure: { __type: "bigint", value: "123..." }
       const integerValue =
-        typeof sample.integer === "bigint"
-          ? sample.integer
-          : BigInt(sample.integer.value);
+        typeof typedSample.integer === "bigint"
+          ? typedSample.integer
+          : BigInt((typedSample.integer as { value: string }).value);
       return Data.int(integerValue);
+    }
     case "ByteArray": // Golden files use "ByteArray"
-      return Data.bytearray(sample.bytearray);
+      return Data.bytearray(typedSample.bytearray as string);
     case "List":
-      return Data.list(sample.list.map(reconstructPlutusData));
+      return Data.list(
+        (typedSample.list as unknown[]).map(reconstructPlutusData),
+      );
     case "Map":
       return Data.map(
-        sample.entries.map((entry: any) => ({
-          key: reconstructPlutusData(entry.key),
-          value: reconstructPlutusData(entry.value),
-        })),
+        (typedSample.entries as { key: unknown; value: unknown }[]).map(
+          (entry) => ({
+            key: reconstructPlutusData(entry.key),
+            value: reconstructPlutusData(entry.value),
+          }),
+        ),
       );
     case "Constr":
       return Data.constr(
-        sample.index,
-        sample.fields.map(reconstructPlutusData),
+        BigInt(typedSample.index as number),
+        (typedSample.fields as unknown[]).map(reconstructPlutusData),
       );
     default:
-      throw new Error(`Unknown PlutusData type: ${sample._tag}`);
+      throw new Error(`Unknown PlutusData type: ${typedSample._tag}`);
   }
 };
 
 /**
- * Helper function to normalize decoded PlutusData to match golden file format
+ * Normalize decoded PlutusData to match golden file format for comparison
  */
-const normalizeDecodedData = (data: any): any => {
-  if (typeof data !== "object" || data === null) {
+const normalizeDecodedData = (data: unknown): unknown => {
+  // Handle primitives
+  if (typeof data === "bigint") {
+    return {
+      _tag: "Integer",
+      integer: data,
+    };
+  }
+
+  if (typeof data === "string") {
+    return {
+      _tag: "ByteArray",
+      bytearray: data,
+    };
+  }
+
+  if (data === null || data === undefined) {
     return data;
   }
 
+  // Handle arrays (Lists in new Data.ts)
   if (Array.isArray(data)) {
-    return data.map(normalizeDecodedData);
+    return {
+      _tag: "List",
+      list: data.map(normalizeDecodedData),
+    };
   }
 
-  const normalized = { ...data };
-
-  // Normalize tag names to match golden files
-  if (normalized._tag === "BytesArray") {
-    normalized._tag = "ByteArray";
+  // Handle Maps
+  if (data instanceof Map) {
+    const entries: { key: unknown; value: unknown }[] = [];
+    for (const [key, value] of data.entries()) {
+      entries.push({
+        key: normalizeDecodedData(key),
+        value: normalizeDecodedData(value),
+      });
+    }
+    return {
+      _tag: "Map",
+      entries,
+    };
   }
 
-  // Recursively normalize nested structures
-  if (normalized.list && Array.isArray(normalized.list)) {
-    normalized.list = normalized.list.map(normalizeDecodedData);
+  // Handle Constr objects (plain objects with index and fields)
+  if (
+    typeof data === "object" &&
+    data !== null &&
+    "index" in data &&
+    "fields" in data
+  ) {
+    const constrData = data as { index: unknown; fields: unknown[] };
+    return {
+      _tag: "Constr",
+      index: constrData.index,
+      fields: constrData.fields.map(normalizeDecodedData),
+    };
   }
 
-  if (normalized.entries && Array.isArray(normalized.entries)) {
-    normalized.entries = normalized.entries.map(([key, value]: [any, any]) => [
-      normalizeDecodedData(key),
-      normalizeDecodedData(value),
-    ]);
+  // Handle already normalized objects (legacy format)
+  if (typeof data === "object" && data !== null && "_tag" in data) {
+    const taggedData = data as { _tag: string; [key: string]: unknown };
+    const normalized = { ...taggedData };
+
+    // Normalize tag names to match golden files
+    if (normalized._tag === "BytesArray") {
+      normalized._tag = "ByteArray";
+    }
+
+    // Recursively normalize nested structures
+    if (normalized.list && Array.isArray(normalized.list)) {
+      normalized.list = normalized.list.map(normalizeDecodedData);
+    }
+
+    if (normalized.entries && Array.isArray(normalized.entries)) {
+      normalized.entries = normalized.entries.map((entry: unknown) => {
+        // Handle both array format [key, value] and object format {key, value}
+        if (Array.isArray(entry) && entry.length === 2) {
+          return {
+            key: normalizeDecodedData(entry[0]),
+            value: normalizeDecodedData(entry[1]),
+          };
+        } else if (
+          entry &&
+          typeof entry === "object" &&
+          "key" in entry &&
+          "value" in entry
+        ) {
+          const entryObj = entry as { key: unknown; value: unknown };
+          return {
+            key: normalizeDecodedData(entryObj.key),
+            value: normalizeDecodedData(entryObj.value),
+          };
+        }
+        return entry;
+      });
+    }
+
+    if (normalized.fields && Array.isArray(normalized.fields)) {
+      normalized.fields = normalized.fields.map(normalizeDecodedData);
+    }
+
+    return normalized;
   }
 
-  if (normalized.fields && Array.isArray(normalized.fields)) {
-    normalized.fields = normalized.fields.map(normalizeDecodedData);
-  }
-
-  return normalized;
+  // Fallback for other objects
+  return data;
 };

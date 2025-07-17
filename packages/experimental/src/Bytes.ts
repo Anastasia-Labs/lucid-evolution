@@ -99,7 +99,7 @@ export const HexSchema = Schema.String.pipe(
 export type Hex = typeof HexSchema.Type;
 
 export const BytesSchema = Schema.transform(
-  Schema.typeSchema(HexSchema),
+  HexSchema,
   Schema.Uint8ArrayFromSelf,
   {
     strict: true,

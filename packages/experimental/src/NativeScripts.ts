@@ -1,10 +1,10 @@
-import { Effect, ParseResult, pipe, Schema } from "effect";
+import { Effect, ParseResult, Schema } from "effect";
 import * as KeyHash from "./KeyHash.js";
 import * as Numeric from "./Numeric.js";
 import * as CBOR from "./CBOR.js";
-import { Hex } from "./index.js";
-import * as NativeScriptCDDL from "./NativeScriptCDDL.js";
+import { Bytes } from "./index.js";
 import * as NativeScriptJSON from "./NativeScriptJSON.js";
+import { ParseIssue } from "effect/ParseResult";
 
 // CDDL specs for native scripts
 // native_script =
@@ -188,6 +188,109 @@ export const NativeScript = Schema.Union(
 );
 
 /**
+ * CDDL schemas for native scripts.
+ *
+ * These schemas define the CBOR encoding format for native scripts according to the CDDL specification:
+ *
+ * - script_pubkey = (0, addr_keyhash)
+ * - script_all = (1, [* native_script])
+ * - script_any = (2, [* native_script])
+ * - script_n_of_k = (3, n : int64, [* native_script])
+ * - invalid_before = (4, slot_no)
+ * - invalid_hereafter = (5, slot_no)
+ * - slot_no = uint .size 8
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+
+const ScriptPubKeyCDDL = Schema.Tuple(
+  Schema.Literal(0),
+  Schema.Uint8ArrayFromSelf,
+);
+
+const ScriptAllCDDL = Schema.Tuple(
+  Schema.Literal(1),
+  Schema.Array(
+    Schema.suspend(
+      (): Schema.Schema<NativeScriptCDDL> =>
+        Schema.encodedSchema(NativeScriptCDDL),
+    ),
+  ),
+);
+
+const ScriptAnyCDDL = Schema.Tuple(
+  Schema.Literal(2),
+  Schema.Array(
+    Schema.suspend(
+      (): Schema.Schema<NativeScriptCDDL> =>
+        Schema.encodedSchema(NativeScriptCDDL),
+    ),
+  ),
+);
+
+const ScriptNOfKCDDL = Schema.Tuple(
+  Schema.Literal(3),
+  Schema.BigIntFromSelf,
+  Schema.Array(
+    Schema.suspend(
+      (): Schema.Schema<NativeScriptCDDL> =>
+        Schema.encodedSchema(NativeScriptCDDL),
+    ),
+  ),
+);
+
+const InvalidBeforeCDDL = Schema.Tuple(
+  Schema.Literal(4),
+  Schema.BigIntFromSelf,
+);
+
+const InvalidHereafterCDDL = Schema.Tuple(
+  Schema.Literal(5),
+  Schema.BigIntFromSelf,
+);
+
+/**
+ * CDDL representation of a native script as a union of tuple types.
+ *
+ * This type represents the low-level CBOR structure of native scripts,
+ * where each variant is encoded as a tagged tuple.
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export type NativeScriptCDDL =
+  | readonly [0, Uint8Array]
+  | readonly [1, readonly NativeScriptCDDL[]]
+  | readonly [2, readonly NativeScriptCDDL[]]
+  | readonly [3, bigint, readonly NativeScriptCDDL[]]
+  | readonly [4, bigint]
+  | readonly [5, bigint];
+
+/**
+ * Schema for NativeScriptCDDL union type.
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const NativeScriptCDDL = Schema.transformOrFail(
+  Schema.Union(
+    ScriptPubKeyCDDL,
+    ScriptAllCDDL,
+    ScriptAnyCDDL,
+    ScriptNOfKCDDL,
+    InvalidBeforeCDDL,
+    InvalidHereafterCDDL,
+  ),
+  Schema.typeSchema(NativeScript),
+  {
+    strict: true,
+    encode: (nativeScript) => internalEncodeCDDL(nativeScript),
+    decode: (cborTuple) => internalDecodeCDDL(cborTuple),
+  },
+);
+
+/**
  * Convert a NativeScript to its CDDL representation.
  *
  * @example
@@ -201,50 +304,46 @@ export const NativeScript = Schema.Union(
  * @since 2.0.0
  * @category encoding
  */
-export const toNativeScriptCDDL = (
+export const internalEncodeCDDL = (
   nativeScript: NativeScript,
-): NativeScriptCDDL.NativeScriptCDDL => {
-  switch (nativeScript._tag) {
-    case "ScriptPubKey": {
-      return [0, KeyHash.Encode.bytes(nativeScript.keyHash)];
+): Effect.Effect<NativeScriptCDDL, ParseIssue> =>
+  Effect.gen(function* () {
+    switch (nativeScript._tag) {
+      case "ScriptPubKey": {
+        return [
+          0,
+          yield* ParseResult.encode(KeyHash.BytesSchema)(nativeScript.keyHash),
+        ];
+      }
+      case "ScriptAll": {
+        const scripts = yield* Effect.forEach(
+          nativeScript.scripts,
+          internalEncodeCDDL,
+        );
+        return [1, scripts] as const;
+      }
+      case "ScriptAny": {
+        const scripts = yield* Effect.forEach(
+          nativeScript.scripts,
+          internalEncodeCDDL,
+        );
+        return [2, scripts] as const;
+      }
+      case "ScriptNOfK": {
+        const scripts = yield* Effect.forEach(
+          nativeScript.scripts,
+          internalEncodeCDDL,
+        );
+        return [3, nativeScript.n, scripts] as const;
+      }
+      case "InvalidBefore": {
+        return [4, BigInt(nativeScript.slot)] as const;
+      }
+      case "InvalidHereafter": {
+        return [5, BigInt(nativeScript.slot)] as const;
+      }
     }
-    case "ScriptAll": {
-      return [
-        1,
-        nativeScript.scripts.map((script: NativeScript) =>
-          toNativeScriptCDDL(script),
-        ),
-      ];
-    }
-    case "ScriptAny": {
-      return [
-        2,
-        nativeScript.scripts.map((script: NativeScript) =>
-          toNativeScriptCDDL(script),
-        ),
-      ];
-    }
-    case "ScriptNOfK": {
-      return [
-        3,
-        nativeScript.n,
-        nativeScript.scripts.map((script: NativeScript) =>
-          toNativeScriptCDDL(script),
-        ),
-      ];
-    }
-    case "InvalidBefore": {
-      return [4, BigInt(nativeScript.slot)];
-    }
-    case "InvalidHereafter": {
-      return [5, BigInt(nativeScript.slot)];
-    }
-    default:
-      throw new Error(
-        `Exhaustive check failed: Unhandled case '${(nativeScript as unknown as { _tag: string })._tag}' encountered.`,
-      );
-  }
-};
+  });
 
 /**
  * Convert a CDDL representation back to a NativeScript.
@@ -263,15 +362,17 @@ export const toNativeScriptCDDL = (
  * @since 2.0.0
  * @category decoding
  */
-export const fromNativeScriptCDDL = (
-  cborTuple: NativeScriptCDDL.NativeScriptCDDL,
-): Effect.Effect<NativeScript, never> =>
+export const internalDecodeCDDL = (
+  cborTuple: NativeScriptCDDL,
+): Effect.Effect<NativeScript, ParseIssue> =>
   Effect.gen(function* () {
     switch (cborTuple[0]) {
       case 0: {
         // ScriptPubKey: [0, keyHash_bytes]
         const [, keyHashBytes] = cborTuple;
-        const keyHash = KeyHash.Decode.bytes(keyHashBytes);
+        const keyHash = yield* ParseResult.decode(KeyHash.BytesSchema)(
+          keyHashBytes,
+        );
         return new ScriptPubKey({ keyHash });
       }
       case 1: {
@@ -279,7 +380,7 @@ export const fromNativeScriptCDDL = (
         const [, scriptCBORs] = cborTuple;
         const scripts: NativeScript[] = [];
         for (const scriptCBOR of scriptCBORs) {
-          const script = yield* fromNativeScriptCDDL(scriptCBOR);
+          const script = yield* internalDecodeCDDL(scriptCBOR);
           scripts.push(script);
         }
         return new ScriptAll({ scripts });
@@ -289,7 +390,7 @@ export const fromNativeScriptCDDL = (
         const [, scriptCBORs] = cborTuple;
         const scripts: NativeScript[] = [];
         for (const scriptCBOR of scriptCBORs) {
-          const script = yield* fromNativeScriptCDDL(scriptCBOR);
+          const script = yield* internalDecodeCDDL(scriptCBOR);
           scripts.push(script);
         }
         return new ScriptAny({ scripts });
@@ -299,7 +400,7 @@ export const fromNativeScriptCDDL = (
         const [, n, scriptCBORs] = cborTuple;
         const scripts: NativeScript[] = [];
         for (const scriptCBOR of scriptCBORs) {
-          const script = yield* fromNativeScriptCDDL(scriptCBOR);
+          const script = yield* internalDecodeCDDL(scriptCBOR);
           scripts.push(script);
         }
         return new ScriptNOfK({
@@ -327,41 +428,21 @@ export const fromNativeScriptCDDL = (
     }
   });
 
-export const CBORBytesSchema = Schema.transformOrFail(
-  Schema.Uint8ArrayFromSelf,
-  NativeScript,
-  {
-    strict: true,
-    encode: (_, __, ___, toI) =>
-      ParseResult.succeed(CBOR.Encode.bytes(toNativeScriptCDDL(toI))),
-    decode: (fromA) =>
-      Effect.gen(function* () {
-        const value = yield* ParseResult.decode(CBOR.CBORBytesSchema())(fromA);
-        const cddlValue = yield* ParseResult.decodeUnknown(
-          NativeScriptCDDL.NativeScriptCDDL,
-        )(value);
-        return yield* fromNativeScriptCDDL(cddlValue);
-      }),
-  },
-);
+export const CBORBytesSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    NativeScriptCDDL, // CBOR → NativeScript
+  );
 
-export const CBORHexSchema = Schema.transformOrFail(
-  Schema.typeSchema(Hex.HexSchema),
-  NativeScript,
-  {
-    strict: true,
-    encode: (_, __, ___, toA) =>
-      ParseResult.succeed(CBOR.Encode.hex(toNativeScriptCDDL(toA))),
-    decode: (fromI) =>
-      Effect.gen(function* () {
-        const value = yield* ParseResult.decode(CBOR.CBORHexSchema())(fromI);
-        const cddlValue = yield* ParseResult.decodeUnknown(
-          NativeScriptCDDL.NativeScriptCDDL,
-        )(value);
-        return yield* fromNativeScriptCDDL(cddlValue);
-      }),
-  },
-);
+export const CBORHexSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    Bytes.BytesSchema, // string → Uint8Array
+    CBORBytesSchema(options), // Uint8Array → NativeScript
+  );
 
 /**
  * Schema transformer for converting between NativeJSON and NativeScript.
@@ -369,51 +450,15 @@ export const CBORHexSchema = Schema.transformOrFail(
  * @since 2.0.0
  * @category schemas
  */
-const NativeJSON = Schema.transformOrFail(
+export const NativeJSON = Schema.transformOrFail(
   NativeScriptJSON.NativeJSONSchema,
   NativeScript,
   {
     strict: true,
-    encode: (_, __, ___, toI) => nativeScriptToNativeJSON(toI),
-    decode: (fromA) => nativeJSONToNativeScript(fromA),
+    encode: (_, __, ___, toI) => internalNativeToJson(toI),
+    decode: (fromA) => internalJSONToNative(fromA),
   },
 );
-
-export const Encode = {
-  cborBytes: Schema.encodeSync(CBORBytesSchema),
-  cborHex: Schema.encodeSync(CBORHexSchema),
-  json: Schema.encodeSync(NativeJSON),
-};
-
-export const Decode = {
-  cborBytes: Schema.decodeUnknownSync(CBORBytesSchema),
-  cborHex: Schema.decodeUnknownSync(CBORHexSchema),
-  json: Schema.decodeUnknownSync(NativeJSON),
-};
-
-export const EncodeEither = {
-  cborBytes: Schema.encodeEither(CBORBytesSchema),
-  cborHex: Schema.encodeEither(CBORHexSchema),
-  json: Schema.encodeEither(NativeJSON),
-};
-
-export const DecodeEither = {
-  cborBytes: Schema.decodeUnknownEither(CBORBytesSchema),
-  cborHex: Schema.decodeUnknownEither(CBORHexSchema),
-  json: Schema.decodeUnknownEither(NativeJSON),
-};
-
-export const EncodeEffect = {
-  cborBytes: Schema.encode(CBORBytesSchema),
-  cborHex: Schema.encode(CBORHexSchema),
-  json: Schema.encode(NativeJSON),
-};
-
-export const DecodeEffect = {
-  cborBytes: Schema.decodeUnknown(CBORBytesSchema),
-  cborHex: Schema.decodeUnknown(CBORHexSchema),
-  json: Schema.decodeUnknown(NativeJSON),
-};
 
 /**
  * Convert a NativeJSON to a NativeScript.
@@ -429,7 +474,7 @@ export const DecodeEffect = {
  * @since 2.0.0
  * @category conversion
  */
-export const nativeJSONToNativeScript = (
+export const internalJSONToNative = (
   nativeJSON: NativeScriptJSON.NativeJSON,
 ): Effect.Effect<NativeScript, never> =>
   Effect.gen(function* () {
@@ -447,21 +492,21 @@ export const nativeJSONToNativeScript = (
       case "all": {
         const scripts = yield* Effect.forEach(
           nativeJSON.scripts,
-          nativeJSONToNativeScript,
+          internalJSONToNative,
         );
         return new ScriptAll({ scripts });
       }
       case "any": {
         const scripts = yield* Effect.forEach(
           nativeJSON.scripts,
-          nativeJSONToNativeScript,
+          internalJSONToNative,
         );
         return new ScriptAny({ scripts });
       }
       case "atLeast": {
         const scripts = yield* Effect.forEach(
           nativeJSON.scripts,
-          nativeJSONToNativeScript,
+          internalJSONToNative,
         );
         return new ScriptNOfK({
           n: Numeric.Int64.make(BigInt(nativeJSON.required)),
@@ -487,7 +532,7 @@ export const nativeJSONToNativeScript = (
  * @since 2.0.0
  * @category conversion
  */
-export const nativeScriptToNativeJSON = (
+export const internalNativeToJson = (
   nativeScript: NativeScript,
 ): Effect.Effect<NativeScriptJSON.NativeJSON, never> =>
   Effect.gen(function* () {
@@ -501,7 +546,7 @@ export const nativeScriptToNativeJSON = (
       case "ScriptAll": {
         const scripts = yield* Effect.forEach(
           nativeScript.scripts,
-          nativeScriptToNativeJSON,
+          internalNativeToJson,
         );
         return {
           type: "all" as const,
@@ -511,7 +556,7 @@ export const nativeScriptToNativeJSON = (
       case "ScriptAny": {
         const scripts = yield* Effect.forEach(
           nativeScript.scripts,
-          nativeScriptToNativeJSON,
+          internalNativeToJson,
         );
         return {
           type: "any" as const,
@@ -521,7 +566,7 @@ export const nativeScriptToNativeJSON = (
       case "ScriptNOfK": {
         const scripts = yield* Effect.forEach(
           nativeScript.scripts,
-          nativeScriptToNativeJSON,
+          internalNativeToJson,
         );
         return {
           type: "atLeast" as const,
@@ -547,3 +592,36 @@ export const nativeScriptToNativeJSON = (
         );
     }
   });
+
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
+  Encode: {
+    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
+    cborHex: Schema.encodeSync(CBORHexSchema(options)),
+    json: Schema.encodeSync(NativeJSON),
+  },
+  Decode: {
+    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
+    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
+    json: Schema.decodeUnknownSync(NativeJSON),
+  },
+  EncodeEither: {
+    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.encodeEither(CBORHexSchema(options)),
+    json: Schema.encodeEither(NativeJSON),
+  },
+  DecodeEither: {
+    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.decodeEither(CBORHexSchema(options)),
+    json: Schema.decodeEither(NativeJSON),
+  },
+  EncodeEffect: {
+    cborBytes: Schema.encode(CBORBytesSchema(options)),
+    cborHex: Schema.encode(CBORHexSchema(options)),
+    json: Schema.encode(NativeJSON),
+  },
+  DecodeEffect: {
+    cborBytes: Schema.decode(CBORBytesSchema(options)),
+    cborHex: Schema.decode(CBORHexSchema(options)),
+    json: Schema.decode(NativeJSON),
+  },
+});

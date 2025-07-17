@@ -1,7 +1,8 @@
-import { Schema, Data, FastCheck } from "effect";
+import { Schema, Data, FastCheck, Effect, ParseResult, pipe } from "effect";
 import * as SingleHostAddr from "./SingleHostAddr.js";
 import * as SingleHostName from "./SingleHostName.js";
 import * as MultiHostName from "./MultiHostName.js";
+import * as Bytes from "./Bytes.js";
 import * as CBOR from "./CBOR.js";
 
 /**
@@ -35,6 +36,12 @@ export const Relay = Schema.Union(
   MultiHostName.MultiHostName,
 );
 
+export const RelayCDDLSchema = Schema.Union(
+  SingleHostAddr.SingleHostAddrCDDLSchema,
+  SingleHostName.SingleHostNameCDDLSchema,
+  MultiHostName.MultiHostNameCDDLSchema,
+);
+
 /**
  * Type alias for Relay.
  *
@@ -45,11 +52,20 @@ export type Relay = typeof Relay.Type;
 
 /**
  * CBOR bytes transformation schema for Relay.
+ * For union types, we create a union of the child CBORBytesSchemas
+ * rather than trying to create a complex three-layer transformation.
  *
  * @since 2.0.0
  * @category schemas
  */
-export const CBORBytesSchema = undefined;
+export const CBORBytesSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.Union(
+    SingleHostAddr.CBORBytesSchema(options),
+    SingleHostName.CBORBytesSchema(options),
+    MultiHostName.CBORBytesSchema(options),
+  );
 
 /**
  * CBOR hex transformation schema for Relay.
@@ -57,51 +73,49 @@ export const CBORBytesSchema = undefined;
  * @since 2.0.0
  * @category schemas
  */
-export const CBORHexSchema = undefined;
+export const CBORHexSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.transformOrFail(Bytes.HexSchema, Schema.typeSchema(Relay), {
+    strict: true,
+    encode: (_, __, ___, toA) =>
+      pipe(
+        ParseResult.encode(CBORBytesSchema(options))(toA),
+        Effect.map(Bytes.Encode.hex),
+      ),
+    decode: (fromA) =>
+      pipe(
+        Bytes.Decode.hex(fromA),
+        ParseResult.decode(CBORBytesSchema(options)),
+      ),
+  });
 
-/**
- * Synchronous encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Encode = {
-  bytes: Schema.encodeSync(CBORBytesSchema),
-  hex: Schema.encodeSync(CBORHexSchema),
-};
-
-/**
- * Synchronous decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Decode = {
-  bytes: Schema.decodeUnknownSync(CBORBytesSchema),
-  hex: Schema.decodeUnknownSync(CBORHexSchema),
-};
-
-/**
- * Either encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  bytes: Schema.encodeEither(CBORBytesSchema),
-  hex: Schema.encodeEither(CBORHexSchema),
-};
-
-/**
- * Either decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  bytes: Schema.decodeUnknownEither(CBORBytesSchema),
-  hex: Schema.decodeUnknownEither(CBORHexSchema),
-};
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
+  Encode: {
+    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
+    cborHex: Schema.encodeSync(CBORHexSchema(options)),
+  },
+  Decode: {
+    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
+    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
+  },
+  EncodeEither: {
+    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.encodeEither(CBORHexSchema(options)),
+  },
+  DecodeEither: {
+    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.decodeEither(CBORHexSchema(options)),
+  },
+  EncodeEffect: {
+    cborBytes: Schema.encode(CBORBytesSchema(options)),
+    cborHex: Schema.encode(CBORHexSchema(options)),
+  },
+  DecodeEffect: {
+    cborBytes: Schema.decode(CBORBytesSchema(options)),
+    cborHex: Schema.decode(CBORHexSchema(options)),
+  },
+});
 
 /**
  * Pattern match on a Relay to handle different relay types.
@@ -229,3 +243,54 @@ export const equals = (self: Relay, that: Relay): boolean => {
       return false;
   }
 };
+
+/**
+ * Create a Relay from a SingleHostAddr.
+ *
+ * @example
+ * import { Relay, SingleHostAddr, Port, IPv4 } from "@lucid-evolution/experimental";
+ * import { Option } from "effect";
+ *
+ * const ipv4 = new IPv4({ address: "c0a80001" });
+ * const hostAddr = SingleHostAddr.withIPv4(Option.some(Port.make(8080)), ipv4);
+ * const relay = Relay.fromSingleHostAddr(hostAddr);
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
+export const fromSingleHostAddr = (
+  singleHostAddr: SingleHostAddr.SingleHostAddr,
+): Relay => singleHostAddr;
+
+/**
+ * Create a Relay from a SingleHostName.
+ *
+ * @example
+ * import { Relay, SingleHostName, Port } from "@lucid-evolution/experimental";
+ * import { Option } from "effect";
+ *
+ * const hostName = SingleHostName.make(Option.some(Port.make(3000)), "pool.example.com");
+ * const relay = Relay.fromSingleHostName(hostName);
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
+export const fromSingleHostName = (
+  singleHostName: SingleHostName.SingleHostName,
+): Relay => singleHostName;
+
+/**
+ * Create a Relay from a MultiHostName.
+ *
+ * @example
+ * import { Relay, MultiHostName } from "@lucid-evolution/experimental";
+ *
+ * const multiHost = MultiHostName.make("pool.example.com");
+ * const relay = Relay.fromMultiHostName(multiHost);
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
+export const fromMultiHostName = (
+  multiHostName: MultiHostName.MultiHostName,
+): Relay => multiHostName;

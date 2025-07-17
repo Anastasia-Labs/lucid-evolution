@@ -1,8 +1,8 @@
-import { Schema, Data, FastCheck, Effect, ParseResult, pipe } from "effect";
+import { Schema, Data, FastCheck, Effect, ParseResult } from "effect";
 import * as RewardAccount from "./RewardAccount.js";
 import * as Coin from "./Coin.js";
 import * as CBOR from "./CBOR.js";
-import { Bytes } from "./index.js";
+import * as Bytes from "./Bytes.js";
 
 /**
  * CDDL specs
@@ -72,16 +72,51 @@ export class Withdrawals extends Schema.TaggedClass<Withdrawals>()(
 export const isWithdrawals = Schema.is(Withdrawals);
 
 /**
- * CDDL schema for Withdrawals as map structure.
+ * CDDL schema for Withdrawals.
  * withdrawals = {+ reward_account => coin}
  *
  * @since 2.0.0
  * @category schemas
  */
-export const WithdrawalsCDDLSchema = Schema.Map({
-  key: Bytes.BytesSchema,
-  value: Schema.BigIntFromNumber,
-});
+export const WithdrawalsCDDLSchema = Schema.transformOrFail(
+  Schema.MapFromSelf({
+    key: Schema.Uint8ArrayFromSelf, // RewardAccount as Uint8Array (29 bytes)
+    value: CBOR.Integer, // Coin as bigint
+  }),
+  Schema.typeSchema(Withdrawals),
+  {
+    strict: true,
+    encode: (toA) =>
+      Effect.gen(function* () {
+        const withdrawalsMap = new Map<Uint8Array, bigint>();
+        for (const [rewardAccount, coin] of toA.withdrawals.entries()) {
+          const accountBytes = yield* ParseResult.encode(
+            RewardAccount.BytesSchema,
+          )(rewardAccount);
+          withdrawalsMap.set(accountBytes, BigInt(coin));
+        }
+        return withdrawalsMap;
+      }),
+    decode: (fromA) =>
+      Effect.gen(function* () {
+        const decodedWithdrawals = new Map<
+          RewardAccount.RewardAccount,
+          Coin.Coin
+        >();
+        for (const [accountBytes, coinAmount] of fromA.entries()) {
+          const rewardAccount = yield* ParseResult.decode(
+            RewardAccount.BytesSchema,
+          )(accountBytes);
+          const coin = Coin.make(coinAmount);
+          decodedWithdrawals.set(rewardAccount, coin);
+        }
+        return yield* ParseResult.decode(Withdrawals)({
+          _tag: "Withdrawals",
+          withdrawals: decodedWithdrawals,
+        });
+      }),
+  },
+);
 
 /**
  * CBOR bytes transformation schema for Withdrawals.
@@ -89,44 +124,13 @@ export const WithdrawalsCDDLSchema = Schema.Map({
  * @since 2.0.0
  * @category schemas
  */
-export const CBORBytesSchema = Schema.transformOrFail(
-  Schema.typeSchema(Bytes.BytesSchema),
-  Withdrawals,
-  {
-    strict: true,
-    encode: (_, __, ___, toA) =>
-      Effect.gen(function* () {
-        const withdrawalsCDDL = Array.from(toA.withdrawals.entries()).map(
-          ([key, value]) => [RewardAccount.Encode.bytes(key), value],
-        );
-        return yield* ParseResult.succeed(CBOR.Encode.bytes(withdrawalsCDDL));
-      }),
-
-    decode: (_, __, ___, fromA) =>
-      Effect.gen(function* () {
-        // const withdrawalsCDDL = yield* ParseResult.decode(
-        //   CBOR.makeCBORBytesSchema(WithdrawalsCDDLSchema),
-        // )(fromA);
-        const value = yield* ParseResult.decode(CBOR.CBORBytesSchema())(fromA);
-        const withdrawalsCDDL = yield* ParseResult.decodeUnknown(
-          WithdrawalsCDDLSchema,
-        )(value);
-        // decode keys and value to the appropriate types
-        const decodedWithdrawals = new Map<
-          RewardAccount.RewardAccount,
-          Coin.Coin
-        >();
-        for (const [key, value] of withdrawalsCDDL) {
-          const rewardAccount = yield* ParseResult.decode(
-            RewardAccount.BytesSchema,
-          )(key);
-          const coin = yield* ParseResult.decode(Coin.CoinSchema)(value);
-          decodedWithdrawals.set(rewardAccount, coin);
-        }
-        return new Withdrawals({ withdrawals: decodedWithdrawals });
-      }),
-  },
-);
+export const CBORBytesSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    WithdrawalsCDDLSchema, // CBOR → Withdrawals
+  );
 
 /**
  * CBOR hex transformation schema for Withdrawals.
@@ -134,20 +138,13 @@ export const CBORBytesSchema = Schema.transformOrFail(
  * @since 2.0.0
  * @category schemas
  */
-export const CBORHexSchema = Schema.transformOrFail(
-  Schema.typeSchema(Bytes.HexSchema),
-  Withdrawals,
-  {
-    strict: true,
-    encode: (_, __, ___, toA) =>
-      pipe(
-        ParseResult.encode(CBORBytesSchema)(toA),
-        Effect.map(Bytes.Encode.hex),
-      ),
-    decode: (fromA) =>
-      pipe(Bytes.Decode.hex(fromA), ParseResult.decode(CBORBytesSchema)),
-  },
-);
+export const CBORHexSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    Bytes.BytesSchema, // string → Uint8Array
+    CBORBytesSchema(options), // Uint8Array → Withdrawals
+  );
 
 /**
  * Check if two Withdrawals instances are equal.
@@ -352,46 +349,29 @@ export const entries = (
 ): Array<[RewardAccount.RewardAccount, Coin.Coin]> =>
   Array.from(withdrawals.withdrawals.entries());
 
-/**
- * Synchronous encoding utilities for Withdrawals.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Encode = {
-  cborHex: Schema.encodeSync(CBORHexSchema),
-  cborBytes: Schema.encodeSync(CBORBytesSchema),
-};
-
-/**
- * Synchronous decoding utilities for Withdrawals.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Decode = {
-  cborHex: Schema.decodeUnknownSync(CBORHexSchema),
-  cborBytes: Schema.decodeUnknownSync(CBORBytesSchema),
-};
-
-/**
- * Either encoding utilities for Withdrawals.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  cborHex: Schema.encodeEither(CBORHexSchema),
-  cborBytes: Schema.encodeEither(CBORBytesSchema),
-};
-
-/**
- * Either decoding utilities for Withdrawals.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  cborHex: Schema.decodeUnknownEither(CBORHexSchema),
-  cborBytes: Schema.decodeUnknownEither(CBORBytesSchema),
-};
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
+  Encode: {
+    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
+    cborHex: Schema.encodeSync(CBORHexSchema(options)),
+  },
+  Decode: {
+    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
+    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
+  },
+  EncodeEither: {
+    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.encodeEither(CBORHexSchema(options)),
+  },
+  DecodeEither: {
+    cborBytes: Schema.decodeUnknownEither(CBORBytesSchema(options)),
+    cborHex: Schema.decodeUnknownEither(CBORHexSchema(options)),
+  },
+  EncodeEffect: {
+    cborBytes: Schema.encode(CBORBytesSchema(options)),
+    cborHex: Schema.encode(CBORHexSchema(options)),
+  },
+  DecodeEffect: {
+    cborBytes: Schema.decodeUnknown(CBORBytesSchema(options)),
+    cborHex: Schema.decodeUnknown(CBORHexSchema(options)),
+  },
+});

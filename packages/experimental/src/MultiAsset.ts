@@ -1,9 +1,9 @@
-import { Schema, Data, FastCheck, HashMap, ParseResult, Effect } from "effect";
+import { Schema, Data, FastCheck, ParseResult, Effect } from "effect";
 import * as PolicyId from "./PolicyId.js";
 import * as AssetName from "./AssetName.js";
 import * as PositiveCoin from "./PositiveCoin.js";
 import * as CBOR from "./CBOR.js";
-import { Bytes } from "./index.js";
+import * as Bytes from "./Bytes.js";
 
 /**
  * Error class for MultiAsset related operations.
@@ -20,11 +20,7 @@ import { Bytes } from "./index.js";
  */
 export class MultiAssetError extends Data.TaggedError("MultiAssetError")<{
   message?: string;
-  reason?:
-    | "InvalidStructure"
-    | "EmptyAssetMap"
-    | "ZeroAmount"
-    | "DuplicateAsset";
+  cause?: unknown;
 }> {}
 
 /**
@@ -33,11 +29,11 @@ export class MultiAssetError extends Data.TaggedError("MultiAssetError")<{
  * @since 2.0.0
  * @category schemas
  */
-export const AssetMapSchema = Schema.HashMap({
+export const AssetMapSchema = Schema.Map({
   key: AssetName.AssetName,
   value: PositiveCoin.PositiveCoinSchema,
 })
-  .pipe(Schema.filter((map) => HashMap.size(map) > 0))
+  .pipe(Schema.filter((map) => map.size > 0))
   .annotations({
     message: () => "Asset map cannot be empty",
     identifier: "AssetMap",
@@ -59,11 +55,11 @@ export type AssetMap = typeof AssetMapSchema.Type;
  * @since 2.0.0
  * @category schemas
  */
-export const MultiAssetSchema = Schema.HashMap({
+export const MultiAssetSchema = Schema.MapFromSelf({
   key: PolicyId.PolicyId,
   value: AssetMapSchema,
 })
-  .pipe(Schema.filter((map) => HashMap.size(map) > 0))
+  .pipe(Schema.filter((map) => map.size > 0))
   .annotations({
     message: () => "MultiAsset cannot be empty",
     identifier: "MultiAsset",
@@ -76,14 +72,13 @@ export const MultiAssetSchema = Schema.HashMap({
  *
  * @example
  * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@lucid-evolution/experimental";
- * import { HashMap } from "effect";
  *
  * const policyId = new PolicyId({ hash: "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235" });
  * const assetName = new AssetName({ name: "546f6b656e" }); // "Token"
  * const amount = PositiveCoin.make(1000n);
  *
- * const assetMap = HashMap.make([assetName, amount]);
- * const multiAsset: MultiAsset.MultiAsset = HashMap.make([policyId, assetMap]);
+ * const assetMap = new Map([[assetName, amount]]);
+ * const multiAsset: MultiAsset.MultiAsset = new Map([[policyId, assetMap]]);
  *
  * @since 2.0.0
  * @category model
@@ -97,8 +92,7 @@ export type MultiAsset = typeof MultiAssetSchema.Type;
  * @since 2.0.0
  * @category constructors
  */
-export const empty = (): HashMap.HashMap<PolicyId.PolicyId, AssetMap> =>
-  HashMap.empty();
+export const empty = (): Map<PolicyId.PolicyId, AssetMap> => new Map();
 
 /**
  * Create a MultiAsset from a single asset.
@@ -120,8 +114,8 @@ export const singleton = (
   assetName: AssetName.AssetName,
   amount: PositiveCoin.PositiveCoin,
 ): MultiAsset => {
-  const assetMap = HashMap.make([assetName, amount]);
-  return HashMap.make([policyId, assetMap]);
+  const assetMap = new Map([[assetName, amount]]);
+  return new Map([[policyId, assetMap]]);
 };
 
 /**
@@ -147,24 +141,26 @@ export const addAsset = (
   assetName: AssetName.AssetName,
   amount: PositiveCoin.PositiveCoin,
 ): MultiAsset => {
-  const existingAssetMap = HashMap.get(multiAsset, policyId);
+  const existingAssetMap = multiAsset.get(policyId);
 
-  if (existingAssetMap._tag === "Some") {
-    const existingAmount = HashMap.get(existingAssetMap.value, assetName);
+  if (existingAssetMap !== undefined) {
+    const existingAmount = existingAssetMap.get(assetName);
     const newAmount =
-      existingAmount._tag === "Some"
-        ? PositiveCoin.add(existingAmount.value, amount)
+      existingAmount !== undefined
+        ? PositiveCoin.add(existingAmount, amount)
         : amount;
 
-    const updatedAssetMap = HashMap.set(
-      existingAssetMap.value,
-      assetName,
-      newAmount,
-    );
-    return HashMap.set(multiAsset, policyId, updatedAssetMap);
+    const updatedAssetMap = new Map(existingAssetMap);
+    updatedAssetMap.set(assetName, newAmount);
+
+    const result = new Map(multiAsset);
+    result.set(policyId, updatedAssetMap);
+    return result;
   } else {
-    const newAssetMap = HashMap.make([assetName, amount]);
-    return HashMap.set(multiAsset, policyId, newAssetMap);
+    const newAssetMap = new Map([[assetName, amount]]);
+    const result = new Map(multiAsset);
+    result.set(policyId, newAssetMap);
+    return result;
   }
 };
 
@@ -191,9 +187,12 @@ export const getAsset = (
   policyId: PolicyId.PolicyId,
   assetName: AssetName.AssetName,
 ) => {
-  const assetMap = HashMap.get(multiAsset, policyId);
-  if (assetMap._tag === "Some") {
-    return HashMap.get(assetMap.value, assetName);
+  const assetMap = multiAsset.get(policyId);
+  if (assetMap !== undefined) {
+    const amount = assetMap.get(assetName);
+    return amount !== undefined
+      ? { _tag: "Some" as const, value: amount }
+      : { _tag: "None" as const };
   }
   return { _tag: "None" as const };
 };
@@ -240,8 +239,7 @@ export const hasAsset = (
  * @since 2.0.0
  * @category transformation
  */
-export const getPolicyIds = (multiAsset: MultiAsset) =>
-  HashMap.keys(multiAsset);
+export const getPolicyIds = (multiAsset: MultiAsset) => multiAsset.keys();
 
 /**
  * Get all assets for a specific policy ID.
@@ -264,7 +262,12 @@ export const getPolicyIds = (multiAsset: MultiAsset) =>
 export const getAssetsByPolicy = (
   multiAsset: MultiAsset,
   policyId: PolicyId.PolicyId,
-) => HashMap.get(multiAsset, policyId);
+) => {
+  const assetMap = multiAsset.get(policyId);
+  return assetMap !== undefined
+    ? { _tag: "Some" as const, value: assetMap }
+    : { _tag: "None" as const };
+};
 
 /**
  * Check if two MultiAsset instances are equal.
@@ -273,28 +276,21 @@ export const getAssetsByPolicy = (
  * @category equality
  */
 export const equals = (a: MultiAsset, b: MultiAsset): boolean =>
-  HashMap.size(a) === HashMap.size(b) &&
-  Array.from(HashMap.keys(a)).every((policyId) => {
-    const aAssets = HashMap.get(a, policyId);
-    const bAssets = HashMap.get(b, policyId);
+  a.size === b.size &&
+  Array.from(a.keys()).every((policyId) => {
+    const aAssets = a.get(policyId);
+    const bAssets = b.get(policyId);
 
-    if (aAssets._tag !== bAssets._tag) return false;
-    if (aAssets._tag === "None") return true;
-    if (bAssets._tag === "None") return false;
-
-    const aMap = aAssets.value;
-    const bMap = bAssets.value;
+    if ((aAssets === undefined) !== (bAssets === undefined)) return false;
+    if (aAssets === undefined) return true;
+    if (bAssets === undefined) return false;
 
     return (
-      HashMap.size(aMap) === HashMap.size(bMap) &&
-      Array.from(HashMap.keys(aMap)).every((assetName) => {
-        const aAmount = HashMap.get(aMap, assetName);
-        const bAmount = HashMap.get(bMap, assetName);
-        return (
-          aAmount._tag === bAmount._tag &&
-          (aAmount._tag === "None" ||
-            (bAmount._tag === "Some" && aAmount.value === bAmount.value))
-        );
+      aAssets.size === bAssets.size &&
+      Array.from(aAssets.keys()).every((assetName) => {
+        const aAmount = aAssets.get(assetName);
+        const bAmount = bAssets.get(assetName);
+        return aAmount === bAmount;
       })
     );
   });
@@ -320,69 +316,81 @@ export const generator = FastCheck.array(
     FastCheck.array(
       FastCheck.tuple(AssetName.generator, PositiveCoin.generator),
       { minLength: 1, maxLength: 5 },
-    ).map((assets) => HashMap.fromIterable(assets)),
+    ).map((assets) => new Map(assets)),
   ),
   { minLength: 1, maxLength: 3 },
-).map((policies) => HashMap.fromIterable(policies));
+).map((policies) => new Map(policies));
 
 /**
- * CDDL schema for MultiAsset as map structure.
+ * CDDL schema for MultiAsset.
  * multiasset<positive_coin> = {+ policy_id => {+ asset_name => positive_coin}}
- *
- * Where:
- * - policy_id: 28-byte Uint8Array (from CBOR byte string)
- * - asset_name: variable-length Uint8Array (from CBOR byte string, can be empty)
- * - positive_coin: unsigned 64-bit integer (must be > 0)
  *
  * @since 2.0.0
  * @category schemas
  */
-export const MultiAssetCDDLSchema = Schema.Map({
-  key: Schema.Uint8ArrayFromSelf, // Policy ID as Uint8Array (28 bytes)
-  value: Schema.Map({
-    key: Schema.Uint8ArrayFromSelf, // Asset name as Uint8Array (variable length)
-    value: Schema.Number, // Amount as number (will be converted to PositiveCoin)
+export const MultiAssetCDDLSchema = Schema.transformOrFail(
+  Schema.MapFromSelf({
+    key: CBOR.ByteArray,
+    value: Schema.MapFromSelf({
+      key: CBOR.ByteArray,
+      value: CBOR.Integer,
+    }),
   }),
-});
+  Schema.typeSchema(MultiAssetSchema),
+  {
+    strict: true,
+    encode: (toI, _, __, toA) =>
+      Effect.gen(function* () {
+        // Convert MultiAsset to raw Map data for CBOR encoding
+        const outerMap = new Map<Uint8Array, Map<Uint8Array, bigint>>();
 
-/**
- * TypeScript type for the raw CDDL representation.
- * This is what gets encoded/decoded to/from CBOR.
- *
- * @since 2.0.0
- * @category model
- */
-export type MultiAssetCDDL = Map<Uint8Array, Map<Uint8Array, number>>;
+        for (const [policyId, assetMap] of toA.entries()) {
+          const policyIdBytes = yield* ParseResult.encode(PolicyId.BytesSchema)(
+            policyId,
+          );
+          const innerMap = new Map<Uint8Array, bigint>();
 
-/**
- * Helper function to convert MultiAsset to entries array for manipulation
- */
-const toEntries = (
-  multiAsset: MultiAsset,
-): Array<
-  [PolicyId.PolicyId, Array<[AssetName.AssetName, PositiveCoin.PositiveCoin]>]
-> => {
-  return Array.from(HashMap.entries(multiAsset)).map(([policyId, assetMap]) => [
-    policyId,
-    Array.from(HashMap.entries(assetMap)),
-  ]);
-};
+          for (const [assetName, amount] of assetMap.entries()) {
+            const assetNameBytes = yield* ParseResult.encode(
+              AssetName.BytesSchema,
+            )(assetName);
+            innerMap.set(assetNameBytes, amount);
+          }
 
-/**
- * Helper function to create MultiAsset from entries array
- */
-const fromEntries = (
-  entries: Array<
-    [PolicyId.PolicyId, Array<[AssetName.AssetName, PositiveCoin.PositiveCoin]>]
-  >,
-): MultiAsset => {
-  return HashMap.fromIterable(
-    entries.map(([policyId, assetEntries]) => [
-      policyId,
-      HashMap.fromIterable(assetEntries),
-    ]),
-  );
-};
+          outerMap.set(policyIdBytes, innerMap);
+        }
+
+        return outerMap;
+      }),
+
+    decode: (fromA) =>
+      Effect.gen(function* () {
+        const result = new Map<PolicyId.PolicyId, AssetMap>();
+
+        for (const [policyIdBytes, assetMapCddl] of fromA.entries()) {
+          const policyId = yield* ParseResult.decode(PolicyId.BytesSchema)(
+            policyIdBytes,
+          );
+
+          const assetMap = new Map<
+            AssetName.AssetName,
+            PositiveCoin.PositiveCoin
+          >();
+          for (const [assetNameBytes, amount] of assetMapCddl.entries()) {
+            const assetName = yield* ParseResult.decode(AssetName.BytesSchema)(
+              assetNameBytes,
+            );
+            const positiveCoin = PositiveCoin.make(amount);
+            assetMap.set(assetName, positiveCoin);
+          }
+
+          result.set(policyId, assetMap);
+        }
+
+        return result;
+      }),
+  },
+);
 
 /**
  * CBOR bytes transformation schema for MultiAsset.
@@ -390,35 +398,13 @@ const fromEntries = (
  * @since 2.0.0
  * @category schemas
  */
-export const CBORBytesSchema = Schema.transformOrFail(
-  Schema.typeSchema(Bytes.BytesSchema),
-  Schema.typeSchema(MultiAssetSchema),
-  {
-    strict: true,
-    encode: (_, __, ___, toA) =>
-      ParseResult.succeed(
-        CBOR.Encode.bytes(
-          new Map(
-            toEntries(toA).map(([policyId, assetEntries]) => [
-              Bytes.Decode.hex(policyId),
-              new Map(
-                assetEntries.map(([assetName, amount]) => [
-                  Bytes.Decode.hex(assetName),
-                  Number(amount),
-                ]),
-              ),
-            ]),
-          ),
-        ),
-      ),
-    decode: (_, __, ___, fromI) =>
-      Effect.gen(function* () {
-        const map = yield* ParseResult.decode(CBOR.CBORBytesSchema())(fromI);
-        const m = yield* ParseResult.decodeUnknown(MultiAssetCDDLSchema)(map);
-        return fromCDDL(m);
-      }),
-  },
-);
+export const CBORBytesSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    MultiAssetCDDLSchema, // CBOR → MultiAsset
+  );
 
 /**
  * CBOR hex transformation schema for MultiAsset.
@@ -426,137 +412,40 @@ export const CBORBytesSchema = Schema.transformOrFail(
  * @since 2.0.0
  * @category schemas
  */
-export const CBORHexSchema = Schema.transformOrFail(
-  Schema.typeSchema(Bytes.HexSchema),
-  Schema.typeSchema(MultiAssetSchema),
-  {
-    strict: true,
-    encode: (_, __, ___, toA) =>
-      ParseResult.succeed(
-        CBOR.Encode.hex(
-          new Map(
-            toEntries(toA).map(([policyId, assetEntries]) => [
-              Bytes.Decode.hex(policyId),
-              new Map(
-                assetEntries.map(([assetName, amount]) => [
-                  Bytes.Decode.hex(assetName),
-                  Number(amount),
-                ]),
-              ),
-            ]),
-          ),
-        ),
-      ),
-    decode: (_, __, ___, fromI) =>
-      Effect.gen(function* () {
-        const map = yield* ParseResult.decode(CBOR.CBORHexSchema())(fromI);
-        const cddlMap =
-          yield* ParseResult.decodeUnknown(MultiAssetCDDLSchema)(map);
-        const m = fromCDDL(cddlMap);
-        return m;
-      }),
+export const CBORHexSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    Bytes.BytesSchema, // string → Uint8Array
+    CBORBytesSchema(options), // Uint8Array → MultiAsset
+  );
+
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
+  Encode: {
+    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
+    cborHex: Schema.encodeSync(CBORHexSchema(options)),
   },
-);
-
-/**
- * Convert MultiAsset to raw Map data for CBOR encoding.
- *
- * @since 2.0.0
- * @category transformation
- */
-export const toCDDL = (multiAsset: MultiAsset): MultiAssetCDDL => {
-  const outerMap = new Map<Uint8Array, Map<Uint8Array, number>>();
-
-  for (const [policyId, assetMap] of HashMap.entries(multiAsset)) {
-    const policyIdBytes = Bytes.Decode.hex(policyId);
-    const innerMap = new Map<Uint8Array, number>();
-
-    for (const [assetName, amount] of HashMap.entries(assetMap)) {
-      const assetNameBytes = Bytes.Decode.hex(assetName);
-      innerMap.set(assetNameBytes, Number(amount));
-    }
-
-    outerMap.set(policyIdBytes, innerMap);
-  }
-
-  return outerMap;
-};
-
-/**
- * Create MultiAsset from raw Map data after CBOR decoding.
- *
- * @since 2.0.0
- * @category constructors
- */
-export const fromCDDL = (raw: MultiAssetCDDL): MultiAsset => {
-  const entries = Array.from(raw.entries()).map(([policyIdBytes, assetMap]) => {
-    const policyId = PolicyId.PolicyId.make(Bytes.Encode.hex(policyIdBytes));
-    const assetEntries = Array.from(assetMap.entries()).map(
-      ([assetNameBytes, amount]) => {
-        const assetName = AssetName.AssetName.make(
-          Bytes.Encode.hex(assetNameBytes),
-        );
-        const positiveCoin = Schema.decodeUnknownSync(
-          PositiveCoin.PositiveCoinSchema,
-        )(amount);
-        return [assetName, positiveCoin] as [
-          AssetName.AssetName,
-          PositiveCoin.PositiveCoin,
-        ];
-      },
-    );
-    return [policyId, assetEntries] as [
-      PolicyId.PolicyId,
-      Array<[AssetName.AssetName, PositiveCoin.PositiveCoin]>,
-    ];
-  });
-
-  return fromEntries(entries);
-};
-
-/**
- * Synchronous encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Encode = {
-  cborHex: Schema.encodeSync(CBORHexSchema),
-  cborBytes: Schema.encodeSync(CBORBytesSchema),
-};
-
-/**
- * Synchronous decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Decode = {
-  cborHex: Schema.decodeUnknownSync(CBORHexSchema),
-  cborBytes: Schema.decodeUnknownSync(CBORBytesSchema),
-};
-
-/**
- * Either encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  cborHex: Schema.encodeEither(CBORHexSchema),
-  cborBytes: Schema.encodeEither(CBORBytesSchema),
-};
-
-/**
- * Either decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  cborHex: Schema.decodeUnknownEither(CBORHexSchema),
-  cborBytes: Schema.decodeUnknownEither(CBORBytesSchema),
-};
+  Decode: {
+    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
+    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
+  },
+  EncodeEither: {
+    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.encodeEither(CBORHexSchema(options)),
+  },
+  DecodeEither: {
+    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.decodeEither(CBORHexSchema(options)),
+  },
+  EncodeEffect: {
+    cborBytes: Schema.encode(CBORBytesSchema(options)),
+    cborHex: Schema.encode(CBORHexSchema(options)),
+  },
+  DecodeEffect: {
+    cborBytes: Schema.decode(CBORBytesSchema(options)),
+    cborHex: Schema.decode(CBORHexSchema(options)),
+  },
+});
 
 /**
  * Merge two MultiAsset instances, combining amounts for assets that exist in both.
@@ -578,8 +467,8 @@ export const DecodeEither = {
 export const merge = (a: MultiAsset, b: MultiAsset): MultiAsset => {
   let result = a;
 
-  for (const [policyId, assetMap] of HashMap.entries(b)) {
-    for (const [assetName, amount] of HashMap.entries(assetMap)) {
+  for (const [policyId, assetMap] of b.entries()) {
+    for (const [assetName, amount] of assetMap.entries()) {
       result = addAsset(result, policyId, assetName, amount);
     }
   }
@@ -608,55 +497,50 @@ export const merge = (a: MultiAsset, b: MultiAsset): MultiAsset => {
  * @category transformation
  */
 export const subtract = (a: MultiAsset, b: MultiAsset): MultiAsset => {
-  let result = HashMap.empty<PolicyId.PolicyId, AssetMap>();
+  const result = new Map<PolicyId.PolicyId, AssetMap>();
 
   // Start with all assets from a
-  for (const [policyId, assetMapA] of HashMap.entries(a)) {
-    const assetMapB = HashMap.get(b, policyId);
+  for (const [policyId, assetMapA] of a.entries()) {
+    const assetMapB = b.get(policyId);
 
-    if (assetMapB._tag === "None") {
+    if (assetMapB === undefined) {
       // No assets to subtract for this policy, keep all
-      result = HashMap.set(result, policyId, assetMapA);
+      result.set(policyId, assetMapA);
     } else {
       // Subtract assets for this policy
-      let newAssetMap = HashMap.empty<
+      const newAssetMap = new Map<
         AssetName.AssetName,
         PositiveCoin.PositiveCoin
       >();
 
-      for (const [assetName, amountA] of HashMap.entries(assetMapA)) {
-        const amountB = HashMap.get(assetMapB.value, assetName);
+      for (const [assetName, amountA] of assetMapA.entries()) {
+        const amountB = assetMapB.get(assetName);
 
-        if (amountB._tag === "None") {
+        if (amountB === undefined) {
           // No amount to subtract, keep the original
-          newAssetMap = HashMap.set(newAssetMap, assetName, amountA);
+          newAssetMap.set(assetName, amountA);
         } else {
           // Subtract amounts
-          const diff = amountA - amountB.value;
+          const diff = amountA - amountB;
           if (diff > 0n) {
             // Only keep positive amounts
-            newAssetMap = HashMap.set(
-              newAssetMap,
-              assetName,
-              PositiveCoin.make(diff),
-            );
+            newAssetMap.set(assetName, PositiveCoin.make(diff));
           }
           // If diff <= 0, the asset is removed (not added to newAssetMap)
         }
       }
 
       // Only add the policy if it has remaining assets
-      if (HashMap.size(newAssetMap) > 0) {
-        result = HashMap.set(result, policyId, newAssetMap);
+      if (newAssetMap.size > 0) {
+        result.set(policyId, newAssetMap);
       }
     }
   }
 
   // Check if result is empty
-  if (HashMap.size(result) === 0) {
+  if (result.size === 0) {
     throw new MultiAssetError({
       message: "Subtraction would result in empty MultiAsset",
-      reason: "EmptyAssetMap",
     });
   }
 

@@ -1,4 +1,4 @@
-import { Schema, Data, FastCheck } from "effect";
+import { Schema, Data, FastCheck, Effect, ParseResult } from "effect";
 import * as PoolKeyHash from "./PoolKeyHash.js";
 import * as VrfKeyHash from "./VrfKeyHash.js";
 import * as Coin from "./Coin.js";
@@ -9,6 +9,7 @@ import * as Relay from "./Relay.js";
 import * as PoolMetadata from "./PoolMetadata.js";
 import * as NetworkId from "./NetworkId.js";
 import * as CBOR from "./CBOR.js";
+import * as Bytes from "./Bytes.js";
 
 /**
  * Error class for PoolParams related operations.
@@ -25,11 +26,7 @@ import * as CBOR from "./CBOR.js";
  */
 export class PoolParamsError extends Data.TaggedError("PoolParamsError")<{
   message?: string;
-  reason?:
-    | "InvalidStructure"
-    | "InvalidOwners"
-    | "InvalidRelays"
-    | "InvalidMetadata";
+  cause?: unknown;
 }> {}
 
 /**
@@ -67,7 +64,7 @@ export class PoolParamsError extends Data.TaggedError("PoolParamsError")<{
  * @since 2.0.0
  * @category model
  */
-export class PoolParams extends Schema.Class<PoolParams>("PoolParams")({
+export class PoolParams extends Schema.TaggedClass<PoolParams>()("PoolParams", {
   operator: PoolKeyHash.PoolKeyHash,
   vrfKeyhash: VrfKeyHash.VrfKeyHash,
   pledge: Coin.CoinSchema,
@@ -97,12 +94,155 @@ export class PoolParams extends Schema.Class<PoolParams>("PoolParams")({
 }
 
 /**
+ * CDDL schema for PoolParams.
+ * pool_params = [
+ *   operator       : pool_keyhash,
+ *   vrf_keyhash    : vrf_keyhash,
+ *   pledge         : coin,
+ *   cost           : coin,
+ *   margin         : unit_interval,
+ *   reward_account : reward_account,
+ *   pool_owners    : set<addr_keyhash>,
+ *   relays         : [* relay],
+ *   pool_metadata  : pool_metadata / nil
+ * ]
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const PoolParamsCDDLSchema = Schema.transformOrFail(
+  Schema.Tuple(
+    Schema.Uint8ArrayFromSelf, // operator (pool_keyhash as bytes)
+    Schema.Uint8ArrayFromSelf, // vrf_keyhash (as bytes)
+    Schema.BigIntFromSelf, // pledge (coin)
+    Schema.BigIntFromSelf, // cost (coin)
+    Schema.encodedSchema(UnitInterval.UnitIntervalCDDLSchema), // margin using UnitInterval CDDL schema
+    Schema.Uint8ArrayFromSelf, // reward_account (bytes)
+    Schema.Array(Schema.Uint8ArrayFromSelf), // pool_owners (set<addr_keyhash> as bytes array)
+    Schema.Array(Schema.encodedSchema(Relay.RelayCDDLSchema)), // relays using Relay CDDL schema
+    Schema.NullOr(Schema.encodedSchema(PoolMetadata.PoolMetadataCDDLSchema)), // pool_metadata using PoolMetadata CDDL schema
+  ),
+  Schema.typeSchema(PoolParams),
+  {
+    strict: true,
+    encode: (toA) =>
+      Effect.gen(function* () {
+        const operatorBytes = yield* ParseResult.encode(
+          PoolKeyHash.BytesSchema,
+        )(toA.operator);
+        const vrfKeyhashBytes = yield* ParseResult.encode(
+          VrfKeyHash.BytesSchema,
+        )(toA.vrfKeyhash);
+        const marginEncoded = yield* ParseResult.encode(
+          UnitInterval.UnitIntervalCDDLSchema,
+        )(toA.margin);
+        const rewardAccountBytes = yield* ParseResult.encode(
+          RewardAccount.BytesSchema,
+        )(toA.rewardAccount);
+
+        const poolOwnersBytes = yield* Effect.all(
+          toA.poolOwners.map((owner) =>
+            ParseResult.encode(KeyHash.BytesSchema)(owner),
+          ),
+        );
+
+        const relaysEncoded = yield* Effect.all(
+          toA.relays.map((relay) =>
+            ParseResult.encode(Relay.RelayCDDLSchema)(relay),
+          ),
+        );
+
+        const poolMetadataEncoded = toA.poolMetadata
+          ? yield* ParseResult.encode(PoolMetadata.PoolMetadataCDDLSchema)(
+              toA.poolMetadata,
+            )
+          : null;
+
+        return yield* Effect.succeed([
+          operatorBytes,
+          vrfKeyhashBytes,
+          toA.pledge,
+          toA.cost,
+          marginEncoded,
+          rewardAccountBytes,
+          poolOwnersBytes,
+          relaysEncoded,
+          poolMetadataEncoded,
+        ] as const);
+      }),
+    decode: ([
+      operatorBytes,
+      vrfKeyhashBytes,
+      pledge,
+      cost,
+      marginEncoded,
+      rewardAccountBytes,
+      poolOwnersBytes,
+      relaysEncoded,
+      poolMetadataEncoded,
+    ]) =>
+      Effect.gen(function* () {
+        const operator = yield* ParseResult.decode(PoolKeyHash.BytesSchema)(
+          operatorBytes,
+        );
+        const vrfKeyhash = yield* ParseResult.decode(VrfKeyHash.BytesSchema)(
+          vrfKeyhashBytes,
+        );
+        const margin = yield* ParseResult.decode(
+          UnitInterval.UnitIntervalCDDLSchema,
+        )(marginEncoded);
+        const rewardAccount = yield* ParseResult.decode(
+          RewardAccount.BytesSchema,
+        )(rewardAccountBytes);
+
+        const poolOwners = yield* Effect.all(
+          poolOwnersBytes.map((ownerBytes) =>
+            ParseResult.decode(KeyHash.BytesSchema)(ownerBytes),
+          ),
+        );
+
+        const relays = yield* Effect.all(
+          relaysEncoded.map((relayEncoded) =>
+            ParseResult.decode(Relay.RelayCDDLSchema)(relayEncoded),
+          ),
+        );
+
+        const poolMetadata = poolMetadataEncoded
+          ? yield* ParseResult.decode(PoolMetadata.PoolMetadataCDDLSchema)(
+              poolMetadataEncoded,
+            )
+          : undefined;
+
+        return yield* Effect.succeed(
+          new PoolParams({
+            operator,
+            vrfKeyhash,
+            pledge,
+            cost,
+            margin,
+            rewardAccount,
+            poolOwners,
+            relays,
+            poolMetadata,
+          }),
+        );
+      }),
+  },
+);
+
+/**
  * CBOR bytes transformation schema for PoolParams.
  *
  * @since 2.0.0
  * @category schemas
  */
-export const CBORBytesSchema = undefined;
+export const CBORBytesSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    PoolParamsCDDLSchema, // CBOR → PoolParams
+  );
 
 /**
  * CBOR hex transformation schema for PoolParams.
@@ -110,7 +250,13 @@ export const CBORBytesSchema = undefined;
  * @since 2.0.0
  * @category schemas
  */
-export const CBORHexSchema = undefined;
+export const CBORHexSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    Bytes.BytesSchema, // string → Uint8Array
+    CBORBytesSchema(options), // Uint8Array → PoolParams
+  );
 
 /**
  * Check if two PoolParams instances are equal.
@@ -276,46 +422,29 @@ export const generator = FastCheck.record({
   }),
 }).map((params) => new PoolParams(params));
 
-/**
- * Synchronous encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Encode = {
-  bytes: Schema.encodeSync(CBORBytesSchema),
-  hex: Schema.encodeSync(CBORHexSchema),
-};
-
-/**
- * Synchronous decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Decode = {
-  bytes: Schema.decodeUnknownSync(CBORBytesSchema),
-  hex: Schema.decodeUnknownSync(CBORHexSchema),
-};
-
-/**
- * Either encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  bytes: Schema.encodeEither(CBORBytesSchema),
-  hex: Schema.encodeEither(CBORHexSchema),
-};
-
-/**
- * Either decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  bytes: Schema.decodeUnknownEither(CBORBytesSchema),
-  hex: Schema.decodeUnknownEither(CBORHexSchema),
-};
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
+  Encode: {
+    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
+    cborHex: Schema.encodeSync(CBORHexSchema(options)),
+  },
+  Decode: {
+    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
+    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
+  },
+  EncodeEither: {
+    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.encodeEither(CBORHexSchema(options)),
+  },
+  DecodeEither: {
+    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.decodeEither(CBORHexSchema(options)),
+  },
+  EncodeEffect: {
+    cborBytes: Schema.encode(CBORBytesSchema(options)),
+    cborHex: Schema.encode(CBORHexSchema(options)),
+  },
+  DecodeEffect: {
+    cborBytes: Schema.decode(CBORBytesSchema(options)),
+    cborHex: Schema.decode(CBORHexSchema(options)),
+  },
+});

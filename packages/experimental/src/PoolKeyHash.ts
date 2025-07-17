@@ -1,7 +1,6 @@
 import { Schema, Data, FastCheck } from "effect";
 import * as Bytes from "./Bytes.js";
 import * as Hash28 from "./Hash28.js";
-import * as CBOR from "./CBOR.js";
 
 /**
  * Error class for PoolKeyHash related operations.
@@ -64,22 +63,6 @@ export const HexSchema = Schema.transform(
 );
 
 /**
- * CBOR bytes transformation schema for PoolKeyHash.
- *
- * @since 2.0.0
- * @category schemas
- */
-export const CBORBytesSchema = undefined;
-
-/**
- * CBOR hex transformation schema for PoolKeyHash.
- *
- * @since 2.0.0
- * @category schemas
- */
-export const CBORHexSchema = undefined;
-
-/**
  * Check if two PoolKeyHash instances are equal.
  *
  * @since 2.0.0
@@ -117,8 +100,6 @@ export const generator = FastCheck.uint8Array({
 export const Encode = {
   hex: Schema.encodeSync(HexSchema),
   bytes: Schema.encodeSync(BytesSchema),
-  cborBytes: Schema.encodeSync(CBORBytesSchema),
-  cborHex: Schema.encodeSync(CBORHexSchema),
 };
 
 /**
@@ -130,8 +111,6 @@ export const Encode = {
 export const Decode = {
   hex: Schema.decodeUnknownSync(HexSchema),
   bytes: Schema.decodeUnknownSync(BytesSchema),
-  cborBytes: Schema.decodeUnknownSync(CBORBytesSchema),
-  cborHex: Schema.decodeUnknownSync(CBORHexSchema),
 };
 
 /**
@@ -143,8 +122,6 @@ export const Decode = {
 export const EncodeEither = {
   hex: Schema.encodeEither(HexSchema),
   bytes: Schema.encodeEither(BytesSchema),
-  cborBytes: Schema.encodeEither(CBORBytesSchema),
-  cborHex: Schema.encodeEither(CBORHexSchema),
 };
 
 /**
@@ -156,6 +133,4 @@ export const EncodeEither = {
 export const DecodeEither = {
   hex: Schema.decodeUnknownEither(HexSchema),
   bytes: Schema.decodeUnknownEither(BytesSchema),
-  cborBytes: Schema.decodeUnknownEither(CBORBytesSchema),
-  cborHex: Schema.decodeUnknownEither(CBORHexSchema),
 };

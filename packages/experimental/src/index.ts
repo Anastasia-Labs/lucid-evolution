@@ -2,7 +2,6 @@ export * as EffectCML from "./CML/index.js";
 export * as Bytes from "./Bytes.js";
 export * as Network from "./Network.js";
 export * as Script from "./old/Script.js";
-export * as DataOld from "./Data_old.js";
 export * as TSchema from "./TSchema.js";
 export * as CML from "./CML/index.js";
 export * as Address from "./Address.js";

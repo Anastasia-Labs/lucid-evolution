@@ -1,7 +1,6 @@
 import { Schema, Data, FastCheck } from "effect";
 import * as Bytes from "./Bytes.js";
 import * as Hash32 from "./Hash32.js";
-import * as CBOR from "./CBOR.js";
 
 /**
  * Error class for VrfKeyHash related operations.
@@ -35,49 +34,26 @@ export class VrfKeyHashError extends Data.TaggedError("VrfKeyHashError")<{
 export const VrfKeyHash = Hash32.HexSchema.pipe(Schema.brand("VrfKeyHash"));
 export type VrfKeyHash = typeof VrfKeyHash.Type;
 
-/**
- * Schema for transforming between Uint8Array and VrfKeyHash.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const BytesSchema = Schema.transform(Hash32.BytesSchema, VrfKeyHash, {
-  strict: true,
-  encode: (_, hash) => Bytes.Decode.hex(hash),
-  decode: (bytes) => Schema.decodeSync(VrfKeyHash)(Bytes.Encode.hex(bytes)),
-});
+export const BytesSchema = Schema.transform(
+  Hash32.BytesSchema,
+  Schema.typeSchema(VrfKeyHash),
+  {
+    strict: true,
+    encode: (_, toA) => Bytes.Decode.hex(toA),
+    decode: (_, fromA) =>
+      Schema.decodeSync(VrfKeyHash)(Bytes.Encode.hex(fromA)),
+  },
+);
 
-/**
- * Schema for transforming between hex string and VrfKeyHash.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
 export const HexSchema = Schema.transform(
   Schema.typeSchema(Hash32.HexSchema),
   VrfKeyHash,
   {
     strict: true,
-    encode: (_, hash) => hash,
-    decode: (hash) => Schema.decodeSync(VrfKeyHash)(hash),
+    encode: (_, toA) => toA,
+    decode: (fromI) => Schema.decodeSync(VrfKeyHash)(fromI),
   },
 );
-
-/**
- * CBOR bytes transformation schema for VrfKeyHash.
- *
- * @since 2.0.0
- * @category schemas
- */
-export const CBORBytesSchema = undefined;
-
-/**
- * CBOR hex transformation schema for VrfKeyHash.
- *
- * @since 2.0.0
- * @category schemas
- */
-export const CBORHexSchema = undefined;
 
 /**
  * Check if two VrfKeyHash instances are equal.
@@ -117,8 +93,6 @@ export const generator = FastCheck.uint8Array({
 export const Encode = {
   hex: Schema.encodeSync(HexSchema),
   bytes: Schema.encodeSync(BytesSchema),
-  cborBytes: Schema.encodeSync(CBORBytesSchema),
-  cborHex: Schema.encodeSync(CBORHexSchema),
 };
 
 /**
@@ -130,8 +104,6 @@ export const Encode = {
 export const Decode = {
   hex: Schema.decodeUnknownSync(HexSchema),
   bytes: Schema.decodeUnknownSync(BytesSchema),
-  cborBytes: Schema.decodeUnknownSync(CBORBytesSchema),
-  cborHex: Schema.decodeUnknownSync(CBORHexSchema),
 };
 
 /**
@@ -143,8 +115,6 @@ export const Decode = {
 export const EncodeEither = {
   hex: Schema.encodeEither(HexSchema),
   bytes: Schema.encodeEither(BytesSchema),
-  cborBytes: Schema.encodeEither(CBORBytesSchema),
-  cborHex: Schema.encodeEither(CBORHexSchema),
 };
 
 /**
@@ -156,6 +126,4 @@ export const EncodeEither = {
 export const DecodeEither = {
   hex: Schema.decodeUnknownEither(HexSchema),
   bytes: Schema.decodeUnknownEither(BytesSchema),
-  cborBytes: Schema.decodeUnknownEither(CBORBytesSchema),
-  cborHex: Schema.decodeUnknownEither(CBORHexSchema),
 };

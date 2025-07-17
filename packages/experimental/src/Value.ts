@@ -1,8 +1,11 @@
-import { Schema, Data, FastCheck, Option, ParseResult, Effect } from "effect";
+import { Schema, Data, FastCheck, Option, Effect, ParseResult } from "effect";
 import * as Coin from "./Coin.js";
 import * as MultiAsset from "./MultiAsset.js";
+import * as PolicyId from "./PolicyId.js";
+import * as AssetName from "./AssetName.js";
+import * as PositiveCoin from "./PositiveCoin.js";
 import * as CBOR from "./CBOR.js";
-import { Bytes } from "./index.js";
+import * as Bytes from "./Bytes.js";
 
 /**
  * Error class for Value related operations.
@@ -19,7 +22,7 @@ import { Bytes } from "./index.js";
  */
 export class ValueError extends Data.TaggedError("ValueError")<{
   message?: string;
-  reason?: "InvalidStructure" | "NegativeAmount" | "InvalidCombination";
+  cause?: unknown;
 }> {}
 
 /**
@@ -27,38 +30,29 @@ export class ValueError extends Data.TaggedError("ValueError")<{
  * value = coin / [coin, multiasset<positive_coin>]
  *
  * This can be either:
- * 1. Just a coin amount (ADA only)
- * 2. A tuple of [coin, multiasset] (ADA + native assets)
+ * 1. Just a coin amount (lovelace only)
+ * 2. A tuple of [coin, multiasset] (lovelace + native assets)
  *
  * @since 2.0.0
  * @category schemas
  */
-export const ValueSchema = Schema.Union(
-  Coin.CoinSchema,
-  Schema.Tuple(Coin.CoinSchema, MultiAsset.MultiAssetSchema),
-);
+export class OnlyCoin extends Schema.TaggedClass<OnlyCoin>("OnlyCoin")(
+  "OnlyCoin",
+  {
+    coin: Coin.CoinSchema,
+  },
+) {}
 
-/**
- * Type alias for Value representing transaction outputs.
- * Can contain both ADA (lovelace) and native assets.
- *
- * @example
- * import { Value, Coin, MultiAsset, PolicyId, AssetName, PositiveCoin } from "@lucid-evolution/experimental";
- *
- * // ADA-only value
- * const adaOnlyValue: Value.Value = Coin.make(1000000n); // 1 ADA
- *
- * // Value with ADA + native assets
- * const policyId = new PolicyId({ hash: "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235" });
- * const assetName = new AssetName({ name: "546f6b656e" });
- * const amount = PositiveCoin.make(1000n);
- * const multiAsset = MultiAsset.singleton(policyId, assetName, amount);
- * const mixedValue: Value.Value = [Coin.make(2000000n), multiAsset];
- *
- * @since 2.0.0
- * @category model
- */
-export type Value = typeof ValueSchema.Type;
+export class WithAssets extends Schema.TaggedClass<WithAssets>("WithAssets")(
+  "WithAssets",
+  {
+    coin: Coin.CoinSchema,
+    assets: MultiAsset.MultiAssetSchema,
+  },
+) {}
+
+export const Value = Schema.Union(OnlyCoin, WithAssets);
+export type Value = typeof Value.Type;
 
 /**
  * Create a Value containing only ADA.
@@ -66,12 +60,12 @@ export type Value = typeof ValueSchema.Type;
  * @example
  * import { Value, Coin } from "@lucid-evolution/experimental";
  *
- * const value = Value.onlyAda(Coin.make(1000000n)); // 1 ADA
+ * const value = Value.onlyCoin(Coin.make(1000000n)); // 1 ADA
  *
  * @since 2.0.0
  * @category constructors
  */
-export const onlyAda = (ada: Coin.Coin): Value => ada;
+export const onlyCoin = (ada: Coin.Coin) => new OnlyCoin({ coin: ada });
 
 /**
  * Create a Value containing ADA and native assets.
@@ -89,10 +83,8 @@ export const onlyAda = (ada: Coin.Coin): Value => ada;
  * @since 2.0.0
  * @category constructors
  */
-export const withAssets = (
-  ada: Coin.Coin,
-  assets: MultiAsset.MultiAsset,
-): Value => [ada, assets] as const;
+export const withAssets = (ada: Coin.Coin, assets: MultiAsset.MultiAsset) =>
+  new WithAssets({ coin: ada, assets });
 
 /**
  * Extract the ADA amount from a Value.
@@ -100,7 +92,7 @@ export const withAssets = (
  * @example
  * import { Value, Coin } from "@lucid-evolution/experimental";
  *
- * const adaOnlyValue = Value.onlyAda(Coin.make(1000000n));
+ * const adaOnlyValue = Value.onlyCoin(Coin.make(1000000n));
  * const ada = Value.getAda(adaOnlyValue);
  * console.log(ada); // 1000000n
  *
@@ -108,11 +100,7 @@ export const withAssets = (
  * @category transformation
  */
 export const getAda = (value: Value): Coin.Coin => {
-  if (typeof value === "bigint") {
-    return value;
-  } else {
-    return value[0];
-  }
+  return value.coin;
 };
 
 /**
@@ -122,7 +110,7 @@ export const getAda = (value: Value): Coin.Coin => {
  * import { Value, Coin, MultiAsset } from "@lucid-evolution/experimental";
  * import { Option } from "effect";
  *
- * const adaOnlyValue = Value.onlyAda(Coin.make(1000000n));
+ * const adaOnlyValue = Value.onlyCoin(Coin.make(1000000n));
  * const assets = Value.getAssets(adaOnlyValue);
  * console.log(Option.isNone(assets)); // true (no assets)
  *
@@ -132,10 +120,10 @@ export const getAda = (value: Value): Coin.Coin => {
 export const getAssets = (
   value: Value,
 ): Option.Option<MultiAsset.MultiAsset> => {
-  if (typeof value === "bigint") {
+  if (value._tag === "OnlyCoin") {
     return Option.none();
   } else {
-    return Option.some(value[1]);
+    return Option.some(value.assets);
   }
 };
 
@@ -145,14 +133,14 @@ export const getAssets = (
  * @example
  * import { Value, Coin } from "@lucid-evolution/experimental";
  *
- * const adaOnlyValue = Value.onlyAda(Coin.make(1000000n));
+ * const adaOnlyValue = Value.onlyCoin(Coin.make(1000000n));
  * console.log(Value.isAdaOnly(adaOnlyValue)); // true
  *
  * @since 2.0.0
  * @category predicates
  */
-export const isAdaOnly = (value: Value): value is Coin.Coin =>
-  typeof value === "bigint";
+export const isAdaOnly = (value: Value): value is OnlyCoin =>
+  value._tag === "OnlyCoin";
 
 /**
  * Check if a Value contains native assets.
@@ -160,15 +148,14 @@ export const isAdaOnly = (value: Value): value is Coin.Coin =>
  * @example
  * import { Value, Coin, MultiAsset } from "@lucid-evolution/experimental";
  *
- * const adaOnlyValue = Value.onlyAda(Coin.make(1000000n));
+ * const adaOnlyValue = Value.onlyCoin(Coin.make(1000000n));
  * console.log(Value.hasAssets(adaOnlyValue)); // false
  *
  * @since 2.0.0
  * @category predicates
  */
-export const hasAssets = (
-  value: Value,
-): value is readonly [Coin.Coin, MultiAsset.MultiAsset] => !isAdaOnly(value);
+export const hasAssets = (value: Value): value is WithAssets =>
+  value._tag === "WithAssets";
 
 /**
  * Add two Values together.
@@ -177,8 +164,8 @@ export const hasAssets = (
  * @example
  * import { Value, Coin, MultiAsset, PolicyId, AssetName, PositiveCoin } from "@lucid-evolution/experimental";
  *
- * const value1 = Value.onlyAda(Coin.make(1000000n));
- * const value2 = Value.onlyAda(Coin.make(2000000n));
+ * const value1 = Value.onlyCoin(Coin.make(1000000n));
+ * const value2 = Value.onlyCoin(Coin.make(2000000n));
  * const result = Value.add(value1, value2);
  * console.log(Value.getAda(result)); // 3000000n
  *
@@ -194,7 +181,7 @@ export const add = (a: Value, b: Value): Value => {
   const assetsB = getAssets(b);
 
   if (Option.isNone(assetsA) && Option.isNone(assetsB)) {
-    return onlyAda(totalAda);
+    return onlyCoin(totalAda);
   }
 
   if (Option.isSome(assetsA) && Option.isNone(assetsB)) {
@@ -211,7 +198,7 @@ export const add = (a: Value, b: Value): Value => {
     return withAssets(totalAda, mergedAssets);
   }
 
-  return onlyAda(totalAda);
+  return onlyCoin(totalAda);
 };
 
 /**
@@ -221,8 +208,8 @@ export const add = (a: Value, b: Value): Value => {
  * @example
  * import { Value, Coin } from "@lucid-evolution/experimental";
  *
- * const value1 = Value.onlyAda(Coin.make(3000000n));
- * const value2 = Value.onlyAda(Coin.make(1000000n));
+ * const value1 = Value.onlyCoin(Coin.make(3000000n));
+ * const value2 = Value.onlyCoin(Coin.make(1000000n));
  * const result = Value.subtract(value1, value2);
  * console.log(Value.getAda(result)); // 2000000n
  *
@@ -239,7 +226,7 @@ export const subtract = (a: Value, b: Value): Value => {
 
   // Both are ADA-only
   if (Option.isNone(assetsA) && Option.isNone(assetsB)) {
-    return onlyAda(resultAda);
+    return onlyCoin(resultAda);
   }
 
   // a has assets, b doesn't - keep a's assets
@@ -251,7 +238,6 @@ export const subtract = (a: Value, b: Value): Value => {
   if (Option.isNone(assetsA) && Option.isSome(assetsB)) {
     throw new ValueError({
       message: "Cannot subtract assets from Value with no assets",
-      reason: "InvalidCombination",
     });
   }
 
@@ -265,11 +251,11 @@ export const subtract = (a: Value, b: Value): Value => {
       return withAssets(resultAda, subtractedAssets);
     } catch {
       // If subtraction results in empty MultiAsset, return ADA-only value
-      return onlyAda(resultAda);
+      return onlyCoin(resultAda);
     }
   }
 
-  return onlyAda(resultAda);
+  return onlyCoin(resultAda);
 };
 
 /**
@@ -278,8 +264,8 @@ export const subtract = (a: Value, b: Value): Value => {
  * @example
  * import { Value, Coin } from "@lucid-evolution/experimental";
  *
- * const value1 = Value.onlyAda(Coin.make(1000000n));
- * const value2 = Value.onlyAda(Coin.make(1000000n));
+ * const value1 = Value.onlyCoin(Coin.make(1000000n));
+ * const value2 = Value.onlyCoin(Coin.make(1000000n));
  * console.log(Value.equals(value1, value2)); // true
  *
  * @since 2.0.0
@@ -310,8 +296,7 @@ export const equals = (a: Value, b: Value): boolean => {
  * @since 2.0.0
  * @category predicates
  */
-export const is = (value: unknown): value is Value =>
-  Schema.is(ValueSchema)(value);
+export const is = (value: unknown): value is Value => Schema.is(Value)(value);
 
 /**
  * Generate a random Value.
@@ -320,8 +305,15 @@ export const is = (value: unknown): value is Value =>
  * @category generators
  */
 export const generator = FastCheck.oneof(
-  Coin.generator,
-  FastCheck.tuple(Coin.generator, MultiAsset.generator),
+  FastCheck.record({
+    _tag: FastCheck.constant("OnlyCoin"),
+    coin: Coin.generator,
+  }),
+  FastCheck.record({
+    _tag: FastCheck.constant("WithAssets"),
+    coin: Coin.generator,
+    assets: MultiAsset.generator,
+  }),
 );
 
 /**
@@ -335,12 +327,94 @@ export const generator = FastCheck.oneof(
  * @since 2.0.0
  * @category schemas
  */
-export const ValueCDDLSchema = Schema.Union(
-  Schema.Number, // Just coin amount as number
-  Schema.Tuple(
-    Schema.Number, // Coin amount as number
-    MultiAsset.MultiAssetCDDLSchema, // MultiAsset as Map structure
+export const ValueCDDLSchema = Schema.transformOrFail(
+  Schema.Union(
+    CBOR.Integer,
+    Schema.Tuple(
+      CBOR.Integer,
+      Schema.encodedSchema(
+        MultiAsset.MultiAssetCDDLSchema, // MultiAsset CDDL structure
+      ),
+    ),
   ),
+  Schema.typeSchema(Value),
+  {
+    strict: true,
+    encode: (toI) =>
+      Effect.gen(function* () {
+        // expected encode result
+        // readonly [bigint, readonly (readonly [Uint8Array<ArrayBufferLike>, readonly (readonly [Uint8Array<ArrayBufferLike>, bigint])[]])[]]
+        if (toI._tag === "OnlyCoin") {
+          // This is OnlyCoin, encode just the coin amount
+          return toI.coin;
+        } else {
+          // Value with assets (WithAssets)
+          // Convert MultiAsset to raw Map data for CBOR encoding
+          const outerMap = new Map<Uint8Array, Map<Uint8Array, bigint>>();
+
+          for (const [policyId, assetMap] of toI.assets.entries()) {
+            const policyIdBytes = yield* ParseResult.encode(
+              PolicyId.BytesSchema,
+            )(policyId);
+            const innerMap = new Map<Uint8Array, bigint>();
+
+            for (const [assetName, amount] of assetMap.entries()) {
+              const assetNameBytes = yield* ParseResult.encode(
+                AssetName.BytesSchema,
+              )(assetName);
+              innerMap.set(assetNameBytes, amount);
+            }
+
+            outerMap.set(policyIdBytes, innerMap);
+          }
+
+          return [toI.coin, outerMap] as const; // Return as tuple
+        }
+      }),
+    decode: (fromA) =>
+      Effect.gen(function* () {
+        if (typeof fromA === "bigint") {
+          // ADA-only value - create OnlyCoin instance
+          return new OnlyCoin({
+            coin: fromA,
+          });
+        } else {
+          // Value with assets [coin, multiasset]
+          const [coinAmount, multiAssetCddl] = fromA;
+
+          // Convert from CDDL format to MultiAsset manually
+          const result = new Map<PolicyId.PolicyId, MultiAsset.AssetMap>();
+
+          for (const [
+            policyIdBytes,
+            assetMapCddl,
+          ] of multiAssetCddl.entries()) {
+            const policyId = yield* ParseResult.decode(PolicyId.BytesSchema)(
+              policyIdBytes,
+            );
+
+            const assetMap = new Map<
+              AssetName.AssetName,
+              PositiveCoin.PositiveCoin
+            >();
+            for (const [assetNameBytes, amount] of assetMapCddl.entries()) {
+              const assetName = yield* ParseResult.decode(
+                AssetName.BytesSchema,
+              )(assetNameBytes);
+              const positiveCoin = PositiveCoin.make(amount);
+              assetMap.set(assetName, positiveCoin);
+            }
+
+            result.set(policyId, assetMap);
+          }
+
+          return new WithAssets({
+            coin: coinAmount,
+            assets: result,
+          });
+        }
+      }),
+  },
 );
 
 /**
@@ -358,22 +432,13 @@ export type ValueCDDL = typeof ValueCDDLSchema.Type;
  * @since 2.0.0
  * @category schemas
  */
-export const CBORBytesSchema = Schema.transformOrFail(
-  Schema.typeSchema(Bytes.BytesSchema),
-  Schema.typeSchema(ValueSchema),
-  {
-    strict: true,
-    encode: (_, __, ___, toA) =>
-      ParseResult.succeed(CBOR.Encode.bytes(toCDDL(toA))),
-    decode: (_, __, ___, fromI) =>
-      Effect.gen(function* () {
-        const value = yield* ParseResult.decode(CBOR.CBORBytesSchema())(fromI);
-        const cddlValue =
-          yield* ParseResult.decodeUnknown(ValueCDDLSchema)(value);
-        return fromCDDL(cddlValue);
-      }),
-  },
-);
+export const CBORBytesSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    ValueCDDLSchema, // CBOR → Value
+  );
 
 /**
  * CBOR hex transformation schema for Value.
@@ -381,99 +446,37 @@ export const CBORBytesSchema = Schema.transformOrFail(
  * @since 2.0.0
  * @category schemas
  */
-export const CBORHexSchema = Schema.transformOrFail(
-  Schema.typeSchema(Bytes.HexSchema),
-  Schema.typeSchema(ValueSchema),
-  {
-    strict: true,
-    encode: (_, __, ___, toA) =>
-      ParseResult.succeed(CBOR.Encode.hex(toCDDL(toA))),
-    decode: (_, __, ___, fromI) =>
-      Effect.gen(function* () {
-        const value = yield* ParseResult.decode(CBOR.CBORHexSchema())(fromI);
-        const cddlValue =
-          yield* ParseResult.decodeUnknown(ValueCDDLSchema)(value);
-        return fromCDDL(cddlValue);
-      }),
+export const CBORHexSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.compose(
+    Bytes.BytesSchema, // string → Uint8Array
+    CBORBytesSchema(options), // Uint8Array → Value
+  );
+
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
+  Encode: {
+    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
+    cborHex: Schema.encodeSync(CBORHexSchema(options)),
   },
-);
-
-/**
- * Convert Value to raw CDDL data for CBOR encoding.
- *
- * @since 2.0.0
- * @category transformation
- */
-export const toCDDL = (value: Value): ValueCDDL => {
-  if (typeof value === "bigint") {
-    // ADA-only value
-    return Number(value);
-  } else {
-    // ADA + MultiAsset value
-    const [ada, multiAsset] = value;
-    return [Number(ada), MultiAsset.toCDDL(multiAsset)];
-  }
-};
-
-/**
- * Create Value from raw CDDL data after CBOR decoding.
- *
- * @since 2.0.0
- * @category constructors
- */
-export const fromCDDL = (raw: ValueCDDL): Value => {
-  if (typeof raw === "number") {
-    // ADA-only value
-    return Coin.make(BigInt(raw));
-  } else {
-    // ADA + MultiAsset value
-    const [adaAmount, multiAssetCDDL] = raw;
-    const ada = Coin.make(BigInt(adaAmount));
-    const multiAsset = MultiAsset.fromCDDL(multiAssetCDDL);
-    return withAssets(ada, multiAsset);
-  }
-};
-
-/**
- * Synchronous encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Encode = {
-  cborHex: Schema.encodeSync(CBORHexSchema),
-  cborBytes: Schema.encodeSync(CBORBytesSchema),
-};
-
-/**
- * Synchronous decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Decode = {
-  cborHex: Schema.decodeUnknownSync(CBORHexSchema),
-  cborBytes: Schema.decodeUnknownSync(CBORBytesSchema),
-};
-
-/**
- * Either encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  cborHex: Schema.encodeEither(CBORHexSchema),
-  cborBytes: Schema.encodeEither(CBORBytesSchema),
-};
-
-/**
- * Either decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  cborHex: Schema.decodeUnknownEither(CBORHexSchema),
-  cborBytes: Schema.decodeUnknownEither(CBORBytesSchema),
-};
+  Decode: {
+    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
+    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
+  },
+  EncodeEither: {
+    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.encodeEither(CBORHexSchema(options)),
+  },
+  DecodeEither: {
+    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
+    cborHex: Schema.decodeEither(CBORHexSchema(options)),
+  },
+  EncodeEffect: {
+    cborBytes: Schema.encode(CBORBytesSchema(options)),
+    cborHex: Schema.encode(CBORHexSchema(options)),
+  },
+  DecodeEffect: {
+    cborBytes: Schema.decode(CBORBytesSchema(options)),
+    cborHex: Schema.decode(CBORHexSchema(options)),
+  },
+});

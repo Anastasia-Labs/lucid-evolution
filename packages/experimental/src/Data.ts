@@ -8,6 +8,7 @@ import {
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
 import * as Numeric from "./Numeric.js";
+import * as _Codec from "./Codec.js";
 
 /**
  * Error class for Data related operations.
@@ -79,11 +80,10 @@ export type Data = Constr | MapList | List | Int | ByteArray;
  * @since 2.0.0
  * @category model
  */
-// export interface Constr<T> {
-//   readonly _tag: "Constr";
-//   readonly index: bigint;
-//   readonly fields: readonly T[];
-// }
+export interface Constr {
+  readonly index: bigint;
+  readonly fields: readonly Data[];
+}
 
 export type MapList = Map<Data, Data>;
 
@@ -102,12 +102,10 @@ export type List = readonly Data[];
  *
  * @since 2.0.0
  */
-export class Constr extends Schema.Class<Constr>("Constr")({
+export const ConstrSchema: Schema.Schema<Constr> = Schema.Struct({
   index: Numeric.Uint64Schema,
-  fields: Schema.Array(
-    Schema.suspend((): Schema.Schema<Data> => PlutusDataSchema),
-  ),
-}) {}
+  fields: Schema.Array(Schema.suspend((): Schema.Schema<Data> => DataSchema)),
+});
 
 /**
  * Schema for PlutusMap data type
@@ -117,8 +115,8 @@ export class Constr extends Schema.Class<Constr>("Constr")({
  * @since 2.0.0
  */
 export const MapSchema = Schema.MapFromSelf({
-  key: Schema.suspend((): Schema.Schema<Data> => PlutusDataSchema),
-  value: Schema.suspend((): Schema.Schema<Data> => PlutusDataSchema),
+  key: Schema.suspend((): Schema.Schema<Data> => DataSchema),
+  value: Schema.suspend((): Schema.Schema<Data> => DataSchema),
 });
 
 /**
@@ -129,7 +127,7 @@ export const MapSchema = Schema.MapFromSelf({
  * @since 2.0.0
  */
 export const ListSchema = Schema.Array(
-  Schema.suspend((): Schema.Schema<Data> => PlutusDataSchema),
+  Schema.suspend((): Schema.Schema<Data> => DataSchema),
 );
 
 /**
@@ -154,7 +152,7 @@ export const ListSchema = Schema.Array(
  * @since 2.0.0
  */
 export const IntSchema = Schema.BigInt;
-export type Int = typeof IntSchema.Type;
+export type Int = bigint;
 
 /**
  * Schema for PlutusBytes data type
@@ -164,7 +162,7 @@ export type Int = typeof IntSchema.Type;
  * @since 2.0.0
  */
 export const BytesSchema = Bytes.HexSchemaLenient;
-export type ByteArray = typeof BytesSchema.Type;
+export type ByteArray = string;
 
 /**
  * Combined schema for PlutusData type
@@ -173,8 +171,8 @@ export type ByteArray = typeof BytesSchema.Type;
  *
  * @since 2.0.0
  */
-export const PlutusDataSchema: Schema.Schema<Data> = Schema.Union(
-  Constr,
+export const DataSchema: Schema.Schema<Data> = Schema.Union(
+  ConstrSchema,
   Schema.typeSchema(MapSchema),
   ListSchema,
   Schema.typeSchema(IntSchema),
@@ -196,7 +194,10 @@ export const PlutusDataSchema: Schema.Schema<Data> = Schema.Union(
  *
  * @since 2.0.0
  */
-export const isConstr = Schema.is(Constr);
+export const isConstr = (data: unknown): data is Constr => {
+  // Check if it's a valid Constr using the schema
+  return Schema.is(ConstrSchema)(data);
+};
 
 /**
  * Type guard to check if a value is a PlutusMap
@@ -271,11 +272,10 @@ export const isBytes = Schema.is(BytesSchema);
  * @since 2.0.0
  * @category constructors
  */
-export const constr = (index: bigint, data: Data[]): Constr =>
-  Constr.make({
-    index,
-    fields: data,
-  });
+export const constr = (index: bigint, data: Data[]): Constr => ({
+  index,
+  fields: data,
+});
 
 /**
  * Creates a Plutus map from key-value pairs
@@ -328,232 +328,7 @@ export const int = (integer: bigint): Int => integer;
  * @since 2.0.0
  * @category constructors
  */
-export const bytearray = (bytes: string): ByteArray => BytesSchema.make(bytes);
-
-/**
- * Recursively converts PlutusData to its CBOR byte representation with configurable encoding options.
- *
- * @example
- * import { Data, CBOR } from "@lucid-evolution/experimental";
- *
- * const constr = Data.constr(0, []);
- * const cborBytes = Data.toCborBytes(constr);
- * // cborBytes is now a Uint8Array with indefinite encoding
- *
- * const definiteBytes = Data.toCborBytes(constr, {
- *   useIndefiniteArrays: false,
- *   useIndefiniteMaps: false
- * });
- * // definiteBytes uses definite-length encoding
- *
- * @since 2.0.0
- * @category encoding
- */
-export const toCborBytes = (
-  data: Data,
-  options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
-): Effect.Effect<Uint8Array, CBOR.CBORError> =>
-  Effect.gen(function* () {
-    // Handle each PlutusData type directly
-    // switch (data._tag) {
-    if (isConstr(data)) {
-      // Create array with encoded fields using configurable encoding
-      const arrayBytes = yield* CBOR.encodeArray(
-        data.fields,
-        options,
-        (field) => toCborBytes(field, options),
-      );
-
-      if (data.index >= 0n && data.index < 7n) {
-        // Use CBOR tags 121-127 for constructor indices 0-6
-        const tagValue = 121 + Number(data.index);
-        return yield* CBOR.encodeTag(tagValue, arrayBytes);
-      } else if (data.index >= 7n && data.index <= 127n) {
-        // #6.102([uint, [* a]]): For tag range 6.1280 .. 6.1400 inclusive
-        const tagValue = 1280 + Number(data.index - 7n);
-        return yield* CBOR.encodeTag(tagValue, arrayBytes);
-      }
-      // For any other index, use tag 102 with the index and fields
-      else {
-        const tagValue = 102;
-        const indexBytes = yield* CBOR.encodeCompactNumber(data.index);
-        const tagArray = yield* CBOR.encodeArray(data.fields, options, (item) =>
-          toCborBytes(item, options),
-        );
-        const value = yield* CBOR.encodeArray(
-          [indexBytes, tagArray],
-          options,
-          (item) => Effect.succeed(item),
-        );
-        return yield* CBOR.encodeTag(tagValue, value);
-      }
-    }
-    if (isMap(data)) {
-      // Use configurable map encoding for PlutusMap
-      const entries = Array.from(data.entries());
-
-      return yield* CBOR.encodeMap(entries, options, (item) =>
-        toCborBytes(item as Data, options),
-      );
-    }
-    if (isList(data)) {
-      // Use configurable array encoding for PlutusList
-      return yield* CBOR.encodeArray(data, options, (item) =>
-        toCborBytes(item as Data, options),
-      );
-    }
-    if (isInt(data)) {
-      // Always use proper CBOR integer encoding for BigInt values
-      return yield* CBOR.encodeBigInt(data);
-    }
-    if (isBytes(data)) {
-      // Convert hex string to Uint8Array and encode as CBOR bytes
-      return yield* CBOR.encodeCBORValue(
-        Bytes.DecodeLenient.hex(data),
-        options,
-      );
-    }
-    return yield* new CBOR.CBORError({
-      message: `Unsupported PlutusData type for CBOR encoding: ${data}`,
-    });
-  });
-
-/**
- * Converts generic CBOR tagged values to Plutus Data constructors.
- * Incorporates the important transformations from the original parsePlutusData function.
- *
- * @since 2.0.0
- * @category transformation
- */
-const convertCBORToPlutusData = (value: CBOR.CBORValue): Data => {
-  // Handle primitives first
-  if (typeof value === "bigint") {
-    return int(value);
-  }
-
-  if (typeof value === "number") {
-    return int(BigInt(value));
-  }
-
-  if (value instanceof Uint8Array) {
-    return Bytes.EncodeLenient.hex(value);
-  }
-
-  // Handle arrays
-  if (Array.isArray(value)) {
-    if (value.length === 0) {
-      return list([]);
-    }
-    return list(value.map((item) => convertCBORToPlutusData(item)));
-  }
-
-  if (value && typeof value === "object") {
-    // Check if it's a tagged value
-    if ("tag" in value && "value" in value) {
-      const taggedValue = value;
-
-      // Handle Plutus Data constructor tags (incorporating parsePlutusData logic)
-      if (taggedValue.tag >= 121 && taggedValue.tag <= 127) {
-        // Direct constructor tags (121-127) represent constructor indices 0-6
-        const constructorIndex = BigInt(taggedValue.tag - 121);
-        if (Array.isArray(taggedValue.value)) {
-          const fields = taggedValue.value.map((item) =>
-            convertCBORToPlutusData(item),
-          );
-          if (fields.length === 0) {
-            return constr(constructorIndex, []);
-          }
-          return constr(constructorIndex, fields);
-        }
-        throw new DataError({
-          message: `Invalid constructor value for tag ${taggedValue.tag}`,
-        });
-      } else if (taggedValue.tag >= 1280 && taggedValue.tag <= 1407) {
-        // CML compatibility tags (1280-1407) represent constructor indices 7-127
-        const constructorIndex = BigInt(taggedValue.tag - 1280 + 7);
-        if (Array.isArray(taggedValue.value)) {
-          const fields = taggedValue.value.map((item) =>
-            convertCBORToPlutusData(item),
-          );
-          if (fields.length === 0) {
-            return constr(constructorIndex, []);
-          }
-          return constr(constructorIndex, fields);
-        }
-        throw new DataError({
-          message: `Invalid constructor value for tag ${taggedValue.tag}`,
-        });
-      } else if (taggedValue.tag === 102) {
-        // General constructor tag (102) - value should be [index, fields]
-        if (Array.isArray(taggedValue.value) && taggedValue.value.length >= 2) {
-          const index = taggedValue.value[0];
-          const fieldsArray = taggedValue.value[1];
-          const indexBigInt =
-            typeof index === "bigint" ? index : BigInt(Number(index));
-
-          // fieldsArray should be the second element and should be an array
-          if (Array.isArray(fieldsArray)) {
-            const fields = fieldsArray.map((item) =>
-              convertCBORToPlutusData(item),
-            );
-            if (fields.length === 0) {
-              return constr(indexBigInt, []);
-            }
-            return constr(indexBigInt, fields);
-          } else {
-            throw new DataError({
-              message: `Tag 102 second element should be an array, got ${typeof fieldsArray}`,
-            });
-          }
-        }
-        throw new DataError({
-          message: `Tag 102 should have array value with at least 2 elements, got ${typeof taggedValue.value}`,
-        });
-      }
-
-      // For other tags, this is not a valid PlutusData constructor
-      throw new DataError({
-        message: `Unsupported CBOR tag for PlutusData: ${taggedValue.tag}`,
-      });
-    }
-
-    // Handle Maps
-    if (value instanceof Map) {
-      const convertedEntries: Array<{ key: Data; value: Data }> = [];
-      for (const [key, val] of value) {
-        convertedEntries.push({
-          key: convertCBORToPlutusData(key),
-          value: convertCBORToPlutusData(val),
-        });
-      }
-      if (convertedEntries.length === 0) {
-        return map([]);
-      }
-      return map(convertedEntries);
-    }
-
-    // Handle plain objects (should not happen with our CBOR decoder)
-    throw new DataError({
-      message: `Unsupported CBOR object type for PlutusData.`,
-    });
-  }
-
-  // Handle unsupported primitive types
-  if (
-    typeof value === "string" ||
-    typeof value === "boolean" ||
-    value === null ||
-    value === undefined
-  ) {
-    throw new DataError({
-      message: `Unsupported CBOR primitive type for PlutusData: ${typeof value}`,
-    });
-  }
-
-  throw new DataError({
-    message: `Unsupported CBOR value type for PlutusData: ${typeof value}`,
-  });
-};
+export const bytearray = (bytes: string): ByteArray => bytes;
 
 /**
  * Pattern matching helper for Constr types
@@ -628,7 +403,7 @@ export const matchData = <T>(
   }
   // If we reach here, it means the data is not a recognized PlutusData type
   throw new DataError({
-    message: `Unsupported PlutusData type: ${JSON.stringify(data)}`,
+    message: `Unsupported PlutusData type: ${typeof data === "bigint" ? String(data) : String(data)}`,
   });
 };
 
@@ -744,9 +519,13 @@ export const genPlutusMap = (depth: number): FastCheck.Arbitrary<MapList> => {
         minLength: 0,
         maxLength: maxSize * 2, // Generate more than needed to increase chance of unique keys
         selector: (pair) => {
-          // Use CBOR encoding for unique key identification
-          const keyHex = Encode.cborHex(pair[0]);
-          return keyHex;
+          // Use a simple string representation for unique key identification
+          // Handle BigInt safely by converting to string first
+          const keyStr =
+            typeof pair[0] === "bigint"
+              ? String(pair[0])
+              : JSON.stringify(pair[0]);
+          return keyStr;
         },
       },
     ).map((pairs) => pairs.map(([key, value]) => ({ key, value })));
@@ -776,121 +555,257 @@ export const genPlutusMap = (depth: number): FastCheck.Arbitrary<MapList> => {
  */
 export const generator = genPlutusData(3);
 
-export const CBORBytesSchema = (
-  options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
-) =>
-  Schema.transformOrFail(
-    Schema.typeSchema(Bytes.BytesSchema),
-    PlutusDataSchema,
-    {
-      strict: true,
-      encode: (_, __, ___, toA) =>
-        Effect.gen(function* () {
-          const bytes = yield* toCborBytes(toA, options);
-          return bytes;
-        }).pipe(
-          Effect.mapError(
-            (error: CBOR.CBORError) =>
-              new ParseResult.Type(PlutusDataSchema.ast, toA, error.message),
-          ),
-        ),
-      decode: (_, __, ast, fromA) =>
-        Effect.gen(function* () {
-          const cborDecoded = yield* ParseResult.decode(
-            CBOR.CBORBytesSchema(options),
-          )(fromA);
-          return convertCBORToPlutusData(cborDecoded);
-        }),
-    },
-  );
+/**
+ * CBOR value representation for PlutusData
+ * This represents the intermediate CBOR structure that corresponds to PlutusData
+ *
+ * @since 2.0.0
+ * @category model
+ */
 
-export const CBORHexSchema = (
-  options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
+export const CBORBytesSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
-  Schema.transformOrFail(Bytes.HexSchema, PlutusDataSchema, {
+  Schema.transformOrFail(Schema.Uint8ArrayFromSelf, DataSchema, {
     strict: true,
-    encode: (_, __, ___, toA) =>
+    encode: (toI) =>
+      // Convert PlutusData to CBOR bytes
       Effect.gen(function* () {
-        const bytes = yield* toCborBytes(toA, options);
-        return Bytes.Encode.hex(bytes);
-      }).pipe(
-        Effect.mapError(
-          (error: CBOR.CBORError) =>
-            new ParseResult.Type(PlutusDataSchema.ast, toA, error.message),
-        ),
-      ),
-    decode: (_, __, ast, fromA) =>
+        const cborValue = plutusDataToCBORValue(toI);
+        return yield* ParseResult.encode(CBOR.CBORBytesSchema(options))(
+          cborValue,
+        );
+      }),
+    decode: (fromI) =>
+      // Convert CBOR bytes to PlutusData
       Effect.gen(function* () {
-        const bytes = Bytes.Decode.hex(fromA);
-        const cborDecoded = yield* ParseResult.decode(
+        const cborValue = yield* ParseResult.decode(
           CBOR.CBORBytesSchema(options),
-        )(bytes);
-        return convertCBORToPlutusData(cborDecoded);
+        )(fromI);
+        return cborValueToPlutusData(cborValue);
       }),
   });
 
-export const Encode = {
-  cborHex: (
-    data: Data,
-    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
-  ) => Effect.runSync(Schema.encode(CBORHexSchema(options))(data)),
-  cborBytes: (
-    data: Data,
-    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
-  ) => Effect.runSync(Schema.encode(CBORBytesSchema(options))(data)),
+export const CBORHexSchema = (
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) =>
+  Schema.transformOrFail(Bytes.HexSchema, DataSchema, {
+    strict: true,
+    encode: (toI) =>
+      Effect.gen(function* () {
+        const cborBytes = yield* ParseResult.encode(CBORBytesSchema(options))(
+          toI,
+        );
+        return Bytes.Encode.hex(cborBytes);
+      }),
+    decode: (fromI) =>
+      Effect.gen(function* () {
+        const cborBytes = Bytes.Decode.hex(fromI);
+        return yield* ParseResult.decode(CBORBytesSchema(options))(cborBytes);
+      }),
+  });
+
+/**
+ * Convert PlutusData to CBORValue
+ *
+ * @since 2.0.0
+ * @category transformation
+ */
+export const plutusDataToCBORValue = (data: Data): CBOR.CBOR => {
+  return matchData(data, {
+    Map: (entries): CBOR.CBOR => {
+      // PlutusData Map -> CBOR map directly (no extra tag needed for top-level maps)
+      const cborEntries = entries.map(
+        ([key, value]) =>
+          [plutusDataToCBORValue(key), plutusDataToCBORValue(value)] as const,
+      );
+      return new Map(cborEntries);
+    },
+    List: (items): CBOR.CBOR => {
+      // PlutusData List -> CBOR array directly (no extra tag needed for top-level arrays)
+      const cborItems = items.map(plutusDataToCBORValue);
+      return cborItems;
+    },
+    Int: (value): CBOR.CBOR => {
+      // PlutusData Int -> CBOR uint or nint
+      return value;
+    },
+    Bytes: (bytes): CBOR.CBOR => {
+      return Bytes.DecodeLenient.hex(bytes);
+    },
+    Constr: (constr): CBOR.CBOR => {
+      // PlutusData Constr -> CBOR tags based on index
+      const cborFields = constr.fields.map(plutusDataToCBORValue);
+      const fieldsArray = cborFields; // Now just a raw array
+
+      if (constr.index >= 0n && constr.index <= 6n) {
+        // Direct encoding for constructor indices 0-6 (tags 121-127)
+        return new CBOR.Tag({
+          tag: Number(121n + constr.index),
+          value: fieldsArray,
+        });
+      } else if (constr.index >= 7n && constr.index <= 127n) {
+        // Alternative encoding for constructor indices 7-127 (tag 1280+index-7)
+        return new CBOR.Tag({
+          tag: Number(1280n + constr.index - 7n),
+          value: fieldsArray,
+        });
+      } else {
+        // General constructor encoding for any uint value (tag 102)
+        return new CBOR.Tag({
+          tag: 102,
+          value: [constr.index, fieldsArray],
+        });
+      }
+    },
+  });
 };
 
-export const Decode = {
-  cborHex: (
-    data: string,
-    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
-  ) => Effect.runSync(Schema.decode(CBORHexSchema(options))(data)),
-  cborBytes: (
-    data: Uint8Array,
-    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
-  ) => Effect.runSync(Schema.decode(CBORBytesSchema(options))(data)),
+/**
+ * Convert CBORValue to PlutusData
+ *
+ * @since 2.0.0
+ * @category transformation
+ */
+export const cborValueToPlutusData = (cborValue: CBOR.CBOR): Data => {
+  // Handle bigint (uint/nint)
+  if (CBOR.isInteger(cborValue)) {
+    return cborValue;
+  }
+
+  // Handle Uint8Array (bytes)
+  if (CBOR.isByteArray(cborValue)) {
+    // Handle empty bytes case
+    if (cborValue.length === 0) {
+      return "";
+    }
+    return Bytes.Encode.hex(cborValue);
+  }
+
+  // Handle tagged values
+  if (CBOR.isTag(cborValue)) {
+    const tag = cborValue.tag;
+    const value = cborValue.value;
+
+    // Handle constructor tags (121-127 for indices 0-6)
+    if (tag >= 121 && tag <= 127) {
+      if (!Array.isArray(value)) {
+        throw new DataError({
+          message: `Expected array for constructor tag ${tag}, got ${typeof value}`,
+        });
+      }
+      const fields = value.map(cborValueToPlutusData);
+      return { index: BigInt(tag - 121), fields };
+    }
+
+    // Handle alternative constructor tags (1280-1400 for indices 7-127)
+    if (tag >= 1280 && tag <= 1400) {
+      if (!Array.isArray(value)) {
+        throw new DataError({
+          message: `Expected array for constructor tag ${tag}, got ${typeof value}`,
+        });
+      }
+      const fields = value.map(cborValueToPlutusData);
+      return { index: BigInt(tag - 1280 + 7), fields };
+    }
+
+    // Handle general constructor tag (102)
+    if (tag === 102) {
+      if (!Array.isArray(value)) {
+        throw new DataError({
+          message: `Expected array for general constructor tag, got ${typeof value}`,
+        });
+      }
+
+      const array = value;
+      if (array.length === 2) {
+        // Two element arrays are general constructors [index, fields]
+        const indexValue = array[0];
+        const fieldsValue = array[1];
+
+        if (typeof indexValue !== "bigint") {
+          throw new DataError({
+            message: `Expected bigint for constructor index, got ${typeof indexValue}`,
+          });
+        }
+        if (!Array.isArray(fieldsValue)) {
+          throw new DataError({
+            message: `Expected array for constructor fields, got ${typeof fieldsValue}`,
+          });
+        }
+
+        const fields = fieldsValue.map(cborValueToPlutusData);
+        return { index: indexValue, fields };
+      }
+    }
+
+    // Handle big_uint tag (2) for large positive integers
+    if (tag === 2) {
+      if (!(value instanceof Uint8Array)) {
+        throw new DataError({
+          message: `Expected bytes for big_uint tag, got ${typeof value}`,
+        });
+      }
+      // Convert bytes to bigint (big-endian)
+      return bytesToBigint(value);
+    }
+
+    // Handle big_nint tag (3) for large negative integers
+    if (tag === 3) {
+      if (!(value instanceof Uint8Array)) {
+        throw new DataError({
+          message: `Expected bytes for big_nint tag, got ${typeof value}`,
+        });
+      }
+      // Convert bytes to bigint and negate (add 1) per RFC 8949
+      const positiveValue = bytesToBigint(value);
+      return -(positiveValue + 1n);
+    }
+
+    throw new DataError({ message: `Unsupported CBOR tag: ${tag}` });
+  }
+
+  // Handle arrays
+  if (CBOR.isArray(cborValue)) {
+    // Arrays are Lists
+    const items = cborValue.map(cborValueToPlutusData);
+    return items;
+  }
+
+  // Handle Maps
+  if (CBOR.isMap(cborValue)) {
+    // Maps are Maps
+    const entries = Array.from(cborValue.entries()).map(
+      ([k, v]) => [cborValueToPlutusData(k), cborValueToPlutusData(v)] as const,
+    );
+    return new Map(entries);
+  }
+
+  // Handle unsupported types
+  throw new DataError({
+    message: `Unknown CBOR value type: ${JSON.stringify(cborValue)}`,
+  });
 };
 
-export const EncodeEither = {
-  cborHex: (
-    data: Data,
-    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
-  ) => Schema.encodeEither(CBORHexSchema(options))(data),
-  cborBytes: (
-    data: Data,
-    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
-  ) => Schema.encodeEither(CBORBytesSchema(options))(data),
+/**
+ * Convert a big-endian byte array to a positive bigint
+ * Used for CBOR tag 2/3 decoding
+ */
+const bytesToBigint = (bytes: Uint8Array): bigint => {
+  if (bytes.length === 0) {
+    return 0n;
+  }
+
+  let result = 0n;
+  for (let i = 0; i < bytes.length; i++) {
+    result = (result << 8n) | BigInt(bytes[i]);
+  }
+
+  return result;
 };
 
-export const DecodeEither = {
-  cborHex: (
-    data: string,
-    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
-  ) => Schema.decodeEither(CBORHexSchema(options))(data),
-  cborBytes: (
-    data: Uint8Array,
-    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
-  ) => Schema.decodeEither(CBORBytesSchema(options))(data),
-};
-
-export const EncodeEffect = {
-  cborHex: (
-    data: Data,
-    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
-  ) => Schema.encode(CBORHexSchema(options))(data),
-  cborBytes: (
-    data: Data,
-    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
-  ) => Schema.encode(CBORBytesSchema(options))(data),
-};
-
-export const DecodeEffect = {
-  cborHex: (
-    data: string,
-    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
-  ) => Schema.decode(CBORHexSchema(options))(data),
-  cborBytes: (
-    data: Uint8Array,
-    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
-  ) => Schema.decode(CBORBytesSchema(options))(data),
-};
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
+  _Codec.createCodec({
+    cborBytes: CBORBytesSchema(options),
+    cborHex: CBORHexSchema(options),
+  });

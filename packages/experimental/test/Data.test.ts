@@ -1,6 +1,9 @@
 import { describe, expect, it } from "@effect/vitest";
 import * as Data from "../src/Data.js";
 
+const Codec = Data.Codec();
+const CodecCanonical = Data.Codec({ mode: "canonical" });
+
 describe("Data Module Tests", () => {
   describe("Basic Types", () => {
     describe("PlutusBytes", () => {
@@ -223,8 +226,8 @@ describe("Data Module Tests", () => {
         it.each(testCases)(
           "should round-trip $name via hex encoding",
           ({ value, expectedHex }) => {
-            const encoded = Data.Encode.cborHex(value);
-            const decoded = Data.Decode.cborHex(encoded);
+            const encoded = Codec.Encode.cborHex(value);
+            const decoded = Codec.Decode.cborHex(encoded);
             expect(decoded).toEqual(value);
             expect(encoded).toBe(expectedHex);
           },
@@ -235,8 +238,8 @@ describe("Data Module Tests", () => {
         it.each(testCases)(
           "should round-trip $name via bytes encoding",
           ({ value }) => {
-            const encoded = Data.Encode.cborBytes(value);
-            const decoded = Data.Decode.cborBytes(encoded);
+            const encoded = Codec.Encode.cborBytes(value);
+            const decoded = Codec.Decode.cborBytes(encoded);
             expect(decoded).toEqual(value);
           },
         );
@@ -355,8 +358,8 @@ describe("Data Module Tests", () => {
         Data.constr(7n, [[], Data.map([])]),
       ]);
 
-      const encoded = Data.Encode.cborHex(complex);
-      const decoded = Data.Decode.cborHex(encoded);
+      const encoded = Codec.Encode.cborHex(complex);
+      const decoded = Codec.Decode.cborHex(encoded);
       expect(decoded).toEqual(complex);
     });
   });
@@ -411,8 +414,8 @@ describe("Data Module Tests", () => {
 
     it.each(boundaryTestCases)("should handle $name correctly", ({ value }) => {
       const plutusData = value;
-      const encoded = Data.Encode.cborBytes(plutusData);
-      const decoded = Data.Decode.cborBytes(encoded);
+      const encoded = Codec.Encode.cborBytes(plutusData);
+      const decoded = Codec.Decode.cborBytes(encoded);
 
       expect(decoded).toEqual(plutusData);
       expect(decoded as Data.Int).toBe(value);
@@ -457,7 +460,7 @@ describe("Data Module Tests", () => {
 
       testCases.forEach(({ value, expectedMajorType }) => {
         const plutusData = value;
-        const encoded = Data.Encode.cborBytes(plutusData);
+        const encoded = Codec.Encode.cborBytes(plutusData);
         const firstByte = encoded[0];
         const majorType = firstByte >> 5;
 
@@ -482,8 +485,8 @@ describe("Data Module Tests", () => {
 
       // Test that empty collections encode/decode correctly
       [emptyList, emptyMap, emptyConstr].forEach((data) => {
-        const encoded = Data.Encode.cborBytes(data);
-        const decoded = Data.Decode.cborBytes(encoded);
+        const encoded = Codec.Encode.cborBytes(data);
+        const decoded = Codec.Decode.cborBytes(encoded);
         expect(decoded).toEqual(data);
       });
     });
@@ -494,8 +497,8 @@ describe("Data Module Tests", () => {
       // Create a list with many elements
       const largeList = Array.from({ length: 1000 }, (_, i) => BigInt(i));
 
-      const encoded = Data.Encode.cborBytes(largeList);
-      const decoded = Data.Decode.cborBytes(encoded);
+      const encoded = Codec.Encode.cborBytes(largeList);
+      const decoded = Codec.Decode.cborBytes(encoded);
       expect(decoded).toEqual(largeList);
       expect(decoded as Data.List).toHaveLength(1000);
     });
@@ -508,8 +511,8 @@ describe("Data Module Tests", () => {
       }));
       const largeMap = Data.map(entries);
 
-      const encoded = Data.Encode.cborBytes(largeMap);
-      const decoded = Data.Decode.cborBytes(encoded);
+      const encoded = Codec.Encode.cborBytes(largeMap);
+      const decoded = Codec.Decode.cborBytes(encoded);
       expect(decoded).toEqual(largeMap);
       expect((decoded as Data.MapList).size).toBe(100);
     });
@@ -519,8 +522,8 @@ describe("Data Module Tests", () => {
       const manyFields = Array.from({ length: 50 }, (_, i) => BigInt(i));
       const constr = Data.constr(42n, manyFields);
 
-      const encoded = Data.Encode.cborBytes(constr);
-      const decoded = Data.Decode.cborBytes(encoded);
+      const encoded = Codec.Encode.cborBytes(constr);
+      const decoded = Codec.Decode.cborBytes(encoded);
       expect(decoded).toEqual(constr);
       expect((decoded as Data.Constr).fields).toHaveLength(50);
     });
@@ -541,7 +544,7 @@ describe("Data Module Tests", () => {
         ({ input, method }) => {
           expect(() => {
             if (method === "cborHex") {
-              Data.Decode.cborHex(input);
+              Codec.Decode.cborHex(input);
             }
           }).toThrow();
         },
@@ -582,8 +585,8 @@ describe("Data Module Tests", () => {
         edgeCases.forEach(({ value }) => {
           expect(() => {
             const bytes = Data.bytearray(value);
-            const encoded = Data.Encode.cborBytes(bytes);
-            const decoded = Data.Decode.cborBytes(encoded);
+            const encoded = Codec.Encode.cborBytes(bytes);
+            const decoded = Codec.Decode.cborBytes(encoded);
             // Note: hex strings are normalized to lowercase during processing
             if (Data.isBytes(decoded)) {
               expect(decoded).toBe(value.toLowerCase());
@@ -682,8 +685,8 @@ describe("Data Module Tests", () => {
         }
 
         expect(() => {
-          const encoded = Data.Encode.cborBytes(nested);
-          const decoded = Data.Decode.cborBytes(encoded);
+          const encoded = Codec.Encode.cborBytes(nested);
+          const decoded = Codec.Decode.cborBytes(encoded);
           expect(decoded).toEqual(nested);
         }).not.toThrow();
       });
@@ -704,8 +707,8 @@ describe("Data Module Tests", () => {
           ]),
         ]);
 
-        const encoded = Data.Encode.cborBytes(complex);
-        const decoded = Data.Decode.cborBytes(encoded);
+        const encoded = Codec.Encode.cborBytes(complex);
+        const decoded = Codec.Decode.cborBytes(encoded);
         expect(decoded).toEqual(complex);
       });
     });
@@ -718,8 +721,8 @@ describe("Data Module Tests", () => {
 
         expect(data1).toEqual(data2);
 
-        const encoded1 = Data.Encode.cborBytes(data1);
-        const encoded2 = Data.Encode.cborBytes(data2);
+        const encoded1 = Codec.Encode.cborBytes(data1);
+        const encoded2 = Codec.Encode.cborBytes(data2);
 
         expect(encoded1).toEqual(encoded2);
       });
@@ -747,8 +750,8 @@ describe("Data Module Tests", () => {
         similar.forEach(({ data1, data2 }) => {
           expect(data1).not.toEqual(data2);
 
-          const encoded1 = Data.Encode.cborBytes(data1);
-          const encoded2 = Data.Encode.cborBytes(data2);
+          const encoded1 = Codec.Encode.cborBytes(data1);
+          const encoded2 = Codec.Encode.cborBytes(data2);
 
           expect(encoded1).not.toEqual(encoded2);
         });
@@ -760,8 +763,8 @@ describe("Data Module Tests", () => {
     it("should handle direct tag constructors (0-6)", () => {
       for (let i = 0; i <= 6; i++) {
         const constr = Data.constr(BigInt(i), [42n]);
-        const encoded = Data.Encode.cborBytes(constr);
-        const decoded = Data.Decode.cborBytes(encoded);
+        const encoded = Codec.Encode.cborBytes(constr);
+        const decoded = Codec.Decode.cborBytes(encoded);
         expect(decoded).toEqual(constr);
 
         // Verify CBOR encoding uses direct tags (121-127) with 1-byte encoding
@@ -777,8 +780,8 @@ describe("Data Module Tests", () => {
 
       testIndices.forEach((index) => {
         const constr = Data.constr(index, [42n]);
-        const encoded = Data.Encode.cborBytes(constr);
-        const decoded = Data.Decode.cborBytes(encoded);
+        const encoded = Codec.Encode.cborBytes(constr);
+        const decoded = Codec.Decode.cborBytes(encoded);
         expect(decoded).toEqual(constr);
         expect((decoded as Data.Constr).index).toBe(index);
 
@@ -801,20 +804,18 @@ describe("Data Module Tests", () => {
   it("should handle canonical format roundtrip", () => {
     const firstCanonical =
       "d90503828181436ad232a34277931bd5a95fcb2d914b711b431e8fb0e0c31fe71b70cec8a3bf37064e1b785c7997367a91151b6a63f4cd860738d9";
-    const decoded = Data.Decode.cborHex(firstCanonical);
+    const decoded = Codec.Decode.cborHex(firstCanonical);
 
-    const encoded = Data.Encode.cborHex(decoded, { _tag: "canonical" });
+    const encoded = CodecCanonical.Encode.cborHex(decoded);
     expect(encoded).toBe(firstCanonical);
-    expect(Data.Decode.cborHex(encoded)).toEqual(decoded);
+    expect(Codec.Decode.cborHex(encoded)).toEqual(decoded);
 
     const secondCanonical =
       "d9050883a4410742b6491b81df71d083fb9aac1b5f7385f841d1edec4a70f3d8f8803183c150334688472079a8ce4b0f7f249c0a9f4f829d2e4f1bc0556aa7b700508606a14365b7f71b4b62f0e2fbb95d6d";
-    const secondDecoded = Data.Decode.cborHex(secondCanonical);
-    const secondEncoded = Data.Encode.cborHex(secondDecoded, {
-      _tag: "canonical",
-    });
+    const secondDecoded = Codec.Decode.cborHex(secondCanonical);
+    const secondEncoded = CodecCanonical.Encode.cborHex(secondDecoded);
     expect(secondEncoded).toBe(secondCanonical);
-    expect(Data.Decode.cborHex(secondEncoded)).toEqual(secondDecoded);
+    expect(Codec.Decode.cborHex(secondEncoded)).toEqual(secondDecoded);
   });
 
   it("should handle unsorted map and return sorted canonical format", () => {
@@ -846,7 +847,7 @@ describe("Data Module Tests", () => {
       ]),
     ]);
 
-    const encoded = Data.Encode.cborHex(unsorted, { _tag: "canonical" });
+    const encoded = CodecCanonical.Encode.cborHex(unsorted);
     const expectedCBORHex =
       "d9050883a4410742b6491b81df71d083fb9aac1b5f7385f841d1edec4a70f3d8f8803183c150334688472079a8ce4b0f7f249c0a9f4f829d2e4f1bc0556aa7b700508606a14365b7f71b4b62f0e2fbb95d6d";
     expect(encoded).toBe(expectedCBORHex);
