@@ -1,5 +1,11 @@
 # @evolution-sdk/uplc
 
+## 2.1.0
+
+### Minor Changes
+
+- [#673](https://github.com/no-witness-labs/evolution-sdk/pull/673) [`b4a4068`](https://github.com/no-witness-labs/evolution-sdk/commit/b4a4068c27e76faf2d91fb4ca8d7915479ec392e) Thanks [@hadelive](https://github.com/hadelive)! - fix uplc
+
 ## 2.0.0
 
 ### Major Changes

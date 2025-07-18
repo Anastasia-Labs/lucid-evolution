@@ -1,6 +1,6 @@
 {
   "name": "@evolution-sdk/uplc",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "main": "./dist/node/uplc_tx.js",
   "browser": "./dist/browser/uplc_tx.js",
   "types": "./dist/node/uplc_tx.d.ts",
