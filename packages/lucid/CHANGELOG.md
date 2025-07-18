@@ -1,5 +1,15 @@
 # @evolution-sdk/lucid
 
+## 2.0.1
+
+### Patch Changes
+
+- Updated dependencies [[`b4a4068`](https://github.com/no-witness-labs/evolution-sdk/commit/b4a4068c27e76faf2d91fb4ca8d7915479ec392e)]:
+  - @evolution-sdk/uplc@2.1.0
+  - @evolution-sdk/utils@2.0.1
+  - @evolution-sdk/provider@2.0.1
+  - @evolution-sdk/wallet@2.0.1
+
 ## 2.0.0
 
 ### Major Changes
