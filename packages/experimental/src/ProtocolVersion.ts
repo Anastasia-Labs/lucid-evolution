@@ -7,7 +7,7 @@ import * as Numeric from "./Numeric.js";
  * Error class for ProtocolVersion related operations.
  *
  * @example
- * import { ProtocolVersion } from "@lucid-evolution/experimental";
+ * import { ProtocolVersion } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new ProtocolVersion.ProtocolVersionError({ message: "Invalid protocol version" });
@@ -43,7 +43,7 @@ export class ProtocolVersion extends Schema.TaggedClass<ProtocolVersion>()(
  * Check if two ProtocolVersion instances are equal.
  *
  * @example
- * import { ProtocolVersion } from "@lucid-evolution/experimental";
+ * import { ProtocolVersion } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const v1 = new ProtocolVersion({ major: 8n, minor: 0n });

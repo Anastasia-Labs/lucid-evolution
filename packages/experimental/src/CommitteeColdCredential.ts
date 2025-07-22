@@ -14,7 +14,7 @@ import * as CBOR from "./CBOR.js";
  * Error class for CommitteeColdCredential operations - re-exports CredentialError.
  *
  * @example
- * import { CommitteeColdCredential } from "@lucid-evolution/experimental";
+ * import { CommitteeColdCredential } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new CommitteeColdCredential.CommitteeColdCredentialError({ message: "Invalid committee cold credential" });
@@ -37,7 +37,7 @@ export const CommitteeColdCredential = Credential.Credential;
  * Type representing a committee cold credential - alias for Credential type.
  *
  * @example
- * import { CommitteeColdCredential, KeyHash } from "@lucid-evolution/experimental";
+ * import { CommitteeColdCredential, KeyHash } from "@evolution-sdk/experimental";
  *
  * const keyHash = new KeyHash.KeyHash({ hash: "1234567890123456789012345678901234567890123456789012345678901234" });
  * const committeeColdCredential: CommitteeColdCredential = keyHash;

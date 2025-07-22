@@ -6,7 +6,7 @@ import * as Bytes from "./Bytes.js";
  * Error class for BlockBodyHash related operations.
  *
  * @example
- * import { BlockBodyHash } from "@lucid-evolution/experimental";
+ * import { BlockBodyHash } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new BlockBodyHash.BlockBodyHashError({ message: "Invalid block body hash" });
@@ -62,7 +62,7 @@ export const HexSchema = Schema.transform(
  * Check if two BlockBodyHash instances are equal.
  *
  * @example
- * import { BlockBodyHash } from "@lucid-evolution/experimental";
+ * import { BlockBodyHash } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * @since 2.0.0

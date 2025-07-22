@@ -6,7 +6,7 @@ import * as Bytes from "./Bytes.js";
  * Error class for BlockHeaderHash related operations.
  *
  * @example
- * import { BlockHeaderHash } from "@lucid-evolution/experimental";
+ * import { BlockHeaderHash } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new BlockHeaderHash.BlockHeaderHashError({ message: "Invalid block header hash" });
@@ -64,7 +64,7 @@ export const HexSchema = Schema.transform(
  * Check if two BlockHeaderHash instances are equal.
  *
  * @example
- * import { BlockHeaderHash } from "@lucid-evolution/experimental";
+ * import { BlockHeaderHash } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * @since 2.0.0

@@ -13,7 +13,7 @@ import * as Credential from "./Credential.js";
  * Error class for CommitteeHotCredential operations - re-exports CredentialError.
  *
  * @example
- * import { CommitteeHotCredential } from "@lucid-evolution/experimental";
+ * import { CommitteeHotCredential } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new CommitteeHotCredential.CommitteeHotCredentialError({ message: "Invalid committee hot credential" });
@@ -36,7 +36,7 @@ export const CommitteeHotCredential = Credential.Credential;
  * Type representing a committee hot credential - alias for Credential type.
  *
  * @example
- * import { CommitteeHotCredential, KeyHash } from "@lucid-evolution/experimental";
+ * import { CommitteeHotCredential, KeyHash } from "@evolution-sdk/experimental";
  *
  * const keyHash = new KeyHash.KeyHash({ hash: "1234567890123456789012345678901234567890123456789012345678901234" });
  * const committeeHotCredential: CommitteeHotCredential = keyHash;

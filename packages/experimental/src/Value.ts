@@ -11,7 +11,7 @@ import * as Bytes from "./Bytes.js";
  * Error class for Value related operations.
  *
  * @example
- * import { Value } from "@lucid-evolution/experimental";
+ * import { Value } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new Value.ValueError({ message: "Invalid value" });
@@ -58,7 +58,7 @@ export type Value = typeof Value.Type;
  * Create a Value containing only ADA.
  *
  * @example
- * import { Value, Coin } from "@lucid-evolution/experimental";
+ * import { Value, Coin } from "@evolution-sdk/experimental";
  *
  * const value = Value.onlyCoin(Coin.make(1000000n)); // 1 ADA
  *
@@ -71,7 +71,7 @@ export const onlyCoin = (ada: Coin.Coin) => new OnlyCoin({ coin: ada });
  * Create a Value containing ADA and native assets.
  *
  * @example
- * import { Value, Coin, MultiAsset, PolicyId, AssetName, PositiveCoin } from "@lucid-evolution/experimental";
+ * import { Value, Coin, MultiAsset, PolicyId, AssetName, PositiveCoin } from "@evolution-sdk/experimental";
  *
  * const ada = Coin.make(2000000n);
  * const policyId = new PolicyId({ hash: "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235" });
@@ -90,7 +90,7 @@ export const withAssets = (ada: Coin.Coin, assets: MultiAsset.MultiAsset) =>
  * Extract the ADA amount from a Value.
  *
  * @example
- * import { Value, Coin } from "@lucid-evolution/experimental";
+ * import { Value, Coin } from "@evolution-sdk/experimental";
  *
  * const adaOnlyValue = Value.onlyCoin(Coin.make(1000000n));
  * const ada = Value.getAda(adaOnlyValue);
@@ -107,7 +107,7 @@ export const getAda = (value: Value): Coin.Coin => {
  * Extract the MultiAsset from a Value, if it exists.
  *
  * @example
- * import { Value, Coin, MultiAsset } from "@lucid-evolution/experimental";
+ * import { Value, Coin, MultiAsset } from "@evolution-sdk/experimental";
  * import { Option } from "effect";
  *
  * const adaOnlyValue = Value.onlyCoin(Coin.make(1000000n));
@@ -131,7 +131,7 @@ export const getAssets = (
  * Check if a Value contains only ADA (no native assets).
  *
  * @example
- * import { Value, Coin } from "@lucid-evolution/experimental";
+ * import { Value, Coin } from "@evolution-sdk/experimental";
  *
  * const adaOnlyValue = Value.onlyCoin(Coin.make(1000000n));
  * console.log(Value.isAdaOnly(adaOnlyValue)); // true
@@ -146,7 +146,7 @@ export const isAdaOnly = (value: Value): value is OnlyCoin =>
  * Check if a Value contains native assets.
  *
  * @example
- * import { Value, Coin, MultiAsset } from "@lucid-evolution/experimental";
+ * import { Value, Coin, MultiAsset } from "@evolution-sdk/experimental";
  *
  * const adaOnlyValue = Value.onlyCoin(Coin.make(1000000n));
  * console.log(Value.hasAssets(adaOnlyValue)); // false
@@ -162,7 +162,7 @@ export const hasAssets = (value: Value): value is WithAssets =>
  * Combines ADA amounts and merges MultiAssets.
  *
  * @example
- * import { Value, Coin, MultiAsset, PolicyId, AssetName, PositiveCoin } from "@lucid-evolution/experimental";
+ * import { Value, Coin, MultiAsset, PolicyId, AssetName, PositiveCoin } from "@evolution-sdk/experimental";
  *
  * const value1 = Value.onlyCoin(Coin.make(1000000n));
  * const value2 = Value.onlyCoin(Coin.make(2000000n));
@@ -206,7 +206,7 @@ export const add = (a: Value, b: Value): Value => {
  * Subtracts ADA amounts and MultiAssets properly.
  *
  * @example
- * import { Value, Coin } from "@lucid-evolution/experimental";
+ * import { Value, Coin } from "@evolution-sdk/experimental";
  *
  * const value1 = Value.onlyCoin(Coin.make(3000000n));
  * const value2 = Value.onlyCoin(Coin.make(1000000n));
@@ -262,7 +262,7 @@ export const subtract = (a: Value, b: Value): Value => {
  * Check if two Values are equal.
  *
  * @example
- * import { Value, Coin } from "@lucid-evolution/experimental";
+ * import { Value, Coin } from "@evolution-sdk/experimental";
  *
  * const value1 = Value.onlyCoin(Coin.make(1000000n));
  * const value2 = Value.onlyCoin(Coin.make(1000000n));

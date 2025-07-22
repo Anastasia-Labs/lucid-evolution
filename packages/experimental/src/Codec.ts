@@ -12,7 +12,7 @@ import type { ParseError } from "effect/ParseResult";
  * Creates a simple codec with encode and decode methods
  *
  * @example
- * import { createCodec } from "@lucid-evolution/experimental/Codec";
+ * import { createCodec } from "@evolution-sdk/experimental/Codec";
  * import { Schema } from "effect";
  *
  * const codecs = createCodec({

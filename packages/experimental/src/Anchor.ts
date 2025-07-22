@@ -8,7 +8,7 @@ import * as Bytes from "./Bytes.js";
  * Error class for Anchor related operations.
  *
  * @example
- * import { Anchor } from "@lucid-evolution/experimental";
+ * import { Anchor } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new Anchor.AnchorError({ message: "Invalid anchor" });
@@ -27,7 +27,7 @@ export class AnchorError extends Data.TaggedError("AnchorError")<{
  * anchor = [anchor_url: url, anchor_data_hash: hash32]
  *
  * @example
- * import { Anchor, Url, Hash32 } from "@lucid-evolution/experimental";
+ * import { Anchor, Url, Hash32 } from "@evolution-sdk/experimental";
  *
  * const anchor = new Anchor({
  *   anchorUrl: Url.make("https://example.com/anchor.json"),
@@ -97,7 +97,7 @@ export const CBORHexSchema = (
  * Create an Anchor from a URL string and hash bytes.
  *
  * @example
- * import { Anchor, Url } from "@lucid-evolution/experimental";
+ * import { Anchor, Url } from "@evolution-sdk/experimental";
  *
  * const anchor = Anchor.make(
  *   "https://example.com/anchor.json",
@@ -117,7 +117,7 @@ export const make = (anchorUrl: string, anchorDataHash: Uint8Array): Anchor =>
  * Create an Anchor from a URL string and hex hash.
  *
  * @example
- * import { Anchor } from "@lucid-evolution/experimental";
+ * import { Anchor } from "@evolution-sdk/experimental";
  *
  * const anchor = Anchor.fromHex(
  *   "https://example.com/anchor.json",
@@ -137,7 +137,7 @@ export const fromHex = (anchorUrl: string, anchorDataHashHex: string): Anchor =>
  * Get the anchor URL string from an Anchor.
  *
  * @example
- * import { Anchor } from "@lucid-evolution/experimental";
+ * import { Anchor } from "@evolution-sdk/experimental";
  *
  * const anchor = Anchor.make("https://example.com/anchor.json", new Uint8Array(32));
  * const urlStr = Anchor.getAnchorUrl(anchor);
@@ -152,7 +152,7 @@ export const getAnchorUrl = (anchor: Anchor): string => anchor.anchorUrl;
  * Get the anchor data hash as bytes from an Anchor.
  *
  * @example
- * import { Anchor } from "@lucid-evolution/experimental";
+ * import { Anchor } from "@evolution-sdk/experimental";
  *
  * const anchor = Anchor.make("https://example.com/anchor.json", new Uint8Array(32));
  * const hashBytes = Anchor.getAnchorDataHash(anchor);
@@ -167,7 +167,7 @@ export const getAnchorDataHash = (anchor: Anchor): Uint8Array =>
  * Get the anchor data hash as hex string from an Anchor.
  *
  * @example
- * import { Anchor } from "@lucid-evolution/experimental";
+ * import { Anchor } from "@evolution-sdk/experimental";
  *
  * const anchor = Anchor.make("https://example.com/anchor.json", new Uint8Array(32));
  * const hexHash = Anchor.getAnchorDataHashHex(anchor);
@@ -182,7 +182,7 @@ export const getAnchorDataHashHex = (anchor: Anchor): string =>
  * Check if two Anchor instances are equal.
  *
  * @example
- * import { Anchor } from "@lucid-evolution/experimental";
+ * import { Anchor } from "@evolution-sdk/experimental";
  *
  * const anchor1 = Anchor.make("https://example.com/anchor.json", new Uint8Array(32));
  * const anchor2 = Anchor.make("https://example.com/anchor.json", new Uint8Array(32));

@@ -6,7 +6,7 @@ import * as Bytes from "./Bytes.js";
  * Error class for UnitInterval related operations.
  *
  * @example
- * import { UnitInterval } from "@lucid-evolution/experimental";
+ * import { UnitInterval } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new UnitInterval.UnitIntervalError({ message: "Invalid unit interval" });
@@ -32,7 +32,7 @@ export class UnitIntervalError extends Data.TaggedError("UnitIntervalError")<{
  * 2. denominator > 0
  *
  * @example
- * import { UnitInterval } from "@lucid-evolution/experimental";
+ * import { UnitInterval } from "@evolution-sdk/experimental";
  *
  * const ratio = new UnitInterval.UnitInterval({
  *   numerator: 1n,
@@ -157,7 +157,7 @@ export const CBORHexSchema = (
  * Create a UnitInterval from numerator and denominator.
  *
  * @example
- * import { UnitInterval } from "@lucid-evolution/experimental";
+ * import { UnitInterval } from "@evolution-sdk/experimental";
  *
  * const half = UnitInterval.make(1n, 2n);
  * console.log(half.numerator); // 1n
@@ -186,7 +186,7 @@ export const make = (numerator: bigint, denominator: bigint): UnitInterval => {
  * Check if two UnitInterval instances are equal.
  *
  * @example
- * import { UnitInterval } from "@lucid-evolution/experimental";
+ * import { UnitInterval } from "@evolution-sdk/experimental";
  *
  * const a = UnitInterval.make(1n, 2n);
  * const b = UnitInterval.make(1n, 2n);
@@ -202,7 +202,7 @@ export const equals = (a: UnitInterval, b: UnitInterval): boolean =>
  * Convert UnitInterval to decimal value.
  *
  * @example
- * import { UnitInterval } from "@lucid-evolution/experimental";
+ * import { UnitInterval } from "@evolution-sdk/experimental";
  *
  * const half = UnitInterval.make(1n, 2n);
  * console.log(UnitInterval.toDecimal(half)); // 0.5
@@ -217,7 +217,7 @@ export const toDecimal = (interval: UnitInterval): number =>
  * Create UnitInterval from decimal value (approximate).
  *
  * @example
- * import { UnitInterval } from "@lucid-evolution/experimental";
+ * import { UnitInterval } from "@evolution-sdk/experimental";
  *
  * const half = UnitInterval.fromDecimal(0.5);
  * console.log(half.numerator); // 1n
@@ -244,7 +244,7 @@ export const fromDecimal = (value: number): UnitInterval => {
  * Create a UnitInterval from a percentage (0-100).
  *
  * @example
- * import { UnitInterval } from "@lucid-evolution/experimental";
+ * import { UnitInterval } from "@evolution-sdk/experimental";
  *
  * const fiftyPercent = UnitInterval.fromPercentage(50);
  * console.log(UnitInterval.toDecimal(fiftyPercent)); // 0.5
@@ -266,7 +266,7 @@ export const fromPercentage = (percentage: number): UnitInterval => {
  * Convert UnitInterval to percentage (0-100).
  *
  * @example
- * import { UnitInterval } from "@lucid-evolution/experimental";
+ * import { UnitInterval } from "@evolution-sdk/experimental";
  *
  * const half = UnitInterval.make(1n, 2n);
  * console.log(UnitInterval.toPercentage(half)); // 50
@@ -281,7 +281,7 @@ export const toPercentage = (interval: UnitInterval): number =>
  * Generate a random UnitInterval.
  *
  * @example
- * import { UnitInterval } from "@lucid-evolution/experimental";
+ * import { UnitInterval } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

@@ -8,7 +8,7 @@ import * as Bytes from "./Bytes.js";
  * Error class for DRep related operations.
  *
  * @example
- * import { DRep } from "@lucid-evolution/experimental";
+ * import { DRep } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new DRep.DRepError({ message: "Invalid DRep" });
@@ -224,7 +224,7 @@ export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
  * Pattern match on a DRep to handle different DRep types.
  *
  * @example
- * import { DRep, KeyHash } from "@lucid-evolution/experimental";
+ * import { DRep, KeyHash } from "@evolution-sdk/experimental";
  *
  * const keyHash = new KeyHash.KeyHash({ hash: "1234567890123456789012345678901234567890123456789012345678901234" });
  * const drep = DRep.fromKeyHash(keyHash);
@@ -268,7 +268,7 @@ export const match = <A, B, C, D>(
  * Check if a DRep is a KeyHashDRep.
  *
  * @example
- * import { DRep, KeyHash } from "@lucid-evolution/experimental";
+ * import { DRep, KeyHash } from "@evolution-sdk/experimental";
  *
  * const keyHash = new KeyHash.KeyHash({ hash: "1234567890123456789012345678901234567890123456789012345678901234" });
  * const drep = DRep.fromKeyHash(keyHash);
@@ -284,7 +284,7 @@ export const isKeyHashDRep = (drep: DRep): drep is KeyHashDRep =>
  * Check if a DRep is a ScriptHashDRep.
  *
  * @example
- * import { DRep, ScriptHash } from "@lucid-evolution/experimental";
+ * import { DRep, ScriptHash } from "@evolution-sdk/experimental";
  *
  * const scriptHash = new ScriptHash.ScriptHash({ hash: "1234567890123456789012345678901234567890123456789012345678901234" });
  * const drep = DRep.fromScriptHash(scriptHash);
@@ -300,7 +300,7 @@ export const isScriptHashDRep = (drep: DRep): drep is ScriptHashDRep =>
  * Check if a DRep is an AlwaysAbstainDRep.
  *
  * @example
- * import { DRep } from "@lucid-evolution/experimental";
+ * import { DRep } from "@evolution-sdk/experimental";
  *
  * const drep = DRep.alwaysAbstain();
  * console.log(DRep.isAlwaysAbstainDRep(drep)); // true
@@ -315,7 +315,7 @@ export const isAlwaysAbstainDRep = (drep: DRep): drep is AlwaysAbstainDRep =>
  * Check if a DRep is an AlwaysNoConfidenceDRep.
  *
  * @example
- * import { DRep } from "@lucid-evolution/experimental";
+ * import { DRep } from "@evolution-sdk/experimental";
  *
  * const drep = DRep.alwaysNoConfidence();
  * console.log(DRep.isAlwaysNoConfidenceDRep(drep)); // true
@@ -356,7 +356,7 @@ export const generator = FastCheck.oneof(
  * Check if two DRep instances are equal.
  *
  * @example
- * import { DRep, KeyHash } from "@lucid-evolution/experimental";
+ * import { DRep, KeyHash } from "@evolution-sdk/experimental";
  *
  * const keyHash = new KeyHash.KeyHash({ hash: "1234567890123456789012345678901234567890123456789012345678901234" });
  * const drep1 = DRep.fromKeyHash(keyHash);
@@ -389,7 +389,7 @@ export const equals = (self: DRep, that: DRep): boolean => {
  * Create a KeyHashDRep from a KeyHash.
  *
  * @example
- * import { DRep, KeyHash } from "@lucid-evolution/experimental";
+ * import { DRep, KeyHash } from "@evolution-sdk/experimental";
  *
  * const keyHash = new KeyHash.KeyHash({ hash: "1234567890123456789012345678901234567890123456789012345678901234" });
  * const drep = DRep.fromKeyHash(keyHash);
@@ -406,7 +406,7 @@ export const fromKeyHash = (keyHash: KeyHash.KeyHash): KeyHashDRep => ({
  * Create a ScriptHashDRep from a ScriptHash.
  *
  * @example
- * import { DRep, ScriptHash } from "@lucid-evolution/experimental";
+ * import { DRep, ScriptHash } from "@evolution-sdk/experimental";
  *
  * const scriptHash = new ScriptHash.ScriptHash({ hash: "1234567890123456789012345678901234567890123456789012345678901234" });
  * const drep = DRep.fromScriptHash(scriptHash);
@@ -425,7 +425,7 @@ export const fromScriptHash = (
  * Create an AlwaysAbstainDRep.
  *
  * @example
- * import { DRep } from "@lucid-evolution/experimental";
+ * import { DRep } from "@evolution-sdk/experimental";
  *
  * const drep = DRep.alwaysAbstain();
  *
@@ -440,7 +440,7 @@ export const alwaysAbstain = (): AlwaysAbstainDRep => ({
  * Create an AlwaysNoConfidenceDRep.
  *
  * @example
- * import { DRep } from "@lucid-evolution/experimental";
+ * import { DRep } from "@evolution-sdk/experimental";
  *
  * const drep = DRep.alwaysNoConfidence();
  *

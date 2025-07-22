@@ -9,7 +9,7 @@ import * as Bytes from "./Bytes.js";
  * Error class for MultiAsset related operations.
  *
  * @example
- * import { MultiAsset } from "@lucid-evolution/experimental";
+ * import { MultiAsset } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new MultiAsset.MultiAssetError({ message: "Invalid multi asset" });
@@ -71,7 +71,7 @@ export const MultiAssetSchema = Schema.MapFromSelf({
  * All amounts must be positive (non-zero).
  *
  * @example
- * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@lucid-evolution/experimental";
+ * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@evolution-sdk/experimental";
  *
  * const policyId = new PolicyId({ hash: "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235" });
  * const assetName = new AssetName({ name: "546f6b656e" }); // "Token"
@@ -98,7 +98,7 @@ export const empty = (): Map<PolicyId.PolicyId, AssetMap> => new Map();
  * Create a MultiAsset from a single asset.
  *
  * @example
- * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@lucid-evolution/experimental";
+ * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@evolution-sdk/experimental";
  *
  * const policyId = new PolicyId({ hash: "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235" });
  * const assetName = new AssetName({ name: "546f6b656e" });
@@ -122,7 +122,7 @@ export const singleton = (
  * Add an asset to a MultiAsset, combining amounts if the asset already exists.
  *
  * @example
- * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@lucid-evolution/experimental";
+ * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@evolution-sdk/experimental";
  *
  * const policyId = new PolicyId({ hash: "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235" });
  * const assetName = new AssetName({ name: "546f6b656e" });
@@ -168,7 +168,7 @@ export const addAsset = (
  * Get the amount of a specific asset from a MultiAsset.
  *
  * @example
- * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@lucid-evolution/experimental";
+ * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@evolution-sdk/experimental";
  * import { Option } from "effect";
  *
  * const policyId = new PolicyId({ hash: "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235" });
@@ -201,7 +201,7 @@ export const getAsset = (
  * Check if a MultiAsset contains a specific asset.
  *
  * @example
- * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@lucid-evolution/experimental";
+ * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@evolution-sdk/experimental";
  *
  * const policyId = new PolicyId({ hash: "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235" });
  * const assetName = new AssetName({ name: "546f6b656e" });
@@ -226,7 +226,7 @@ export const hasAsset = (
  * Get all policy IDs in a MultiAsset.
  *
  * @example
- * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@lucid-evolution/experimental";
+ * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@evolution-sdk/experimental";
  *
  * const policyId = new PolicyId({ hash: "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235" });
  * const assetName = new AssetName({ name: "546f6b656e" });
@@ -245,7 +245,7 @@ export const getPolicyIds = (multiAsset: MultiAsset) => multiAsset.keys();
  * Get all assets for a specific policy ID.
  *
  * @example
- * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@lucid-evolution/experimental";
+ * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@evolution-sdk/experimental";
  * import { Option } from "effect";
  *
  * const policyId = new PolicyId({ hash: "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235" });
@@ -451,7 +451,7 @@ export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
  * Merge two MultiAsset instances, combining amounts for assets that exist in both.
  *
  * @example
- * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@lucid-evolution/experimental";
+ * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@evolution-sdk/experimental";
  *
  * const policyId = new PolicyId({ hash: "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235" });
  * const assetName = new AssetName({ name: "546f6b656e" });
@@ -483,7 +483,7 @@ export const merge = (a: MultiAsset, b: MultiAsset): MultiAsset => {
  * If the result would be empty, an error is thrown since MultiAsset cannot be empty.
  *
  * @example
- * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@lucid-evolution/experimental";
+ * import { MultiAsset, PolicyId, AssetName, PositiveCoin } from "@evolution-sdk/experimental";
  *
  * const policyId = new PolicyId({ hash: "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235" });
  * const assetName = new AssetName({ name: "546f6b656e" });

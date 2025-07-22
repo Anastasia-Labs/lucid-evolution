@@ -7,7 +7,7 @@ import * as CBOR from "./CBOR.js";
  * Error class for PoolMetadata related operations.
  *
  * @example
- * import { PoolMetadata } from "@lucid-evolution/experimental";
+ * import { PoolMetadata } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new PoolMetadata.PoolMetadataError({ message: "Invalid pool metadata" });
@@ -26,7 +26,7 @@ export class PoolMetadataError extends Data.TaggedError("PoolMetadataError")<{
  * pool_metadata = [url, bytes]
  *
  * @example
- * import { PoolMetadata, Url } from "@lucid-evolution/experimental";
+ * import { PoolMetadata, Url } from "@evolution-sdk/experimental";
  *
  * const metadata = new PoolMetadata({
  *   url: Url.make("https://example.com/pool.json"),

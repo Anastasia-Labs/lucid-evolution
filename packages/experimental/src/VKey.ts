@@ -6,7 +6,7 @@ import * as Hash32 from "./Hash32.js";
  * Error class for VKey related operations.
  *
  * @example
- * import { VKey } from "@lucid-evolution/experimental";
+ * import { VKey } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new VKey.VKeyError({ message: "Invalid verification key" });
@@ -59,7 +59,7 @@ export const HexSchema = Schema.transform(
  * Check if two VKey instances are equal.
  *
  * @example
- * import { VKey } from "@lucid-evolution/experimental";
+ * import { VKey } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * @since 2.0.0
@@ -71,7 +71,7 @@ export const equals = (a: VKey, b: VKey): boolean => a === b;
  * Generate a random VKey.
  *
  * @example
- * import { VKey } from "@lucid-evolution/experimental";
+ * import { VKey } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

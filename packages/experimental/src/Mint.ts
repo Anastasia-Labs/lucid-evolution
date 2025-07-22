@@ -18,7 +18,7 @@ import * as _Codec from "./Codec.js";
  * Error class for Mint related operations.
  *
  * @example
- * import { Mint } from "@lucid-evolution/experimental";
+ * import { Mint } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new Mint.MintError({ message: "Invalid mint" });
@@ -92,7 +92,7 @@ export const prettyPrint: PrettyPrint = Pretty.make(Mint);
  * Create empty Mint.
  *
  * @example
- * import { Mint } from "@lucid-evolution/experimental";
+ * import { Mint } from "@evolution-sdk/experimental";
  *
  * const mint = Mint.empty();
  *
@@ -105,7 +105,7 @@ export const empty = (): Mint => new Map<PolicyId.PolicyId, AssetMap>();
  * Create Mint from a single policy and asset entry.
  *
  * @example
- * import { Mint, PolicyId, AssetName, NonZeroInt64 } from "@lucid-evolution/experimental";
+ * import { Mint, PolicyId, AssetName, NonZeroInt64 } from "@evolution-sdk/experimental";
  *
  * const policyId = new PolicyId.PolicyId({ hash: "..." });
  * const assetName = new AssetName.AssetName({ name: "token1" });
@@ -127,7 +127,7 @@ export const singleton = (
  * Add or update an asset in the Mint.
  *
  * @example
- * import { Mint, PolicyId, AssetName, NonZeroInt64 } from "@lucid-evolution/experimental";
+ * import { Mint, PolicyId, AssetName, NonZeroInt64 } from "@evolution-sdk/experimental";
  *
  * const mint = Mint.empty();
  * const policyId = new PolicyId.PolicyId({ hash: "..." });
@@ -175,7 +175,7 @@ export const insert = (
  * Remove an asset from the Mint.
  *
  * @example
- * import { Mint, PolicyId, AssetName } from "@lucid-evolution/experimental";
+ * import { Mint, PolicyId, AssetName } from "@evolution-sdk/experimental";
  *
  * const mint = Mint.singleton(policyId, assetName, NonZeroInt64.make(1000n));
  * const updatedMint = Mint.remove(mint, policyId, assetName);
@@ -217,7 +217,7 @@ export const removeAsset = (
  * Get the amount for a specific policy and asset.
  *
  * @example
- * import { Mint, PolicyId, AssetName, NonZeroInt64 } from "@lucid-evolution/experimental";
+ * import { Mint, PolicyId, AssetName, NonZeroInt64 } from "@evolution-sdk/experimental";
  *
  * const mint = Mint.singleton(policyId, assetName, NonZeroInt64.make(1000n));
  * const amount = Mint.get(mint, policyId, assetName);
@@ -246,7 +246,7 @@ export const get = (
  * Check if Mint contains a specific policy and asset.
  *
  * @example
- * import { Mint, PolicyId, AssetName, NonZeroInt64 } from "@lucid-evolution/experimental";
+ * import { Mint, PolicyId, AssetName, NonZeroInt64 } from "@evolution-sdk/experimental";
  *
  * const mint = Mint.singleton(policyId, assetName, NonZeroInt64.make(1000n));
  * const hasAsset = Mint.has(mint, policyId, assetName); // true
@@ -264,7 +264,7 @@ export const has = (
  * Check if Mint is empty.
  *
  * @example
- * import { Mint } from "@lucid-evolution/experimental";
+ * import { Mint } from "@evolution-sdk/experimental";
  *
  * const mint = Mint.empty();
  * const empty = Mint.isEmpty(mint); // true
@@ -278,7 +278,7 @@ export const isEmpty = (mint: Mint): boolean => mint.size === 0;
  * Get the number of policies in the Mint.
  *
  * @example
- * import { Mint, PolicyId, AssetName, NonZeroInt64 } from "@lucid-evolution/experimental";
+ * import { Mint, PolicyId, AssetName, NonZeroInt64 } from "@evolution-sdk/experimental";
  *
  * const mint = Mint.singleton(policyId, assetName, NonZeroInt64.make(1000n));
  * const policyCount = Mint.policyCount(mint); // 1
@@ -292,7 +292,7 @@ export const policyCount = (mint: Mint): number => mint.size;
  * Check if two Mint instances are equal.
  *
  * @example
- * import { Mint, PolicyId, AssetName, NonZeroInt64 } from "@lucid-evolution/experimental";
+ * import { Mint, PolicyId, AssetName, NonZeroInt64 } from "@evolution-sdk/experimental";
  *
  * const mint1 = Mint.singleton(policyId, assetName, NonZeroInt64.make(1000n));
  * const mint2 = Mint.singleton(policyId, assetName, NonZeroInt64.make(1000n));

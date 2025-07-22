@@ -16,7 +16,7 @@ export const IPV6_HEX_LENGTH = 32;
  * Error class for IPv6 related operations.
  *
  * @example
- * import { IPv6 } from "@lucid-evolution/experimental";
+ * import { IPv6 } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new IPv6.IPv6Error({ message: "Invalid IPv6 address" });
@@ -47,7 +47,7 @@ export const BytesSchema = Bytes16.BytesSchema;
  * IPv6 addresses are exactly 16 bytes (32 hex characters).
  *
  * @example
- * import { IPv6 } from "@lucid-evolution/experimental";
+ * import { IPv6 } from "@evolution-sdk/experimental";
  *
  * const ipv6 = IPv6.make("20010db885a3000000008a2e03707334");
  * console.log(ipv6); // "20010db885a3000000008a2e03707334"
@@ -97,7 +97,7 @@ export const IPv6HexSchema = Schema.transform(
  * Create an IPv6 address from a standard string representation.
  *
  * @example
- * import { IPv6 } from "@lucid-evolution/experimental";
+ * import { IPv6 } from "@evolution-sdk/experimental";
  *
  * const ipv6 = IPv6.fromString("2001:0db8:85a3:0000:0000:8a2e:0370:7334");
  * // Converts to hex representation
@@ -121,7 +121,7 @@ export const fromString = (ipv6String: string): IPv6 => {
  * Convert an IPv6 address to standard string representation.
  *
  * @example
- * import { IPv6 } from "@lucid-evolution/experimental";
+ * import { IPv6 } from "@evolution-sdk/experimental";
  *
  * const ipv6 = IPv6.make("20010db885a3000000008a2e03707334");
  * const string = IPv6.toString(ipv6);
@@ -143,7 +143,7 @@ export const toString = (ipv6: IPv6): string => {
  * Check if two IPv6 instances are equal.
  *
  * @example
- * import { IPv6 } from "@lucid-evolution/experimental";
+ * import { IPv6 } from "@evolution-sdk/experimental";
  *
  * const ipv6a = IPv6.make("20010db885a3000000008a2e03707334");
  * const ipv6b = IPv6.make("20010db885a3000000008a2e03707334");
@@ -158,7 +158,7 @@ export const equals = (a: IPv6, b: IPv6): boolean => a === b;
  * Generate a random IPv6 address.
  *
  * @example
- * import { IPv6 } from "@lucid-evolution/experimental";
+ * import { IPv6 } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

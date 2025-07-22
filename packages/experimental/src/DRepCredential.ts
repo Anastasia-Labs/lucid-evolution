@@ -13,7 +13,7 @@ import * as Credential from "./Credential.js";
  * Error class for DRepCredential operations - re-exports CredentialError.
  *
  * @example
- * import { DRepCredential } from "@lucid-evolution/experimental";
+ * import { DRepCredential } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new DRepCredential.DRepCredentialError({ message: "Invalid DRep credential" });
@@ -36,7 +36,7 @@ export const DRepCredential = Credential.Credential;
  * Type representing a DRep credential - alias for Credential type.
  *
  * @example
- * import { DRepCredential, KeyHash } from "@lucid-evolution/experimental";
+ * import { DRepCredential, KeyHash } from "@evolution-sdk/experimental";
  *
  * const keyHash = new KeyHash.KeyHash({ hash: "1234567890123456789012345678901234567890123456789012345678901234" });
  * const drepCredential: DRepCredential = keyHash;

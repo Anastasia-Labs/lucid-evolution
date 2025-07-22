@@ -15,7 +15,7 @@ import * as Bytes from "./Bytes.js";
  * Error class for PoolParams related operations.
  *
  * @example
- * import { PoolParams } from "@lucid-evolution/experimental";
+ * import { PoolParams } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new PoolParams.PoolParamsError({ message: "Invalid pool parameters" });
@@ -44,7 +44,7 @@ export class PoolParamsError extends Data.TaggedError("PoolParamsError")<{
  *   )
  *
  * @example
- * import { PoolParams, PoolKeyHash, VrfKeyHash, Coin, UnitInterval, RewardAccount, KeyHash } from "@lucid-evolution/experimental";
+ * import { PoolParams, PoolKeyHash, VrfKeyHash, Coin, UnitInterval, RewardAccount, KeyHash } from "@evolution-sdk/experimental";
  *
  * const poolParams = new PoolParams.PoolParams({
  *   operator: PoolKeyHash.PoolKeyHash.make("a".repeat(56)),
@@ -288,7 +288,7 @@ export const equals = (a: PoolParams, b: PoolParams): boolean =>
  * Create a PoolParams instance with validation.
  *
  * @example
- * import { PoolParams, PoolKeyHash, VrfKeyHash, Coin, UnitInterval } from "@lucid-evolution/experimental";
+ * import { PoolParams, PoolKeyHash, VrfKeyHash, Coin, UnitInterval } from "@evolution-sdk/experimental";
  *
  * const poolParams = PoolParams.make({
  *   operator: PoolKeyHash.PoolKeyHash.make("a".repeat(56)),
@@ -384,7 +384,7 @@ export const hasValidMargin = (params: PoolParams): boolean =>
  * Generate a random PoolParams.
  *
  * @example
- * import { PoolParams } from "@lucid-evolution/experimental";
+ * import { PoolParams } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

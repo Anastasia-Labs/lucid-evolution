@@ -39,7 +39,7 @@ export class Header extends Schema.TaggedClass<Header>()("Header", {
  * Check if two Header instances are equal.
  *
  * @example
- * import { Header } from "@lucid-evolution/experimental";
+ * import { Header } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const header1 = new Header({
@@ -63,7 +63,7 @@ export const equals = (a: Header, b: Header): boolean =>
  * Predicate to check if a value is a Header instance.
  *
  * @example
- * import { Header } from "@lucid-evolution/experimental";
+ * import { Header } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const header = new Header({

@@ -8,7 +8,7 @@ import * as Bytes from "./Bytes.js";
  * Error class for SingleHostName related operations.
  *
  * @example
- * import { SingleHostName } from "@lucid-evolution/experimental";
+ * import { SingleHostName } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new SingleHostName.SingleHostNameError({ message: "Invalid single host name" });
@@ -31,7 +31,7 @@ export class SingleHostNameError extends Data.TaggedError(
  * Used for A or AAAA DNS records.
  *
  * @example
- * import { SingleHostName, Port, DnsName } from "@lucid-evolution/experimental";
+ * import { SingleHostName, Port, DnsName } from "@evolution-sdk/experimental";
  * import { Option } from "effect";
  *
  * const hostName = new SingleHostName({
@@ -62,7 +62,7 @@ export class SingleHostName extends Schema.TaggedClass<SingleHostName>()(
  * Create a SingleHostName with a port.
  *
  * @example
- * import { SingleHostName, Port, DnsName } from "@lucid-evolution/experimental";
+ * import { SingleHostName, Port, DnsName } from "@evolution-sdk/experimental";
  * import { Option } from "effect";
  *
  * const dnsName = new DnsName({ name: "relay.example.com" });
@@ -84,7 +84,7 @@ export const withPort = (
  * Create a SingleHostName without a port.
  *
  * @example
- * import { SingleHostName, DnsName } from "@lucid-evolution/experimental";
+ * import { SingleHostName, DnsName } from "@evolution-sdk/experimental";
  *
  * const dnsName = new DnsName({ name: "relay.example.com" });
  * const hostName = SingleHostName.withoutPort(dnsName);
@@ -102,7 +102,7 @@ export const withoutPort = (dnsName: DnsName.DnsName): SingleHostName =>
  * Check if the host name has a port.
  *
  * @example
- * import { SingleHostName } from "@lucid-evolution/experimental";
+ * import { SingleHostName } from "@evolution-sdk/experimental";
  *
  * console.log(SingleHostName.hasPort(hostName)); // true or false
  *
@@ -116,7 +116,7 @@ export const hasPort = (hostName: SingleHostName): boolean =>
  * Get the DNS name from a SingleHostName.
  *
  * @example
- * import { SingleHostName } from "@lucid-evolution/experimental";
+ * import { SingleHostName } from "@evolution-sdk/experimental";
  *
  * const dnsName = SingleHostName.getDnsName(hostName);
  * console.log(dnsName.name); // "relay.example.com"
@@ -131,7 +131,7 @@ export const getDnsName = (hostName: SingleHostName): DnsName.DnsName =>
  * Get the port from a SingleHostName, if it exists.
  *
  * @example
- * import { SingleHostName } from "@lucid-evolution/experimental";
+ * import { SingleHostName } from "@evolution-sdk/experimental";
  * import { Option } from "effect";
  *
  * const port = SingleHostName.getPort(hostName);

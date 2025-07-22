@@ -13,7 +13,7 @@ import * as Bytes from "./Bytes.js";
  * Error class for Withdrawals related operations.
  *
  * @example
- * import { Withdrawals } from "@lucid-evolution/experimental";
+ * import { Withdrawals } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new Withdrawals.WithdrawalsError({ message: "Invalid withdrawals" });
@@ -32,7 +32,7 @@ export class WithdrawalsError extends Data.TaggedError("WithdrawalsError")<{
  * withdrawals = {+ reward_account => coin}
  *
  * @example
- * import { Withdrawals, RewardAccount, Coin } from "@lucid-evolution/experimental";
+ * import { Withdrawals, RewardAccount, Coin } from "@evolution-sdk/experimental";
  *
  * const withdrawals = new Withdrawals({
  *   withdrawals: new Map([
@@ -178,7 +178,7 @@ export const generator = FastCheck.array(
  * Create an empty Withdrawals instance.
  *
  * @example
- * import { Withdrawals } from "@lucid-evolution/experimental";
+ * import { Withdrawals } from "@evolution-sdk/experimental";
  *
  * const empty = Withdrawals.empty();
  *
@@ -192,7 +192,7 @@ export const empty = (): Withdrawals =>
  * Create a Withdrawals instance with a single withdrawal.
  *
  * @example
- * import { Withdrawals, RewardAccount, Coin } from "@lucid-evolution/experimental";
+ * import { Withdrawals, RewardAccount, Coin } from "@evolution-sdk/experimental";
  *
  * const rewardAccount = new RewardAccount.RewardAccount({ ... });
  * const withdrawals = Withdrawals.singleton(rewardAccount, Coin.make(1000000n));
@@ -210,7 +210,7 @@ export const singleton = (
  * Create a Withdrawals instance from an array of [RewardAccount, Coin] pairs.
  *
  * @example
- * import { Withdrawals, RewardAccount, Coin } from "@lucid-evolution/experimental";
+ * import { Withdrawals, RewardAccount, Coin } from "@evolution-sdk/experimental";
  *
  * const rewardAccount = new RewardAccount.RewardAccount({ ... });
  * const withdrawals = Withdrawals.fromEntries([[rewardAccount, Coin.make(1000000n)]]);
@@ -226,7 +226,7 @@ export const fromEntries = (
  * Add a withdrawal to existing Withdrawals.
  *
  * @example
- * import { Withdrawals, RewardAccount, Coin } from "@lucid-evolution/experimental";
+ * import { Withdrawals, RewardAccount, Coin } from "@evolution-sdk/experimental";
  *
  * const withdrawals = Withdrawals.empty();
  * const rewardAccount = new RewardAccount.RewardAccount({ ... });
@@ -249,7 +249,7 @@ export const add = (
  * Remove a withdrawal from existing Withdrawals.
  *
  * @example
- * import { Withdrawals, RewardAccount } from "@lucid-evolution/experimental";
+ * import { Withdrawals, RewardAccount } from "@evolution-sdk/experimental";
  *
  * const withdrawals = Withdrawals.singleton(rewardAccount, Coin.make(1000000n));
  * const updatedWithdrawals = Withdrawals.remove(withdrawals, rewardAccount);
@@ -270,7 +270,7 @@ export const remove = (
  * Get the coin amount for a specific reward account.
  *
  * @example
- * import { Withdrawals, RewardAccount, Coin } from "@lucid-evolution/experimental";
+ * import { Withdrawals, RewardAccount, Coin } from "@evolution-sdk/experimental";
  * import { Option } from "effect";
  *
  * const withdrawals = Withdrawals.singleton(rewardAccount, Coin.make(1000000n));
@@ -289,7 +289,7 @@ export const get = (
  * Check if Withdrawals contains a specific reward account.
  *
  * @example
- * import { Withdrawals, RewardAccount, Coin } from "@lucid-evolution/experimental";
+ * import { Withdrawals, RewardAccount, Coin } from "@evolution-sdk/experimental";
  *
  * const withdrawals = Withdrawals.singleton(rewardAccount, Coin.make(1000000n));
  * const hasAccount = Withdrawals.has(withdrawals, rewardAccount); // true
@@ -306,7 +306,7 @@ export const has = (
  * Check if Withdrawals is empty.
  *
  * @example
- * import { Withdrawals } from "@lucid-evolution/experimental";
+ * import { Withdrawals } from "@evolution-sdk/experimental";
  *
  * const withdrawals = Withdrawals.empty();
  * const empty = Withdrawals.isEmpty(withdrawals); // true
@@ -321,7 +321,7 @@ export const isEmpty = (withdrawals: Withdrawals): boolean =>
  * Get the size (number of withdrawals) in Withdrawals.
  *
  * @example
- * import { Withdrawals, RewardAccount, Coin } from "@lucid-evolution/experimental";
+ * import { Withdrawals, RewardAccount, Coin } from "@evolution-sdk/experimental";
  *
  * const withdrawals = Withdrawals.singleton(rewardAccount, Coin.make(1000000n));
  * const size = Withdrawals.size(withdrawals); // 1
@@ -336,7 +336,7 @@ export const size = (withdrawals: Withdrawals): number =>
  * Get all entries as an array of [reward account, coin] pairs.
  *
  * @example
- * import { Withdrawals, RewardAccount, Coin } from "@lucid-evolution/experimental";
+ * import { Withdrawals, RewardAccount, Coin } from "@evolution-sdk/experimental";
  *
  * const withdrawals = Withdrawals.singleton(rewardAccount, Coin.make(1000000n));
  * const entries = Withdrawals.entries(withdrawals);

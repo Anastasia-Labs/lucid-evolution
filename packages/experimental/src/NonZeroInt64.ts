@@ -18,7 +18,7 @@ export const POS_INT64_MAX = 9223372036854775807n;
  * Error class for NonZeroInt64 related operations.
  *
  * @example
- * import { NonZeroInt64 } from "@lucid-evolution/experimental";
+ * import { NonZeroInt64 } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new NonZeroInt64.NonZeroInt64Error({ message: "Invalid non-zero int64" });
@@ -81,7 +81,7 @@ export const NonZeroInt64Schema = Schema.Union(
  * Used in minting operations where zero amounts are not allowed.
  *
  * @example
- * import { NonZeroInt64 } from "@lucid-evolution/experimental";
+ * import { NonZeroInt64 } from "@evolution-sdk/experimental";
  *
  * const positiveAmount: NonZeroInt64.NonZeroInt64 = 1000n;
  * const negativeAmount: NonZeroInt64.NonZeroInt64 = -500n;
@@ -95,7 +95,7 @@ export type NonZeroInt64 = typeof NonZeroInt64Schema.Type;
  * Smart constructor for creating NonZeroInt64 values.
  *
  * @example
- * import { NonZeroInt64 } from "@lucid-evolution/experimental";
+ * import { NonZeroInt64 } from "@evolution-sdk/experimental";
  *
  * const positiveValue = NonZeroInt64.make(1000n);
  * const negativeValue = NonZeroInt64.make(-500n);
@@ -111,7 +111,7 @@ export const make = (value: bigint): NonZeroInt64 => {
  * Check if a value is a valid NonZeroInt64.
  *
  * @example
- * import { NonZeroInt64 } from "@lucid-evolution/experimental";
+ * import { NonZeroInt64 } from "@evolution-sdk/experimental";
  *
  * console.log(NonZeroInt64.is(1000n)); // true
  * console.log(NonZeroInt64.is(-500n)); // true
@@ -127,7 +127,7 @@ export const is = (value: unknown): value is NonZeroInt64 =>
  * Check if a NonZeroInt64 is positive.
  *
  * @example
- * import { NonZeroInt64 } from "@lucid-evolution/experimental";
+ * import { NonZeroInt64 } from "@evolution-sdk/experimental";
  *
  * const positiveValue = NonZeroInt64.make(1000n);
  * console.log(NonZeroInt64.isPositive(positiveValue)); // true
@@ -141,7 +141,7 @@ export const isPositive = (value: NonZeroInt64): boolean => value > 0n;
  * Check if a NonZeroInt64 is negative.
  *
  * @example
- * import { NonZeroInt64 } from "@lucid-evolution/experimental";
+ * import { NonZeroInt64 } from "@evolution-sdk/experimental";
  *
  * const negativeValue = NonZeroInt64.make(-500n);
  * console.log(NonZeroInt64.isNegative(negativeValue)); // true
@@ -155,7 +155,7 @@ export const isNegative = (value: NonZeroInt64): boolean => value < 0n;
  * Get the absolute value of a NonZeroInt64.
  *
  * @example
- * import { NonZeroInt64 } from "@lucid-evolution/experimental";
+ * import { NonZeroInt64 } from "@evolution-sdk/experimental";
  *
  * const negativeValue = NonZeroInt64.make(-500n);
  * const absoluteValue = NonZeroInt64.abs(negativeValue);
@@ -171,7 +171,7 @@ export const abs = (value: NonZeroInt64): NonZeroInt64 =>
  * Negate a NonZeroInt64.
  *
  * @example
- * import { NonZeroInt64 } from "@lucid-evolution/experimental";
+ * import { NonZeroInt64 } from "@evolution-sdk/experimental";
  *
  * const positiveValue = NonZeroInt64.make(1000n);
  * const negatedValue = NonZeroInt64.negate(positiveValue);
@@ -186,7 +186,7 @@ export const negate = (value: NonZeroInt64): NonZeroInt64 => make(-value);
  * Compare two NonZeroInt64 values.
  *
  * @example
- * import { NonZeroInt64 } from "@lucid-evolution/experimental";
+ * import { NonZeroInt64 } from "@evolution-sdk/experimental";
  *
  * const value1 = NonZeroInt64.make(100n);
  * const value2 = NonZeroInt64.make(200n);
@@ -205,7 +205,7 @@ export const compare = (a: NonZeroInt64, b: NonZeroInt64): -1 | 0 | 1 => {
  * Check if two NonZeroInt64 values are equal.
  *
  * @example
- * import { NonZeroInt64 } from "@lucid-evolution/experimental";
+ * import { NonZeroInt64 } from "@evolution-sdk/experimental";
  *
  * const value1 = NonZeroInt64.make(1000n);
  * const value2 = NonZeroInt64.make(1000n);
@@ -220,7 +220,7 @@ export const equals = (a: NonZeroInt64, b: NonZeroInt64): boolean => a === b;
  * Generate a random NonZeroInt64.
  *
  * @example
- * import { NonZeroInt64 } from "@lucid-evolution/experimental";
+ * import { NonZeroInt64 } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

@@ -8,7 +8,7 @@ import * as Bytes from "./Bytes.js";
  * Error class for DatumOption related operations.
  *
  * @example
- * import { DatumOption } from "@lucid-evolution/experimental";
+ * import { DatumOption } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new DatumOption.DatumOptionError({ message: "Invalid datum option" });
@@ -79,7 +79,7 @@ export type DatumOption = typeof DatumOptionSchema.Type;
  * Create a DatumOption with a datum hash.
  *
  * @example
- * import { DatumOption } from "@lucid-evolution/experimental";
+ * import { DatumOption } from "@evolution-sdk/experimental";
  *
  * const datumHash = "a0b1c2d3e4f5678901234567890abcdef0123456789abcdef0123456789abcdef";
  * const datumOption = DatumOption.fromHash(datumHash);
@@ -93,7 +93,7 @@ export const fromHash = (hash: string): DatumOption => new DatumHash({ hash });
  * Create a DatumOption with inline data.
  *
  * @example
- * import { DatumOption, Data } from "@lucid-evolution/experimental";
+ * import { DatumOption, Data } from "@evolution-sdk/experimental";
  *
  * const plutusData = Data.fromNumber(42n);
  * const datumOption = DatumOption.fromInlineData(plutusData);
@@ -108,7 +108,7 @@ export const fromInlineData = (data: PlutusData.Data): DatumOption =>
  * Check if a DatumOption is a datum hash.
  *
  * @example
- * import { DatumOption } from "@lucid-evolution/experimental";
+ * import { DatumOption } from "@evolution-sdk/experimental";
  *
  * const datumOption = DatumOption.fromHash("a0b1c2d3...");
  * console.log(DatumOption.isDatumHash(datumOption)); // true
@@ -124,7 +124,7 @@ export const isDatumHash = (
  * Check if a DatumOption is inline data.
  *
  * @example
- * import { DatumOption, Data } from "@lucid-evolution/experimental";
+ * import { DatumOption, Data } from "@evolution-sdk/experimental";
  *
  * const plutusData = Data.fromNumber(42n);
  * const datumOption = DatumOption.fromInlineData(plutusData);
@@ -141,7 +141,7 @@ export const isInlineDatum = (
  * Get the hash from a DatumHash, or undefined if it's not a DatumHash.
  *
  * @example
- * import { DatumOption } from "@lucid-evolution/experimental";
+ * import { DatumOption } from "@evolution-sdk/experimental";
  *
  * const datumOption = DatumOption.fromHash("a0b1c2d3...");
  * const hash = DatumOption.getHash(datumOption);
@@ -157,7 +157,7 @@ export const getHash = (datumOption: DatumOption): string | undefined =>
  * Get the data from an InlineDatum, or undefined if it's not an InlineDatum.
  *
  * @example
- * import { DatumOption, Data } from "@lucid-evolution/experimental";
+ * import { DatumOption, Data } from "@evolution-sdk/experimental";
  *
  * const plutusData = Data.fromNumber(42n);
  * const datumOption = DatumOption.fromInlineData(plutusData);

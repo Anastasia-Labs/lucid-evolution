@@ -6,7 +6,7 @@ import * as Hash28 from "./Hash28.js";
  * Error class for PolicyId related operations.
  *
  * @example
- * import { PolicyId } from "@lucid-evolution/experimental";
+ * import { PolicyId } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new PolicyId.PolicyIdError({ message: "Invalid policy id" });
@@ -33,7 +33,7 @@ export class PolicyIdError extends Data.TaggedError("PolicyIdError")<{
  * script_hash = hash28
  *
  * @example
- * import { PolicyId } from "@lucid-evolution/experimental";
+ * import { PolicyId } from "@evolution-sdk/experimental";
  *
  * const policyId = new PolicyId({
  *   hash: "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235"
@@ -81,7 +81,7 @@ export const HexSchema = Schema.transform(Schema.String, PolicyId, {
  * Check if two PolicyId instances are equal.
  *
  * @example
- * import { PolicyId } from "@lucid-evolution/experimental";
+ * import { PolicyId } from "@evolution-sdk/experimental";
  *
  * const policyId1 = new PolicyId({ hash: "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235" });
  * const policyId2 = new PolicyId({ hash: "a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235" });
@@ -96,7 +96,7 @@ export const equals = (a: PolicyId, b: PolicyId): boolean => a === b;
  * Generate a random PolicyId.
  *
  * @example
- * import { PolicyId } from "@lucid-evolution/experimental";
+ * import { PolicyId } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

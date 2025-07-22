@@ -7,7 +7,7 @@ import * as _Codec from "./Codec.js";
  * Error class for ScriptRef related operations.
  *
  * @example
- * import { ScriptRef } from "@lucid-evolution/experimental";
+ * import { ScriptRef } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new ScriptRef.ScriptRefError({ message: "Invalid script ref" });
@@ -30,7 +30,7 @@ export class ScriptRefError extends Data.TaggedError("ScriptRefError")<{
  * The script_ref uses CBOR tag 24 to indicate it contains CBOR-encoded script data.
  *
  * @example
- * import { ScriptRef } from "@lucid-evolution/experimental";
+ * import { ScriptRef } from "@evolution-sdk/experimental";
  * import { Schema } from "effect";
  *
  * const scriptRef = Schema.decodeSync(ScriptRef.ScriptRef)("deadbeef"); // hex bytes
@@ -46,7 +46,7 @@ export type ScriptRef = typeof ScriptRef.Type;
  * Check if a value is a valid ScriptRef.
  *
  * @example
- * import { ScriptRef } from "@lucid-evolution/experimental";
+ * import { ScriptRef } from "@evolution-sdk/experimental";
  *
  * const scriptRef = ScriptRef.make("deadbeef");
  * const isValid = ScriptRef.isScriptRef(scriptRef); // true
@@ -60,7 +60,7 @@ export const isScriptRef = Schema.is(ScriptRef);
  * Check if two ScriptRef instances are equal.
  *
  * @example
- * import { ScriptRef } from "@lucid-evolution/experimental";
+ * import { ScriptRef } from "@evolution-sdk/experimental";
  *
  * const ref1 = ScriptRef.make("deadbeef");
  * const ref2 = ScriptRef.make("deadbeef");

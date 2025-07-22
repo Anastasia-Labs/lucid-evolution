@@ -17,7 +17,7 @@ export const IPV4_HEX_LENGTH = 8;
  * Error class for IPv4 related operations.
  *
  * @example
- * import { IPv4 } from "@lucid-evolution/experimental";
+ * import { IPv4 } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new IPv4.IPv4Error({ message: "Invalid IPv4 address" });
@@ -48,7 +48,7 @@ export const BytesSchema = Bytes4.BytesSchema;
  * Stored as 4 bytes in network byte order (big-endian).
  *
  * @example
- * import { IPv4 } from "@lucid-evolution/experimental";
+ * import { IPv4 } from "@evolution-sdk/experimental";
  *
  * const ipv4 = IPv4.make("c0a80001"); // 192.168.0.1 in hex
  * console.log(ipv4); // "c0a80001"
@@ -98,7 +98,7 @@ export const IPv4HexSchema = Schema.transform(
  * Create an IPv4 from dotted decimal notation.
  *
  * @example
- * import { IPv4 } from "@lucid-evolution/experimental";
+ * import { IPv4 } from "@evolution-sdk/experimental";
  *
  * const ipv4 = IPv4.fromString("192.168.0.1");
  * console.log(ipv4); // "c0a80001"
@@ -134,7 +134,7 @@ export const fromString = (dotted: string): IPv4 => {
  * Convert an IPv4 to dotted decimal notation.
  *
  * @example
- * import { IPv4 } from "@lucid-evolution/experimental";
+ * import { IPv4 } from "@evolution-sdk/experimental";
  *
  * const ipv4 = IPv4.fromString("192.168.0.1");
  * console.log(IPv4.toString(ipv4)); // "192.168.0.1"
@@ -151,7 +151,7 @@ export const toString = (ipv4: IPv4): string => {
  * Check if two IPv4 instances are equal.
  *
  * @example
- * import { IPv4 } from "@lucid-evolution/experimental";
+ * import { IPv4 } from "@evolution-sdk/experimental";
  *
  * const ipv4_1 = IPv4.fromString("192.168.0.1");
  * const ipv4_2 = IPv4.fromString("192.168.0.1");
@@ -166,7 +166,7 @@ export const equals = (a: IPv4, b: IPv4): boolean => a === b;
  * Generate a random IPv4.
  *
  * @example
- * import { IPv4 } from "@lucid-evolution/experimental";
+ * import { IPv4 } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

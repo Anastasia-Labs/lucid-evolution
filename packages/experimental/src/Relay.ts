@@ -9,7 +9,7 @@ import * as CBOR from "./CBOR.js";
  * Error class for Relay related operations.
  *
  * @example
- * import { Relay } from "@lucid-evolution/experimental";
+ * import { Relay } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new Relay.RelayError({ message: "Invalid relay configuration" });
@@ -121,7 +121,7 @@ export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
  * Pattern match on a Relay to handle different relay types.
  *
  * @example
- * import { Relay, SingleHostAddr, SingleHostName, MultiHostName } from "@lucid-evolution/experimental";
+ * import { Relay, SingleHostAddr, SingleHostName, MultiHostName } from "@evolution-sdk/experimental";
  *
  * const relay = Relay.fromMultiHostName(MultiHostName.make("pool.example.com"));
  *
@@ -160,7 +160,7 @@ export const match = <A, B, C>(
  * Check if a Relay is a SingleHostAddr.
  *
  * @example
- * import { Relay, SingleHostAddr } from "@lucid-evolution/experimental";
+ * import { Relay, SingleHostAddr } from "@evolution-sdk/experimental";
  *
  * const relay = Relay.fromSingleHostAddr(new SingleHostAddr.SingleHostAddr({ ... }));
  * console.log(Relay.isSingleHostAddr(relay)); // true
@@ -176,7 +176,7 @@ export const isSingleHostAddr = (
  * Check if a Relay is a SingleHostName.
  *
  * @example
- * import { Relay, SingleHostName } from "@lucid-evolution/experimental";
+ * import { Relay, SingleHostName } from "@evolution-sdk/experimental";
  *
  * const relay = Relay.fromSingleHostName(new SingleHostName.SingleHostName({ ... }));
  * console.log(Relay.isSingleHostName(relay)); // true
@@ -192,7 +192,7 @@ export const isSingleHostName = (
  * Check if a Relay is a MultiHostName.
  *
  * @example
- * import { Relay, MultiHostName } from "@lucid-evolution/experimental";
+ * import { Relay, MultiHostName } from "@evolution-sdk/experimental";
  *
  * const relay = new MultiHostName.MultiHostName({ tag: 2, dnsName: ... });
  * console.log(isMultiHostName(relay)); // true
@@ -220,7 +220,7 @@ export const generator = FastCheck.oneof(
  * Check if two Relay instances are equal.
  *
  * @example
- * import { Relay, MultiHostName } from "@lucid-evolution/experimental";
+ * import { Relay, MultiHostName } from "@evolution-sdk/experimental";
  *
  * const relay1 = Relay.fromMultiHostName(MultiHostName.make("pool.example.com"));
  * const relay2 = Relay.fromMultiHostName(MultiHostName.make("pool.example.com"));
@@ -248,7 +248,7 @@ export const equals = (self: Relay, that: Relay): boolean => {
  * Create a Relay from a SingleHostAddr.
  *
  * @example
- * import { Relay, SingleHostAddr, Port, IPv4 } from "@lucid-evolution/experimental";
+ * import { Relay, SingleHostAddr, Port, IPv4 } from "@evolution-sdk/experimental";
  * import { Option } from "effect";
  *
  * const ipv4 = new IPv4({ address: "c0a80001" });
@@ -266,7 +266,7 @@ export const fromSingleHostAddr = (
  * Create a Relay from a SingleHostName.
  *
  * @example
- * import { Relay, SingleHostName, Port } from "@lucid-evolution/experimental";
+ * import { Relay, SingleHostName, Port } from "@evolution-sdk/experimental";
  * import { Option } from "effect";
  *
  * const hostName = SingleHostName.make(Option.some(Port.make(3000)), "pool.example.com");
@@ -283,7 +283,7 @@ export const fromSingleHostName = (
  * Create a Relay from a MultiHostName.
  *
  * @example
- * import { Relay, MultiHostName } from "@lucid-evolution/experimental";
+ * import { Relay, MultiHostName } from "@evolution-sdk/experimental";
  *
  * const multiHost = MultiHostName.make("pool.example.com");
  * const relay = Relay.fromMultiHostName(multiHost);

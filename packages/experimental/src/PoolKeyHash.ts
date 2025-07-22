@@ -6,7 +6,7 @@ import * as Hash28 from "./Hash28.js";
  * Error class for PoolKeyHash related operations.
  *
  * @example
- * import { PoolKeyHash } from "@lucid-evolution/experimental";
+ * import { PoolKeyHash } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new PoolKeyHash.PoolKeyHashError({ message: "Invalid pool key hash" });
@@ -74,7 +74,7 @@ export const equals = (a: PoolKeyHash, b: PoolKeyHash): boolean => a === b;
  * Generate a random PoolKeyHash.
  *
  * @example
- * import { PoolKeyHash } from "@lucid-evolution/experimental";
+ * import { PoolKeyHash } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

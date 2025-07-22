@@ -294,8 +294,8 @@ export const NativeScriptCDDL = Schema.transformOrFail(
  * Convert a NativeScript to its CDDL representation.
  *
  * @example
- * import { toNativeScriptCDDL } from "@lucid-evolution/experimental";
- * import { ScriptPubKey, KeyHash } from "@lucid-evolution/experimental";
+ * import { toNativeScriptCDDL } from "@evolution-sdk/experimental";
+ * import { ScriptPubKey, KeyHash } from "@evolution-sdk/experimental";
  *
  * const keyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  * const script = new ScriptPubKey({ keyHash });
@@ -352,7 +352,7 @@ export const internalEncodeCDDL = (
  * the appropriate NativeScript instances.
  *
  * @example
- * import { fromNativeScriptCDDL } from "@lucid-evolution/experimental";
+ * import { fromNativeScriptCDDL } from "@evolution-sdk/experimental";
  * import { Effect } from "effect";
  *
  * const cddl: NativeScriptCDDL.NativeScriptCDDL = [0, keyHashBytes];
@@ -464,7 +464,7 @@ export const NativeJSON = Schema.transformOrFail(
  * Convert a NativeJSON to a NativeScript.
  *
  * @example
- * import { nativeJSONToNativeScript } from "@lucid-evolution/experimental";
+ * import { nativeJSONToNativeScript } from "@evolution-sdk/experimental";
  * import { Effect } from "effect";
  *
  * const json = { type: "sig", keyHash: "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f" };
@@ -520,8 +520,8 @@ export const internalJSONToNative = (
  * Convert a NativeScript to a NativeJSON.
  *
  * @example
- * import { nativeScriptToNativeJSON } from "@lucid-evolution/experimental";
- * import { ScriptPubKey, KeyHash } from "@lucid-evolution/experimental";
+ * import { nativeScriptToNativeJSON } from "@evolution-sdk/experimental";
+ * import { ScriptPubKey, KeyHash } from "@evolution-sdk/experimental";
  * import { Effect } from "effect";
  *
  * const keyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");

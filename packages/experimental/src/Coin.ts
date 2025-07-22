@@ -4,7 +4,7 @@ import { Schema, Data, FastCheck } from "effect";
  * Error class for Coin related operations.
  *
  * @example
- * import { Coin } from "@lucid-evolution/experimental";
+ * import { Coin } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new Coin.CoinError({ message: "Invalid coin amount" });
@@ -46,7 +46,7 @@ export const CoinSchema = Schema.BigIntFromSelf.pipe(
  * 1 ADA = 1,000,000 lovelace
  *
  * @example
- * import { Coin } from "@lucid-evolution/experimental";
+ * import { Coin } from "@evolution-sdk/experimental";
  *
  * const coinAmount: Coin.Coin = 1000000n; // 1 ADA in lovelace
  * console.log(coinAmount); // 1000000n
@@ -60,7 +60,7 @@ export type Coin = typeof CoinSchema.Type;
  * Smart constructor for creating Coin values.
  *
  * @example
- * import { Coin } from "@lucid-evolution/experimental";
+ * import { Coin } from "@evolution-sdk/experimental";
  *
  * const coin = Coin.make(1000000n); // 1 ADA in lovelace
  * console.log(coin); // 1000000n
@@ -74,7 +74,7 @@ export const make = (value: bigint): Coin => CoinSchema.make(value);
  * Check if a value is a valid Coin.
  *
  * @example
- * import { Coin } from "@lucid-evolution/experimental";
+ * import { Coin } from "@evolution-sdk/experimental";
  *
  * console.log(Coin.is(1000000n)); // true
  * console.log(Coin.is(-1n)); // false
@@ -90,7 +90,7 @@ export const is = (value: unknown): value is Coin =>
  * Add two coin amounts safely.
  *
  * @example
- * import { Coin } from "@lucid-evolution/experimental";
+ * import { Coin } from "@evolution-sdk/experimental";
  *
  * const coin1 = Coin.make(1000000n);
  * const coin2 = Coin.make(2000000n);
@@ -115,7 +115,7 @@ export const add = (a: Coin, b: Coin): Coin => {
  * Subtract two coin amounts safely.
  *
  * @example
- * import { Coin } from "@lucid-evolution/experimental";
+ * import { Coin } from "@evolution-sdk/experimental";
  *
  * const coin1 = Coin.make(3000000n);
  * const coin2 = Coin.make(1000000n);
@@ -140,7 +140,7 @@ export const subtract = (a: Coin, b: Coin): Coin => {
  * Compare two coin amounts.
  *
  * @example
- * import { Coin } from "@lucid-evolution/experimental";
+ * import { Coin } from "@evolution-sdk/experimental";
  *
  * const coin1 = Coin.make(1000000n);
  * const coin2 = Coin.make(2000000n);
@@ -161,7 +161,7 @@ export const compare = (a: Coin, b: Coin): -1 | 0 | 1 => {
  * Check if two coin amounts are equal.
  *
  * @example
- * import { Coin } from "@lucid-evolution/experimental";
+ * import { Coin } from "@evolution-sdk/experimental";
  *
  * const coin1 = Coin.make(1000000n);
  * const coin2 = Coin.make(1000000n);
@@ -176,7 +176,7 @@ export const equals = (a: Coin, b: Coin): boolean => a === b;
  * Generate a random Coin value.
  *
  * @example
- * import { Coin } from "@lucid-evolution/experimental";
+ * import { Coin } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

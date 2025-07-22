@@ -15,7 +15,7 @@ import * as Bytes from "./Bytes.js";
  * Error class for AuxiliaryDataHash related operations.
  *
  * @example
- * import { AuxiliaryDataHash } from "@lucid-evolution/experimental";
+ * import { AuxiliaryDataHash } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new AuxiliaryDataHash.AuxiliaryDataHashError({ message: "Invalid auxiliary data hash" });
@@ -36,7 +36,7 @@ export class AuxiliaryDataHashError extends Data.TaggedError(
  * auxiliary_data_hash = hash32
  *
  * @example
- * import { AuxiliaryDataHash } from "@lucid-evolution/experimental";
+ * import { AuxiliaryDataHash } from "@evolution-sdk/experimental";
  *
  * const auxHash = new AuxiliaryDataHash({
  *   hash: "1234567890123456789012345678901234567890123456789012345678901234"
@@ -95,7 +95,7 @@ export const HexSchema = Schema.transform(
  * Check if two AuxiliaryDataHash instances are equal.
  *
  * @example
- * import { AuxiliaryDataHash } from "@lucid-evolution/experimental";
+ * import { AuxiliaryDataHash } from "@evolution-sdk/experimental";
  *
  * const auxHash1 = new AuxiliaryDataHash({
  *   hash: "1234567890123456789012345678901234567890123456789012345678901234"
@@ -115,7 +115,7 @@ export const equals = (a: AuxiliaryDataHash, b: AuxiliaryDataHash): boolean =>
  * Generate a random AuxiliaryDataHash.
  *
  * @example
- * import { AuxiliaryDataHash } from "@lucid-evolution/experimental";
+ * import { AuxiliaryDataHash } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

@@ -15,7 +15,7 @@ import * as _Codec from "./Codec.js";
  * Error class for Data related operations.
  *
  * @example
- * import { Data } from "@lucid-evolution/experimental";
+ * import { Data } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new Data.DataError({ message: "Invalid data" });
@@ -188,7 +188,7 @@ export const DataSchema: Schema.Schema<Data> = Schema.Union(
  * @category predicates
  *
  * @example
- * import { Data } from "@lucid-evolution/experimental";
+ * import { Data } from "@evolution-sdk/experimental";
  *
  * const value = Data.constr(0, []);
  * const isConstr = Data.isConstr(value); // true
@@ -206,7 +206,7 @@ export const isConstr = (data: unknown): data is Constr => {
  * @category predicates
  *
  * @example
- * import { Data } from "@lucid-evolution/experimental";
+ * import { Data } from "@evolution-sdk/experimental";
  *
  * const value = Data.plutusMap([]);
  * const isPlutusMap = Data.isPlutusMap(value); // true
@@ -221,7 +221,7 @@ export const isMap = Schema.is(MapSchema);
  * @category predicates
  *
  * @example
- * import { Data } from "@lucid-evolution/experimental";
+ * import { Data } from "@evolution-sdk/experimental";
  *
  * const value = Data.plutusList([]);
  * const isPlutusList = Data.isPlutusList(value); // true
@@ -236,7 +236,7 @@ export const isList = Schema.is(ListSchema);
  * @category predicates
  *
  * @example
- * import { Data } from "@lucid-evolution/experimental";
+ * import { Data } from "@evolution-sdk/experimental";
  *
  * const value = Data.plutusBigInt(42n);
  * const isPlutusBigInt = Data.isPlutusBigInt(value); // true
@@ -251,7 +251,7 @@ export const isInt = Schema.is(IntSchema);
  * @category predicates
  *
  * @example
- * import { Data } from "@lucid-evolution/experimental";
+ * import { Data } from "@evolution-sdk/experimental";
  *
  * const value = Data.plutusBytes("deadbeef");
  * const isPlutusBytes = Data.isPlutusBytes(value); // true
@@ -264,7 +264,7 @@ export const isBytes = Schema.is(BytesSchema);
  * Creates a constructor with the specified index and data
  *
  * @example
- * import { Data } from "@lucid-evolution/experimental";
+ * import { Data } from "@evolution-sdk/experimental";
  *
  * const constr0 = Data.constr(0, []); // CBOR tag #6.121
  * const constr1 = Data.constr(1, []); // CBOR tag #6.122
@@ -282,7 +282,7 @@ export const constr = (index: bigint, data: Data[]): Constr => ({
  * Creates a Plutus map from key-value pairs
  *
  * @example
- * import { Data } from "@lucid-evolution/experimental";
+ * import { Data } from "@evolution-sdk/experimental";
  *
  * const map = Data.plutusMap([]);
  *
@@ -296,7 +296,7 @@ export const map = (entries: Array<{ key: Data; value: Data }>): MapList =>
  * Creates a Plutus list from items
  *
  * @example
- * import { Data } from "@lucid-evolution/experimental";
+ * import { Data } from "@evolution-sdk/experimental";
  *
  * const list = Data.plutusList([]);
  *
@@ -309,7 +309,7 @@ export const list = (list: Data[]): List => list;
  * Creates Plutus big integer
  *
  * @example
- * import { Data } from "@lucid-evolution/experimental";
+ * import { Data } from "@evolution-sdk/experimental";
  *
  * const plutusBigInt = Data.plutusBigInt(12345n);
  *
@@ -322,7 +322,7 @@ export const int = (integer: bigint): Int => integer;
  * Creates Plutus bounded bytes from hex string
  *
  * @example
- * import { Data } from "@lucid-evolution/experimental";
+ * import { Data } from "@evolution-sdk/experimental";
  *
  * const plutusBytes = Data.plutusBytes("deadbeef");
  *
@@ -335,7 +335,7 @@ export const bytearray = (bytes: string): ByteArray => bytes;
  * Pattern matching helper for Constr types
  *
  * @example
- * import { Data } from "@lucid-evolution/experimental";
+ * import { Data } from "@evolution-sdk/experimental";
  *
  * const result = Data.matchConstr(constr, {
  *   0: (fields) => "Alternative 0",
@@ -364,7 +364,7 @@ export const matchConstr = <T>(
  * Pattern matching helper for PlutusData types
  *
  * @example
- * import { Data } from "@lucid-evolution/experimental";
+ * import { Data } from "@evolution-sdk/experimental";
  *
  * const result = Data.matchPlutusData(data, {
  *   PlutusMap: (entries) => "Map",
@@ -414,7 +414,7 @@ export const matchData = <T>(
  * @category generators
  *
  * @example
- * import { Data } from "@lucid-evolution/experimental";
+ * import { Data } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect"
  *
  * const data = Data.genPlutusData(3);
@@ -500,7 +500,7 @@ export const genConstr = (depth: number): FastCheck.Arbitrary<Constr> =>
  * @category generators
  *
  * @example
- * import { Data } from "@lucid-evolution/experimental";
+ * import { Data } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect"
  *
  * const mapArb = Data.genPlutusMap(2);

@@ -16,7 +16,7 @@ import * as Bytes from "./Bytes.js";
  * Error class for HeaderBody related operations.
  *
  * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
+ * import { HeaderBody } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new HeaderBody.HeaderBodyError({ message: "Invalid header body" });
@@ -46,7 +46,7 @@ export class HeaderBodyError extends Data.TaggedError("HeaderBodyError")<{
  * ]
  *
  * @example
- * import { HeaderBody, Natural, Hash32, VKey, VrfVkey, VrfCert, BlockBodyHash, OperationalCert, ProtocolVersion } from "@lucid-evolution/experimental";
+ * import { HeaderBody, Natural, Hash32, VKey, VrfVkey, VrfCert, BlockBodyHash, OperationalCert, ProtocolVersion } from "@evolution-sdk/experimental";
  *
  * const headerBody = new HeaderBody({
  *   blockNumber: Natural.Natural.make(1000n),
@@ -99,7 +99,7 @@ export class HeaderBody extends Schema.TaggedClass<HeaderBody>()("HeaderBody", {
  * Check if two HeaderBody instances are equal.
  *
  * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
+ * import { HeaderBody } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const header1 = new HeaderBody({ ... });
@@ -279,7 +279,7 @@ export const HeaderBodyCDDLSchema = Schema.transformOrFail(
  * Check if the given value is a valid HeaderBody.
  *
  * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
+ * import { HeaderBody } from "@evolution-sdk/experimental";
  *
  * const headerBody = new HeaderBody({ ... });
  * console.log(HeaderBody.isHeaderBody(headerBody)); // true

@@ -6,7 +6,7 @@ import * as Bytes64 from "./Bytes64.js";
  * Error class for Ed25519Signature related operations.
  *
  * @example
- * import { Ed25519Signature } from "@lucid-evolution/experimental";
+ * import { Ed25519Signature } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new Ed25519Signature.Ed25519SignatureError({ message: "Invalid Ed25519 signature" });
@@ -64,7 +64,7 @@ export const HexSchema = Schema.transform(
  * Check if two Ed25519Signature instances are equal.
  *
  * @example
- * import { Ed25519Signature } from "@lucid-evolution/experimental";
+ * import { Ed25519Signature } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * @since 2.0.0
@@ -77,7 +77,7 @@ export const equals = (a: Ed25519Signature, b: Ed25519Signature): boolean =>
  * Generate a random Ed25519Signature.
  *
  * @example
- * import { Ed25519Signature } from "@lucid-evolution/experimental";
+ * import { Ed25519Signature } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

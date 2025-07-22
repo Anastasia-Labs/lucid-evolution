@@ -6,7 +6,7 @@ import * as Bytes from "./Bytes.js";
  * Error class for VrfVkey related operations.
  *
  * @example
- * import { VrfVkey } from "@lucid-evolution/experimental";
+ * import { VrfVkey } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new VrfVkey.VrfVkeyError({ message: "Invalid VRF verification key" });
@@ -59,7 +59,7 @@ export const HexSchema = Schema.transform(
  * Check if two VrfVkey instances are equal.
  *
  * @example
- * import { VrfVkey } from "@lucid-evolution/experimental";
+ * import { VrfVkey } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * @since 2.0.0

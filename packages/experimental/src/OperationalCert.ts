@@ -45,7 +45,7 @@ export class OperationalCert extends Schema.TaggedClass<OperationalCert>()(
  * Check if two OperationalCert instances are equal.
  *
  * @example
- * import { OperationalCert } from "@lucid-evolution/experimental";
+ * import { OperationalCert } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const cert1 = new OperationalCert({

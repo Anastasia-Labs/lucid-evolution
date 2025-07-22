@@ -15,7 +15,7 @@ export const EPOCH_NO_MAX_VALUE = Numeric.UINT8_MAX;
  * Error class for EpochNo related operations.
  *
  * @example
- * import { EpochNo } from "@lucid-evolution/experimental";
+ * import { EpochNo } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new EpochNo.EpochNoError({ message: "Invalid epoch number" });
@@ -44,7 +44,7 @@ export const EpochNoSchema = Numeric.Uint8Schema.annotations({
  * Type alias for EpochNo representing blockchain epoch numbers.
  *
  * @example
- * import { EpochNo } from "@lucid-evolution/experimental";
+ * import { EpochNo } from "@evolution-sdk/experimental";
  *
  * const epoch: EpochNo.EpochNo = 123;
  * console.log(epoch); // 123
@@ -58,7 +58,7 @@ export type EpochNo = typeof EpochNoSchema.Type;
  * Smart constructor for creating EpochNo values.
  *
  * @example
- * import { EpochNo } from "@lucid-evolution/experimental";
+ * import { EpochNo } from "@evolution-sdk/experimental";
  *
  * const epoch = EpochNo.make(123);
  * console.log(epoch); // 123
@@ -72,7 +72,7 @@ export const make = (value: number): EpochNo => EpochNoSchema.make(value);
  * Check if a value is a valid EpochNo.
  *
  * @example
- * import { EpochNo } from "@lucid-evolution/experimental";
+ * import { EpochNo } from "@evolution-sdk/experimental";
  *
  * console.log(EpochNo.is(123)); // true
  * console.log(EpochNo.is(-1)); // false
@@ -88,7 +88,7 @@ export const is = (value: unknown): value is EpochNo =>
  * Check if two EpochNo instances are equal.
  *
  * @example
- * import { EpochNo } from "@lucid-evolution/experimental";
+ * import { EpochNo } from "@evolution-sdk/experimental";
  *
  * const epoch1 = EpochNo.make(123);
  * const epoch2 = EpochNo.make(123);
@@ -103,7 +103,7 @@ export const equals = (a: EpochNo, b: EpochNo): boolean => a === b;
  * Compare two EpochNo values.
  *
  * @example
- * import { EpochNo } from "@lucid-evolution/experimental";
+ * import { EpochNo } from "@evolution-sdk/experimental";
  *
  * const epoch1 = EpochNo.make(100);
  * const epoch2 = EpochNo.make(200);
@@ -122,7 +122,7 @@ export const compare = (a: EpochNo, b: EpochNo): -1 | 0 | 1 => {
  * Generate a random EpochNo.
  *
  * @example
- * import { EpochNo } from "@lucid-evolution/experimental";
+ * import { EpochNo } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

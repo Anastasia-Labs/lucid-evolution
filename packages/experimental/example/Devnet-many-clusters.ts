@@ -1,4 +1,4 @@
-import { Devnet } from "@lucid-evolution/experimental";
+import { Devnet } from "@evolution-sdk/experimental";
 
 const range = Array.from({ length: 4 }, (_, i) => i + 1);
 

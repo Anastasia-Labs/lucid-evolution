@@ -11,7 +11,7 @@ import * as Anchor from "./Anchor.js";
  * Error class for Certificate related operations.
  *
  * @example
- * import { Certificate } from "@lucid-evolution/experimental";
+ * import { Certificate } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new Certificate.CertificateError({ message: "Invalid certificate" });

@@ -6,7 +6,7 @@ import * as Hash32 from "./Hash32.js";
  * Error class for KESVkey related operations.
  *
  * @example
- * import { KESVkey } from "@lucid-evolution/experimental";
+ * import { KESVkey } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new KESVkey.KESVkeyError({ message: "Invalid KES verification key" });
@@ -59,7 +59,7 @@ export const HexSchema = Schema.transform(
  * Check if two KESVkey instances are equal.
  *
  * @example
- * import { KESVkey } from "@lucid-evolution/experimental";
+ * import { KESVkey } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * @since 2.0.0
@@ -71,7 +71,7 @@ export const equals = (a: KESVkey, b: KESVkey): boolean => a === b;
  * Generate a random KESVkey.
  *
  * @example
- * import { KESVkey } from "@lucid-evolution/experimental";
+ * import { KESVkey } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

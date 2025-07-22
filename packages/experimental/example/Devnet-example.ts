@@ -1,11 +1,11 @@
-import { Kupmios, Lucid } from "@lucid-evolution/lucid";
+import { Kupmios, Lucid } from "@evolution-sdk/lucid";
 import {
   Address,
   Devnet,
   EnterpriseAddress,
   NetworkId,
   KeyHash,
-} from "@lucid-evolution/experimental";
+} from "@evolution-sdk/experimental";
 //TODO: remove this import when CML is no longer needed
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { setTimeout } from "timers/promises";

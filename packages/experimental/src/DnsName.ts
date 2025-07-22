@@ -5,7 +5,7 @@ import * as Text128 from "./Text128.js";
  * Error class for DnsName related operations.
  *
  * @example
- * import { DnsName } from "@lucid-evolution/experimental";
+ * import { DnsName } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new DnsName.DnsNameError({ message: "Invalid DNS name" });
@@ -24,7 +24,7 @@ export class DnsNameError extends Data.TaggedError("DnsNameError")<{
  * dns_name = text .size (0 .. 128)
  *
  * @example
- * import { DnsName } from "@lucid-evolution/experimental";
+ * import { DnsName } from "@evolution-sdk/experimental";
  *
  * const dnsName = DnsName.make("example.com");
  * console.log(dnsName); // "example.com" (branded as DnsName)
@@ -46,7 +46,7 @@ export type DnsName = typeof DnsName.Type;
  * Create a DnsName from a string.
  *
  * @example
- * import { DnsName } from "@lucid-evolution/experimental";
+ * import { DnsName } from "@evolution-sdk/experimental";
  *
  * const dnsName = DnsName.make("example.com");
  *
@@ -59,7 +59,7 @@ export const make = Schema.decodeSync(DnsName);
  * Check if two DnsName instances are equal.
  *
  * @example
- * import { DnsName } from "@lucid-evolution/experimental";
+ * import { DnsName } from "@evolution-sdk/experimental";
  *
  * const dns1 = DnsName.make("example.com");
  * const dns2 = DnsName.make("example.com");
@@ -74,7 +74,7 @@ export const equals = (a: DnsName, b: DnsName): boolean => a === b;
  * Check if a DNS name is empty.
  *
  * @example
- * import { DnsName } from "@lucid-evolution/experimental";
+ * import { DnsName } from "@evolution-sdk/experimental";
  *
  * const emptyDns = DnsName.make("");
  * console.log(DnsName.isEmpty(emptyDns)); // true
@@ -88,7 +88,7 @@ export const isEmpty = (dnsName: DnsName): boolean => dnsName.length === 0;
  * Get the length of a DNS name.
  *
  * @example
- * import { DnsName } from "@lucid-evolution/experimental";
+ * import { DnsName } from "@evolution-sdk/experimental";
  *
  * const dnsName = DnsName.make("example.com");
  * console.log(DnsName.length(dnsName)); // 11
@@ -102,7 +102,7 @@ export const length = (dnsName: DnsName): number => dnsName.length;
  * Generate a random DnsName.
  *
  * @example
- * import { DnsName } from "@lucid-evolution/experimental";
+ * import { DnsName } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

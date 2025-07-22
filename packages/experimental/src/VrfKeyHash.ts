@@ -6,7 +6,7 @@ import * as Hash32 from "./Hash32.js";
  * Error class for VrfKeyHash related operations.
  *
  * @example
- * import { VrfKeyHash } from "@lucid-evolution/experimental";
+ * import { VrfKeyHash } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new VrfKeyHash.VrfKeyHashError({ message: "Invalid VRF key hash" });
@@ -67,7 +67,7 @@ export const equals = (a: VrfKeyHash, b: VrfKeyHash): boolean => a === b;
  * Generate a random VrfKeyHash.
  *
  * @example
- * import { VrfKeyHash } from "@lucid-evolution/experimental";
+ * import { VrfKeyHash } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

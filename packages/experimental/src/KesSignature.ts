@@ -6,7 +6,7 @@ import * as Bytes448 from "./Bytes448.js";
  * Error class for KesSignature related operations.
  *
  * @example
- * import { KesSignature } from "@lucid-evolution/experimental";
+ * import { KesSignature } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new KesSignature.KesSignatureError({ message: "Invalid KES signature" });
@@ -62,7 +62,7 @@ export const HexSchema = Schema.transform(
  * Check if two KesSignature instances are equal.
  *
  * @example
- * import { KesSignature } from "@lucid-evolution/experimental";
+ * import { KesSignature } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * @since 2.0.0
@@ -74,7 +74,7 @@ export const equals = (a: KesSignature, b: KesSignature): boolean => a === b;
  * Generate a random KesSignature.
  *
  * @example
- * import { KesSignature } from "@lucid-evolution/experimental";
+ * import { KesSignature } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

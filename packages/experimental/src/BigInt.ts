@@ -4,7 +4,7 @@ import { Schema, Data } from "effect";
  * Error class for BigInt related operations.
  *
  * @example
- * import { BigInt } from "@lucid-evolution/experimental";
+ * import { BigInt } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new BigInt.BigIntError({ message: "Invalid big integer" });
@@ -89,7 +89,7 @@ export type BigInt = typeof BigIntSchema.Type;
  * Creates an integer value
  *
  * @example
- * import { BigInt } from "@lucid-evolution/experimental";
+ * import { BigInt } from "@evolution-sdk/experimental";
  *
  * const int = BigInt.int(42);
  *
@@ -105,7 +105,7 @@ export const int = (value: number): BigInt => ({
  * Creates a big unsigned integer from bytes
  *
  * @example
- * import { BigInt } from "@lucid-evolution/experimental";
+ * import { BigInt } from "@evolution-sdk/experimental";
  *
  * const bigUInt = BigInt.bigUInt(new Uint8Array([1, 2, 3]));
  *
@@ -121,7 +121,7 @@ export const bigUInt = (bytes: Uint8Array): BigInt => ({
  * Creates a big negative integer from bytes
  *
  * @example
- * import { BigInt } from "@lucid-evolution/experimental";
+ * import { BigInt } from "@evolution-sdk/experimental";
  *
  * const bigNInt = BigInt.bigNInt(new Uint8Array([1, 2, 3]));
  *
@@ -137,7 +137,7 @@ export const bigNInt = (bytes: Uint8Array): BigInt => ({
  * Pattern matching helper for BigInt types
  *
  * @example
- * import { BigInt } from "@lucid-evolution/experimental";
+ * import { BigInt } from "@evolution-sdk/experimental";
  *
  * const result = BigInt.match(bigInt, {
  *   Int: (value) => `Integer: ${value}`,

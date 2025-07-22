@@ -5,7 +5,7 @@ import * as Coin from "./Coin.js";
  * Error class for PositiveCoin related operations.
  *
  * @example
- * import { PositiveCoin } from "@lucid-evolution/experimental";
+ * import { PositiveCoin } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new PositiveCoin.PositiveCoinError({ message: "Invalid positive coin amount" });
@@ -58,7 +58,7 @@ export const PositiveCoinSchema = Schema.BigIntFromSelf.pipe(
  * Used in multiasset maps where zero amounts are not allowed.
  *
  * @example
- * import { PositiveCoin } from "@lucid-evolution/experimental";
+ * import { PositiveCoin } from "@evolution-sdk/experimental";
  *
  * const positiveCoinAmount: PositiveCoin.PositiveCoin = 1000000n; // 1 ADA in lovelace
  * console.log(positiveCoinAmount); // 1000000n
@@ -72,7 +72,7 @@ export type PositiveCoin = typeof PositiveCoinSchema.Type;
  * Smart constructor for creating PositiveCoin values.
  *
  * @example
- * import { PositiveCoin } from "@lucid-evolution/experimental";
+ * import { PositiveCoin } from "@evolution-sdk/experimental";
  *
  * const positiveCoin = PositiveCoin.make(1000000n); // 1 ADA in lovelace
  * console.log(positiveCoin); // 1000000n
@@ -87,7 +87,7 @@ export const make = (value: bigint): PositiveCoin =>
  * Create a PositiveCoin from a regular Coin, throwing if the value is zero.
  *
  * @example
- * import { PositiveCoin, Coin } from "@lucid-evolution/experimental";
+ * import { PositiveCoin, Coin } from "@evolution-sdk/experimental";
  *
  * const coin = Coin.make(1000000n);
  * const positiveCoin = PositiveCoin.fromCoin(coin);
@@ -110,7 +110,7 @@ export const fromCoin = (coin: Coin.Coin): PositiveCoin => {
  * Convert a PositiveCoin to a regular Coin.
  *
  * @example
- * import { PositiveCoin } from "@lucid-evolution/experimental";
+ * import { PositiveCoin } from "@evolution-sdk/experimental";
  *
  * const positiveCoin = PositiveCoin.make(1000000n);
  * const coin = PositiveCoin.toCoin(positiveCoin);
@@ -125,7 +125,7 @@ export const toCoin = (positiveCoin: PositiveCoin): Coin.Coin => positiveCoin;
  * Check if a value is a valid PositiveCoin.
  *
  * @example
- * import { PositiveCoin } from "@lucid-evolution/experimental";
+ * import { PositiveCoin } from "@evolution-sdk/experimental";
  *
  * console.log(PositiveCoin.is(1000000n)); // true
  * console.log(PositiveCoin.is(0n)); // false
@@ -141,7 +141,7 @@ export const is = (value: unknown): value is PositiveCoin =>
  * Add two positive coin amounts safely.
  *
  * @example
- * import { PositiveCoin } from "@lucid-evolution/experimental";
+ * import { PositiveCoin } from "@evolution-sdk/experimental";
  *
  * const coin1 = PositiveCoin.make(1000000n);
  * const coin2 = PositiveCoin.make(2000000n);
@@ -167,7 +167,7 @@ export const add = (a: PositiveCoin, b: PositiveCoin): PositiveCoin => {
  * Note: Result must still be positive.
  *
  * @example
- * import { PositiveCoin } from "@lucid-evolution/experimental";
+ * import { PositiveCoin } from "@evolution-sdk/experimental";
  *
  * const coin1 = PositiveCoin.make(3000000n);
  * const coin2 = PositiveCoin.make(1000000n);
@@ -192,7 +192,7 @@ export const subtract = (a: PositiveCoin, b: PositiveCoin): PositiveCoin => {
  * Compare two positive coin amounts.
  *
  * @example
- * import { PositiveCoin } from "@lucid-evolution/experimental";
+ * import { PositiveCoin } from "@evolution-sdk/experimental";
  *
  * const coin1 = PositiveCoin.make(1000000n);
  * const coin2 = PositiveCoin.make(2000000n);
@@ -213,7 +213,7 @@ export const compare = (a: PositiveCoin, b: PositiveCoin): -1 | 0 | 1 => {
  * Check if two positive coin amounts are equal.
  *
  * @example
- * import { PositiveCoin } from "@lucid-evolution/experimental";
+ * import { PositiveCoin } from "@evolution-sdk/experimental";
  *
  * const coin1 = PositiveCoin.make(1000000n);
  * const coin2 = PositiveCoin.make(1000000n);
@@ -228,7 +228,7 @@ export const equals = (a: PositiveCoin, b: PositiveCoin): boolean => a === b;
  * Generate a random PositiveCoin value.
  *
  * @example
- * import { PositiveCoin } from "@lucid-evolution/experimental";
+ * import { PositiveCoin } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

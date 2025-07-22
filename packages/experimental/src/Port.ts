@@ -15,7 +15,7 @@ export const PORT_MAX_VALUE = Numeric.UINT16_MAX;
  * Error class for Port related operations.
  *
  * @example
- * import { Port } from "@lucid-evolution/experimental";
+ * import { Port } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new Port.PortError({ message: "Invalid port number" });
@@ -45,7 +45,7 @@ export const PortSchema = Numeric.Uint16Schema.annotations({
  * Valid range is 0-65535 as per standard TCP/UDP port specification.
  *
  * @example
- * import { Port } from "@lucid-evolution/experimental";
+ * import { Port } from "@evolution-sdk/experimental";
  *
  * const port: Port.Port = 8080;
  * console.log(port); // 8080
@@ -59,7 +59,7 @@ export type Port = typeof PortSchema.Type;
  * Smart constructor for creating Port values.
  *
  * @example
- * import { Port } from "@lucid-evolution/experimental";
+ * import { Port } from "@evolution-sdk/experimental";
  *
  * const port = Port.make(8080);
  * console.log(port); // 8080
@@ -73,7 +73,7 @@ export const make = (value: number): Port => PortSchema.make(value);
  * Check if a value is a valid Port.
  *
  * @example
- * import { Port } from "@lucid-evolution/experimental";
+ * import { Port } from "@evolution-sdk/experimental";
  *
  * console.log(Port.is(8080)); // true
  * console.log(Port.is(70000)); // false (too large)
@@ -89,7 +89,7 @@ export const is = (value: unknown): value is Port =>
  * Check if two Port instances are equal.
  *
  * @example
- * import { Port } from "@lucid-evolution/experimental";
+ * import { Port } from "@evolution-sdk/experimental";
  *
  * const port1 = Port.make(8080);
  * const port2 = Port.make(8080);
@@ -104,7 +104,7 @@ export const equals = (a: Port, b: Port): boolean => a === b;
  * Check if a port is a well-known port (0-1023).
  *
  * @example
- * import { Port } from "@lucid-evolution/experimental";
+ * import { Port } from "@evolution-sdk/experimental";
  *
  * const port80 = Port.make(80);
  * const port8080 = Port.make(8080);
@@ -120,7 +120,7 @@ export const isWellKnown = (port: Port): boolean => port >= 0 && port <= 1023;
  * Check if a port is a registered port (1024-49151).
  *
  * @example
- * import { Port } from "@lucid-evolution/experimental";
+ * import { Port } from "@evolution-sdk/experimental";
  *
  * const port8080 = Port.make(8080);
  * console.log(Port.isRegistered(port8080)); // true
@@ -135,7 +135,7 @@ export const isRegistered = (port: Port): boolean =>
  * Check if a port is a dynamic/private port (49152-65535).
  *
  * @example
- * import { Port } from "@lucid-evolution/experimental";
+ * import { Port } from "@evolution-sdk/experimental";
  *
  * const port50000 = Port.make(50000);
  * console.log(Port.isDynamic(port50000)); // true
@@ -150,7 +150,7 @@ export const isDynamic = (port: Port): boolean =>
  * Generate a random Port.
  *
  * @example
- * import { Port } from "@lucid-evolution/experimental";
+ * import { Port } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

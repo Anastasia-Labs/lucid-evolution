@@ -14,7 +14,7 @@ export const URL_MAX_LENGTH = 128;
  * Error class for Url related operations.
  *
  * @example
- * import { Url } from "@lucid-evolution/experimental";
+ * import { Url } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new Url.UrlError({ message: "Invalid URL" });
@@ -33,7 +33,7 @@ export class UrlError extends Data.TaggedError("UrlError")<{
  * url = text .size (0..128)
  *
  * @example
- * import { Url } from "@lucid-evolution/experimental";
+ * import { Url } from "@evolution-sdk/experimental";
  *
  * const url = Url.make("https://example.com/metadata.json");
  * console.log(url); // "https://example.com/metadata.json"
@@ -71,7 +71,7 @@ export const UrlTextSchema = Schema.transform(
  * Check if two Url instances are equal.
  *
  * @example
- * import { Url } from "@lucid-evolution/experimental";
+ * import { Url } from "@evolution-sdk/experimental";
  *
  * const url1 = Url.make("https://example.com");
  * const url2 = Url.make("https://example.com");
@@ -86,7 +86,7 @@ export const equals = (a: Url, b: Url): boolean => a === b;
  * Check if a URL is empty.
  *
  * @example
- * import { Url } from "@lucid-evolution/experimental";
+ * import { Url } from "@evolution-sdk/experimental";
  *
  * const emptyUrl = Url.make("");
  * console.log(Url.isEmpty(emptyUrl)); // true
@@ -100,7 +100,7 @@ export const isEmpty = (url: Url): boolean => url.length === 0;
  * Get the length of a URL.
  *
  * @example
- * import { Url } from "@lucid-evolution/experimental";
+ * import { Url } from "@evolution-sdk/experimental";
  *
  * const url = Url.make("https://example.com");
  * console.log(Url.length(url)); // 19
@@ -114,7 +114,7 @@ export const length = (url: Url): number => url.length;
  * Generate a random Url.
  *
  * @example
- * import { Url } from "@lucid-evolution/experimental";
+ * import { Url } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *
@@ -173,7 +173,7 @@ export const DecodeEither = {
  * Create a Url from a text string.
  *
  * @example
- * import { Url } from "@lucid-evolution/experimental";
+ * import { Url } from "@evolution-sdk/experimental";
  *
  * const url = Url.make("https://example.com/metadata.json");
  * console.log(url); // "https://example.com/metadata.json"

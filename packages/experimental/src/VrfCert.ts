@@ -7,7 +7,7 @@ import * as CBOR from "./CBOR.js";
  * Error class for VrfCert related operations.
  *
  * @example
- * import { VrfCert } from "@lucid-evolution/experimental";
+ * import { VrfCert } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new VrfCert.VrfCertError({ message: "Invalid VRF certificate" });
@@ -60,7 +60,7 @@ export type VRFProof = typeof VRFProof.Type;
  * vrf_cert = [vrf_output, vrf_proof]
  *
  * @example
- * import { VrfCert } from "@lucid-evolution/experimental";
+ * import { VrfCert } from "@evolution-sdk/experimental";
  *
  * const cert = new VrfCert.VrfCert({
  *   output: VrfCert.VRFOutput.make("a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235a0028f35"),
@@ -87,7 +87,7 @@ export class VrfCert extends Schema.TaggedClass<VrfCert>()("VrfCert", {
  * Check if the given value is a valid VrfCert.
  *
  * @example
- * import { VrfCert } from "@lucid-evolution/experimental";
+ * import { VrfCert } from "@evolution-sdk/experimental";
  *
  * const cert = new VrfCert.VrfCert({ output: ..., proof: ... });
  * console.log(VrfCert.isVrfCert(cert)); // true
@@ -204,7 +204,7 @@ export const VRFProofBytesSchema = Schema.transform(
  * Check if two VrfCert instances are equal.
  *
  * @example
- * import { VrfCert } from "@lucid-evolution/experimental";
+ * import { VrfCert } from "@evolution-sdk/experimental";
  *
  * const cert1 = new VrfCert.VrfCert({ output: ..., proof: ... });
  * const cert2 = new VrfCert.VrfCert({ output: ..., proof: ... });
@@ -220,7 +220,7 @@ export const equals = (a: VrfCert, b: VrfCert): boolean =>
  * Create a VrfCert from output and proof.
  *
  * @example
- * import { VrfCert } from "@lucid-evolution/experimental";
+ * import { VrfCert } from "@evolution-sdk/experimental";
  *
  * const cert = VrfCert.make(
  *   VrfCert.VRFOutput.make("a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235a0028f35"),

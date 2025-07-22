@@ -19,7 +19,7 @@ export const ASSET_NAME_MAX_HEX_LENGTH = Hash32.HASH32_HEX_LENGTH; // Reuse Hash
  * Error class for AssetName related operations.
  *
  * @example
- * import { AssetName } from "@lucid-evolution/experimental";
+ * import { AssetName } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new AssetName.AssetNameError({ message: "Invalid asset name" });
@@ -68,7 +68,7 @@ export const AssetNameBytesSchema = Hash32.VariableBytesSchema.annotations({
  * Asset names are limited to 32 bytes (0-64 hex characters).
  *
  * @example
- * import { AssetName } from "@lucid-evolution/experimental";
+ * import { AssetName } from "@evolution-sdk/experimental";
  * import { Schema } from "effect";
  *
  * const assetName = Schema.decodeSync(AssetName)("546f6b656e"); // "Token" in hex
@@ -119,7 +119,7 @@ export const HexSchema = Schema.transform(Hash32.VariableHexSchema, AssetName, {
  * Check if two AssetName instances are equal.
  *
  * @example
- * import { AssetName } from "@lucid-evolution/experimental";
+ * import { AssetName } from "@evolution-sdk/experimental";
  * import { Schema } from "effect";
  *
  * const assetName1 = Schema.decodeSync(AssetName)("546f6b656e");
@@ -135,7 +135,7 @@ export const equals = (a: AssetName, b: AssetName): boolean => a === b;
  * Generate a random AssetName.
  *
  * @example
- * import { AssetName } from "@lucid-evolution/experimental";
+ * import { AssetName } from "@evolution-sdk/experimental";
  * import { FastCheck, Schema } from "effect";
  * import assert from "assert";
  *

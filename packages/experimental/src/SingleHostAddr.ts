@@ -9,7 +9,7 @@ import * as Bytes from "./Bytes.js";
  * Error class for SingleHostAddr related operations.
  *
  * @example
- * import { SingleHostAddr } from "@lucid-evolution/experimental";
+ * import { SingleHostAddr } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new SingleHostAddr.SingleHostAddrError({ message: "Invalid single host address" });
@@ -30,7 +30,7 @@ export class SingleHostAddrError extends Data.TaggedError(
  * single_host_addr = (0, port/ nil, ipv4/ nil, ipv6/ nil)
  *
  * @example
- * import { SingleHostAddr, Port, IPv4, IPv6 } from "@lucid-evolution/experimental";
+ * import { SingleHostAddr, Port, IPv4, IPv6 } from "@evolution-sdk/experimental";
  * import { Option } from "effect";
  *
  * const hostAddr = new SingleHostAddr({
@@ -64,7 +64,7 @@ export class SingleHostAddr extends Schema.TaggedClass<SingleHostAddr>()(
  * Create a SingleHostAddr with IPv4 address.
  *
  * @example
- * import { SingleHostAddr, Port, IPv4 } from "@lucid-evolution/experimental";
+ * import { SingleHostAddr, Port, IPv4 } from "@evolution-sdk/experimental";
  * import { Option } from "effect";
  *
  * const ipv4 = new IPv4({ address: "c0a80001" }); // 192.168.0.1
@@ -87,7 +87,7 @@ export const withIPv4 = (
  * Create a SingleHostAddr with IPv6 address.
  *
  * @example
- * import { SingleHostAddr, Port, IPv6 } from "@lucid-evolution/experimental";
+ * import { SingleHostAddr, Port, IPv6 } from "@evolution-sdk/experimental";
  * import { Option } from "effect";
  *
  * const ipv6 = new IPv6({ address: "20010db885a3000000008a2e03707334" });
@@ -110,7 +110,7 @@ export const withIPv6 = (
  * Create a SingleHostAddr with both IPv4 and IPv6 addresses.
  *
  * @example
- * import { SingleHostAddr, Port, IPv4, IPv6 } from "@lucid-evolution/experimental";
+ * import { SingleHostAddr, Port, IPv4, IPv6 } from "@evolution-sdk/experimental";
  * import { Option } from "effect";
  *
  * const ipv4 = new IPv4({ address: "c0a80001" });
@@ -135,7 +135,7 @@ export const withBothIPs = (
  * Check if the host address has an IPv4 address.
  *
  * @example
- * import { SingleHostAddr } from "@lucid-evolution/experimental";
+ * import { SingleHostAddr } from "@evolution-sdk/experimental";
  *
  * console.log(SingleHostAddr.hasIPv4(hostAddr)); // true or false
  *
@@ -149,7 +149,7 @@ export const hasIPv4 = (hostAddr: SingleHostAddr): boolean =>
  * Check if the host address has an IPv6 address.
  *
  * @example
- * import { SingleHostAddr } from "@lucid-evolution/experimental";
+ * import { SingleHostAddr } from "@evolution-sdk/experimental";
  *
  * console.log(SingleHostAddr.hasIPv6(hostAddr)); // true or false
  *
@@ -163,7 +163,7 @@ export const hasIPv6 = (hostAddr: SingleHostAddr): boolean =>
  * Check if the host address has a port.
  *
  * @example
- * import { SingleHostAddr } from "@lucid-evolution/experimental";
+ * import { SingleHostAddr } from "@evolution-sdk/experimental";
  *
  * console.log(SingleHostAddr.hasPort(hostAddr)); // true or false
  *

@@ -13,7 +13,7 @@ import * as Numeric from "./Numeric.js";
  * Error class for TransactionInput related operations.
  *
  * @example
- * import { TransactionInput } from "@lucid-evolution/experimental";
+ * import { TransactionInput } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new TransactionInput.TransactionInputError({ message: "Invalid transaction input" });
@@ -34,7 +34,7 @@ export class TransactionInputError extends Data.TaggedError(
  * transaction_input = [transaction_id : $hash32, index : uint .size 2]
  *
  * @example
- * import { TransactionInput, TransactionHash, Numeric } from "@lucid-evolution/experimental";
+ * import { TransactionInput, TransactionHash, Numeric } from "@evolution-sdk/experimental";
  *
  * const txHash = TransactionHash.TransactionHash.make("a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235");
  * const input = new TransactionInput({
@@ -65,7 +65,7 @@ export class TransactionInput extends Schema.TaggedClass<TransactionInput>()(
  * Check if the given value is a valid TransactionInput.
  *
  * @example
- * import { TransactionInput, TransactionHash } from "@lucid-evolution/experimental";
+ * import { TransactionInput, TransactionHash } from "@evolution-sdk/experimental";
  *
  * const txHash = TransactionHash.TransactionHash.make("a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235");
  * const input = new TransactionInput({ transactionId: txHash, index: 0 });

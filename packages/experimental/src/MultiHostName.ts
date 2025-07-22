@@ -7,7 +7,7 @@ import * as Bytes from "./Bytes.js";
  * Error class for MultiHostName related operations.
  *
  * @example
- * import { MultiHostName } from "@lucid-evolution/experimental";
+ * import { MultiHostName } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new MultiHostName.MultiHostNameError({ message: "Invalid multi host name" });
@@ -26,7 +26,7 @@ export class MultiHostNameError extends Data.TaggedError("MultiHostNameError")<{
  * multi_host_name = (2, dns_name)
  *
  * @example
- * import { MultiHostName, DnsName } from "@lucid-evolution/experimental";
+ * import { MultiHostName, DnsName } from "@evolution-sdk/experimental";
  *
  * const hostName = new MultiHostName({
  *   dnsName: DnsName.make("pool.example.com")
@@ -111,7 +111,7 @@ export const CBORHexSchema = (
  * Create a MultiHostName instance.
  *
  * @example
- * import { MultiHostName, DnsName } from "@lucid-evolution/experimental";
+ * import { MultiHostName, DnsName } from "@evolution-sdk/experimental";
  *
  * const hostName = MultiHostName.make(DnsName.make("pool.example.com"));
  *
@@ -125,7 +125,7 @@ export const make = (dnsName: DnsName.DnsName): MultiHostName =>
  * Get the DNS name from a MultiHostName.
  *
  * @example
- * import { MultiHostName } from "@lucid-evolution/experimental";
+ * import { MultiHostName } from "@evolution-sdk/experimental";
  *
  * const dnsName = MultiHostName.getDnsName(hostName);
  * console.log(dnsName); // "pool.example.com"
@@ -140,7 +140,7 @@ export const getDnsName = (hostName: MultiHostName): DnsName.DnsName =>
  * Check if two MultiHostName instances are equal.
  *
  * @example
- * import { MultiHostName, DnsName } from "@lucid-evolution/experimental";
+ * import { MultiHostName, DnsName } from "@evolution-sdk/experimental";
  *
  * const hostName1 = new MultiHostName({ dnsName: DnsName.make("pool.example.com") });
  * const hostName2 = new MultiHostName({ dnsName: DnsName.make("pool.example.com") });
