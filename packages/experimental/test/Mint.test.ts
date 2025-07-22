@@ -14,7 +14,9 @@ describe("Mint", () => {
   const assetName2 = "546f6b656e32" as AssetName.AssetName; // "Token2" in hex
 
   test("fromEntries creates a Mint from array of entries", () => {
-    const entries: [PolicyId.PolicyId, [AssetName.AssetName, bigint][]][] = [
+    const entries: Array<
+      [PolicyId.PolicyId, Array<[AssetName.AssetName, bigint]>]
+    > = [
       [policyId1, [[assetName1, 100n]]],
       [policyId2, [[assetName2, 200n]]],
     ];
@@ -28,14 +30,14 @@ describe("Mint", () => {
   test("singleton creates a Mint with single asset", () => {
     const mint = Mint.singleton(policyId1, assetName1, 500n);
 
-    expect(mint.data.get(policyId1)?.get(assetName1)).toBe(500n);
-    expect(mint.data.size).toBe(1);
+    expect(mint.get(policyId1)?.get(assetName1)).toBe(500n);
+    expect(mint.size).toBe(1);
   });
 
   test("empty creates an empty Mint", () => {
     const mint = Mint.empty();
 
-    expect(mint.data.size).toBe(0);
+    expect(mint.size).toBe(0);
   });
 
   test("isEmpty correctly identifies empty mints", () => {
@@ -53,27 +55,27 @@ describe("Mint", () => {
         const originalMint = Mint.fromEntries([
           [
             policyId1,
-            new Map([
+            [
               [assetName1, 100n],
               [assetName2, 200n],
-            ]),
+            ],
           ],
-          [policyId2, new Map([[assetName1, 300n]])],
+          [policyId2, [[assetName1, 300n]]],
         ]);
 
         // Encode to CBOR hex
-        const cborHex = Mint.Encode.cborHex(originalMint);
+        const cborHex = Mint.Codec().Encode.cborHex(originalMint);
         expect(typeof cborHex).toBe("string");
         expect(cborHex.length).toBeGreaterThan(0);
 
         // Decode back from CBOR hex
-        const decodedMint = Mint.Decode.cborHex(cborHex);
+        const decodedMint = Mint.Codec().Decode.cborHex(cborHex);
 
         // Verify the decoded mint matches the original
-        expect(decodedMint.data.size).toBe(originalMint.data.size);
-        expect(decodedMint.data.get(policyId1)?.get(assetName1)).toBe(100n);
-        expect(decodedMint.data.get(policyId1)?.get(assetName2)).toBe(200n);
-        expect(decodedMint.data.get(policyId2)?.get(assetName1)).toBe(300n);
+        expect(decodedMint.size).toBe(originalMint.size);
+        expect(decodedMint.get(policyId1)?.get(assetName1)).toBe(100n);
+        expect(decodedMint.get(policyId1)?.get(assetName2)).toBe(200n);
+        expect(decodedMint.get(policyId2)?.get(assetName1)).toBe(300n);
       }),
     );
 
@@ -82,15 +84,15 @@ describe("Mint", () => {
         const originalMint = Mint.singleton(policyId1, assetName1, 1000n);
 
         // Encode to CBOR bytes
-        const cborBytes = Mint.Encode.cborBytes(originalMint);
+        const cborBytes = Mint.Codec().Encode.cborBytes(originalMint);
         expect(cborBytes).toBeInstanceOf(Uint8Array);
         expect(cborBytes.length).toBeGreaterThan(0);
 
         // Decode back from CBOR bytes
-        const decodedMint = Mint.Decode.cborBytes(cborBytes);
+        const decodedMint = Mint.Codec().Decode.cborBytes(cborBytes);
 
         // Verify the decoded mint matches the original
-        expect(decodedMint.data.get(policyId1)?.get(assetName1)).toBe(1000n);
+        expect(decodedMint.get(policyId1)?.get(assetName1)).toBe(1000n);
       }),
     );
 
@@ -99,11 +101,11 @@ describe("Mint", () => {
         const emptyMint = Mint.empty();
 
         // Encode empty mint
-        const cborHex = Mint.Encode.cborHex(emptyMint);
+        const cborHex = Mint.Codec().Encode.cborHex(emptyMint);
         expect(typeof cborHex).toBe("string");
 
         // Decode back
-        const decodedMint = Mint.Decode.cborHex(cborHex);
+        const decodedMint = Mint.Codec().Decode.cborHex(cborHex);
         expect(Mint.isEmpty(decodedMint)).toBe(true);
       }),
     );
@@ -113,11 +115,11 @@ describe("Mint", () => {
         const burnMint = Mint.singleton(policyId1, assetName1, -500n);
 
         // Encode and decode
-        const cborHex = Mint.Encode.cborHex(burnMint);
-        const decodedMint = Mint.Decode.cborHex(cborHex);
+        const cborHex = Mint.Codec().Encode.cborHex(burnMint);
+        const decodedMint = Mint.Codec().Decode.cborHex(cborHex);
 
         // Verify negative value is preserved
-        expect(decodedMint.data.get(policyId1)?.get(assetName1)).toBe(-500n);
+        expect(decodedMint.get(policyId1)?.get(assetName1)).toBe(-500n);
       }),
     );
   });
@@ -126,7 +128,7 @@ describe("Mint", () => {
     it.effect("should handle invalid CBOR hex gracefully", () =>
       Effect.gen(function* () {
         const result = yield* Effect.either(
-          Effect.try(() => Mint.Decode.cborHex("invalid_hex")),
+          Effect.try(() => Mint.Codec().Decode.cborHex("invalid_hex")),
         );
 
         expect(result._tag).toBe("Left");
@@ -137,7 +139,7 @@ describe("Mint", () => {
       Effect.gen(function* () {
         const invalidBytes = new Uint8Array([0xff, 0xff, 0xff]);
         const result = yield* Effect.either(
-          Effect.try(() => Mint.Decode.cborBytes(invalidBytes)),
+          Effect.try(() => Mint.Codec().Decode.cborBytes(invalidBytes)),
         );
 
         expect(result._tag).toBe("Left");
@@ -150,39 +152,63 @@ describe("Mint", () => {
       // Simulate minting new tokens
       const mint = Mint.fromEntries([
         [
-          "policy123",
-          new Map([
-            ["MyToken", 1000000n], // Mint 1M tokens
-            ["MyNFT", 1n], // Mint 1 NFT
-          ]),
+          "policy123" as PolicyId.PolicyId,
+          [
+            ["MyToken" as AssetName.AssetName, 1000000n], // Mint 1M tokens
+            ["MyNFT" as AssetName.AssetName, 1n], // Mint 1 NFT
+          ],
         ],
       ]);
 
-      expect(mint.data.get("policy123")?.get("MyToken")).toBe(1000000n);
-      expect(mint.data.get("policy123")?.get("MyNFT")).toBe(1n);
+      expect(
+        mint
+          .get("policy123" as PolicyId.PolicyId)
+          ?.get("MyToken" as AssetName.AssetName),
+      ).toBe(1000000n);
+      expect(
+        mint
+          .get("policy123" as PolicyId.PolicyId)
+          ?.get("MyNFT" as AssetName.AssetName),
+      ).toBe(1n);
     });
 
     test("should handle burning scenario", () => {
       // Simulate burning tokens
-      const burn = Mint.singleton("policy123", "MyToken", -500000n);
+      const burn = Mint.singleton(
+        "policy123" as PolicyId.PolicyId,
+        "MyToken" as AssetName.AssetName,
+        -500000n,
+      );
 
-      expect(burn.data.get("policy123")?.get("MyToken")).toBe(-500000n);
+      expect(
+        burn
+          .get("policy123" as PolicyId.PolicyId)
+          ?.get("MyToken" as AssetName.AssetName),
+      ).toBe(-500000n);
     });
 
     test("should handle mixed mint/burn scenario", () => {
       // Simulate minting some tokens while burning others
       const mintBurn = Mint.fromEntries([
         [
-          "policy123",
-          new Map([
-            ["TokenA", 1000n], // Mint TokenA
-            ["TokenB", -500n], // Burn TokenB
-          ]),
+          "policy123" as PolicyId.PolicyId,
+          [
+            ["TokenA" as AssetName.AssetName, 1000n], // Mint TokenA
+            ["TokenB" as AssetName.AssetName, -500n], // Burn TokenB
+          ],
         ],
       ]);
 
-      expect(mintBurn.data.get("policy123")?.get("TokenA")).toBe(1000n);
-      expect(mintBurn.data.get("policy123")?.get("TokenB")).toBe(-500n);
+      expect(
+        mintBurn
+          .get("policy123" as PolicyId.PolicyId)
+          ?.get("TokenA" as AssetName.AssetName),
+      ).toBe(1000n);
+      expect(
+        mintBurn
+          .get("policy123" as PolicyId.PolicyId)
+          ?.get("TokenB" as AssetName.AssetName),
+      ).toBe(-500n);
     });
   });
 });

@@ -4,6 +4,7 @@ import {
   ParseResult,
   Schema,
   FastCheck,
+  pipe,
 } from "effect";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
@@ -569,41 +570,19 @@ export const CBORBytesSchema = (
   Schema.transformOrFail(Schema.Uint8ArrayFromSelf, DataSchema, {
     strict: true,
     encode: (toI) =>
-      // Convert PlutusData to CBOR bytes
-      Effect.gen(function* () {
-        const cborValue = plutusDataToCBORValue(toI);
-        return yield* ParseResult.encode(CBOR.CBORBytesSchema(options))(
-          cborValue,
-        );
-      }),
+      pipe(plutusDataToCBORValue(toI), (cborValue) =>
+        ParseResult.encode(CBOR.CBORBytesSchema(options))(cborValue),
+      ),
     decode: (fromI) =>
-      // Convert CBOR bytes to PlutusData
-      Effect.gen(function* () {
-        const cborValue = yield* ParseResult.decode(
-          CBOR.CBORBytesSchema(options),
-        )(fromI);
-        return cborValueToPlutusData(cborValue);
-      }),
+      pipe(
+        ParseResult.decode(CBOR.CBORBytesSchema(options))(fromI),
+        Effect.map(cborValueToPlutusData),
+      ),
   });
 
 export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
-) =>
-  Schema.transformOrFail(Bytes.HexSchema, DataSchema, {
-    strict: true,
-    encode: (toI) =>
-      Effect.gen(function* () {
-        const cborBytes = yield* ParseResult.encode(CBORBytesSchema(options))(
-          toI,
-        );
-        return Bytes.Encode.hex(cborBytes);
-      }),
-    decode: (fromI) =>
-      Effect.gen(function* () {
-        const cborBytes = Bytes.Decode.hex(fromI);
-        return yield* ParseResult.decode(CBORBytesSchema(options))(cborBytes);
-      }),
-  });
+) => Schema.compose(Bytes.BytesSchema, CBORBytesSchema(options));
 
 /**
  * Convert PlutusData to CBORValue

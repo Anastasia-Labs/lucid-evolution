@@ -4,7 +4,6 @@ import {
   FastCheck,
   ParseResult,
   Effect,
-  Option,
   Equal,
   Pretty,
 } from "effect";
@@ -141,7 +140,7 @@ export const singleton = (
 /**
  * Helper function to create Mint from entries array
  */
-const fromEntries = (
+export const fromEntries = (
   entries: Array<
     [PolicyId.PolicyId, Array<[AssetName.AssetName, NonZeroInt64.NonZeroInt64]>]
   >,
@@ -231,16 +230,16 @@ export const get = (
   mint: Mint,
   policyId: PolicyId.PolicyId,
   assetName: AssetName.AssetName,
-): Option.Option<bigint> => {
+) => {
   const assets = mint.get(policyId);
   if (assets === undefined) {
-    return Option.none();
+    return undefined;
   }
   const amount = assets.get(assetName);
   if (amount === undefined) {
-    return Option.none();
+    return undefined;
   }
-  return Option.some(amount);
+  return amount;
 };
 
 /**
@@ -259,7 +258,7 @@ export const has = (
   mint: Mint,
   policyId: PolicyId.PolicyId,
   assetName: AssetName.AssetName,
-): boolean => Option.isSome(get(mint, policyId, assetName));
+): boolean => get(mint, policyId, assetName) !== undefined;
 
 /**
  * Check if Mint is empty.
