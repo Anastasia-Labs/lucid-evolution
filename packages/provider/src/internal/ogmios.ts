@@ -1,7 +1,7 @@
 import { Schema as S } from "effect";
-import { applySingleCborEncoding, fromUnit } from "@lucid-evolution/utils";
+import { applySingleCborEncoding, fromUnit } from "@evolution-sdk/utils";
 import { Record } from "effect";
-import * as CoreType from "@lucid-evolution/core-types";
+import * as CoreType from "@evolution-sdk/core-types";
 
 export const JSONRPCSchema = <A, I, R>(schema: S.Schema<A, I, R>) =>
   S.Struct({

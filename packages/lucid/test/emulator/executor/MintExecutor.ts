@@ -2,8 +2,8 @@ import { Effect, pipe } from "effect";
 import { EmulatorInstance } from "../service/EmulatorInstance.js";
 import { User } from "../service/EmulatorUser.js";
 import * as MintBuilder from "../builder/MintBuilder.js";
-import { mintingPolicyToId } from "@lucid-evolution/utils";
-import { fromText } from "@lucid-evolution/core-utils";
+import { mintingPolicyToId } from "@evolution-sdk/utils";
+import { fromText } from "@evolution-sdk/core-utils";
 import { handleSignSubmitWithoutValidation } from "../../specs/utils.js";
 
 export const mintAndPay = ({ tokenName = "Wow", quantity = 123n } = {}) =>

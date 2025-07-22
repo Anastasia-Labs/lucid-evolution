@@ -5,7 +5,7 @@ import {
   RewardAddress,
   CertificateValidator,
   WithdrawalValidator,
-} from "@lucid-evolution/core-types";
+} from "@evolution-sdk/core-types";
 import { CML } from "./core.js";
 import { networkToId } from "./network.js";
 import { validatorToScriptHash } from "./scripts.js";

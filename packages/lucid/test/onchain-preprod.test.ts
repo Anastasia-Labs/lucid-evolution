@@ -382,6 +382,26 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
+  test("Parametrized Contract - Deposit Funds - Datum Hash", async () => {
+    const program = pipe(
+      ParametrizedEndpoints.depositFundsDatumHash,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("Parametrized Contract - Collect Funds - Datum Hash", async () => {
+    const program = pipe(
+      ParametrizedEndpoints.collectFundsDatumHash,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
   test("Mint Test - Mint Token", async () => {
     const program = pipe(
       MintBurnEndpoints.mint,

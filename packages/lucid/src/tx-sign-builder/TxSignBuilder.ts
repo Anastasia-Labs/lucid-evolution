@@ -1,5 +1,5 @@
 import { CML, makeReturn } from "../core.js";
-import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
+import { LucidConfig } from "../evolution-sdk/LucidEvolution.js";
 import { Effect } from "effect";
 import * as S from "@effect/schema/Schema";
 //TODO: move to commont utils
@@ -7,7 +7,7 @@ import {
   PrivateKey,
   TransactionWitnesses,
   Wallet,
-} from "@lucid-evolution/core-types";
+} from "@evolution-sdk/core-types";
 import { TransactionSignError } from "../Errors.js";
 import { TxSigned } from "../tx-submit/TxSubmit.js";
 import * as CompleteTxSigner from "./internal/CompleteTxSigner.js";

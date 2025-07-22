@@ -53,7 +53,7 @@ export declare const generator: FastCheck.Arbitrary<BaseAddress>;
 **Example**
 
 ```ts
-import { BaseAddress } from "@lucid-evolution/experimental";
+import { BaseAddress } from "@evolution-sdk/experimental";
 import { FastCheck } from "effect";
 import assert from "assert";
 

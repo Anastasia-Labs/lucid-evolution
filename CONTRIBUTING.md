@@ -1,10 +1,10 @@
-# Contributing to Lucid Evolution
+# Contributing to Evolution SDK
 
-👋 Welcome to the Lucid Evolution community!
+👋 Welcome to the Evolution SDK community!
 
-This guide will help you get started with contributing to Lucid Evolution. Our goal is to make the contribution process transparent and collaborative for everyone involved.
+This guide will help you get started with contributing to Evolution SDK. Our goal is to make the contribution process transparent and collaborative for everyone involved.
 
-Lucid Evolution is structured as a monorepo with multiple packages. Each package serves a specific purpose, so please make sure you're working in the appropriate package when making changes. While we encourage innovation, we also value stability for our users, so please:
+Evolution SDK is structured as a monorepo with multiple packages. Each package serves a specific purpose, so please make sure you're working in the appropriate package when making changes. While we encourage innovation, we also value stability for our users, so please:
 
 - Maintain backward compatibility unless a breaking change is explicitly agreed upon for a major version release
 - Consider performance implications when modifying core functionality
@@ -42,7 +42,7 @@ Pull requests are the best way to propose changes. Write clear, concise commit m
 
 ## Local Testing
 
-Lucid Evolution uses Vitest for testing. There are two main types of tests:
+Evolution SDK uses Vitest for testing. There are two main types of tests:
 
 1. **Unit and emulator tests** - These can run without external dependencies
 2. **On-chain integration tests** - These require API keys and network access
@@ -86,13 +86,13 @@ VITE_OGMIOS_URL="your_ogmios_endpoint_url"
 pnpm test
 
 # Run tests for a specific package
-pnpm --filter @lucid-evolution/lucid test
+pnpm --filter @evolution-sdk/lucid test
 
 # Run a specific test file
-pnpm --filter @lucid-evolution/lucid test -- path/to/test/file.test.ts
+pnpm --filter @evolution-sdk/lucid test -- path/to/test/file.test.ts
 
 # Run tests in watch mode
-pnpm --filter @lucid-evolution/lucid test -- --watch
+pnpm --filter @evolution-sdk/lucid test -- --watch
 ```
 
 ### Testing Without API Keys
@@ -105,7 +105,7 @@ Many unit tests and emulator-based tests will run without external API keys. The
 
 ## Reporting Bugs
 
-We use GitHub issues to track bugs. Report a bug by [opening a new issue](https://github.com/Anastasia-Labs/lucid-evolution/issues/new).
+We use GitHub issues to track bugs. Report a bug by [opening a new issue](https://github.com/no-witness-labs/evolution-sdk/issues/new).
 
 ### Bug Report Guidelines
 
@@ -131,10 +131,10 @@ Run `pnpm changeset` to create a new changeset (this is required for CI).
 
 ## License
 
-By contributing to Lucid Evolution, you agree that your contributions will be licensed under its MIT License.
+By contributing to Evolution SDK, you agree that your contributions will be licensed under its MIT License.
 
 ## Questions?
 
-Don't hesitate to ask. You can open an issue or reach out to the maintainers directly. Anastasia Labs team and community actively discuss our opinions in our [Discord](https://discord.gg/s89P9gpEff).
+Don't hesitate to ask. You can open an issue or reach out to the maintainers directly. No Witness Labs team and community actively discuss our opinions in our [Discord](https://discord.gg/eqZDvHvW6k).
 
-Thank you for contributing to Lucid Evolution!
+Thank you for contributing to Evolution SDK!

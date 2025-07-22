@@ -7,7 +7,7 @@ import {
   Credential,
   AlwaysAbstain,
   AlwaysNoConfidence,
-} from "@lucid-evolution/core-types";
+} from "@evolution-sdk/core-types";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { TxBuilderError } from "../../Errors.js";
 import { Effect } from "effect";

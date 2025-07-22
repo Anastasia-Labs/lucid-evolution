@@ -7,7 +7,7 @@ import {
   SimpleMintContract,
   NetworkConfig,
 } from "./services";
-import { Constr, Data } from "@lucid-evolution/plutus";
+import { Constr, Data } from "@evolution-sdk/plutus";
 import { fromText, RedeemerBuilder, UTxO } from "../../src";
 import { handleSignSubmit, withLogRetry } from "./utils";
 
@@ -194,7 +194,6 @@ export const registerStake = Effect.gen(function* ($) {
     .newTx()
     .registerStake(rewardAddress)
     .completeProgram();
-
   return signBuilder;
 }).pipe(
   Effect.flatMap(handleSignSubmit),

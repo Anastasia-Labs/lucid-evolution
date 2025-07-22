@@ -1,0 +1,6 @@
+.backup/
+.next/
+_pagefind/
+cache/
+node_modules/
+out/

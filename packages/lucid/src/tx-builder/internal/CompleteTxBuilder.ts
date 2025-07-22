@@ -13,7 +13,7 @@ import {
   EvalRedeemer,
   UTxO,
   Wallet,
-} from "@lucid-evolution/core-types";
+} from "@evolution-sdk/core-types";
 import {
   ERROR_MESSAGE,
   RunTimeError,
@@ -21,7 +21,7 @@ import {
   TxBuilderError,
 } from "../../Errors.js";
 import { CML } from "../../core.js";
-import * as UPLC from "@lucid-evolution/uplc";
+import * as UPLC from "@evolution-sdk/uplc";
 import * as TxBuilder from "../TxBuilder.js";
 import * as TxSignBuilder from "../../tx-sign-builder/TxSignBuilder.js";
 import {
@@ -35,8 +35,8 @@ import {
   utxoToTransactionInput,
   utxoToTransactionOutput,
   toCMLRedeemerTag,
-} from "@lucid-evolution/utils";
-import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
+} from "@evolution-sdk/utils";
+import { SLOT_CONFIG_NETWORK } from "@evolution-sdk/plutus";
 import { collectFromUTxO } from "./Collect.js";
 import { TxConfig } from "./Service.js";
 import { isError } from "effect/Predicate";

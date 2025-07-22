@@ -1,4 +1,4 @@
-import { ProtocolParameters } from "@lucid-evolution/core-types";
+import { ProtocolParameters } from "@evolution-sdk/core-types";
 import { CML } from "../core.js";
 
 export const makeTxConfig = (

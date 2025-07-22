@@ -1,10 +1,10 @@
-import { fromHex, toHex } from "@lucid-evolution/core-utils";
+import { fromHex, toHex } from "@evolution-sdk/core-utils";
 import {
   KeyHash,
   Payload,
   PrivateKey,
   SignedMessage,
-} from "@lucid-evolution/core-types";
+} from "@evolution-sdk/core-types";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import * as M from "@emurgo/cardano-message-signing-nodejs";
 

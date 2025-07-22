@@ -8,8 +8,8 @@ import * as TypeBox from "@sinclair/typebox";
 //   TSchema,
 //   Type,
 // } from "@sinclair/typebox";
-import { Datum, Exact, Json, Redeemer } from "@lucid-evolution/core-types";
-import { fromHex, fromText, toHex } from "@lucid-evolution/core-utils";
+import { Datum, Exact, Json, Redeemer } from "@evolution-sdk/core-types";
+import { fromHex, fromText, toHex } from "@evolution-sdk/core-utils";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 export * from "@sinclair/typebox";
 

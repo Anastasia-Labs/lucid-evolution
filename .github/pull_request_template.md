@@ -11,7 +11,7 @@ Fixes # (issue)
 - [ ] 🔩 Performance improvement
 - [ ] 📚 Docs
 
-If the feature is substantial or introduces breaking changes without a discussion, its best to open an [issue](https://github.com/Anastasia-Labs/lucid-evolution/issues) first.
+If the feature is substantial or introduces breaking changes without a discussion, its best to open an [issue](https://github.com/no-witness-labs/evolution-sdk/issues) first.
 
 ## Checklist
 

@@ -1,0 +1,34 @@
+# Reference Scripts
+
+Reference scripts point to an already on-chain script rather than including it entirely. Without reference scripts, the full script code must be included in each transaction. By referring to a UTxO holding the reference script, it reduces transaction size and base fee (execution costs remain the same).
+
+## Deploy a Reference Script
+
+```js showLineNumbers {8}
+// Deploy a script as a reference script
+const deployScriptTx = await lucid
+  .newTx()
+  .pay.ToAddressWithData(
+    scriptAddress,
+    { kind: "inline", value: datum }, // or `undefined` if you just need to deploy the script
+    { lovelace: 5_000_000n }, // or `undefined` if you just need to deploy the script
+    script, // the script to be stored as a reference
+  )
+  .complete();
+```
+
+## Using a Reference Script
+
+```js showLineNumbers {9}
+// Find a UTxO containing the reference script
+const allUTxOs = await lucid.utxosAt(scriptAddress);
+const refScriptUTxO = allUTxOs.filter((utxo) => utxo.scriptRef)[0];
+
+// Use the reference script instead of attaching the validator
+const tx = await lucid
+  .newTx()
+  .collectFrom([utxoToSpend], redeemer)
+  .readFrom([refScriptUTxO]) // reference the script UTxO
+  .complete();
+```
+

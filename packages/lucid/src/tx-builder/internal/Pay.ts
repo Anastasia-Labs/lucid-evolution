@@ -5,8 +5,8 @@ import {
   coreToTxOutput,
   toScriptRef,
   valueToAssets,
-} from "@lucid-evolution/utils";
-import { Address, Assets, Script } from "@lucid-evolution/core-types";
+} from "@evolution-sdk/utils";
+import { Address, Assets, Script } from "@evolution-sdk/core-types";
 import { OutputDatum } from "../types.js";
 import * as TxBuilder from "../TxBuilder.js";
 import { CML } from "../../core.js";

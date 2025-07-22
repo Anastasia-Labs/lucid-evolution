@@ -24,6 +24,8 @@ export * as Bech32 from "./Bech32.js";
 export * as Natural from "./Natural.js";
 export * as Hex from "./Bytes.js";
 export * as NetworkId from "./NetworkId.js";
+export * as DatumHash from "./DatumHash.js";
+export * as DatumOption from "./DatumOption.js";
 export * as Devnet from "./Devnet/Devnet.js";
 export * as DevnetDefault from "./Devnet/DevnetDefault.js";
 // New modules based on CDDL specification

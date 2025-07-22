@@ -1,11 +1,11 @@
 import { Effect, pipe } from "effect";
-import { fromHex } from "@lucid-evolution/core-utils";
-import { Assets, Redeemer } from "@lucid-evolution/core-types";
+import { fromHex } from "@evolution-sdk/core-utils";
+import { Assets, Redeemer } from "@evolution-sdk/core-types";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { toPartial, toV1, toV2, toV3 } from "./TxUtils.js";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import * as TxBuilder from "../TxBuilder.js";
-import { addAssets } from "@lucid-evolution/utils";
+import { addAssets } from "@evolution-sdk/utils";
 import { TxConfig } from "./Service.js";
 
 export const mintError = (cause: unknown) =>

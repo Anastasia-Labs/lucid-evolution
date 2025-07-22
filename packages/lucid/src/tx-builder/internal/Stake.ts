@@ -1,4 +1,4 @@
-import { Lovelace, Redeemer, RewardAddress } from "@lucid-evolution/core-types";
+import { Lovelace, Redeemer, RewardAddress } from "@evolution-sdk/core-types";
 import * as TxBuilder from "../TxBuilder.js";
 import { Effect, pipe } from "effect";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";

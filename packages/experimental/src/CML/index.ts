@@ -58,7 +58,7 @@ export * as DNSName from "./DNSName.js";
 export * as DRep from "./DRep.js";
 export * as DRepVotingThresholds from "./DRepVotingThresholds.js";
 export * as DatumHash from "./DatumHash.js";
-export * as DatumOption from "./DatumOption.js";
+export * as DatumOption from "../DatumOption.js";
 export * as Ed25519KeyHash from "./Ed25519KeyHash.js";
 export * as Ed25519KeyHashList from "./Ed25519KeyHashList.js";
 export * as Ed25519Signature from "./Ed25519Signature.js";

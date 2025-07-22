@@ -49,6 +49,7 @@
             bun
             nodejs
             pnpm
+	    corepack_20
             # C/C++ Libraries
             clang-tools
             cmake

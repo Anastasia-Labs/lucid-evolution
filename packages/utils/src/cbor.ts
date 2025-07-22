@@ -1,6 +1,6 @@
-import { fromHex, toHex } from "@lucid-evolution/core-utils";
+import { fromHex, toHex } from "@evolution-sdk/core-utils";
 import { CML } from "./core.js";
-import { Datum, DatumJson } from "@lucid-evolution/core-types";
+import { Datum, DatumJson } from "@evolution-sdk/core-types";
 import { decode, encode } from "cbor-x";
 
 // 1st byte (58) 0101(major type 2) , 1000 (additional info)

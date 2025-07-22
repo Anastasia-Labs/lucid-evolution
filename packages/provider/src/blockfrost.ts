@@ -1,9 +1,9 @@
 import { CML } from "./core.js";
-import { fromHex, sleep } from "@lucid-evolution/core-utils";
+import { fromHex, sleep } from "@evolution-sdk/core-utils";
 import {
   applyDoubleCborEncoding,
   scriptFromNative,
-} from "@lucid-evolution/utils";
+} from "@evolution-sdk/utils";
 import {
   Address,
   Credential,
@@ -20,7 +20,7 @@ import {
   TxHash,
   Unit,
   UTxO,
-} from "@lucid-evolution/core-types";
+} from "@evolution-sdk/core-types";
 import packageJson from "../package.json" with { type: "json" };
 import * as _Blockfrost from "./internal/blockfrost.js";
 
@@ -160,7 +160,6 @@ export class Blockfrost implements Provider {
   }
 
   async getUtxosByOutRef(outRefs: OutRef[]): Promise<UTxO[]> {
-    // TODO: Make sure old already spent UTxOs are not retrievable.
     const queryHashes = [...new Set(outRefs.map((outRef) => outRef.txHash))];
     const utxos = await Promise.all(
       queryHashes.map(async (txHash) => {
@@ -170,15 +169,17 @@ export class Blockfrost implements Provider {
         if (!result || result.error) {
           return [];
         }
-        const utxosResult: BlockfrostUtxoResult = result.outputs.map(
-          (
-            // deno-lint-ignore no-explicit-any
-            r: any,
-          ) => ({
-            ...r,
-            tx_hash: txHash,
-          }),
-        );
+        const utxosResult: BlockfrostUtxoResult = result.outputs
+          .filter((r: any) => !r.consumed_by_tx)
+          .map(
+            (
+              // deno-lint-ignore no-explicit-any
+              r: any,
+            ) => ({
+              ...r,
+              tx_hash: txHash,
+            }),
+          );
         return this.blockfrostUtxosToUtxos(utxosResult);
       }),
     );
@@ -386,6 +387,7 @@ type BlockfrostUtxoResult = Array<{
   data_hash?: string;
   inline_datum?: string;
   reference_script_hash?: string;
+  consumed_by_tx?: string;
 }>;
 
 type BlockfrostUtxoError = {

@@ -1,4 +1,4 @@
-import { Native, Script } from "@lucid-evolution/core-types";
+import { Native, Script } from "@evolution-sdk/core-types";
 import * as S from "@effect/schema/Schema";
 import { CML } from "./core.js";
 

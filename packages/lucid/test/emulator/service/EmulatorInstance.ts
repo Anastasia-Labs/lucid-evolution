@@ -3,7 +3,7 @@ import {
   EmulatorAccount,
   generateEmulatorAccount,
   generateEmulatorAccountFromPrivateKey,
-} from "@lucid-evolution/provider";
+} from "@evolution-sdk/provider";
 import { Context, Effect, Layer } from "effect";
 import { PROTOCOL_PARAMETERS_DEFAULT } from "../../../src/index.js";
 

@@ -1,6 +1,6 @@
 {
-  "name": "@lucid-evolution/core-utils",
-  "version": "0.1.16",
+  "name": "@evolution-sdk/core-utils",
+  "version": "2.0.0",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

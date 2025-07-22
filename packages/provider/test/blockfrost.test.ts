@@ -1,5 +1,5 @@
 import { assert, describe, expect, test } from "vitest";
-import { ProtocolParameters, UTxO } from "@lucid-evolution/core-types";
+import { ProtocolParameters, UTxO } from "@evolution-sdk/core-types";
 import { Config, Effect } from "effect";
 import { Blockfrost } from "../src/blockfrost.js";
 import * as PreprodConstants from "./preprod-constants.js";

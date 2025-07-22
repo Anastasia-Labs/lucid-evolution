@@ -1,28 +1,46 @@
 {
-  "extends": "@lucid-evolution/typescript-config/nextjs.json",
+  "extends": "@evolution-sdk/typescript-config/nextjs.json",
   "compilerOptions": {
+    "baseUrl": ".",
+    "target": "es2022",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "moduleResolution": "bundler",
+    "jsx": "preserve",
+    "module": "esnext",
+    "resolveJsonModule": true,
+    "paths": {
+      "@components/*": ["src/components/*"],
+      // These work at runtime due to Next.js internal resolution or custom config,
+      // but we include them here so TypeScript doesn't complain.
+      "private-next-root-dir/*": ["./src/*"],
+      "next-mdx-import-source-file": ["./src/mdx-components.tsx"]
+    },
     "plugins": [
       {
         "name": "next"
       }
     ],
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-    "incremental": true,
-    "isolatedModules": true
+    "strictNullChecks": true,
+    "noUncheckedIndexedAccess": true
   },
   "include": [
     "next-env.d.ts",
-    "next.config.js",
-    "theme.config.jsx",
+    "next.config.mjs",
+    "postcss.config.mjs",
+    "**/docs/*.js",
+    "**/docs/*.jsx",
     "**/docs/*.ts",
     "**/docs/*.tsx",
-    ".next/types/**/*.ts",
+    ".next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules", ".next", ".backup", "cache"]
 }

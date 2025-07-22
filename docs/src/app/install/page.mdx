@@ -1,0 +1,93 @@
+import { Callout, Cards, FileTree, Tabs } from "nextra/components";
+
+# Install Evolution-SDK
+
+Evolution-SDK is a powerful, modular framework for building Cardano applications off-chain. It provides developers with type-safe interfaces and utilities to interact with the Cardano blockchain, create transactions, and manage wallets without dealing with low-level complexities.
+
+## Prerequisites
+
+Before installing Evolution-SDK, ensure your environment meets the prerequisites:
+
+- [**Node.js**](https://nodejs.org/): Version 18 or higher
+- **Package Manager**: [`pnpm`](https://pnpm.io/), [`npm`](https://www.npmjs.com/), [`yarn`](https://classic.yarnpkg.com/) or [`bun`](https://bun.sh/)
+
+## Installation
+
+Choose your preferred package manager to install Evolution-SDK:
+
+<Tabs items={['pnpm', 'npm', 'yarn', 'bun']}>
+  <Tabs.Tab>
+    <div className="text-sm">
+      pnpm, or Performant Node Package Manager, is one of the main JavaScript package managers. It focuses on being a disk space-efficient alternative to npm. To install Evolution-SDK, run:
+    </div>
+  
+    ```bash
+    pnpm i @evolution-sdk/lucid
+    ```
+  </Tabs.Tab>
+
+<Tabs.Tab>
+  <div className="text-sm">
+    npm is a package manager for the JavaScript programming language. It is the
+    default package manager for the JavaScript runtime environment Node.js. To
+    install Evolution-SDK, run:
+  </div>
+  ```bash @evolution-sdklution/lucid ```
+</Tabs.Tab>
+
+<Tabs.Tab>
+  <div className="text-sm">
+    Yarn is one of the main JavaScript package managers. It is an alternative to
+    the npm package manager aiming to solve consistency, security, and
+    performance problems with large codebases. To install Evolution-SDK, run:
+  </div>
+  ```bash yarn add @evolution-sdk/lucid ```
+</Tabs.Tab>
+
+  <Tabs.Tab>
+    <div className="text-sm">
+      Bun is a JavaScript runtime, package manager, test runner and bundler. It uses WebKit's JavaScriptCore as the JavaScript engine, unlike Node.js and Deno, which both use V8. To install Evolution-SDK, run:
+    </div>
+  
+    ```bash
+    bun i @evolution-sdk/lucid
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+## Package Structure
+
+Evolution SDK uses a modular architecture to allow importing only what you need:
+
+<FileTree>
+  <FileTree.Folder name="evolution-sdk" defaultOpen>
+    <FileTree.Folder name="packages" defaultOpen>
+      <FileTree.File name="evolution-sdk/lucid ⇀ Main package for Evolution SDK" />
+      <FileTree.File name="evolution-sdk/bip39 ⇀ Package for BIP-39 mnemonic code" />
+      <FileTree.File name="evolution-sdk/core-types ⇀ Core types used across Evolution SDK packages" />
+      <FileTree.File name="evolution-sdk/core-utils ⇀ Core utilities used across Evolution SDK packages" />
+      <FileTree.File name="evolution-sdk/crc8 ⇀ Package for CRC8 calculation" />
+      <FileTree.File name="evolution-sdk/plutus ⇀ Package for Plutus integration" />
+      <FileTree.File name="evolution-sdk/provider ⇀ Package for providing data " />
+      <FileTree.File name="evolution-sdk/sign_data ⇀ Package for signing data" />
+      <FileTree.File name="evolution-sdk/utils ⇀ Utility functions for Evolution SDK" />
+      <FileTree.File name="evolution-sdk/wallet ⇀ Wallet package for Evolution SDK" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+<Callout type="info">
+  Installing the `lucid` package will automatically export all other packages in
+  the library.
+</Callout>
+
+## Next Steps
+
+<Cards>
+  <Cards.Card icon="📕" title="Documentation" href="/documentation/about" />
+  <Cards.Card
+    icon="🔍"
+    title="Under the hood"
+    href="/documentation/under-the-hood"
+  />
+</Cards>

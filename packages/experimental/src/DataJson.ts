@@ -148,7 +148,7 @@ export const mkConstr = <T extends Data>(
  * Converts TypeScript data into CBOR hex string
  *
  * @example
- * import { Data, Type } from "@lucid-evolution/experimental"
+ * import { Data, Type } from "@evolution-sdk/experimental"
  *
  * const Token = Type.Struct({
  *   policyId: Type.ByteArray,
@@ -218,7 +218,7 @@ export const toCBOR = <Source, Target extends Data>(
  * Decodes a CBOR hex string to a TypeScript type
  *
  * @example
- * import { Data } from "@lucid-evolution/experimental";
+ * import { Data } from "@evolution-sdk/experimental";
  * const data = Data.fromCBOR(cborHexString, schema);
  *
  * @since 1.0.0
@@ -289,7 +289,7 @@ export const resolveCBOR = (input: string): Data => {
  * Decodes an unknown value from Plutus Data Constructor to a TypeScript type
  *
  * @example
- * import { Type , Data } from "@lucid-evolution/experimental";
+ * import { Type , Data } from "@evolution-sdk/experimental";
  *
  * const Token = Type.Struct({
  *   policyId: Type.ByteArray,
@@ -313,7 +313,7 @@ export const fromData = <Source, Target extends Data>(
  * Encodes a TypeScript value to Plutus Data Constructor
  *
  * @example
- * import { Data } from "@lucid-evolution/experimental";
+ * import { Data } from "@evolution-sdk/experimental";
  *
  * const token : unknown = {
  *   policyId: "deadbeef",

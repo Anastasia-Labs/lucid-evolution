@@ -208,7 +208,7 @@ export const encodeVariableLength = (natural: Natural.Natural) =>
  * Following the Cardano ledger implementation for variable-length integers
  *
  * @example
- * import { PointerAddress } from "@lucid-evolution/experimental";
+ * import { PointerAddress } from "@evolution-sdk/experimental";
  * import { Effect } from "effect";
  * import assert from "assert";
  *
@@ -298,7 +298,7 @@ export const equals = (a: PointerAddress, b: PointerAddress): boolean => {
  * Generate a random PointerAddress.
  *
  * @example
- * import { PointerAddress } from "@lucid-evolution/experimental";
+ * import { PointerAddress } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

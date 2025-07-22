@@ -117,7 +117,7 @@ export const equals = (a: EnterpriseAddress, b: EnterpriseAddress): boolean => {
  * Generate a random EnterpriseAddress.
  *
  * @example
- * import { EnterpriseAddress } from "@lucid-evolution/experimental";
+ * import { EnterpriseAddress } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

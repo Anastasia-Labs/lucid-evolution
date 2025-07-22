@@ -1,6 +1,6 @@
 {
-  "name": "@lucid-evolution/plutus",
-  "version": "0.1.29",
+  "name": "@evolution-sdk/plutus",
+  "version": "2.0.0",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -33,8 +33,8 @@
   "dependencies": {
     "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-3",
     "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-3",
-    "@lucid-evolution/core-types": "workspace:*",
-    "@lucid-evolution/core-utils": "workspace:*",
+    "@evolution-sdk/core-types": "workspace:*",
+    "@evolution-sdk/core-utils": "workspace:*",
     "@sinclair/typebox": "^0.32.28"
   },
   "devDependencies": {

@@ -1,5 +1,5 @@
-import { getAddressDetails } from "@lucid-evolution/utils";
-import { fromHex } from "@lucid-evolution/core-utils";
+import { getAddressDetails } from "@evolution-sdk/utils";
+import { fromHex } from "@evolution-sdk/core-utils";
 import {
   Address,
   KeyHash,
@@ -7,7 +7,7 @@ import {
   PrivateKey,
   RewardAddress,
   UTxO,
-} from "@lucid-evolution/core-types";
+} from "@evolution-sdk/core-types";
 import { CML } from "./core.js";
 import { mnemonicToEntropy } from "bip39";
 

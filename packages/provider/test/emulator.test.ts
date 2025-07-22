@@ -1,6 +1,6 @@
-import { ProtocolParameters } from "@lucid-evolution/core-types";
+import { ProtocolParameters } from "@evolution-sdk/core-types";
 import { assert, describe, test } from "vitest";
-import { PROTOCOL_PARAMETERS_DEFAULT } from "@lucid-evolution/utils";
+import { PROTOCOL_PARAMETERS_DEFAULT } from "@evolution-sdk/utils";
 import { Emulator, generateEmulatorAccount } from "../src";
 import { Effect } from "effect";
 import * as PreprodConstants from "./preprod-constants";

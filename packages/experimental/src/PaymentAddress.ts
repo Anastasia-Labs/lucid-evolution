@@ -23,7 +23,7 @@ export type PaymentAddress = Schema.Schema.Type<typeof PaymentAddress>;
  * Check if the given value is a valid PaymentAddress
  *
  * @example
- * import { PaymentAddress } from "@lucid-evolution/experimental";
+ * import { PaymentAddress } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const isValid = PaymentAddress.isPaymentAddress("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");

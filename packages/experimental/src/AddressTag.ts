@@ -24,7 +24,7 @@ export type AddressTag = "Base" | "Enterprise" | "Pointer" | "Reward" | "Byron";
 //  * Get address kind from address string
 //  *
 //  * @example
-//  * import { AddressTag } from "@lucid-evolution/experimental";
+//  * import { AddressTag } from "@evolution-sdk/experimental";
 //  * import { Effect } from "effect";
 //  * import assert from "assert";
 //  *
@@ -45,7 +45,7 @@ export type AddressTag = "Base" | "Enterprise" | "Pointer" | "Reward" | "Byron";
 //  * Shifts the header byte to the right by 4 bits to isolate the address type
 //  *
 //  * @example
-//  * import { AddressTag } from "@lucid-evolution/experimental";
+//  * import { AddressTag } from "@evolution-sdk/experimental";
 //  * import assert from "assert";
 //  *
 //  * const tag = AddressTag.fromHeader(0);

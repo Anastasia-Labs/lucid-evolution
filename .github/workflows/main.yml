@@ -50,7 +50,7 @@ jobs:
           cache: "pnpm"
 
       - run: pnpm i
-      - run: pnpm run build
+      - run: pnpm run build --filter='!@evolution-sdk/experimental'
       - run: pnpm run lint
       - run: pnpm run format-check
       - run: pnpm turbo run test --affected --env-mode=loose

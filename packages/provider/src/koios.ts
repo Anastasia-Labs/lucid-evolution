@@ -13,9 +13,9 @@ import {
   TxHash,
   Unit,
   UTxO,
-} from "@lucid-evolution/core-types";
-import { fromHex } from "@lucid-evolution/core-utils";
-import { fromUnit } from "@lucid-evolution/utils";
+} from "@evolution-sdk/core-types";
+import { fromHex } from "@evolution-sdk/core-utils";
+import { fromUnit } from "@evolution-sdk/utils";
 import * as _Koios from "./internal/koios.js";
 import * as _Ogmios from "./internal/ogmios.js";
 import { Data, Effect, pipe, Schedule, Schema as S } from "effect";

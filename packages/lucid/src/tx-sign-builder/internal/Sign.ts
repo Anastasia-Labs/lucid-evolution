@@ -5,7 +5,7 @@ import {
   PrivateKey,
   TransactionWitnesses,
   Wallet,
-} from "@lucid-evolution/core-types";
+} from "@evolution-sdk/core-types";
 import { CML } from "../../core.js";
 
 export const signError = (cause: unknown) => new TxSignerError({ cause });

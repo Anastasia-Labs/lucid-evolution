@@ -1,4 +1,4 @@
-import { Assets, OutRef, TxOutput, UTxO } from "@lucid-evolution/core-types";
+import { Assets, OutRef, TxOutput, UTxO } from "@evolution-sdk/core-types";
 import { CML } from "./core.js";
 import { fromScriptRef, toScriptRef } from "./scripts.js";
 import { assetsToValue, valueToAssets } from "./value.js";

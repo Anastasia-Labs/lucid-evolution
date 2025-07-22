@@ -51,7 +51,7 @@ export declare const decodeVariableLength: (
 **Example**
 
 ```ts
-import { PointerAddress } from "@lucid-evolution/experimental";
+import { PointerAddress } from "@evolution-sdk/experimental";
 import { Effect } from "effect";
 import assert from "assert";
 
@@ -109,7 +109,7 @@ export declare const generator: FastCheck.Arbitrary<PointerAddress>;
 **Example**
 
 ```ts
-import { PointerAddress } from "@lucid-evolution/experimental";
+import { PointerAddress } from "@evolution-sdk/experimental";
 import { FastCheck } from "effect";
 import assert from "assert";
 

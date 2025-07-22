@@ -1,7 +1,7 @@
 import { expect, it } from "vitest";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { coreToUtxo, utxoToCore } from "../src/index.js";
-import { UTxO } from "@lucid-evolution/core-types";
+import { UTxO } from "@evolution-sdk/core-types";
 
 it("should deserialize CBOR UTXO data from the first sample", () => {
   const cmlUTXO = CML.TransactionUnspentOutput.from_cbor_hex(

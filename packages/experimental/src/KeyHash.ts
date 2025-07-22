@@ -6,7 +6,7 @@ import * as Hash28 from "./Hash28.js";
  * Error class for KeyHash related operations.
  *
  * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
+ * import { KeyHash } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new KeyHash.KeyHashError({ message: "Invalid key hash" });
@@ -59,7 +59,7 @@ export const HexSchema = Schema.transform(
  * Check if two KeyHash instances are equal.
  *
  * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
+ * import { KeyHash } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * @since 2.0.0
@@ -71,7 +71,7 @@ export const equals = (a: KeyHash, b: KeyHash): boolean => a === b;
  * Generate a random KeyHash.
  *
  * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
+ * import { KeyHash } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

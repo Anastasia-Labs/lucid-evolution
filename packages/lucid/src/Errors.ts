@@ -1,4 +1,4 @@
-import { Network } from "@lucid-evolution/core-types";
+import { Network } from "@evolution-sdk/core-types";
 import { Data } from "effect";
 
 export const ERROR_MESSAGE = {

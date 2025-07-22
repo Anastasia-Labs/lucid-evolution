@@ -1,6 +1,6 @@
 {
-  "name": "@lucid-evolution/eslint-config",
-  "version": "0.2.3",
+  "name": "@evolution-sdk/eslint-config",
+  "version": "2.0.0",
   "type": "module",
   "private": true,
   "exports": {

@@ -5,7 +5,7 @@ import {
   ScriptHash,
   KeyHash,
   RewardAddress,
-} from "@lucid-evolution/core-types";
+} from "@evolution-sdk/core-types";
 import { networkToId } from "./network.js";
 import { CML } from "./core.js";
 import { getAddressDetails } from "./address.js";

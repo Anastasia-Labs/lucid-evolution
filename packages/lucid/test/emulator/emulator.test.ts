@@ -9,7 +9,7 @@ import * as MintExecutor from "./executor/MintExecutor.js";
 import * as HelloExecutor from "./executor/HelloExecutor.js";
 import * as SignExecutor from "./executor/SignExecutor.js";
 import { HelloContract } from "../specs/services.js";
-import { Data } from "@lucid-evolution/plutus";
+import { Data } from "@evolution-sdk/plutus";
 import { CONSTANTS } from "./Constants.js";
 
 const TestEnvironment = pipe(

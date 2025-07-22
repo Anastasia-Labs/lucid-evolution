@@ -5,9 +5,9 @@ import {
   mintingPolicyToId,
   toUnit,
   validatorToAddress,
-} from "@lucid-evolution/utils";
-import { Script } from "@lucid-evolution/core-types";
-import { Constr, Data } from "@lucid-evolution/plutus";
+} from "@evolution-sdk/utils";
+import { Script } from "@evolution-sdk/core-types";
+import { Constr, Data } from "@evolution-sdk/plutus";
 import { HelloContract } from "../../specs/services.js";
 
 export const composeWithDatumHashAndInlineDatum = (config: {

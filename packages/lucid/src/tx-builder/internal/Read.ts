@@ -1,6 +1,6 @@
 import { Effect } from "effect";
-import { utxoToCore } from "@lucid-evolution/utils";
-import { UTxO } from "@lucid-evolution/core-types";
+import { utxoToCore } from "@evolution-sdk/utils";
+import { UTxO } from "@evolution-sdk/core-types";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import { resolveDatum } from "./TxUtils.js";
 import { TxConfig } from "./Service.js";

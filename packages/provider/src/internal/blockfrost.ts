@@ -1,6 +1,6 @@
 import { pipe, Record } from "effect";
-import * as CoreType from "@lucid-evolution/core-types";
-import { applySingleCborEncoding } from "@lucid-evolution/utils";
+import * as CoreType from "@evolution-sdk/core-types";
+import { applySingleCborEncoding } from "@evolution-sdk/utils";
 
 /**
  * Blockfrost only supports Ogmios 5.6

@@ -240,7 +240,7 @@ export function toScriptHash(validator: Script): ScriptHash.ScriptHash {
  * Convert a minting policy to a policy id.
  * @example
  * ```ts
- * import { Validator } from "@lucid-evolution/..."
+ * import { Validator } from "@evolution-sdk/..."
  * const mintingPolicy = {
  *  type: "PlutusV3",
  *  script: "..."

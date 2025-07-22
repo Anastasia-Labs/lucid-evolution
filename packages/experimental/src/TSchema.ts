@@ -22,7 +22,7 @@ interface ByteArray
  * The byte array is represented as a hex string
  *
  * @example
- * import { TSchema , Data } from "@lucid-evolution/experimental";
+ * import { TSchema , Data } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const Token = TSchema.ByteArray;
@@ -62,7 +62,7 @@ interface Integer
  * The integer is represented as a BigInt
  *
  * @example
- * import { TSchema, Data } from "@lucid-evolution/experimental";
+ * import { TSchema, Data } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const Token = TSchema.Integer;
@@ -104,7 +104,7 @@ interface Literal<
  * Creates a schema for literal types with Plutus Data Constructor transformation
  *
  * @example
- * import { TSchema , Data } from "@lucid-evolution/experimental";
+ * import { TSchema , Data } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const RedeemAction = TSchema.Literal("spend", "mint", "withdraw");
@@ -177,7 +177,7 @@ interface Array<S extends Schema.Schema.Any>
  * Creates a schema for arrays with Plutus list type annotation
  *
  * @example
- * import { TSchema, Data } from "@lucid-evolution/experimental";
+ * import { TSchema, Data } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const TokenList = TSchema.Array( TSchema.ByteArray );
@@ -224,7 +224,7 @@ interface Map<K extends Schema.Schema.Any, V extends Schema.Schema.Any>
  * Maps are represented as a constructor with index 0 and fields as an array of key-value pairs
  *
  * @example
- * import { TSchema, Data } from "@lucid-evolution/experimental";
+ * import { TSchema, Data } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const TokenMap = TSchema.Map(TSchema.ByteArray, TSchema.Integer);
@@ -295,7 +295,7 @@ interface NullOr<S extends Schema.Schema.All>
  * - Nothing with index 1
  *
  * @example
- * import { TSchema, Data } from "@lucid-evolution/experimental";
+ * import { TSchema, Data } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const MaybeDeadline = TSchema.NullOr(TSchema.Integer);
@@ -356,7 +356,7 @@ interface UndefineOr<S extends Schema.Schema.Any>
  * - Nothing with index 1
  *
  * @example
- * import { TSchema, Data } from "@lucid-evolution/experimental";
+ * import { TSchema, Data } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const MaybeDeadline = TSchema.UndefinedOr(TSchema.Integer);
@@ -417,7 +417,7 @@ interface Boolean
  * - True with index 1
  *
  * @example
- * import { TSchema , Data } from "@lucid-evolution/experimental";
+ * import { TSchema , Data } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const BoolSchema = TSchema.Boolean;
@@ -493,7 +493,7 @@ interface Struct<Fields extends Schema.Struct.Fields>
  * Objects are represented as a constructor with index 0 and fields as an array
  *
  * @example
- * import { TSchema , Data } from "@lucid-evolution/experimental";
+ * import { TSchema , Data } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const Token = TSchema.Struct({
@@ -575,7 +575,7 @@ interface Union<Members extends ReadonlyArray<Schema.Schema.Any>>
  * Unions are represented as a constructor with index 0 and fields as an array
  *
  * @example
- * import { TSchema, Data } from "@lucid-evolution/experimental";
+ * import { TSchema, Data } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const MintRedeem = TSchema.Struct({
@@ -699,7 +699,7 @@ interface Tuple<Elements extends Schema.TupleType.Elements>
  * Tuples are represented as a constructor with index 0 and fields as an array
  *
  * @example
- * import { TSchema , Data } from "@lucid-evolution/experimental";
+ * import { TSchema , Data } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const Token = TSchema.Tuple([

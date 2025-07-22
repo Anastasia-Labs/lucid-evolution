@@ -1,10 +1,10 @@
-import { fromText } from "@lucid-evolution/core-utils";
+import { fromText } from "@evolution-sdk/core-utils";
 import {
   getAddressDetails,
   scriptFromNative,
   unixTimeToSlot,
   mintingPolicyToId,
-} from "@lucid-evolution/utils";
+} from "@evolution-sdk/utils";
 import { Effect, pipe } from "effect";
 import { HelloContract, NetworkConfig, User } from "./services";
 import {
@@ -12,7 +12,7 @@ import {
   handleSignSubmitWithoutValidation,
   withLogRetry,
 } from "./utils";
-import { Constr, Data } from "@lucid-evolution/plutus";
+import { Constr, Data } from "@evolution-sdk/plutus";
 import { DatumType } from "./hello-params";
 
 export const composeMintTx = Effect.gen(function* ($) {

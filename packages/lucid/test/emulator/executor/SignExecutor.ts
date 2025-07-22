@@ -1,6 +1,6 @@
-import { fromHex, fromText } from "@lucid-evolution/core-utils";
-import { verifyData } from "@lucid-evolution/sign_data";
-import { getAddressDetails } from "@lucid-evolution/utils";
+import { fromHex, fromText } from "@evolution-sdk/core-utils";
+import { verifyData } from "@evolution-sdk/sign_data";
+import { getAddressDetails } from "@evolution-sdk/utils";
 import { Effect } from "effect";
 import { EmulatorInstance } from "../service/EmulatorInstance";
 import { User } from "../service/EmulatorUser";

@@ -1,7 +1,7 @@
 import { FetchHttpClient, HttpBody, HttpClientError } from "@effect/platform";
 import { Effect, pipe, Schema as S } from "effect";
-import * as CoreType from "@lucid-evolution/core-types";
-import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
+import * as CoreType from "@evolution-sdk/core-types";
+import { applyDoubleCborEncoding } from "@evolution-sdk/utils";
 import { ParseError } from "effect/ParseResult";
 import * as HttpUtils from "./HttpUtils.js";
 

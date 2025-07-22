@@ -20,15 +20,15 @@ import {
   Unit,
   UnixTime,
   UTxO,
-} from "@lucid-evolution/core-types";
+} from "@evolution-sdk/core-types";
 import {
   fromCMLRedeemerTag,
   generateSeedPhrase,
   PROTOCOL_PARAMETERS_DEFAULT,
-} from "@lucid-evolution/utils";
-import { coreToUtxo, getAddressDetails } from "@lucid-evolution/utils";
-import { fromHex } from "@lucid-evolution/core-utils";
-import { walletFromSeed } from "@lucid-evolution/wallet";
+} from "@evolution-sdk/utils";
+import { coreToUtxo, getAddressDetails } from "@evolution-sdk/utils";
+import { fromHex } from "@evolution-sdk/core-utils";
+import { walletFromSeed } from "@evolution-sdk/wallet";
 
 /** Concatentation of txHash + outputIndex */
 type FlatOutRef = string;

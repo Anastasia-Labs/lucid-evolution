@@ -1,6 +1,6 @@
 {
-  "name": "@lucid-evolution/sign_data",
-  "version": "0.1.25",
+  "name": "@evolution-sdk/sign_data",
+  "version": "2.0.0",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -35,8 +35,8 @@
     "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-3",
     "@emurgo/cardano-message-signing-browser": "^1.0.1",
     "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
-    "@lucid-evolution/core-types": "workspace:*",
-    "@lucid-evolution/core-utils": "workspace:*"
+    "@evolution-sdk/core-types": "workspace:*",
+    "@evolution-sdk/core-utils": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.12.8",

@@ -108,7 +108,7 @@ export const equals = (a: RewardAccount, b: RewardAccount): boolean => {
  * Generate a random RewardAccount.
  *
  * @example
- * import { RewardAccount } from "@lucid-evolution/experimental";
+ * import { RewardAccount } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

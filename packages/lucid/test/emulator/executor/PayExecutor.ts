@@ -1,8 +1,8 @@
 import { Effect, pipe } from "effect";
 import { EmulatorInstance } from "../service/EmulatorInstance";
 import { User } from "../service/EmulatorUser";
-import { Script } from "@lucid-evolution/core-types";
-import { validatorToAddress } from "@lucid-evolution/utils";
+import { Script } from "@evolution-sdk/core-types";
+import { validatorToAddress } from "@evolution-sdk/utils";
 import * as PayBuilder from "../builder/PayBuilder";
 import { handleSignSubmitWithoutValidation } from "../../specs/utils";
 import { HelloContract } from "../../specs/services";

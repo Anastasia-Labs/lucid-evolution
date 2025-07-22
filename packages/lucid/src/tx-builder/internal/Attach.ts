@@ -1,4 +1,4 @@
-import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
+import { applyDoubleCborEncoding } from "@evolution-sdk/utils";
 import {
   CertificateValidator,
   MintingPolicy,
@@ -7,7 +7,7 @@ import {
   Validator,
   VoteValidator,
   WithdrawalValidator,
-} from "@lucid-evolution/core-types";
+} from "@evolution-sdk/core-types";
 import { CML } from "../../core.js";
 
 export const attachScript = ({ type, script }: Validator) => {

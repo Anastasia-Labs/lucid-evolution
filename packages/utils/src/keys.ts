@@ -1,4 +1,4 @@
-import { PrivateKey, PublicKey } from "@lucid-evolution/core-types";
+import { PrivateKey, PublicKey } from "@evolution-sdk/core-types";
 import { generateMnemonic } from "bip39";
 import { CML } from "./core.js";
 

@@ -1,8 +1,8 @@
 import { assert, test } from "vitest";
 import { buildBaseOutput } from "../src/tx-builder/internal/Pay";
-import { assetsToValue } from "@lucid-evolution/utils";
+import { assetsToValue } from "@evolution-sdk/utils";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
-import { Script } from "@lucid-evolution/core-types";
+import { Script } from "@evolution-sdk/core-types";
 
 test("buildBaseOutput - only address", async () => {
   const output: CML.TransactionOutputAmountBuilder = buildBaseOutput(

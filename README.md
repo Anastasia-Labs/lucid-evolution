@@ -1,23 +1,23 @@
 <p align="center">
-  <img width="130px" src="docs/public/lucid-evolution-al-red.svg" align="center"/>
-  <h1 align="center">Lucid <span style="color: #AD1F1E;">Evolution</span></h1>
+  <img width="50px" src="docs/public/evolution-sdk-no-witness-labs.svg" align="center"/>
+  <h1 align="center">Evolution <span style="color: #DD7722;">SDK</span></h1>
   <p align="center">A highly scalable, production-ready transaction builder and off-chain framework for dApps and devs on Cardano.</p>
 </p>
 
 <p align="center">
-  <a href="https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml">
-    <img src="https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml/badge.svg" alt="Build Status"/>
+  <a href="https://github.com/no-witness-labs/evolution-sdk/actions/workflows/main.yml">
+    <img src="https://github.com/no-witness-labs/evolution-sdk/actions/workflows/main.yml/badge.svg" alt="Build Status"/>
   </a>
-  <img src="https://img.shields.io/npm/dy/%40lucid-evolution%2Flucid" alt="NPM Downloads"/>
-  <a href="https://discord.gg/s89P9gpEff">
+  <img src="https://img.shields.io/npm/dy/%40evolution-sdk%2Flucid" alt="NPM Downloads"/>
+  <a href="https://discord.gg/eqZDvHvW6k">
     <img alt="Discord" src="https://img.shields.io/discord/947985069111377951?logo=discord">
   </a>
-  <img alt="NPM Version" src="https://img.shields.io/npm/v/%40lucid-evolution%2Flucid?color=%2350C62A">
+  <img alt="NPM Version" src="https://img.shields.io/npm/v/%40evolution-sdk%2Flucid?color=%2350C62A">
 </p>
 
-There are a growing number of projects that are built on top of `lucid-evolution`! If you've built a library or a project on top of lucid-evolution, tell me about it [on X](https://twitter.com/solidsnakedev) or [on Discord](https://discord.gg/s89P9gpEff) . I'll add it below and tweet it out.
+There are a growing number of projects that are built on top of `evolution-sdk`! If you've built a library or a project on top of evolution-sdk, tell me about it [on X](https://x.com/nowitnesslabs) or [on Discord](https://discord.gg/eqZDvHvW6k) . I'll add it below and tweet it out.
 
-<h3 align="center">Powered by Lucid Evolution</span></h1>
+<h3 align="center">Powered by Evolution SDK</span></h1>
 
 <table align="center" style="justify-content: center;align-items: center;display: flex;">
   <tr>
@@ -132,10 +132,10 @@ There are a growing number of projects that are built on top of `lucid-evolution
 
 ---
 
-## 📦 [Install](https://anastasia-labs.github.io/lucid-evolution/install)
+## 📦 [Install](https://no-witness-labs.github.io/evolution-sdk/install)
 
 ```bash
-pnpm i @lucid-evolution/lucid
+pnpm i @evolution-sdk/lucid
 ```
 
 <div align="center">
@@ -147,7 +147,7 @@ pnpm i @lucid-evolution/lucid
 ## 🚀 Quick Start
 
 ```typescript
-import { Lucid, Koios, generateSeedPhrase } from "@lucid-evolution/lucid";
+import { Lucid, Koios, generateSeedPhrase } from "@evolution-sdk/lucid";
 
 // Initialize Lucid with a provider
 const lucid = await Lucid(
@@ -175,29 +175,29 @@ console.log("Transaction Submitted:", txHash);
 
 ## 📚 Documentation
 
-For comprehensive documentation including API references, examples, and guides, visit our [official documentation site](https://anastasia-labs.github.io/lucid-evolution/).
+For comprehensive documentation including API references, examples, and guides, visit our [official documentation site](https://no-witness-labs.github.io/evolution-sdk/).
 
-- 🔍 [Core Concepts](https://anastasia-labs.github.io/lucid-evolution/documentation/core-concepts/instantiate-evolution)
-- 🧠 [Deep Dives](https://anastasia-labs.github.io/lucid-evolution/documentation/deep-dives/pay-methods)
-- ⚙️ [Under the Hood](https://anastasia-labs.github.io/lucid-evolution/documentation/under-the-hood)
+- 🔍 [Core Concepts](https://no-witness-labs.github.io/evolution-sdk/documentation/core-concepts/instantiate-evolution)
+- 🧠 [Deep Dives](https://no-witness-labs.github.io/evolution-sdk/documentation/deep-dives/pay-methods)
+- ⚙️ [Under the Hood](https://no-witness-labs.github.io/evolution-sdk/documentation/under-the-hood)
 
 ## 👥 Community and Support
 
-- [Discord Community](https://discord.gg/s89P9gpEff): Join for discussions, support, and updates
-- [GitHub Issues](https://github.com/Anastasia-Labs/lucid-evolution/issues): Report bugs or request features
+- [Discord Community](https://discord.gg/eqZDvHvW6k): Join for discussions, support, and updates
+- [GitHub Issues](https://github.com/no-witness-labs/evolution-sdk/issues): Report bugs or request features
 
 ## 🤝 Contributing
 
-We welcome contributions to Lucid Evolution! Please check our [CONTRIBUTING.md](./CONTRIBUTING.md) guide for more information.
+We welcome contributions to Evolution SDK! Please check our [CONTRIBUTING.md](./CONTRIBUTING.md) guide for more information.
 
 ### Getting Started
 
 ```bash
-git clone https://github.com/Anastasia-Labs/lucid-evolution.git
+git clone https://github.com/no-witness-labs/evolution-sdk.git
 ```
 
 ```bash
-cd lucid-evolution
+cd evolution-sdk
 pnpm install
 ```
 
@@ -220,51 +220,51 @@ pnpm build
         </thead>
         <tbody>
           <tr>
-            <td><code>@lucid-evolution/lucid</code></td>
-            <td>Core package for Lucid Evolution</td>
+            <td><code>@evolution-sdk/lucid</code></td>
+            <td>Core package for Evolution SDK</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/bip39</code></td>
+            <td><code>@evolution-sdk/bip39</code></td>
             <td>BIP-39 mnemonic code implementation</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/core-types</code></td>
+            <td><code>@evolution-sdk/core-types</code></td>
             <td>Shared type definitions</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/core-utils</code></td>
+            <td><code>@evolution-sdk/core-utils</code></td>
             <td>Common utility functions</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/crc8</code></td>
+            <td><code>@evolution-sdk/crc8</code></td>
             <td>CRC8 calculation utilities</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/plutus</code></td>
+            <td><code>@evolution-sdk/plutus</code></td>
             <td>Plutus integration tools</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/provider</code></td>
+            <td><code>@evolution-sdk/provider</code></td>
             <td>Data provider interfaces</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/sign_data</code></td>
+            <td><code>@evolution-sdk/sign_data</code></td>
             <td>Data signing utilities</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/utils</code></td>
+            <td><code>@evolution-sdk/utils</code></td>
             <td>General-purpose utility functions</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/wallet</code></td>
+            <td><code>@evolution-sdk/wallet</code></td>
             <td>Wallet integration package</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/typescript-config</code></td>
+            <td><code>@evolution-sdk/typescript-config</code></td>
             <td>Shared TypeScript configurations</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/eslint-config</code></td>
+            <td><code>@evolution-sdk/eslint-config</code></td>
             <td>Shared ESLint configurations</td>
           </tr>
         </tbody>
@@ -282,7 +282,7 @@ pnpm build
 pnpm test
 
 # Run tests for a specific package
-pnpm --filter @lucid-evolution/lucid test
+pnpm --filter @evolution-sdk/lucid test
 ```
 
 <div style="margin: 20px 0;"></div>
@@ -291,7 +291,7 @@ pnpm --filter @lucid-evolution/lucid test
   <details>
     <summary><strong>🧪 Testing Details</strong></summary>
     <div style="text-align: left; margin-top: 15px;">
-      <p>Lucid Evolution includes both unit tests and on-chain integration tests.</p>
+      <p>Evolution SDK includes both unit tests and on-chain integration tests.</p>
       <p>For detailed testing instructions, including environment setup and API keys, please refer to our <a href="./CONTRIBUTING.md#local-testing">CONTRIBUTING guide</a>.</p>
     </div>
   </details>
@@ -305,16 +305,16 @@ pnpm --filter @lucid-evolution/lucid test
 pnpm dev
 ```
 
-> Visit http://localhost:3000/lucid-evolution.
+> Visit http://localhost:3000/evolution-sdk.
 
 ---
 
 ## 📜 License
 
-Lucid Evolution is licensed under the [MIT License](./LICENSE).
+Evolution SDK is licensed under the [MIT License](./LICENSE).
 
 ---
 
 <div style="margin: 20px 0;"></div>
 
-<p align="center">Maintained with ❤️ by <a href="https://anastasialabs.com/">Anastasia Labs</a></p>
+<p align="center">Maintained with ❤️ by <a href="https://no-witness-labs.github.io/evolution-sdk/">No Witness Labs</a></p>

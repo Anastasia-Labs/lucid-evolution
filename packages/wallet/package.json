@@ -1,6 +1,6 @@
 {
-  "name": "@lucid-evolution/wallet",
-  "version": "0.1.71",
+  "name": "@evolution-sdk/wallet",
+  "version": "2.0.1",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -33,10 +33,10 @@
   "dependencies": {
     "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-3",
     "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-3",
-    "@lucid-evolution/core-types": "workspace:*",
-    "@lucid-evolution/core-utils": "workspace:*",
-    "@lucid-evolution/sign_data": "workspace:*",
-    "@lucid-evolution/utils": "workspace:*",
+    "@evolution-sdk/core-types": "workspace:*",
+    "@evolution-sdk/core-utils": "workspace:*",
+    "@evolution-sdk/sign_data": "workspace:*",
+    "@evolution-sdk/utils": "workspace:*",
     "bip39": "^3.1.0"
   },
   "devDependencies": {

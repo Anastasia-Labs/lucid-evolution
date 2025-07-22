@@ -1,5 +1,5 @@
 {
-  "name": "lucid-evolution",
+  "name": "evolution-sdk",
   "private": true,
   "scripts": {
     "build-cache": "turbo build --cache-dir=.turbo",
@@ -10,13 +10,13 @@
     "format-check": "prettier --check \"**/*.{ts,tsx,md}\"",
     "test": "turbo test",
     "clean": "turbo clean && rm -rf node_modules",
-    "publish-packages": "turbo run build && changeset version && changeset publish"
+    "publish-packages": "pnpm build --filter='!@evolution-sdk/experimental' && changeset version && changeset publish"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.1",
-    "@lucid-evolution/eslint-config": "workspace:*",
-    "@lucid-evolution/typescript-config": "workspace:*",
+    "@evolution-sdk/eslint-config": "workspace:*",
+    "@evolution-sdk/typescript-config": "workspace:*",
     "prettier": "^3.2.5",
     "turbo": "2.4.4"
   },

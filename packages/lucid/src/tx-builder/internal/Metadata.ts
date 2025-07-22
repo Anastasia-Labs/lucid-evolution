@@ -1,9 +1,9 @@
-import { Label } from "@lucid-evolution/core-types";
+import { Label } from "@evolution-sdk/core-types";
 import * as TxBuilder from "../TxBuilder.js";
 import { Effect } from "effect";
 import { CML } from "../../core.js";
 import * as S from "@effect/schema/Schema";
-import { toHex } from "@lucid-evolution/core-utils";
+import { toHex } from "@evolution-sdk/core-utils";
 
 export const attachMetadata = (
   config: TxBuilder.TxBuilderConfig,

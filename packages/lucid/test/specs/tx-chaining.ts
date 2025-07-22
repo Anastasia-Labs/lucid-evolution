@@ -5,11 +5,11 @@ import {
   withLogRetry,
 } from "./utils.js";
 import { HelloContract, User } from "./services.js";
-import { getAddressDetails } from "@lucid-evolution/utils";
-import { Constr, Data } from "@lucid-evolution/plutus";
-import { fromText } from "@lucid-evolution/core-utils";
-import { PaymentKeyHash, UTxO } from "@lucid-evolution/core-types";
-import { LucidEvolution } from "../../src/lucid-evolution/index.js";
+import { getAddressDetails } from "@evolution-sdk/utils";
+import { Constr, Data } from "@evolution-sdk/plutus";
+import { fromText } from "@evolution-sdk/core-utils";
+import { PaymentKeyHash, UTxO } from "@evolution-sdk/core-types";
+import { LucidEvolution } from "../../src/evolution-sdk/index.js";
 import {
   RunTimeError,
   TxBuilderError,

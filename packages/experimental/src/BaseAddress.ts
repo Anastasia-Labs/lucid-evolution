@@ -135,7 +135,7 @@ export const equals = (a: BaseAddress, b: BaseAddress): boolean => {
  * Generate a random BaseAddress.
  *
  * @example
- * import { BaseAddress } from "@lucid-evolution/experimental";
+ * import { BaseAddress } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

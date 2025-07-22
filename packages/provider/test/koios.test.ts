@@ -1,5 +1,5 @@
 import { Koios } from "../src/koios.js";
-import { ProtocolParameters, UTxO } from "@lucid-evolution/core-types";
+import { ProtocolParameters, UTxO } from "@evolution-sdk/core-types";
 import { assert, describe, expect, test, vi } from "vitest";
 import * as PreprodConstants from "./preprod-constants.js";
 import * as _Koios from "../src/internal/koios.js";

@@ -1,12 +1,12 @@
 name: 🛠️ Bug Report
-description: Report an issue with Lucid Evolution
+description: Report an issue with Evolution SDK
 labels: ['bug']
 body:
   - type: markdown
     attributes:
       value: |
 
-        Thank you for helping us improve Lucid Evolution! Please fill out the details below to ensure we can address the issue efficiently.
+        Thank you for helping us improve Evolution SDK! Please fill out the details below to ensure we can address the issue efficiently.
         
          **Notes:**
         - ✅ Detailed reports help us resolve issues faster.
@@ -44,7 +44,7 @@ body:
       label: Error Details
       description: |
         Please provide:
-        - Lucid Evolution version (check your package.json)
+        - Evolution SDK version (check your package.json)
         - Terminal logs/error messages
       render: shell
       placeholder: Paste your error logs here
@@ -73,9 +73,9 @@ body:
       label: Validations
       description: Before submitting the issue, please make sure you do the following
       options:
-        - label: Read the [documentation](https://anastasia-labs.github.io/lucid-evolution/)
+        - label: Read the [documentation](https://no-witness-labs.github.io/evolution-sdk/)
           required: true
-        - label: Check that there isn't already an [issue](https://github.com/Anastasia-Labs/lucid-evolution/issues) that reports the same bug to avoid creating a duplicate
+        - label: Check that there isn't already an [issue](https://github.com/no-witness-labs/evolution-sdk/issues) that reports the same bug to avoid creating a duplicate
           required: true
         - label: The provided reproduction is a [minimal reproducible](https://stackoverflow.com/help/minimal-reproducible-example) example of the bug
           required: true

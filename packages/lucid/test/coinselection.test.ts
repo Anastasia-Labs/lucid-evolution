@@ -1,7 +1,7 @@
-import { Assets, UTxO } from "@lucid-evolution/core-types";
+import { Assets, UTxO } from "@evolution-sdk/core-types";
 import { assert, describe, expect, it, test } from "vitest";
 import { recursive } from "../src/tx-builder/internal/CompleteTxBuilder.js";
-import { sortUTxOs } from "@lucid-evolution/utils";
+import { sortUTxOs } from "@evolution-sdk/utils";
 import { createHash } from "node:crypto";
 import { Effect } from "effect";
 

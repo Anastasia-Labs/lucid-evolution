@@ -160,7 +160,7 @@ export const equals = (a: Credential, b: Credential): boolean => {
  * Randomly selects between generating a KeyHash or ScriptHash credential.
  *
  * @example
- * import { Credential } from "@lucid-evolution/experimental";
+ * import { Credential } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

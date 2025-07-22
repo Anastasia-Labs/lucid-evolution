@@ -1,5 +1,5 @@
-import { EvalRedeemer, UTxO } from "@lucid-evolution/core-types";
-import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
+import { EvalRedeemer, UTxO } from "@evolution-sdk/core-types";
+import { applyDoubleCborEncoding } from "@evolution-sdk/utils";
 
 export const discoveryUTxO: UTxO = {
   txHash: "b50e73e74a3073bc44f555928702c0ae0f555a43f1afdce34b3294247dce022d",

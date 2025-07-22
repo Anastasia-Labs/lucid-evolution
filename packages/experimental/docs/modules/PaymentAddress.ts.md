@@ -51,7 +51,7 @@ export declare const isPaymentAddress: (
 **Example**
 
 ```ts
-import { PaymentAddress } from "@lucid-evolution/experimental";
+import { PaymentAddress } from "@evolution-sdk/experimental";
 import assert from "assert";
 
 const isValid = PaymentAddress.isPaymentAddress(

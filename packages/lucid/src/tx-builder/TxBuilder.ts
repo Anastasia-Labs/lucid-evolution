@@ -1,5 +1,5 @@
 import { CML, makeReturn } from "../core.js";
-import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
+import { LucidConfig } from "../evolution-sdk/LucidEvolution.js";
 import { OutputDatum } from "./types.js";
 import {
   Address,
@@ -19,7 +19,7 @@ import {
   TxOutput,
   Unit,
   UTxO,
-} from "@lucid-evolution/core-types";
+} from "@evolution-sdk/core-types";
 import * as Collect from "./internal/Collect.js";
 import * as Read from "./internal/Read.js";
 import * as Attach from "./internal/Attach.js";
@@ -37,7 +37,7 @@ import { TransactionError } from "../Errors.js";
 import { Either } from "effect/Either";
 import { Effect, Layer, pipe } from "effect";
 import { handleRedeemerBuilder } from "./internal/TxUtils.js";
-import { addAssets } from "@lucid-evolution/utils";
+import { addAssets } from "@evolution-sdk/utils";
 import { TxConfig } from "./internal/Service.js";
 
 export type TxBuilderConfig = {

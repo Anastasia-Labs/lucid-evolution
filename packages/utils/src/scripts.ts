@@ -9,11 +9,11 @@ import {
   MintingPolicy,
   PolicyId,
   Exact,
-} from "@lucid-evolution/core-types";
+} from "@evolution-sdk/core-types";
 import { CML } from "./core.js";
 import { networkToId } from "./network.js";
 import { applyDoubleCborEncoding } from "./cbor.js";
-import { Data } from "@lucid-evolution/plutus";
+import { Data } from "@evolution-sdk/plutus";
 import {
   Application,
   encodeUPLC,
@@ -21,7 +21,7 @@ import {
   UPLCConst,
   UPLCProgram,
 } from "@harmoniclabs/uplc";
-import { fromHex, toHex } from "@lucid-evolution/core-utils";
+import { fromHex, toHex } from "@evolution-sdk/core-utils";
 import { decode } from "cbor-x";
 import { dataFromCbor } from "@harmoniclabs/plutus-data";
 
