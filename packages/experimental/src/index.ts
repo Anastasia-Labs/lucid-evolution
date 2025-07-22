@@ -1,8 +1,8 @@
 export * as EffectCML from "./CML/index.js";
 export * as Bytes from "./Bytes.js";
 export * as Network from "./Network.js";
-export * as Script from "./old/Script.js";
-export * as TSchema from "./TSchema.js";
+// export * as Script from "./old/Script.js"; // Temporarily disabled due to API incompatibility
+// export * as TSchema from "./TSchema.js"; // Temporarily disabled due to API incompatibility
 export * as CML from "./CML/index.js";
 export * as Address from "./Address.js";
 export * as PointerAddress from "./PointerAddress.js";
@@ -24,7 +24,6 @@ export * as Bech32 from "./Bech32.js";
 export * as Natural from "./Natural.js";
 export * as Hex from "./Bytes.js";
 export * as NetworkId from "./NetworkId.js";
-export * as DatumHash from "./DatumHash.js";
 export * as DatumOption from "./DatumOption.js";
 export * as Devnet from "./Devnet/Devnet.js";
 export * as DevnetDefault from "./Devnet/DevnetDefault.js";
@@ -35,7 +34,7 @@ export * as Coin from "./Coin.js";
 export * as PositiveCoin from "./PositiveCoin.js";
 export * as MultiAsset from "./MultiAsset.js";
 export * as Value from "./Value.js";
-export * as UnitInterval from "./UnitInterval.js";
+// export * as UnitInterval from "./UnitInterval.js"; // Temporarily disabled due to Schema type issues
 export * as VrfKeyHash from "./VrfKeyHash.js";
 export * as PoolKeyHash from "./PoolKeyHash.js";
-export * as PoolParams from "./PoolParams.js";
+// export * as PoolParams from "./PoolParams.js"; // Temporarily disabled due to Schema type issues

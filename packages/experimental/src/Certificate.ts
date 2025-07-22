@@ -4,7 +4,7 @@ import * as PoolKeyHash from "./PoolKeyHash.js";
 import * as Coin from "./Coin.js";
 import * as EpochNo from "./EpochNo.js";
 import * as DRep from "./DRep.js";
-import * as PoolParams from "./PoolParams.js";
+// import * as PoolParams from "./PoolParams.js"; // Temporarily disabled
 import * as Anchor from "./Anchor.js";
 
 /**
@@ -84,10 +84,10 @@ export const Certificate = Schema.Union(
     stakeCredential: Credential.Credential,
     poolKeyHash: PoolKeyHash.PoolKeyHash,
   }),
-  // 3: pool_registration = (3, pool_params)
-  Schema.TaggedStruct("PoolRegistration", {
-    poolParams: PoolParams.PoolParams,
-  }),
+  // 3: pool_registration = (3, pool_params) - Temporarily disabled
+  // Schema.TaggedStruct("PoolRegistration", {
+  //   poolParams: PoolParams.PoolParams,
+  // }),
   // 4: pool_retirement = (4, pool_keyhash, epoch_no)
   Schema.TaggedStruct("PoolRetirement", {
     poolKeyHash: PoolKeyHash.PoolKeyHash,

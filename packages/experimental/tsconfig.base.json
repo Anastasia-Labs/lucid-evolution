@@ -8,5 +8,13 @@
   },
   "files": ["src/index.ts"],
   "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules", "test"]
+  "exclude": [
+    "dist", 
+    "node_modules", 
+    "test",
+    "src/old/**/*",
+    "src/TSchema.ts",
+    "src/PoolParams.ts",
+    "src/UnitInterval.ts"
+  ]
 }
