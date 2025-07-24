@@ -1,7 +1,7 @@
 import { Data, Schema } from "effect";
 import * as _Codec from "./Codec.js";
 
-export class HexError extends Data.TaggedError("HexError")<{
+export class BytesError extends Data.TaggedError("BytesError")<{
   message?: string;
   cause?: unknown;
 }> {}
@@ -154,9 +154,10 @@ export const BytesLenientSchema = Schema.transform(
   }
 );
 
-export const Codec = _Codec.createCodec({
-  hex: HexSchema,
-  bytes: BytesSchema,
-  hexLenient: HexLenientSchema,
-  bytesLenient: BytesLenientSchema,
-});
+export const Codec = _Codec.createEncoders(
+  {
+    bytes: BytesSchema,
+    bytesLenient: BytesLenientSchema,
+  },
+  BytesError
+);
