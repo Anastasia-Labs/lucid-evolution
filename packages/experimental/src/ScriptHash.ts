@@ -1,15 +1,15 @@
-import { Schema, Data, FastCheck } from "effect";
-import * as Bytes from "./Bytes.js";
+import { Schema, Data, FastCheck, pipe } from "effect";
 import * as Hash28 from "./Hash28.js";
+import { createEncoders } from "./Codec.js";
 
 /**
  * Error class for ScriptHash related operations.
  *
  * @example
- * import { ScriptHash } from "@evolution-sdk/experimental";
+ * import { ScriptHashError } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
- * const error = new ScriptHash.ScriptHashError({ message: "Invalid script hash" });
+ * const error = new ScriptHashError({ message: "Invalid script hash" });
  * assert(error.message === "Invalid script hash");
  *
  * @since 2.0.0
@@ -17,11 +17,7 @@ import * as Hash28 from "./Hash28.js";
  */
 export class ScriptHashError extends Data.TaggedError("ScriptHashError")<{
   message?: string;
-  reason?:
-    | "InvalidHexLength"
-    | "InvalidBytesLength"
-    | "InvalidHexFormat"
-    | "InvalidCBORFormat";
+  cause?: unknown;
 }> {}
 
 /**
@@ -32,24 +28,40 @@ export class ScriptHashError extends Data.TaggedError("ScriptHashError")<{
  * @since 2.0.0
  * @category schemas
  */
-export const ScriptHash = Hash28.HexSchema.pipe(Schema.brand("ScriptHash"));
-export type ScriptHash = typeof ScriptHash.Type;
-
-export const BytesSchema = Schema.transform(Hash28.BytesSchema, ScriptHash, {
-  strict: true,
-  encode: (_, toA) => Bytes.Decode.hex(toA),
-  decode: (_, fromA) => Schema.decodeSync(ScriptHash)(Bytes.Encode.hex(fromA)),
+export const ScriptHash = pipe(
+  Hash28.HexSchema,
+  Schema.brand("ScriptHash")
+).annotations({
+  identifier: "ScriptHash",
 });
 
-export const HexSchema = Schema.transform(
-  Schema.typeSchema(Hash28.HexSchema),
-  ScriptHash,
-  {
-    strict: true,
-    encode: (_, toA) => toA,
-    decode: (fromI) => Schema.decodeSync(ScriptHash)(fromI),
-  },
-);
+export type ScriptHash = typeof ScriptHash.Type;
+
+/**
+ * Schema for transforming between Uint8Array and ScriptHash.
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const BytesSchema = Schema.compose(
+  Hash28.BytesHexTransformer, // Uint8Array -> hex string
+  ScriptHash // hex string -> ScriptHash
+).annotations({
+  identifier: "ScriptHash.Bytes",
+});
+
+/**
+ * Schema for transforming between hex string and ScriptHash.
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const HexSchema = Schema.compose(
+  Hash28.HexSchema, // string -> hex string
+  ScriptHash // hex string -> ScriptHash
+).annotations({
+  identifier: "ScriptHash.Hex",
+});
 
 /**
  * Check if two ScriptHash instances are equal.
@@ -78,48 +90,18 @@ export const equals = (a: ScriptHash, b: ScriptHash): boolean => a === b;
 export const generator = FastCheck.uint8Array({
   minLength: Hash28.HASH28_BYTES_LENGTH,
   maxLength: Hash28.HASH28_BYTES_LENGTH,
-}).map((bytes) => ScriptHash.make(Bytes.Encode.hex(bytes)));
+}).map((bytes) => Codec.Decode.bytes(bytes));
 
 /**
- * Synchronous encoding utilities.
+ * Codec utilities for ScriptHash encoding and decoding operations.
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const Encode = {
-  hex: Schema.encodeSync(HexSchema),
-  bytes: Schema.encodeSync(BytesSchema),
-};
-
-/**
- * Synchronous decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Decode = {
-  hex: Schema.decodeUnknownSync(HexSchema),
-  bytes: Schema.decodeUnknownSync(BytesSchema),
-};
-
-/**
- * Either encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  hex: Schema.encodeEither(HexSchema),
-  bytes: Schema.encodeEither(BytesSchema),
-};
-
-/**
- * Either decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  hex: Schema.decodeUnknownEither(HexSchema),
-  bytes: Schema.decodeUnknownEither(BytesSchema),
-};
+export const Codec = createEncoders(
+  {
+    bytes: BytesSchema,
+    hex: HexSchema,
+  },
+  ScriptHashError
+);

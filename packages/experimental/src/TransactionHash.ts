@@ -1,15 +1,15 @@
-import { Schema, Data, FastCheck } from "effect";
-import * as Bytes from "./Bytes.js";
+import { Schema, Data, FastCheck, pipe } from "effect";
 import * as Hash32 from "./Hash32.js";
+import { createEncoders } from "./Codec.js";
 
 /**
  * Error class for TransactionHash related operations.
  *
  * @example
- * import { TransactionHash } from "@evolution-sdk/experimental";
+ * import { TransactionHashError } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
- * const error = new TransactionHash.TransactionHashError({ message: "Invalid transaction hash" });
+ * const error = new TransactionHashError({ message: "Invalid transaction hash" });
  * assert(error.message === "Invalid transaction hash");
  *
  * @since 2.0.0
@@ -19,11 +19,7 @@ export class TransactionHashError extends Data.TaggedError(
   "TransactionHashError",
 )<{
   message?: string;
-  reason?:
-    | "InvalidHexLength"
-    | "InvalidBytesLength"
-    | "InvalidHexFormat"
-    | "InvalidCBORFormat";
+  cause?: unknown;
 }> {}
 
 /**
@@ -33,43 +29,40 @@ export class TransactionHashError extends Data.TaggedError(
  * @since 2.0.0
  * @category schemas
  */
-export const TransactionHash = Hash32.HexSchema.pipe(
-  Schema.brand("TransactionHash"),
-);
+export const TransactionHash = pipe(
+  Hash32.HexSchema,
+  Schema.brand("TransactionHash")
+).annotations({
+  identifier: "TransactionHash",
+});
+
 export type TransactionHash = typeof TransactionHash.Type;
 
 /**
  * Schema for transforming between Uint8Array and TransactionHash.
  *
  * @since 2.0.0
- * @category encoding/decoding
+ * @category schemas
  */
-export const BytesSchema = Schema.transform(
-  Hash32.BytesSchema,
-  TransactionHash,
-  {
-    strict: true,
-    encode: (_, hash) => Bytes.Decode.hex(hash),
-    decode: (bytes) =>
-      Schema.decodeSync(TransactionHash)(Bytes.Encode.hex(bytes)),
-  },
-);
+export const BytesSchema = Schema.compose(
+  Hash32.BytesHexTransformer, // Uint8Array -> hex string
+  TransactionHash // hex string -> TransactionHash
+).annotations({
+  identifier: "TransactionHash.Bytes",
+});
 
 /**
  * Schema for transforming between hex string and TransactionHash.
  *
  * @since 2.0.0
- * @category encoding/decoding
+ * @category schemas
  */
-export const HexSchema = Schema.transform(
-  Schema.typeSchema(Hash32.HexSchema),
-  TransactionHash,
-  {
-    strict: true,
-    encode: (_, hash) => hash,
-    decode: (hash) => Schema.decodeSync(TransactionHash)(hash),
-  },
-);
+export const HexSchema = Schema.compose(
+  Hash32.HexSchema, // string -> hex string
+  TransactionHash // hex string -> TransactionHash
+).annotations({
+  identifier: "TransactionHash.Hex",
+});
 
 /**
  * Check if two TransactionHash instances are equal.
@@ -99,48 +92,18 @@ export const equals = (a: TransactionHash, b: TransactionHash): boolean =>
 export const generator = FastCheck.uint8Array({
   minLength: Hash32.HASH32_BYTES_LENGTH,
   maxLength: Hash32.HASH32_BYTES_LENGTH,
-}).map((bytes) => Schema.decodeSync(TransactionHash)(Bytes.Encode.hex(bytes)));
+}).map((bytes) => Codec.Decode.bytes(bytes));
 
 /**
- * Synchronous encoding utilities.
+ * Codec utilities for TransactionHash encoding and decoding operations.
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const Encode = {
-  hex: Schema.encodeSync(HexSchema),
-  bytes: Schema.encodeSync(BytesSchema),
-};
-
-/**
- * Synchronous decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Decode = {
-  hex: Schema.decodeUnknownSync(HexSchema),
-  bytes: Schema.decodeUnknownSync(BytesSchema),
-};
-
-/**
- * Either encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  hex: Schema.encodeEither(HexSchema),
-  bytes: Schema.encodeEither(BytesSchema),
-};
-
-/**
- * Either decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  hex: Schema.decodeUnknownEither(HexSchema),
-  bytes: Schema.decodeUnknownEither(BytesSchema),
-};
+export const Codec = createEncoders(
+  {
+    bytes: BytesSchema,
+    hex: HexSchema,
+  },
+  TransactionHashError
+);

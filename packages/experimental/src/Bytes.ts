@@ -1,4 +1,5 @@
 import { Data, Schema } from "effect";
+import * as _Codec from "./Codec.js";
 
 export class HexError extends Data.TaggedError("HexError")<{
   message?: string;
@@ -59,7 +60,7 @@ export const isHexLenient = (input: string): boolean => {
 };
 
 const hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) =>
-  i.toString(16).padStart(2, "0"),
+  i.toString(16).padStart(2, "0")
 );
 
 // We use optimized technique to convert hex string to byte array
@@ -78,25 +79,14 @@ const asciiToBase16 = (char: number): number => {
   return 0;
 };
 
-export const HexStringFilter = Schema.String.pipe(
-  Schema.filter((a) => isHex(a)),
-  Schema.annotations({
-    message: (issue) =>
-      `${issue.actual} must be a valid hex string (0-9, A-F, a-f)`,
-  }),
-);
-
 export const HexSchema = Schema.String.pipe(
   Schema.filter((a) => isHex(a)),
-  // Schema.brand("Hex"),
   Schema.annotations({
     message: (issue) =>
       `${issue.actual} must be a valid hex string (0-9, A-F, a-f)`,
     identifier: "Hex",
-  }),
+  })
 );
-
-export type Hex = typeof HexSchema.Type;
 
 export const BytesSchema = Schema.transform(
   HexSchema,
@@ -108,7 +98,7 @@ export const BytesSchema = Schema.transform(
       for (let i = 0; i < toA.length; i++) {
         hex += hexes[toA[i]];
       }
-      return hex as Hex;
+      return hex;
     },
     decode: (fromA) => {
       const array = new Uint8Array(fromA.length / 2);
@@ -119,7 +109,7 @@ export const BytesSchema = Schema.transform(
       }
       return array;
     },
-  },
+  }
 );
 
 /**
@@ -129,43 +119,30 @@ export const BytesSchema = Schema.transform(
  * @since 2.0.0
  * @category schemas
  */
-export const HexSchemaLenient = Schema.String.pipe(
+export const HexLenientSchema = Schema.String.pipe(
   Schema.filter((a) => isHexLenient(a)),
   Schema.annotations({
     message: (issue) =>
       `${issue.actual} must be a valid hex string (0-9, A-F, a-f) or empty string`,
     identifier: "HexLenient",
-  }),
+  })
 );
 
-export type HexLenient = typeof HexSchemaLenient.Type;
-
-/**
- * Lenient bytes schema that allows empty hex strings/byte arrays.
- * Useful for PlutusData where empty byte arrays are valid.
- *
- * @since 2.0.0
- * @category schemas
- */
-export const BytesSchemaLenient = Schema.transform(
-  Schema.typeSchema(HexSchemaLenient),
+export const BytesLenientSchema = Schema.transform(
+  HexLenientSchema,
   Schema.Uint8ArrayFromSelf,
   {
     strict: true,
     encode: (toA) => {
-      // Handle empty arrays
-      if (toA.length === 0) return "" as HexLenient;
-
+      if (toA.length === 0) return "";
       let hex = "";
       for (let i = 0; i < toA.length; i++) {
         hex += hexes[toA[i]];
       }
-      return hex as HexLenient;
+      return hex;
     },
     decode: (fromA) => {
-      // Handle empty strings
       if (fromA.length === 0) return new Uint8Array(0);
-
       const array = new Uint8Array(fromA.length / 2);
       for (let ai = 0, hi = 0; ai < array.length; ai++, hi += 2) {
         const n1 = asciiToBase16(fromA.charCodeAt(hi));
@@ -174,56 +151,12 @@ export const BytesSchemaLenient = Schema.transform(
       }
       return array;
     },
-  },
+  }
 );
 
-export const Encode = {
-  hex: Schema.encodeSync(BytesSchema),
-};
-export const Decode = {
-  hex: Schema.decodeUnknownSync(BytesSchema),
-};
-
-export const EncodeEither = {
-  hex: Schema.encodeEither(BytesSchema),
-};
-export const DecodeEither = {
-  hex: Schema.decodeUnknownEither(BytesSchema),
-};
-export const EncodeEffect = {
-  hex: Schema.encode(BytesSchema),
-};
-export const DecodeEffect = {
-  hex: Schema.decodeUnknown(BytesSchema),
-};
-
-/**
- * Lenient encoding/decoding utilities that allow empty hex strings/byte arrays.
- * Useful for PlutusData where empty byte arrays are valid.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeLenient = {
-  hex: Schema.encodeSync(BytesSchemaLenient),
-};
-
-export const DecodeLenient = {
-  hex: Schema.decodeUnknownSync(BytesSchemaLenient),
-};
-
-export const EncodeEitherLenient = {
-  hex: Schema.encodeEither(BytesSchemaLenient),
-};
-
-export const DecodeEitherLenient = {
-  hex: Schema.decodeUnknownEither(BytesSchemaLenient),
-};
-
-export const EncodeEffectLenient = {
-  hex: Schema.encode(BytesSchemaLenient),
-};
-
-export const DecodeEffectLenient = {
-  hex: Schema.decodeUnknown(BytesSchemaLenient),
-};
+export const Codec = _Codec.createCodec({
+  hex: HexSchema,
+  bytes: BytesSchema,
+  hexLenient: HexLenientSchema,
+  bytesLenient: BytesLenientSchema,
+});

@@ -5,46 +5,117 @@
  * @category utilities
  */
 
-import { Schema, Effect, Either } from "effect";
-import type { ParseError } from "effect/ParseResult";
+import { Schema, Effect, Either, ParseResult } from "effect";
 
 /**
- * Creates a simple codec with encode and decode methods
- *
- * @example
- * import { createCodec } from "@evolution-sdk/experimental/Codec";
- * import { Schema } from "effect";
- *
- * const codecs = createCodec({
- *   user: Schema.Struct({ name: Schema.String, age: Schema.Number }),
- *   json: Schema.parseJson(Schema.String),
- * });
- *
- * // Usage:
- * const encoded = codecs.Encode.user({ name: "John", age: 30 });
- * const decoded = codecs.Decode.user({ name: "Jane", age: 25 });
+ * Creates encoding and decoding utilities with custom error mapping
  *
  * @since 2.0.0
  * @category constructors
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const createCodec = <T extends Record<string, Schema.Schema<any, any>>>(
+export const createEncoders = <
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  T extends Record<string, Schema.Schema<any, any, never>>,
+  ErrorClass extends {
+    new (options: { message?: string; cause?: unknown }): unknown;
+  },
+>(
   schemas: T,
+  ErrorClass: ErrorClass
 ) => {
-  const createMethods = (
+  const createEncodeMethod = <A, I>(
+    schema: Schema.Schema<A, I, never>,
+    operationType: "encode" | "decode",
+    formatName: string
+  ) => {
+    if (operationType === "encode") {
+      return (input: A): I => {
+        try {
+          return Schema.encodeSync(schema)(input);
+        } catch (cause) {
+          throw new ErrorClass({
+            message: `Failed to encode to ${formatName}`,
+            cause,
+          });
+        }
+      };
+    } else {
+      return (input: I): A => {
+        try {
+          return Schema.decodeSync(schema)(input);
+        } catch (cause) {
+          throw new ErrorClass({
+            message: `Failed to decode ${formatName}`,
+            cause,
+          });
+        }
+      };
+    }
+  };
+
+  const encodeSync = Object.fromEntries(
+    Object.entries(schemas).map(([key, schema]) => [
+      key,
+      createEncodeMethod(schema, "encode", key),
+    ])
+  );
+
+  const decodeSync = Object.fromEntries(
+    Object.entries(schemas).map(([key, schema]) => [
+      key,
+      createEncodeMethod(schema, "decode", key),
+    ])
+  );
+
+  const createEffectMethods = (
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    fn: <A, I>(schema: Schema.Schema<A, I>) => any,
+    fn: (schema: any) => any,
+    operationType: "encode" | "decode"
   ) =>
     Object.fromEntries(
-      Object.entries(schemas).map(([key, schema]) => [key, fn(schema)]),
+      Object.entries(schemas).map(([key, schema]) => [
+        key,
+        (input: unknown) =>
+          fn(schema)(input).pipe(
+            Effect.mapError(
+              (cause: ParseResult.ParseError) =>
+                new ErrorClass({
+                  message: `Failed to ${operationType} ${key}`,
+                  cause,
+                })
+            )
+          ),
+      ])
     );
 
-  const encodeSync = createMethods(Schema.encodeSync);
-  const decodeSync = createMethods(Schema.decodeUnknownSync);
-  const encodeEffect = createMethods(Schema.encode);
-  const decodeEffect = createMethods(Schema.decodeUnknown);
-  const encodeEither = createMethods(Schema.encodeEither);
-  const decodeEither = createMethods(Schema.decodeUnknownEither);
+  const createEitherMethods = (
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    fn: (schema: any) => any,
+    operationType: "encode" | "decode"
+  ) =>
+    Object.fromEntries(
+      Object.entries(schemas).map(([key, schema]) => [
+        key,
+        (input: unknown) =>
+          fn(schema)(input).pipe(
+            Either.mapLeft(
+              (cause: ParseResult.ParseError) =>
+                new ErrorClass({
+                  message: `Failed to ${operationType} ${key}`,
+                  cause,
+                })
+            )
+          ),
+      ])
+    );
+
+  const encodeEffect = createEffectMethods(Schema.encode, "encode");
+  const decodeEffect = createEffectMethods(Schema.decode, "decode");
+  const encodeEither = createEitherMethods(Schema.encodeEither, "encode");
+  const decodeEither = createEitherMethods(
+    Schema.decodeUnknownEither,
+    "decode"
+  );
 
   return {
     Encode: encodeSync as {
@@ -54,33 +125,28 @@ export const createCodec = <T extends Record<string, Schema.Schema<any, any>>>(
         : never;
     },
     Decode: decodeSync as {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      [K in keyof T]: T[K] extends Schema.Schema<infer A, any, any>
-        ? (input: unknown) => A
+      [K in keyof T]: T[K] extends Schema.Schema<infer A, infer I>
+        ? (input: I) => A
         : never;
     },
     EncodeEffect: encodeEffect as {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      [K in keyof T]: T[K] extends Schema.Schema<infer A, infer I, any>
-        ? (input: A) => Effect.Effect<I, ParseError>
+      [K in keyof T]: T[K] extends Schema.Schema<infer A, infer I>
+        ? (input: A) => Effect.Effect<I, InstanceType<ErrorClass>>
         : never;
     },
     DecodeEffect: decodeEffect as {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      [K in keyof T]: T[K] extends Schema.Schema<infer A, any, any>
-        ? (input: unknown) => Effect.Effect<A, ParseError>
+      [K in keyof T]: T[K] extends Schema.Schema<infer A, infer I>
+        ? (input: I) => Effect.Effect<A, InstanceType<ErrorClass>>
         : never;
     },
     EncodeEither: encodeEither as {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      [K in keyof T]: T[K] extends Schema.Schema<infer A, infer I, any>
-        ? (input: A) => Either.Either<I, ParseError>
+      [K in keyof T]: T[K] extends Schema.Schema<infer A, infer I>
+        ? (input: A) => Either.Either<I, InstanceType<ErrorClass>>
         : never;
     },
     DecodeEither: decodeEither as {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      [K in keyof T]: T[K] extends Schema.Schema<infer A, any, any>
-        ? (input: unknown) => Either.Either<A, ParseError>
+      [K in keyof T]: T[K] extends Schema.Schema<infer A, infer I>
+        ? (input: I) => Either.Either<A, InstanceType<ErrorClass>>
         : never;
     },
   };

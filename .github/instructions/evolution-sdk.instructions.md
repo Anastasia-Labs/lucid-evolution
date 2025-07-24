@@ -14,10 +14,13 @@
   - [Naming Conventions](#naming-conventions)
     - [Function Naming Conventions](#function-naming-conventions)
   - [Coding Practices](#coding-practices)
+    - [🚨 CRITICAL EFFECT PATTERNS 🚨](#-critical-effect-patterns-)
+      - [ABSOLUTELY FORBIDDEN: try-catch in Effect.gen](#absolutely-forbidden-try-catch-in-effectgen)
+      - [MANDATORY: Return Yield Pattern for Errors](#mandatory-return-yield-pattern-for-errors)
     - [Use const keyword over function keyword](#use-const-keyword-over-function-keyword)
     - [Pattern Matching](#pattern-matching)
-    - [Avoid using `any` type](#avoid-using-any-type)
-    - [Avoid using `as` type assertion keyword](#avoid-using-as-type-assertion-keyword)
+    - [ABSOLUTELY FORBIDDEN: Type Assertions](#absolutely-forbidden-type-assertions)
+    - [ABSOLUTELY FORBIDDEN: any type](#absolutely-forbidden-any-type)
     - [null vs undefined](#null-vs-undefined)
     - [Class vs Functions](#class-vs-functions)
     - [Be careful with equality checks](#be-careful-with-equality-checks)
@@ -28,9 +31,6 @@
     - [Schema.TaggedClass as Smart Constructors](#schemataggedclass-as-smart-constructors)
     - [Constructors](#constructors)
       - [Class-based Constructors](#class-based-constructors)
-      - [Smart Constructors Pattern](#smart-constructors-pattern)
-      - [Multiple Constructor Methods](#multiple-constructor-methods)
-      - [Constructor Safety Guidelines](#constructor-safety-guidelines)
     - [Union Types](#union-types)
   - [Function Structure](#function-structure)
     - [Effect-based Functions](#effect-based-functions)
@@ -261,6 +261,66 @@ Functions should follow naming patterns for consistency:
 
 ## Coding Practices
 
+### 🚨 CRITICAL EFFECT PATTERNS 🚨
+
+#### ABSOLUTELY FORBIDDEN: try-catch in Effect.gen
+
+NEVER use `try-catch` blocks inside `Effect.gen` generators!
+
+- Effect generators handle errors through the Effect type system, not JavaScript exceptions
+- Use `Effect.tryPromise`, `Effect.try`, or proper Effect error handling instead
+- CRITICAL: This will cause runtime errors and break Effect's error handling
+
+```ts
+// ❌ FORBIDDEN - Never do this in Effect.gen
+Effect.gen(function*() {
+  try {
+    const result = yield* someEffect
+  } catch (error) {
+    // This will never be reached and breaks Effect semantics
+  }
+})
+
+// ✅ CORRECT - Use Effect's built-in error handling
+Effect.gen(function*() {
+  const result = yield* Effect.result(someEffect)
+  if (result._tag === "Failure") {
+    // Handle error case properly
+  }
+})
+```
+
+#### MANDATORY: Return Yield Pattern for Errors
+
+ALWAYS use `return yield*` when yielding errors or interrupts in Effect.gen!
+
+- When yielding `Effect.fail`, `Effect.interrupt`, or other terminal effects, always use `return yield*`
+- This makes it clear that the generator function terminates at that point
+
+```ts
+// ✅ CORRECT - Always use return yield* for errors
+Effect.gen(function*() {
+  if (someCondition) {
+    return yield* Effect.fail(new KeyHashError({ message: "error" }))
+  }
+  
+  if (shouldInterrupt) {
+    return yield* Effect.interrupt
+  }
+  
+  // Continue with normal flow...
+  const result = yield* someOtherEffect
+  return result
+})
+
+// ❌ WRONG - Missing return keyword
+Effect.gen(function*() {
+  if (someCondition) {
+    yield* Effect.fail("error message") // Unreachable code after error!
+  }
+})
+```
+
 ### Use const keyword over function keyword
 
 ```ts
@@ -296,16 +356,34 @@ export const toId = <T extends Network>(network: T): 0 | 1 => {
 };
 ```
 
-### Avoid using `any` type
+### ABSOLUTELY FORBIDDEN: Type Assertions
 
-- Avoid using `any` type as it defeats the purpose of TypeScript's type system.
-- Use `unknown` instead of `any` to enforce type checking.
-- Use `unknown` when you need to accept any type but still want to enforce type checking later.
+NEVER use `as never`, `as any`, or `as unknown` type assertions!
 
-### Avoid using `as` type assertion keyword
+- These break TypeScript's type safety and hide real type errors
+- Always fix the underlying type issues instead of masking them
 
-- Avoid using `as` keyword unless absolutely necessary.
-- Instead use `satisfies` operator to ensure that an object conforms to a specific type.
+```ts
+// ❌ FORBIDDEN - Never do any of these
+const value = something as any
+const value = something as never  
+const value = something as unknown
+```
+
+**CORRECT APPROACH:** Fix the actual type mismatch by:
+- Using proper generic type parameters
+- Importing correct types
+- Using proper Effect constructors and combinators
+- Adjusting function signatures to match usage
+- Use `satisfies` operator when you need to ensure an object conforms to a specific type
+
+### ABSOLUTELY FORBIDDEN: any type
+
+NEVER use `any` type as it defeats the purpose of TypeScript's type system!
+
+- Use `unknown` instead of `any` to enforce type checking
+- Use `unknown` when you need to accept any type but still want to enforce type checking later
+- Always fix the underlying type issues instead of using `any`
 
 ### null vs undefined
 
@@ -426,60 +504,47 @@ try {
 - Class names should be PascalCase and match their schema name
 
 ```ts
-import { Schema } from "effect";
+import { Schema, Data } from "effect";
+import * as HeaderBody from "./HeaderBody.js";
+import * as KesSignature from "./KesSignature.js";
 
-// Define constants for validation requirements
-// Sets the expected byte length for a key hash
-export const KEYHASH_BYTES_LENGTH = 28;
+/**
+ * Error class for Header operations
+ *
+ * @since 2.0.0
+ * @category errors
+ */
+export class HeaderError extends Data.TaggedError("HeaderError")<{
+  message?: string;
+  cause?: unknown;
+}> {}
 
-// Sets the expected hex string length (2 chars per byte)
-export const KEYHASH_HEX_LENGTH = 56;
-
-// Define a schema with validation rules
-// This creates a specialized schema that validates:
-// 1. That the input is a valid hex string (via HexStringSchema)
-// 2. That it has exactly the required length
-const KeyHashHexString = HexStringSchema.pipe(
-  Schema.length(KEYHASH_HEX_LENGTH),
-).annotations({
-  // Custom error message for validation failures that shows expected vs actual length
-  message: (issue) =>
-    `must be ${KEYHASH_HEX_LENGTH} characters, got: ${issue.actual}.`,
-});
-
-// Define the class using Schema.TaggedClass
-// This creates:
-// 1. A runtime validator that checks inputs against the schema
-// 2. A TypeScript type definition for compile-time type checking
-// 3. A discriminated union with _tag: "KeyHash" for pattern matching
-export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
-  // Define the structure with schema-validated properties
-  hash: KeyHashHexString, // Will be validated as a hex string of correct length
+/**
+ * Header implementation using HeaderBody and KesSignature
+ *
+ * CDDL: header = [header_body, body_signature : kes_signature]
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export class Header extends Schema.TaggedClass<Header>()("Header", {
+  headerBody: HeaderBody.HeaderBody,
+  bodySignature: KesSignature.KesSignature,
 }) {}
 
 // Usage:
-// Creating an instance will automatically validate the input
-// const keyHash = new KeyHash({ hash: "validHexString..." }); // Valid - creates instance
-// const invalid = new KeyHash({ hash: "tooShort" }); // Error - fails validation
+// Creating an instance will automatically validate the input against the schema
+const header = new Header({
+  headerBody: new HeaderBody.HeaderBody({ /* ... */ }),
+  bodySignature: KesSignature.KesSignature.make("valid_kes_signature...")
+}); // Valid - creates instance
+
+// This will throw a validation error if the input doesn't match the schema
+const invalid = new Header({
+  headerBody: "invalid", // Error - not a HeaderBody instance
+  bodySignature: "invalid" // Error - not a KesSignature instance
+});
 ```
-
-#### Smart Constructors Pattern
-
-Follow these patterns for constructors:
-
-1. **Effect-based factory functions** - For creating objects from different formats
-
-#### Multiple Constructor Methods
-
-For complex types, provide multiple ways to create objects using Schema transformations and encoding/decoding utilities (see Implementation Patterns section for detailed examples).
-
-#### Constructor Safety Guidelines
-
-- Create Schema transformations for each common input format (string, bytes, CBOR) to support various use cases
-- Provide synchronous encoding/decoding utilities for common operations
-- Use Either-based utilities for error handling without exceptions
-- Implement comprehensive type safety using Schema-based transformations (see Implementation Patterns section for detailed examples)
-
 ### Union Types
 
 For union types representing different variants of a concept:
@@ -523,6 +588,49 @@ export const operation = (input: InputType): Effect.Effect<Result, ErrorType> =>
 ```
 
 ## Error Handling
+
+### Standardized Error Classes
+
+**MANDATORY: Use TaggedError Pattern for All Error Classes**
+
+All error classes MUST follow the standardized `Data.TaggedError` pattern with consistent property structure:
+
+```ts
+// ✅ CORRECT - Standardized error class pattern
+export class KeyHashError extends Data.TaggedError("KeyHashError")<{
+  message?: string;
+  cause?: unknown;
+}> {}
+
+export class PolicyIdError extends Data.TaggedError("PolicyIdError")<{
+  message?: string;
+  cause?: unknown;
+}> {}
+```
+
+**Required Properties:**
+- `message?: string` - Optional human-readable error description
+- `cause?: unknown` - Optional underlying error or exception that caused this error
+
+**Rationale**: This pattern ensures:
+- **Consistency** across all error types in the codebase
+- **Interoperability** with Effect-TS error handling patterns
+- **Debuggability** through consistent cause chaining
+- **Type Safety** with proper discriminated union support
+
+```ts
+// ❌ FORBIDDEN - Custom error structures
+export class CustomError extends Data.TaggedError("CustomError")<{
+  reason: string;        // Don't use 'reason' instead of 'message'
+  details: object;       // Don't use custom property names
+}> {}
+
+// ❌ FORBIDDEN - Missing cause property
+export class IncompleteError extends Data.TaggedError("IncompleteError")<{
+  message?: string;
+  // Missing cause?: unknown
+}> {}
+```
 
 ### Error Messages
 
@@ -747,6 +855,37 @@ Categories should be consistently used across the codebase and include:
 - `generators` - For generator functions
 - `ordering` - For comparison functions
 
+### Example Code Standards
+
+**MANDATORY: Use Codec Utility Functions in Examples**
+
+All JSDoc examples and documentation code snippets MUST use the `Codec` utility functions instead of direct `Schema.encode`/`Schema.decode` operations:
+
+- ✅ **CORRECT**: Use `Codec.Encode.bytes()`, `Codec.Decode.hex()`, etc.
+- ❌ **FORBIDDEN**: Direct `Schema.encodeSync()`, `Schema.decodeUnknownSync()`, etc.
+
+**Rationale**: The `Codec` utilities provide consistent error mapping to custom error types and standardized API patterns across all modules.
+
+```ts
+// ✅ CORRECT - Use Codec utilities in examples
+/**
+ * @example
+ * import { KeyHash } from "@evolution-sdk/experimental";
+ * 
+ * const bytes = new Uint8Array(28);
+ * const keyHash = KeyHash.Codec.Decode.bytes(bytes);
+ * const hexString = KeyHash.Codec.Encode.hex(keyHash);
+ */
+
+// ❌ FORBIDDEN - Never use direct Schema operations in examples
+/**
+ * @example  
+ * import { KeyHash, Schema } from "@evolution-sdk/experimental";
+ * 
+ * const keyHash = Schema.decodeUnknownSync(KeyHash.BytesSchema)(bytes); // DON'T DO THIS
+ */
+```
+
 ## Implementation Patterns
 
 The implementation pattern defines common operations using Schema-based transformations and encoding/decoding utilities. This pattern provides:
@@ -758,53 +897,65 @@ The implementation pattern defines common operations using Schema-based transfor
 
 ### Bidirectional Transformations
 
-The key benefit of `Schema.transform` is that it defines bidirectional transformations between types. Once you define a transformation schema, you can compose it with various encoding and decoding combinators to create utilities for different use cases. This approach ensures consistency and reduces code duplication.
+The key benefit of `Schema.compose` and `Schema.transform` is that they define bidirectional transformations between types. Once you define transformation schemas, you can compose them with various encoding and decoding combinators to create utilities for different use cases. This approach ensures consistency and reduces code duplication.
 
 ### Example
 
 ```ts
-// Define transformation schemas for different input formats
-// These schemas establish bidirectional mappings between raw data and typed objects
-export const BytesSchema = Schema.transform(Hash28.BytesSchema, KeyHash, {
-  strict: true,
-  encode: (_, toA) => Bytes.Decode.hex(toA.hash),
-  decode: (_, fromA) => new KeyHash({ hash: Bytes.Encode.hex(fromA) }),
+// Define the core branded type
+export const KeyHash = Hash28.HexSchema.pipe(
+  Schema.brand("KeyHash")
+).annotations({
+  identifier: "KeyHash",
 });
 
-export const HexSchema = Schema.transform(
-  Schema.typeSchema(Hash28.HexSchema),
-  KeyHash,
-  {
-    strict: true,
-    encode: (_, toA) => toA.hash,
-    decode: (fromI) => new KeyHash({ hash: fromI }),
-  },
-);
+export type KeyHash = typeof KeyHash.Type;
 
-// Synchronous utilities built on schemas
-// These compose the transformation schemas with sync combinators
-export const Encode = {
-  hex: Schema.encodeSync(HexSchema),
-  bytes: Schema.encodeSync(BytesSchema),
-};
+// Define transformation schemas for different input formats
+// These schemas establish bidirectional mappings between raw data and typed objects
+export const BytesSchema = Schema.compose(
+  Hash28.BytesHexTransformer, // Uint8Array -> hex string
+  KeyHash // hex string -> KeyHash
+).annotations({
+  identifier: "KeyHash.Bytes",
+});
 
-export const Decode = {
-  hex: Schema.decodeUnknownSync(HexSchema),
-  bytes: Schema.decodeUnknownSync(BytesSchema),
-};
+export const HexSchema = Schema.compose(
+  Hash28.HexSchema, // string -> hex string
+  KeyHash // hex string -> KeyHash
+).annotations({
+  identifier: "KeyHash.Hex",
+});
 
-// Either-based utilities for error handling
-// These compose the same schemas with Either-based combinators for safe error handling
-export const EncodeEither = {
-  hex: Schema.encodeEither(HexSchema),
-  bytes: Schema.encodeEither(BytesSchema),
-};
+// Create comprehensive codec utilities with custom error mapping
+// Uses createEncoders function to generate all encoding/decoding variants
+export const Codec = createEncoders({
+  bytes: BytesSchema,
+  hex: HexSchema,
+}, KeyHashError);
 
-export const DecodeEither = {
-  hex: Schema.decodeUnknownEither(HexSchema),
-  bytes: Schema.decodeUnknownEither(BytesSchema),
-};
+// This automatically generates:
+// - Synchronous utilities (throw custom error on failure)
+export const Encode = Codec.Encode; // { bytes: (KeyHash) => Uint8Array, hex: (KeyHash) => string }
+export const Decode = Codec.Decode; // { bytes: (unknown) => KeyHash, hex: (unknown) => KeyHash }
+
+// - Effect-based utilities (return Effect with custom error)
+export const EncodeEffect = Codec.EncodeEffect; // { bytes: (KeyHash) => Effect<Uint8Array, KeyHashError> }
+export const DecodeEffect = Codec.DecodeEffect; // { hex: (unknown) => Effect<KeyHash, KeyHashError> }
+
+// - Either-based utilities (return Either with custom error)
+export const EncodeEither = Codec.EncodeEither; // { bytes: (KeyHash) => Either<Uint8Array, KeyHashError> }
+export const DecodeEither = Codec.DecodeEither; // { hex: (unknown) => Either<KeyHash, KeyHashError> }
 ```
+
+**Key advantages of this pattern:**
+
+1. **Consistent Error Handling**: All encoding/decoding operations map to the same custom error type
+2. **Multiple Operation Modes**: Synchronous (throws), Effect-based, and Either-based variants
+3. **Type Safety**: Full TypeScript inference across all generated utilities
+4. **Reusable Pattern**: The `createEncoders` function can be used across all modules
+5. **Bidirectional Schemas**: `Schema.compose` creates reversible transformations
+6. **Custom Error Context**: Errors include descriptive messages and original cause
 
 ## Dependencies
 
