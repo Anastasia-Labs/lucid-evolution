@@ -1,5 +1,5 @@
 import { Schema, Data, FastCheck, ParseResult, Effect } from "effect";
-import * as Hash32 from "./Hash32.js";
+import * as Bytes32 from "./Bytes32.js";
 import * as PlutusData from "./Data.js";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
@@ -30,7 +30,7 @@ export class DatumOptionError extends Data.TaggedError("DatumOptionError")<{
  * @category schemas
  */
 export class DatumHash extends Schema.TaggedClass<DatumHash>()("DatumHash", {
-  hash: Hash32.HexSchema,
+  hash: Bytes32.HexSchema,
 }) {}
 
 /**
@@ -50,10 +50,10 @@ export class InlineDatum extends Schema.TaggedClass<InlineDatum>()(
 /**
  * Schema for DatumOption representing optional datum information in transaction outputs.
  *
- * CDDL: datum_option = [0, hash32// 1, data]
+ * CDDL: datum_option = [0, Bytes32// 1, data]
  *
  * Where:
- * - [0, hash32] represents a datum hash reference
+ * - [0, Bytes32] represents a datum hash reference
  * - [1, data] represents inline plutus data
  *
  * @since 2.0.0
@@ -191,10 +191,10 @@ export const generator = FastCheck.oneof(
 
 /**
  * CDDL schema for DatumOption.
- * datum_option = [0, hash32// 1, data]
+ * datum_option = [0, Bytes32// 1, data]
  *
  * Where:
- * - [0, hash32] represents a datum hash (tag 0 with 32-byte hash)
+ * - [0, Bytes32] represents a datum hash (tag 0 with 32-byte hash)
  * - [1, data] represents inline data (tag 1 with CBOR-encoded plutus data)
  *
  * @since 2.0.0
@@ -202,7 +202,7 @@ export const generator = FastCheck.oneof(
  */
 export const DatumOptionCDDLSchema = Schema.transformOrFail(
   Schema.Union(
-    Schema.Tuple(Schema.Literal(0n), CBOR.ByteArray), // [0, hash32]
+    Schema.Tuple(Schema.Literal(0n), CBOR.ByteArray), // [0, Bytes32]
     Schema.Tuple(Schema.Literal(1n), CBOR.CBORSchema), // [1, data] - data as CBOR bytes
   ),
   Schema.typeSchema(DatumOptionSchema),
@@ -214,8 +214,8 @@ export const DatumOptionCDDLSchema = Schema.transformOrFail(
           toA._tag === "DatumHash"
             ? ([
                 0n,
-                yield* ParseResult.decode(Bytes.BytesSchema)(toA.hash),
-              ] as const) // Encode as [0, hash32]
+                yield* ParseResult.decode(Bytes.FromBytes)(toA.hash),
+              ] as const) // Encode as [0, Bytes32]
             : ([1n, PlutusData.plutusDataToCBORValue(toA.data)] as const); // Encode as [1, data]
         return result;
       }),
@@ -223,7 +223,7 @@ export const DatumOptionCDDLSchema = Schema.transformOrFail(
       Effect.gen(function* () {
         if (tag === 0n) {
           // Decode as DatumHash
-          const hash = yield* ParseResult.encode(Bytes.BytesSchema)(value);
+          const hash = yield* ParseResult.encode(Bytes.FromBytes)(value);
           return new DatumHash({ hash });
         } else if (tag === 1n) {
           // Decode as InlineDatum
@@ -253,7 +253,7 @@ export const CBORBytesSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    CBOR.FromBytes(options), // Uint8Array → CBOR
     DatumOptionCDDLSchema, // CBOR → DatumOption
   );
 
@@ -268,7 +268,7 @@ export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
+    Bytes.FromBytes, // string → Uint8Array
     CBORBytesSchema(options), // Uint8Array → DatumOption
   );
 

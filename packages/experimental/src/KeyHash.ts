@@ -30,19 +30,19 @@ export const KeyHash = pipe(
 
 export type KeyHash = typeof KeyHash.Type;
 
-export const BytesSchema = Schema.compose(
-  Hash28.BytesHexTransformer, // Uint8Array -> hex string
+export const FromBytes = Schema.compose(
+  Hash28.FromBytes, // Uint8Array -> hex string
   KeyHash // hex string -> KeyHash
 ).annotations({
-  identifier: "KeyHash.Bytes",
+  identifier: "KeyHash.FromBytes",
 });
 
-export const HexSchema = Schema.compose(
+export const FromHex = Schema.compose(
   Hash28.HexSchema, // string -> hex string
   KeyHash // hex string -> KeyHash
 ).annotations({
-  identifier: "KeyHash.Hex",
-})
+  identifier: "KeyHash.FromHex",
+});
 
 /**
  * Check if two KeyHash instances are equal.
@@ -71,8 +71,8 @@ export const generator = FastCheck.uint8Array({
  */
 export const Codec = createEncoders(
   {
-    bytes: BytesSchema,
-    string: HexSchema,
+    bytes: FromBytes,
+    string: FromHex,
   },
   KeyHashError
 );

@@ -51,7 +51,7 @@ export type DRepCredential = Credential.Credential;
  *
  * @since 2.0.0
  */
-export const isCredential = Credential.isCredential;
+export const isCredential = Credential.is;
 export const equals = Credential.equals;
 export const generator = Credential.generator;
 export const Codec = Credential.Codec;
@@ -62,5 +62,5 @@ export const Codec = Credential.Codec;
  * @since 2.0.0
  * @category schemas
  */
-export const CBORBytesSchema = Credential.CBORBytesSchema;
-export const CBORHexSchema = Credential.CBORHexSchema;
+export const CBORBytesSchema = Credential.FromCBORBytes;
+export const CBORHexSchema = Credential.FromCBORHex;

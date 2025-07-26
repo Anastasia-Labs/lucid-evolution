@@ -1,6 +1,5 @@
 import { Schema, Data, Effect, ParseResult } from "effect";
 import * as Natural from "./Natural.js";
-import * as Hash32 from "./Hash32.js";
 import * as ProtocolVersion from "./ProtocolVersion.js";
 import * as BlockBodyHash from "./BlockBodyHash.js";
 import * as VKey from "./VKey.js";
@@ -11,6 +10,8 @@ import * as KESVkey from "./KESVkey.js";
 import * as Ed25519Signature from "./Ed25519Signature.js";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
+import * as BlockHeaderHash from "./BlockHeaderHash.js";
+import * as _Codec from "./Codec.js";
 
 /**
  * Error class for HeaderBody related operations.
@@ -46,12 +47,12 @@ export class HeaderBodyError extends Data.TaggedError("HeaderBodyError")<{
  * ]
  *
  * @example
- * import { HeaderBody, Natural, Hash32, VKey, VrfVkey, VrfCert, BlockBodyHash, OperationalCert, ProtocolVersion } from "@evolution-sdk/experimental";
+ * import { HeaderBody, Natural, Bytes32, VKey, VrfVkey, VrfCert, BlockBodyHash, OperationalCert, ProtocolVersion } from "@evolution-sdk/experimental";
  *
  * const headerBody = new HeaderBody({
  *   blockNumber: Natural.Natural.make(1000n),
  *   slot: Natural.Natural.make(2000n),
- *   prevHash: Hash32.Hash32.make("a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235"),
+ *   prevHash: Bytes32.Bytes32.make("a0028f350aaabe0545fdcb56b039bfb08e4bb4d8c4d7c3c7d481c235"),
  *   issuerVkey: VKey.VKey.make("..."),
  *   vrfVkey: VrfVkey.VrfVkey.make("..."),
  *   vrfResult: new VrfCert.VrfCert({ ... }),
@@ -67,9 +68,7 @@ export class HeaderBodyError extends Data.TaggedError("HeaderBodyError")<{
 export class HeaderBody extends Schema.TaggedClass<HeaderBody>()("HeaderBody", {
   blockNumber: Natural.Natural,
   slot: Natural.Natural,
-  prevHash: Schema.NullOr(
-    Hash32.HexSchema.pipe(Schema.brand("BlockHeaderHash")),
-  ),
+  prevHash: Schema.NullOr(BlockHeaderHash.BlockHeaderHash),
   issuerVkey: VKey.VKey,
   vrfVkey: VrfVkey.VrfVkey,
   vrfResult: VrfCert.VrfCert,
@@ -77,23 +76,7 @@ export class HeaderBody extends Schema.TaggedClass<HeaderBody>()("HeaderBody", {
   blockBodyHash: BlockBodyHash.BlockBodyHash,
   operationalCert: OperationalCert.OperationalCert,
   protocolVersion: ProtocolVersion.ProtocolVersion,
-}) {
-  [Symbol.for("nodejs.util.inspect.custom")]() {
-    return {
-      _tag: this._tag,
-      blockNumber: this.blockNumber.toString(),
-      slot: this.slot.toString(),
-      prevHash: this.prevHash,
-      issuerVkey: this.issuerVkey,
-      vrfVkey: this.vrfVkey,
-      vrfResult: this.vrfResult,
-      blockBodySize: this.blockBodySize.toString(),
-      blockBodyHash: this.blockBodyHash,
-      operationalCert: this.operationalCert,
-      protocolVersion: this.protocolVersion,
-    };
-  }
-}
+}) {}
 
 /**
  * Check if two HeaderBody instances are equal.
@@ -139,7 +122,7 @@ export const equals = (a: HeaderBody, b: HeaderBody): boolean =>
  * @since 2.0.0
  * @category schemas
  */
-export const HeaderBodyCDDLSchema = Schema.transformOrFail(
+export const FromCDDL = Schema.transformOrFail(
   Schema.Tuple(
     CBOR.Integer, // block_number as bigint
     CBOR.Integer, // slot as bigint
@@ -147,16 +130,16 @@ export const HeaderBodyCDDLSchema = Schema.transformOrFail(
     CBOR.ByteArray, // issuer_vkey as bytes (32 bytes)
     CBOR.ByteArray, // vrf_vkey as bytes (32 bytes)
     Schema.encodedSchema(
-      VrfCert.VrfCertCDDLSchema, // vrf_result as VrfCert
+      VrfCert.VrfCertCDDLSchema // vrf_result as VrfCert
     ),
     CBOR.Integer, // block_body_size as bigint
     CBOR.ByteArray, // block_body_hash as bytes
     Schema.encodedSchema(
-      OperationalCert.OperationalCertCDDLSchema, // operational_cert as OperationalCert
+      OperationalCert.FromCDDL // operational_cert as OperationalCert
     ),
     Schema.encodedSchema(
-      ProtocolVersion.ProtocolVersionCDDLSchema, // protocol_version as ProtocolVersion
-    ),
+      ProtocolVersion.FromCDDL // protocol_version as ProtocolVersion
+    )
   ),
   Schema.typeSchema(HeaderBody),
   {
@@ -164,28 +147,28 @@ export const HeaderBodyCDDLSchema = Schema.transformOrFail(
     encode: (toA) =>
       Effect.gen(function* () {
         const prevHashBytes = toA.prevHash
-          ? yield* ParseResult.decode(Bytes.BytesSchema)(toA.prevHash.slice(2))
+          ? yield* ParseResult.encode(BlockHeaderHash.FromBytes)(toA.prevHash)
           : null;
-        const issuerVkeyBytes = yield* ParseResult.encode(VKey.BytesSchema)(
-          toA.issuerVkey,
+        const issuerVkeyBytes = yield* ParseResult.encode(VKey.FromBytes)(
+          toA.issuerVkey
         );
-        const vrfVkeyBytes = yield* ParseResult.encode(VrfVkey.BytesSchema)(
-          toA.vrfVkey,
+        const vrfVkeyBytes = yield* ParseResult.encode(VrfVkey.FromBytes)(
+          toA.vrfVkey
         );
         const vrfOutputBytes = yield* ParseResult.encode(
-          VrfCert.VRFOutputBytesSchema,
+          VrfCert.VRFOutputFromBytes
         )(toA.vrfResult.output);
         const vrfProofBytes = yield* ParseResult.encode(
-          VrfCert.VRFProofBytesSchema,
+          VrfCert.VRFProofFromBytes
         )(toA.vrfResult.proof);
         const blockBodyHashBytes = yield* ParseResult.encode(
-          BlockBodyHash.BytesSchema,
+          BlockBodyHash.FromBytes
         )(toA.blockBodyHash);
-        const hotVkeyBytes = yield* ParseResult.encode(KESVkey.BytesSchema)(
-          toA.operationalCert.hotVkey,
+        const hotVkeyBytes = yield* ParseResult.encode(KESVkey.FromBytes)(
+          toA.operationalCert.hotVkey
         );
         const sigmaBytes = yield* ParseResult.encode(
-          Ed25519Signature.BytesSchema,
+          Ed25519Signature.FromBytes
         )(toA.operationalCert.sigma);
 
         return [
@@ -223,28 +206,28 @@ export const HeaderBodyCDDLSchema = Schema.transformOrFail(
     ]) =>
       Effect.gen(function* () {
         const prevHash = prevHashBytes
-          ? yield* ParseResult.encode(Bytes.BytesSchema)(prevHashBytes)
+          ? yield* ParseResult.decode(BlockHeaderHash.FromBytes)(prevHashBytes)
           : null;
-        const issuerVkey = yield* ParseResult.decode(VKey.BytesSchema)(
-          issuerVkeyBytes,
+        const issuerVkey = yield* ParseResult.decode(VKey.FromBytes)(
+          issuerVkeyBytes
         );
-        const vrfVkey = yield* ParseResult.decode(VrfVkey.BytesSchema)(
-          vrfVkeyBytes,
+        const vrfVkey = yield* ParseResult.decode(VrfVkey.FromBytes)(
+          vrfVkeyBytes
         );
-        const vrfOutput = yield* ParseResult.decode(
-          VrfCert.VRFOutputBytesSchema,
-        )(vrfOutputBytes);
-        const vrfProof = yield* ParseResult.decode(VrfCert.VRFProofBytesSchema)(
-          vrfProofBytes,
+        const vrfOutput = yield* ParseResult.decode(VrfCert.VRFOutputFromBytes)(
+          vrfOutputBytes
+        );
+        const vrfProof = yield* ParseResult.decode(VrfCert.VRFProofFromBytes)(
+          vrfProofBytes
         );
         const blockBodyHash = yield* ParseResult.decode(
-          BlockBodyHash.BytesSchema,
+          BlockBodyHash.FromBytes
         )(blockBodyHashBytes);
-        const hotVkey = yield* ParseResult.decode(KESVkey.BytesSchema)(
-          hotVkeyBytes,
+        const hotVkey = yield* ParseResult.decode(KESVkey.FromBytes)(
+          hotVkeyBytes
         );
-        const sigma = yield* ParseResult.decode(Ed25519Signature.BytesSchema)(
-          sigmaBytes,
+        const sigma = yield* ParseResult.decode(Ed25519Signature.FromBytes)(
+          sigmaBytes
         );
 
         return yield* ParseResult.decode(HeaderBody)({
@@ -272,7 +255,7 @@ export const HeaderBodyCDDLSchema = Schema.transformOrFail(
           }),
         });
       }),
-  },
+  }
 );
 
 /**
@@ -296,11 +279,11 @@ export const isHeaderBody = Schema.is(HeaderBody);
  * @category schemas
  */
 export const CBORBytesSchema = (
-  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
-    HeaderBodyCDDLSchema, // CBOR → HeaderBody
+    CBOR.FromBytes(options), // Uint8Array → CBOR
+    FromCDDL // CBOR → HeaderBody
   );
 
 /**
@@ -310,36 +293,18 @@ export const CBORBytesSchema = (
  * @category schemas
  */
 export const CBORHexSchema = (
-  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
-    CBORBytesSchema(options), // Uint8Array → HeaderBody
+    Bytes.FromHex, // string → Uint8Array
+    CBORBytesSchema(options) // Uint8Array → HeaderBody
   );
 
-export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
-  Encode: {
-    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
-    cborHex: Schema.encodeSync(CBORHexSchema(options)),
-  },
-  Decode: {
-    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
-  },
-  EncodeEither: {
-    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.encodeEither(CBORHexSchema(options)),
-  },
-  DecodeEither: {
-    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.decodeEither(CBORHexSchema(options)),
-  },
-  EncodeEffect: {
-    cborBytes: Schema.encode(CBORBytesSchema(options)),
-    cborHex: Schema.encode(CBORHexSchema(options)),
-  },
-  DecodeEffect: {
-    cborBytes: Schema.decode(CBORBytesSchema(options)),
-    cborHex: Schema.decode(CBORHexSchema(options)),
-  },
-});
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
+  _Codec.createEncoders(
+    {
+      cborBytes: CBORBytesSchema(options),
+      cborHex: CBORHexSchema(options),
+    },
+    HeaderBodyError
+  );

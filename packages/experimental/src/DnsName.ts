@@ -1,5 +1,6 @@
 import { Schema, Data } from "effect";
 import * as Text128 from "./Text128.js";
+import * as _Codec from "./Codec.js";
 
 /**
  * Error class for DnsName related operations.
@@ -16,7 +17,7 @@ import * as Text128 from "./Text128.js";
  */
 export class DnsNameError extends Data.TaggedError("DnsNameError")<{
   message?: string;
-  reason?: "InvalidLength" | "InvalidFormat" | "TooLong";
+  cause?: unknown;
 }> {}
 
 /**
@@ -32,7 +33,7 @@ export class DnsNameError extends Data.TaggedError("DnsNameError")<{
  * @since 2.0.0
  * @category model
  */
-export const DnsName = Text128.VariableTextSchema.pipe(Schema.brand("DnsName"));
+export const DnsName = Text128.FromVariableHex.pipe(Schema.brand("DnsName"));
 
 /**
  * Type alias for DnsName.
@@ -41,6 +42,20 @@ export const DnsName = Text128.VariableTextSchema.pipe(Schema.brand("DnsName"));
  * @category model
  */
 export type DnsName = typeof DnsName.Type;
+
+export const FromBytes = Schema.compose(
+  Text128.FromVariableBytes,
+  DnsName
+).annotations({
+  identifier: "DnsName.FromBytes",
+});
+
+export const FromHex = Schema.compose(
+  Text128.FromVariableHex,
+  DnsName
+).annotations({
+  identifier: "DnsName.FromHex",
+});
 
 /**
  * Create a DnsName from a string.
@@ -53,7 +68,7 @@ export type DnsName = typeof DnsName.Type;
  * @since 2.0.0
  * @category constructors
  */
-export const make = Schema.decodeSync(DnsName);
+export const make = DnsName.make;
 
 /**
  * Check if two DnsName instances are equal.
@@ -69,34 +84,6 @@ export const make = Schema.decodeSync(DnsName);
  * @category equality
  */
 export const equals = (a: DnsName, b: DnsName): boolean => a === b;
-
-/**
- * Check if a DNS name is empty.
- *
- * @example
- * import { DnsName } from "@evolution-sdk/experimental";
- *
- * const emptyDns = DnsName.make("");
- * console.log(DnsName.isEmpty(emptyDns)); // true
- *
- * @since 2.0.0
- * @category predicates
- */
-export const isEmpty = (dnsName: DnsName): boolean => dnsName.length === 0;
-
-/**
- * Get the length of a DNS name.
- *
- * @example
- * import { DnsName } from "@evolution-sdk/experimental";
- *
- * const dnsName = DnsName.make("example.com");
- * console.log(DnsName.length(dnsName)); // 11
- *
- * @since 2.0.0
- * @category transformation
- */
-export const length = (dnsName: DnsName): number => dnsName.length;
 
 /**
  * Generate a random DnsName.
@@ -118,61 +105,15 @@ export const length = (dnsName: DnsName): number => dnsName.length;
 export const generator = Text128.generator.map((text) => make(text));
 
 /**
- * Synchronous encoding utilities.
+ * Codec utilities for DnsName encoding and decoding operations.
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const Encode = {
-  hex: Schema.encodeSync(DnsName),
-};
-
-/**
- * Synchronous decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Decode = {
-  hex: Schema.decodeUnknownSync(DnsName),
-};
-
-/**
- * Either encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  hex: Schema.encodeEither(DnsName),
-};
-
-/**
- * Either decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  hex: Schema.decodeUnknownEither(DnsName),
-};
-
-/**
- * Effect-based encoding/decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEffect = {
-  hex: Schema.encode(DnsName),
-};
-
-/**
- * Effect-based decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEffect = {
-  hex: Schema.decodeUnknown(DnsName),
-};
+export const Codec = _Codec.createEncoders(
+  {
+    bytes: FromBytes,
+    hex: FromHex,
+  },
+  DnsNameError
+);

@@ -6,6 +6,7 @@ import * as RewardAccount from "./RewardAccount.js";
 import * as ByronAddress from "./ByronAddress.js";
 import * as Bytes from "./Bytes.js";
 import * as Bech32 from "./Bech32.js";
+import { createEncoders } from "./Codec.js";
 
 /**
  * CDDL specs
@@ -48,7 +49,7 @@ import * as Bech32 from "./Bech32.js";
  * @category model
  */
 export class AddressError extends Data.TaggedError("AddressError")<{
-  message: string;
+  message?: string;
   cause?: unknown;
 }> {}
 
@@ -63,7 +64,7 @@ export const Address = Schema.Union(
   EnterpriseAddress.EnterpriseAddress,
   PointerAddress.PointerAddress,
   RewardAccount.RewardAccount,
-  ByronAddress.ByronAddress,
+  ByronAddress.ByronAddress
 );
 
 /**
@@ -80,21 +81,21 @@ export type Address = typeof Address.Type;
  * @since 2.0.0
  * @category schema
  */
-export const BytesSchema = Schema.transformOrFail(
-  Schema.typeSchema(Schema.Uint8ArrayFromSelf),
+export const FromBytes = Schema.transformOrFail(
+  Schema.Uint8ArrayFromSelf,
   Address,
   {
     strict: true,
     encode: (_, __, ___, toA) => {
       switch (toA._tag) {
         case "BaseAddress":
-          return ParseResult.encode(BaseAddress.BytesSchema)(toA);
+          return ParseResult.encode(BaseAddress.FromBytes)(toA);
         case "EnterpriseAddress":
-          return ParseResult.encode(EnterpriseAddress.BytesSchema)(toA);
+          return ParseResult.encode(EnterpriseAddress.FromBytes)(toA);
         case "PointerAddress":
-          return ParseResult.encode(PointerAddress.BytesSchema)(toA);
+          return ParseResult.encode(PointerAddress.FromBytes)(toA);
         case "RewardAccount":
-          return ParseResult.encode(RewardAccount.BytesSchema)(toA);
+          return ParseResult.encode(RewardAccount.FromBytes)(toA);
         case "ByronAddress":
           return ParseResult.encode(ByronAddress.BytesSchema)(toA);
       }
@@ -112,25 +113,25 @@ export const BytesSchema = Schema.transformOrFail(
           case 0b0001: // Script payment, Key stake
           case 0b0010: // Key payment, Script stake
           case 0b0011:
-            return yield* ParseResult.decode(BaseAddress.BytesSchema)(fromA);
+            return yield* ParseResult.decode(BaseAddress.FromBytes)(fromA);
 
           // Enterprise address types (0110, 0111)
           // Format: [payment credential only]
           case 0b0110: // Key payment
           case 0b0111:
-            return yield* ParseResult.decode(EnterpriseAddress.BytesSchema)(
-              fromA,
+            return yield* ParseResult.decode(EnterpriseAddress.FromBytes)(
+              fromA
             );
 
           // Pointer address types (0100, 0101)
           // Format: [payment credential, variable length integers for slot, txIndex, certIndex]
           case 0b0100: // Key payment with pointer
           case 0b0101:
-            return yield* ParseResult.decode(PointerAddress.BytesSchema)(fromA);
+            return yield* ParseResult.decode(PointerAddress.FromBytes)(fromA);
 
           case 0b1110:
           case 0b1111:
-            return yield* ParseResult.decode(RewardAccount.BytesSchema)(fromA);
+            return yield* ParseResult.decode(RewardAccount.FromBytes)(fromA);
 
           case 0b1000:
             return yield* ParseResult.decode(ByronAddress.BytesSchema)(fromA);
@@ -140,12 +141,12 @@ export const BytesSchema = Schema.transformOrFail(
               new ParseResult.Type(
                 ast,
                 fromA,
-                `Unknown address type: ${addressType}`,
-              ),
+                `Unknown address type: ${addressType}`
+              )
             );
         }
       }),
-  },
+  }
 );
 
 /**
@@ -154,17 +155,7 @@ export const BytesSchema = Schema.transformOrFail(
  * @since 2.0.0
  * @category schema
  */
-export const HexSchema = Schema.transformOrFail(
-  Schema.typeSchema(Bytes.HexSchema),
-  Address,
-  {
-    strict: true,
-    encode: (_, __, ___, toA) =>
-      pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Bytes.Encode.hex)),
-    decode: (_, __, ___, fromA) =>
-      pipe(Bytes.Decode.hex(fromA), ParseResult.decode(BytesSchema)),
-  },
-);
+export const FromHex = Schema.compose(Bytes.FromHex, FromBytes);
 
 /**
  * Schema for encoding/decoding addresses as Bech32 strings.
@@ -172,40 +163,36 @@ export const HexSchema = Schema.transformOrFail(
  * @since 2.0.0
  * @category schema
  */
-export const Bech32Schema = Schema.transformOrFail(
-  Schema.typeSchema(Bech32.Bech32Schema),
-  Address,
-  {
-    strict: true,
-    encode: (_, __, ___, toA) =>
-      Effect.gen(function* () {
-        const bytes = yield* ParseResult.encode(BytesSchema)(toA);
-        let prefix: string;
-        switch (toA._tag) {
-          case "BaseAddress":
-          case "EnterpriseAddress":
-          case "PointerAddress":
-            prefix = toA.networkId === 0 ? "addr_test" : "addr";
-            break;
-          case "RewardAccount":
-            prefix = toA.networkId === 0 ? "stake_test" : "stake";
-            break;
-          case "ByronAddress":
-            prefix = "";
-            break;
-        }
-        const b = yield* ParseResult.decode(Bech32.makeBytesSchema(prefix))(
-          bytes,
-        );
-        return b;
-      }),
-    decode: (fromI) =>
-      pipe(
-        ParseResult.encode(Bech32.makeBytesSchema())(fromI),
-        Effect.flatMap(ParseResult.decode(BytesSchema)),
-      ),
-  },
-);
+export const FromBech32 = Schema.transformOrFail(Schema.typeSchema(Bech32.Bech32Schema), Address, {
+  strict: true,
+  encode: (_, __, ___, toA) =>
+    Effect.gen(function* () {
+      const bytes = yield* ParseResult.encode(FromBytes)(toA);
+      let prefix: string;
+      switch (toA._tag) {
+        case "BaseAddress":
+        case "EnterpriseAddress":
+        case "PointerAddress":
+          prefix = toA.networkId === 0 ? "addr_test" : "addr";
+          break;
+        case "RewardAccount":
+          prefix = toA.networkId === 0 ? "stake_test" : "stake";
+          break;
+        case "ByronAddress":
+          prefix = "";
+          break;
+      }
+      const b = yield* ParseResult.decode(Bech32.FromBytes(prefix))(
+        bytes
+      );
+      return b;
+    }),
+  decode: (fromI) =>
+    pipe(
+      ParseResult.encode(Bech32.FromBytes())(fromI),
+      Effect.flatMap(ParseResult.decode(FromBytes))
+    ),
+});
 
 /**
  * Checks if two addresses are equal.
@@ -223,7 +210,7 @@ export const equals = (a: Address, b: Address): boolean => {
     case "EnterpriseAddress":
       return EnterpriseAddress.equals(
         a,
-        b as EnterpriseAddress.EnterpriseAddress,
+        b as EnterpriseAddress.EnterpriseAddress
       );
     case "PointerAddress":
       return PointerAddress.equals(a, b as PointerAddress.PointerAddress);
@@ -244,77 +231,20 @@ export const generator = FastCheck.oneof(
   BaseAddress.generator,
   EnterpriseAddress.generator,
   PointerAddress.generator,
-  RewardAccount.generator,
+  RewardAccount.generator
 );
 
 /**
- * Synchronous encoding utilities for addresses.
+ * Codec utilities for addresses.
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const Encode = {
-  bech32: Schema.encodeSync(Bech32Schema),
-  hex: Schema.encodeSync(HexSchema),
-  bytes: Schema.encodeSync(BytesSchema),
-};
-
-/**
- * Synchronous decoding utilities for addresses.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Decode = {
-  bech32: Schema.decodeUnknownSync(Bech32Schema),
-  hex: Schema.decodeUnknownSync(HexSchema),
-  bytes: Schema.decodeUnknownSync(BytesSchema),
-};
-
-/**
- * Either encoding utilities for addresses.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  bech32: Schema.encodeEither(Bech32Schema),
-  hex: Schema.encodeEither(HexSchema),
-  bytes: Schema.encodeEither(BytesSchema),
-};
-
-/**
- * Either decoding utilities for addresses.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  bech32: Schema.decodeUnknownEither(Bech32Schema),
-  hex: Schema.decodeUnknownEither(HexSchema),
-  bytes: Schema.decodeUnknownEither(BytesSchema),
-};
-
-/**
- * Effectful encoding utilities for addresses.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEffect = {
-  bech32: Schema.encode(Bech32Schema),
-  hex: Schema.encode(HexSchema),
-  bytes: Schema.encode(BytesSchema),
-};
-
-/**
- * Effectful decoding utilities for addresses.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEffect = {
-  bech32: Schema.decodeUnknown(Bech32Schema),
-  hex: Schema.decodeUnknown(HexSchema),
-  bytes: Schema.decodeUnknown(BytesSchema),
-};
+export const Codec = createEncoders(
+  {
+    bech32: FromBech32,
+    hex: FromHex,
+    bytes: FromBytes,
+  },
+  AddressError
+);

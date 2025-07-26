@@ -1,34 +1,35 @@
 import { pipe, Schema } from "effect";
 import * as Bytes from "./Bytes.js";
 
-/**
- * Schema for 80-byte arrays
- *
- * CDDL: bytes .size 80
- *
- * @since 2.0.0
- * @category schemas
- */
+export const BYTES_LENGTH = 80;
+export const HEX_LENGTH = 160;
+
 export const BytesSchema = pipe(
   Schema.Uint8ArrayFromSelf,
-  Schema.filter((a) => a.length === 80, {
+  Schema.filter((a) => a.length === BYTES_LENGTH, {
     message: (issue) =>
-      `${issue.actual} must be a byte array of length 80, but got ${issue.actual}`,
-    identifier: "Bytes80",
-  }),
+      `${issue.actual} must be a byte array of length ${BYTES_LENGTH}, but got ${issue.actual}`,
+    identifier: "Bytes80.Bytes",
+  })
 );
 
-/**
- * Schema for 80-byte hex strings (160 characters)
- *
- * @since 2.0.0
- * @category schemas
- */
 export const HexSchema = pipe(
   Bytes.HexSchema,
-  Schema.filter((a) => a.length === 160, {
+  Schema.filter((a) => a.length === HEX_LENGTH, {
     message: (issue) =>
-      `${issue.actual} must be a hex string of length 160, but got ${issue.actual}`,
-    identifier: "Bytes80HexString",
-  }),
+      `${issue.actual} must be a hex string of length ${HEX_LENGTH}, but got ${issue.actual}`,
+    identifier: "Bytes80.Hex",
+  })
 );
+
+export const FromHex = Schema.transform(HexSchema, BytesSchema, {
+  strict: true,
+  decode: (toI) => Bytes.Codec.Decode.bytes(toI),
+  encode: (fromA) => Bytes.Codec.Encode.bytes(fromA),
+});
+
+export const FromBytes = Schema.transform(BytesSchema, HexSchema, {
+  strict: true,
+  encode: (toI) => Bytes.Codec.Decode.bytes(toI),
+  decode: (fromA) => Bytes.Codec.Encode.bytes(fromA),
+});

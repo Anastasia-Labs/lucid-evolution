@@ -13,7 +13,7 @@ export class Bech32Error extends Data.TaggedError("Bech32Error")<{
 export const Bech32Schema = Schema.String.pipe(Schema.brand("Bech32"));
 export type Bech32 = typeof Bech32Schema.Type;
 
-export const makeBytesSchema = (prefix: string = "addr") =>
+export const FromBytes = (prefix: string = "addr") =>
   Schema.transformOrFail(Schema.Uint8ArrayFromSelf, Bech32Schema, {
     strict: true,
     encode: (_, __, ast, toA) =>

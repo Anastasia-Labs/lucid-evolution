@@ -86,9 +86,9 @@ export const isHeader = (value: unknown): value is Header =>
  * @since 2.0.0
  * @category schemas
  */
-export const HeaderCDDLSchema = Schema.transformOrFail(
+export const FromCDDL = Schema.transformOrFail(
   Schema.Tuple(
-    Schema.encodedSchema(HeaderBody.HeaderBodyCDDLSchema), // header_body using HeaderBody CDDL schema
+    Schema.encodedSchema(HeaderBody.FromCDDL), // header_body using HeaderBody CDDL schema
     CBOR.ByteArray // body_signature as bytes
   ),
   Schema.typeSchema(Header),
@@ -97,20 +97,20 @@ export const HeaderCDDLSchema = Schema.transformOrFail(
     encode: (toA) =>
       Effect.gen(function* () {
         const headerBodyCddl = yield* ParseResult.encode(
-          HeaderBody.HeaderBodyCDDLSchema
+          HeaderBody.FromCDDL
         )(toA.headerBody);
         const bodySignatureBytes = yield* ParseResult.encode(
-          KesSignature.BytesSchema
+          KesSignature.FromBytes
         )(toA.bodySignature);
         return [headerBodyCddl, bodySignatureBytes] as const;
       }),
     decode: ([headerBodyCddl, bodySignatureBytes]) =>
       Effect.gen(function* () {
         const headerBody = yield* ParseResult.decode(
-          HeaderBody.HeaderBodyCDDLSchema
+          HeaderBody.FromCDDL
         )(headerBodyCddl);
         const bodySignature = yield* ParseResult.decode(
-          KesSignature.BytesSchema
+          KesSignature.FromBytes
         )(bodySignatureBytes);
         return yield* ParseResult.decode(Header)({
           _tag: "Header",
@@ -131,8 +131,8 @@ export const CBORBytesSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
-    HeaderCDDLSchema // CBOR → Header
+    CBOR.FromBytes(options), // Uint8Array → CBOR
+    FromCDDL // CBOR → Header
   );
 
 /**
@@ -145,7 +145,7 @@ export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
+    Bytes.FromHex, // string → Uint8Array
     CBORBytesSchema(options) // Uint8Array → Header
   );
 

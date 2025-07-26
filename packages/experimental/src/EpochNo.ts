@@ -5,11 +5,7 @@ import * as Numeric from "./Numeric.js";
  * CDDL specification:
  * epoch_no = uint .size 8
  *
- * @since 2.0.0
- * @category constants
  */
-export const EPOCH_NO_MIN_VALUE = Numeric.UINT8_MIN;
-export const EPOCH_NO_MAX_VALUE = Numeric.UINT8_MAX;
 
 /**
  * Error class for EpochNo related operations.
@@ -26,7 +22,7 @@ export const EPOCH_NO_MAX_VALUE = Numeric.UINT8_MAX;
  */
 export class EpochNoError extends Data.TaggedError("EpochNoError")<{
   message?: string;
-  reason?: "InvalidValue" | "TooLow" | "TooHigh";
+  cause?: unknown;
 }> {}
 
 /**
@@ -35,10 +31,7 @@ export class EpochNoError extends Data.TaggedError("EpochNoError")<{
  * @since 2.0.0
  * @category schemas
  */
-export const EpochNoSchema = Numeric.Uint8Schema.annotations({
-  identifier: "EpochNo",
-  description: "Epoch number (8-bit unsigned integer)",
-});
+export const EpochNoSchema = Numeric.Uint8Schema.pipe(Schema.brand("EpochNo"));
 
 /**
  * Type alias for EpochNo representing blockchain epoch numbers.
@@ -66,7 +59,7 @@ export type EpochNo = typeof EpochNoSchema.Type;
  * @since 2.0.0
  * @category constructors
  */
-export const make = (value: number): EpochNo => EpochNoSchema.make(value);
+export const make = EpochNoSchema.make;
 
 /**
  * Check if a value is a valid EpochNo.
@@ -81,8 +74,7 @@ export const make = (value: number): EpochNo => EpochNoSchema.make(value);
  * @since 2.0.0
  * @category predicates
  */
-export const is = (value: unknown): value is EpochNo =>
-  Schema.is(EpochNoSchema)(value);
+export const is = Schema.is(EpochNoSchema);
 
 /**
  * Check if two EpochNo instances are equal.
@@ -136,31 +128,3 @@ export const compare = (a: EpochNo, b: EpochNo): -1 | 0 | 1 => {
  * @category generators
  */
 export const generator = Numeric.Uint8Generator;
-
-/**
- * Synchronous encoding/decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Encode = {
-  sync: Schema.encodeSync(EpochNoSchema),
-};
-
-export const Decode = {
-  sync: Schema.decodeUnknownSync(EpochNoSchema),
-};
-
-/**
- * Effect-based encoding/decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEffect = {
-  effect: Schema.encode(EpochNoSchema),
-};
-
-export const DecodeEffect = {
-  effect: Schema.decodeUnknown(EpochNoSchema),
-};

@@ -15,7 +15,7 @@ import { Schema, Data, FastCheck } from "effect";
  */
 export class CoinError extends Data.TaggedError("CoinError")<{
   message?: string;
-  reason?: "InvalidAmount" | "NegativeAmount" | "ExceedsMaxValue";
+  cause?: unknown;
 }> {}
 
 /**
@@ -34,7 +34,7 @@ export const MAX_COIN_VALUE = 18446744073709551615n;
  * @category schemas
  */
 export const CoinSchema = Schema.BigIntFromSelf.pipe(
-  Schema.filter((value) => value >= 0n && value <= MAX_COIN_VALUE),
+  Schema.filter((value) => value >= 0n && value <= MAX_COIN_VALUE)
 ).annotations({
   message: (issue) =>
     `Coin must be between 0 and ${MAX_COIN_VALUE}, but got ${issue.actual}`,
@@ -68,7 +68,7 @@ export type Coin = typeof CoinSchema.Type;
  * @since 2.0.0
  * @category constructors
  */
-export const make = (value: bigint): Coin => CoinSchema.make(value);
+export const make = CoinSchema.make;
 
 /**
  * Check if a value is a valid Coin.
@@ -83,8 +83,7 @@ export const make = (value: bigint): Coin => CoinSchema.make(value);
  * @since 2.0.0
  * @category predicates
  */
-export const is = (value: unknown): value is Coin =>
-  Schema.is(CoinSchema)(value);
+export const is = Schema.is(CoinSchema);
 
 /**
  * Add two coin amounts safely.
@@ -105,7 +104,6 @@ export const add = (a: Coin, b: Coin): Coin => {
   if (result > MAX_COIN_VALUE) {
     throw new CoinError({
       message: `Addition overflow: ${a} + ${b} exceeds maximum coin value`,
-      reason: "ExceedsMaxValue",
     });
   }
   return result;
@@ -130,7 +128,6 @@ export const subtract = (a: Coin, b: Coin): Coin => {
   if (result < 0n) {
     throw new CoinError({
       message: `Subtraction underflow: ${a} - ${b} results in negative value`,
-      reason: "NegativeAmount",
     });
   }
   return result;
@@ -193,31 +190,3 @@ export const generator = FastCheck.bigInt({
   min: 0n,
   max: MAX_COIN_VALUE,
 });
-
-/**
- * Synchronous encoding/decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Encode = {
-  sync: Schema.encodeSync(CoinSchema),
-};
-
-export const Decode = {
-  sync: Schema.decodeUnknownSync(CoinSchema),
-};
-
-/**
- * Either encoding/decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  either: Schema.encodeEither(CoinSchema),
-};
-
-export const DecodeEither = {
-  either: Schema.decodeUnknownEither(CoinSchema),
-};

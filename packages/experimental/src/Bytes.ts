@@ -84,33 +84,55 @@ export const HexSchema = Schema.String.pipe(
   Schema.annotations({
     message: (issue) =>
       `${issue.actual} must be a valid hex string (0-9, A-F, a-f)`,
-    identifier: "Hex",
+    identifier: "Bytes.Hex",
   })
 );
 
-export const BytesSchema = Schema.transform(
-  HexSchema,
+export const FromHex = Schema.transform(HexSchema, Schema.Uint8ArrayFromSelf, {
+  strict: true,
+  encode: (toA) => {
+    let hex = "";
+    for (let i = 0; i < toA.length; i++) {
+      hex += hexes[toA[i]];
+    }
+    return hex;
+  },
+  decode: (fromA) => {
+    const array = new Uint8Array(fromA.length / 2);
+    for (let ai = 0, hi = 0; ai < array.length; ai++, hi += 2) {
+      const n1 = asciiToBase16(fromA.charCodeAt(hi));
+      const n2 = asciiToBase16(fromA.charCodeAt(hi + 1));
+      array[ai] = n1 * 16 + n2;
+    }
+    return array;
+  },
+}).annotations({
+  identifier: "Bytes.FromHex",
+});
+
+export const FromBytes = Schema.transform(
   Schema.Uint8ArrayFromSelf,
+  HexSchema,
   {
     strict: true,
-    encode: (toA) => {
+    decode: (toA) => {
       let hex = "";
       for (let i = 0; i < toA.length; i++) {
         hex += hexes[toA[i]];
       }
       return hex;
     },
-    decode: (fromA) => {
+    encode: (fromA) => {
       const array = new Uint8Array(fromA.length / 2);
       for (let ai = 0, hi = 0; ai < array.length; ai++, hi += 2) {
-        const n1 = asciiToBase16(fromA.charCodeAt(hi));
-        const n2 = asciiToBase16(fromA.charCodeAt(hi + 1));
-        array[ai] = n1 * 16 + n2;
+        array[ai] = parseInt(fromA.slice(hi, hi + 2), 16);
       }
       return array;
     },
   }
-);
+).annotations({
+  identifier: "Bytes.FromBytes",
+});
 
 /**
  * Lenient hex schema that allows empty strings.
@@ -128,7 +150,7 @@ export const HexLenientSchema = Schema.String.pipe(
   })
 );
 
-export const BytesLenientSchema = Schema.transform(
+export const FromHexLenient = Schema.transform(
   HexLenientSchema,
   Schema.Uint8ArrayFromSelf,
   {
@@ -156,8 +178,8 @@ export const BytesLenientSchema = Schema.transform(
 
 export const Codec = _Codec.createEncoders(
   {
-    bytes: BytesSchema,
-    bytesLenient: BytesLenientSchema,
+    bytes: FromHex,
+    bytesLenient: FromHexLenient,
   },
   BytesError
 );

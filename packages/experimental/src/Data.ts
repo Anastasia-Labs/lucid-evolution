@@ -454,7 +454,7 @@ export const genPlutusBytes = (): FastCheck.Arbitrary<ByteArray> =>
   FastCheck.uint8Array({
     minLength: 0, // Allow empty arrays (valid for PlutusBytes)
     maxLength: 32, // Max 32 bytes
-  }).map((bytes) => bytearray(Bytes.Codec.Encode.bytes(bytes)));
+  }).map((bytes) => bytearray(Bytes.Codec.encode.bytes(bytes)));
 
 /**
  * Creates an arbitrary that generates PlutusBigInt values
@@ -576,18 +576,18 @@ export const CBORBytesSchema = (
     strict: true,
     encode: (toI) =>
       pipe(plutusDataToCBORValue(toI), (cborValue) =>
-        ParseResult.encode(CBOR.CBORBytesSchema(options))(cborValue)
+        ParseResult.encode(CBOR.FromBytes(options))(cborValue)
       ),
     decode: (fromI) =>
       pipe(
-        ParseResult.decode(CBOR.CBORBytesSchema(options))(fromI),
+        ParseResult.decode(CBOR.FromBytes(options))(fromI),
         Effect.map(cborValueToPlutusData)
       ),
   });
 
 export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS
-) => Schema.compose(Bytes.BytesSchema, CBORBytesSchema(options));
+) => Schema.compose(Bytes.FromBytes, CBORBytesSchema(options));
 
 /**
  * Convert PlutusData to CBORValue
@@ -663,7 +663,7 @@ export const cborValueToPlutusData = (cborValue: CBOR.CBOR): Data => {
     if (cborValue.length === 0) {
       return "";
     }
-    return Bytes.Codec.Encode.bytes(cborValue);
+    return Bytes.Codec.encode.bytes(cborValue);
   }
 
   // Handle tagged values

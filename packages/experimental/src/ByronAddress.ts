@@ -2,11 +2,6 @@ import { Schema } from "effect";
 import * as Bytes from "./Bytes.js";
 import * as NetworkId from "./NetworkId.js";
 
-export declare const NominalType: unique symbol;
-export interface ByronAddress {
-  readonly [NominalType]: unique symbol;
-}
-
 /**
  * Byron legacy address format
  *
@@ -14,7 +9,7 @@ export interface ByronAddress {
  * @category schemas
  */
 export class ByronAddress extends Schema.TaggedClass<ByronAddress>(
-  "ByronAddress",
+  "ByronAddress"
 )("ByronAddress", {
   networkId: NetworkId.NetworkId,
   bytes: Bytes.HexSchema,
@@ -37,11 +32,11 @@ export const BytesSchema = Schema.transform(
   ByronAddress,
   {
     strict: true,
-    encode: (_, toA) => Bytes.Decode.hex(toA.bytes),
+    encode: (_, toA) => Bytes.Codec.Decode.bytes(toA.bytes),
     decode: (_, fromA) =>
       new ByronAddress({
         networkId: NetworkId.NetworkId.make(0),
-        bytes: Bytes.Encode.hex(fromA),
+        bytes: Bytes.Codec.Encode.bytes(fromA),
       }),
-  },
+  }
 );

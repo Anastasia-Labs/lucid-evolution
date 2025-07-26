@@ -8,8 +8,8 @@ import * as _Codec from "./Codec.js";
  * @since 1.0.0
  * @category errors
  */
-export class CBORValueError extends Data.TaggedError("CBORValueError")<{
-  message: string;
+export class CBORError extends Data.TaggedError("CBORError")<{
+  message?: string;
   cause?: unknown;
 }> {}
 
@@ -172,7 +172,7 @@ export const isTag = Schema.is(Tag);
 export const Simple = Schema.Union(
   Schema.Boolean,
   Schema.Null,
-  Schema.Undefined,
+  Schema.Undefined
 );
 
 // Float (Major Type 7)
@@ -194,7 +194,7 @@ export const CBORSchema: Schema.Schema<CBOR> = Schema.Union(
   RecordSchema,
   Tag,
   Simple,
-  Float,
+  Float
 );
 
 /**
@@ -256,7 +256,7 @@ export const match = <R>(
     null: () => R;
     undefined: () => R;
     float: (value: number) => R;
-  },
+  }
 ): R => {
   if (typeof value === "bigint") {
     return patterns.integer(value);
@@ -306,8 +306,8 @@ export const match = <R>(
 // Internal encoding function used by Schema.transformOrFail
 const internalEncode = (
   value: CBOR,
-  options: CodecOptions = DEFAULT_OPTIONS,
-): Effect.Effect<Uint8Array, CBORValueError> =>
+  options: CodecOptions = DEFAULT_OPTIONS
+): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     if (typeof value === "bigint") {
       if (value >= 0n) {
@@ -341,7 +341,7 @@ const internalEncode = (
     ) {
       return yield* encodeRecord(
         value as { readonly [key: string]: CBOR },
-        options,
+        options
       );
     }
     if (typeof value === "boolean" || value === null || value === undefined) {
@@ -351,25 +351,23 @@ const internalEncode = (
       return yield* encodeFloat(value, options);
     }
 
-    return yield* new CBORValueError({
+    return yield* new CBORError({
       message: `Unsupported CBOR value type: ${typeof value}`,
     });
   });
 
 // Internal decoding function used by Schema.transformOrFail
-const internalDecode = (
-  data: Uint8Array,
-): Effect.Effect<CBOR, CBORValueError> =>
+const internalDecode = (data: Uint8Array): Effect.Effect<CBOR, CBORError> =>
   Effect.gen(function* () {
     if (data.length === 0) {
-      return yield* new CBORValueError({ message: "Empty CBOR data" });
+      return yield* new CBORError({ message: "Empty CBOR data" });
     }
 
     const { item, bytesConsumed } = yield* decodeItemWithLength(data);
 
     // Verify that all input bytes were consumed
     if (bytesConsumed !== data.length) {
-      return yield* new CBORValueError({
+      return yield* new CBORError({
         message: `Invalid CBOR: expected to consume ${data.length} bytes, but consumed ${bytesConsumed}`,
       });
     }
@@ -381,11 +379,11 @@ const internalDecode = (
 
 const encodeUint = (
   value: bigint,
-  options: CodecOptions,
-): Effect.Effect<Uint8Array, CBORValueError> =>
+  options: CodecOptions
+): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     if (value < 0n) {
-      return yield* new CBORValueError({
+      return yield* new CBORError({
         message: `Cannot encode negative value ${value} as unsigned integer`,
       });
     }
@@ -436,11 +434,11 @@ const encodeUint = (
 
 const encodeNint = (
   value: bigint,
-  options: CodecOptions,
-): Effect.Effect<Uint8Array, CBORValueError> =>
+  options: CodecOptions
+): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     if (value >= 0n) {
-      return yield* new CBORValueError({
+      return yield* new CBORError({
         message: `Cannot encode non-negative value ${value} as negative integer`,
       });
     }
@@ -498,8 +496,8 @@ const encodeNint = (
 
 const encodeBytes = (
   value: Uint8Array,
-  options: CodecOptions,
-): Effect.Effect<Uint8Array, CBORValueError> =>
+  options: CodecOptions
+): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     const length = value.length;
     let headerBytes: Uint8Array;
@@ -522,7 +520,7 @@ const encodeBytes = (
         length & 0xff,
       ]);
     } else {
-      return yield* new CBORValueError({
+      return yield* new CBORError({
         message: `Byte string too long: ${length} bytes`,
       });
     }
@@ -535,8 +533,8 @@ const encodeBytes = (
 
 const encodeText = (
   value: string,
-  options: CodecOptions,
-): Effect.Effect<Uint8Array, CBORValueError> =>
+  options: CodecOptions
+): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     const utf8Bytes = new TextEncoder().encode(value);
     const length = utf8Bytes.length;
@@ -560,7 +558,7 @@ const encodeText = (
         length & 0xff,
       ]);
     } else {
-      return yield* new CBORValueError({
+      return yield* new CBORError({
         message: `Text string too long: ${length} bytes`,
       });
     }
@@ -573,8 +571,8 @@ const encodeText = (
 
 const encodeArray = (
   value: ReadonlyArray<CBOR>,
-  options: CodecOptions,
-): Effect.Effect<Uint8Array, CBORValueError> =>
+  options: CodecOptions
+): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     const length = value.length;
     const chunks: Uint8Array[] = [];
@@ -612,10 +610,10 @@ const encodeArray = (
             (length >> 16) & 0xff,
             (length >> 8) & 0xff,
             length & 0xff,
-          ]),
+          ])
         );
       } else {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: `Array too long: ${length} elements`,
         });
       }
@@ -641,8 +639,8 @@ const encodeArray = (
 
 const encodeMap = (
   value: ReadonlyMap<CBOR, CBOR>,
-  options: CodecOptions,
-): Effect.Effect<Uint8Array, CBORValueError> =>
+  options: CodecOptions
+): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     // Convert Map to array of pairs for processing
     const pairs = Array.from(value.entries());
@@ -670,8 +668,8 @@ const encodeMap = (
             const encodedKey = yield* internalEncode(key, options);
             const encodedValue = yield* internalEncode(val, options);
             return { encodedKey, encodedValue };
-          }),
-        ),
+          })
+        )
       );
 
       // Sort by encoded key length only (not full lexicographic order)
@@ -721,10 +719,10 @@ const encodeMap = (
             (length >> 16) & 0xff,
             (length >> 8) & 0xff,
             length & 0xff,
-          ]),
+          ])
         );
       } else {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: `Map too long: ${length} entries`,
         });
       }
@@ -761,8 +759,8 @@ const encodeMap = (
 
 const encodeRecord = (
   value: { readonly [key: string]: CBOR },
-  options: CodecOptions,
-): Effect.Effect<Uint8Array, CBORValueError> =>
+  options: CodecOptions
+): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     // Convert Record to array of pairs for processing
     const pairs = Object.entries(value);
@@ -790,8 +788,8 @@ const encodeRecord = (
             const encodedKey = yield* internalEncode(key, options);
             const encodedValue = yield* internalEncode(val, options);
             return { encodedKey, encodedValue };
-          }),
-        ),
+          })
+        )
       );
 
       // Sort by encoded key length only (not full lexicographic order)
@@ -841,10 +839,10 @@ const encodeRecord = (
             (length >> 16) & 0xff,
             (length >> 8) & 0xff,
             length & 0xff,
-          ]),
+          ])
         );
       } else {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: `Record too long: ${length} entries`,
         });
       }
@@ -882,8 +880,8 @@ const encodeRecord = (
 const encodeTag = (
   tag: number,
   value: CBOR,
-  options: CodecOptions,
-): Effect.Effect<Uint8Array, CBORValueError> =>
+  options: CodecOptions
+): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     const chunks: Uint8Array[] = [];
     const useMinimal =
@@ -898,7 +896,7 @@ const encodeTag = (
     } else if (tag < 65536 && useMinimal) {
       chunks.push(new Uint8Array([0xd9, tag >> 8, tag & 0xff]));
     } else {
-      return yield* new CBORValueError({ message: `Tag ${tag} too large` });
+      return yield* new CBORError({ message: `Tag ${tag} too large` });
     }
 
     // Encode tagged value
@@ -918,23 +916,23 @@ const encodeTag = (
   });
 
 const encodeSimple = (
-  value: boolean | null | undefined,
-): Effect.Effect<Uint8Array, CBORValueError> =>
+  value: boolean | null | undefined
+): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     if (value === false) return new Uint8Array([0xf4]);
     if (value === true) return new Uint8Array([0xf5]);
     if (value === null) return new Uint8Array([0xf6]);
     if (value === undefined) return new Uint8Array([0xf7]);
 
-    return yield* new CBORValueError({
+    return yield* new CBORError({
       message: `Invalid simple value: ${value}`,
     });
   });
 
 const encodeFloat = (
   value: number,
-  options: CodecOptions,
-): Effect.Effect<Uint8Array, CBORValueError> =>
+  options: CodecOptions
+): Effect.Effect<Uint8Array, CBORError> =>
   Effect.succeed(
     (() => {
       if (Number.isNaN(value)) {
@@ -967,12 +965,12 @@ const encodeFloat = (
         view.setFloat64(0, value, false); // big-endian
         return new Uint8Array([0xfb, ...new Uint8Array(buffer)]);
       }
-    })(),
+    })()
   );
 
 // Internal decoding functions
 
-const decodeUint = (data: Uint8Array): Effect.Effect<CBOR, CBORValueError> =>
+const decodeUint = (data: Uint8Array): Effect.Effect<CBOR, CBORError> =>
   Effect.gen(function* () {
     const firstByte = data[0];
     const additionalInfo = firstByte & 0x1f;
@@ -981,21 +979,21 @@ const decodeUint = (data: Uint8Array): Effect.Effect<CBOR, CBORValueError> =>
       return BigInt(additionalInfo);
     } else if (additionalInfo === 24) {
       if (data.length < 2) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Insufficient data for 1-byte unsigned integer",
         });
       }
       return BigInt(data[1]);
     } else if (additionalInfo === 25) {
       if (data.length < 3) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Insufficient data for 2-byte unsigned integer",
         });
       }
       return BigInt(data[1]) * 256n + BigInt(data[2]);
     } else if (additionalInfo === 26) {
       if (data.length < 5) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Insufficient data for 4-byte unsigned integer",
         });
       }
@@ -1007,7 +1005,7 @@ const decodeUint = (data: Uint8Array): Effect.Effect<CBOR, CBORValueError> =>
       );
     } else if (additionalInfo === 27) {
       if (data.length < 9) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Insufficient data for 8-byte unsigned integer",
         });
       }
@@ -1017,13 +1015,13 @@ const decodeUint = (data: Uint8Array): Effect.Effect<CBOR, CBORValueError> =>
       }
       return result;
     } else {
-      return yield* new CBORValueError({
+      return yield* new CBORError({
         message: `Unsupported additional info for unsigned integer: ${additionalInfo}`,
       });
     }
   });
 
-const decodeNint = (data: Uint8Array): Effect.Effect<CBOR, CBORValueError> =>
+const decodeNint = (data: Uint8Array): Effect.Effect<CBOR, CBORError> =>
   Effect.gen(function* () {
     const firstByte = data[0];
     const additionalInfo = firstByte & 0x1f;
@@ -1032,21 +1030,21 @@ const decodeNint = (data: Uint8Array): Effect.Effect<CBOR, CBORValueError> =>
       return -1n - BigInt(additionalInfo);
     } else if (additionalInfo === 24) {
       if (data.length < 2) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Insufficient data for 1-byte negative integer",
         });
       }
       return -1n - BigInt(data[1]);
     } else if (additionalInfo === 25) {
       if (data.length < 3) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Insufficient data for 2-byte negative integer",
         });
       }
       return -1n - (BigInt(data[1]) * 256n + BigInt(data[2]));
     } else if (additionalInfo === 26) {
       if (data.length < 5) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Insufficient data for 4-byte negative integer",
         });
       }
@@ -1059,7 +1057,7 @@ const decodeNint = (data: Uint8Array): Effect.Effect<CBOR, CBORValueError> =>
       );
     } else if (additionalInfo === 27) {
       if (data.length < 9) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Insufficient data for 8-byte negative integer",
         });
       }
@@ -1069,15 +1067,15 @@ const decodeNint = (data: Uint8Array): Effect.Effect<CBOR, CBORValueError> =>
       }
       return -1n - result;
     } else {
-      return yield* new CBORValueError({
+      return yield* new CBORError({
         message: `Unsupported additional info for negative integer: ${additionalInfo}`,
       });
     }
   });
 
 const decodeBytesWithLength = (
-  data: Uint8Array,
-): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORValueError> =>
+  data: Uint8Array
+): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORError> =>
   Effect.gen(function* () {
     const firstByte = data[0];
     const additionalInfo = firstByte & 0x1f;
@@ -1100,32 +1098,32 @@ const decodeBytesWithLength = (
         const chunkMajorType = (chunkFirstByte >> 5) & 0x07;
 
         if (chunkMajorType !== CBOR_MAJOR_TYPE.BYTE_STRING) {
-          return yield* new CBORValueError({
+          return yield* new CBORError({
             message: "Expected byte string chunk in indefinite byte string",
           });
         }
 
         const chunkAdditionalInfo = chunkFirstByte & 0x1f;
         if (chunkAdditionalInfo === CBOR_ADDITIONAL_INFO.INDEFINITE) {
-          return yield* new CBORValueError({
+          return yield* new CBORError({
             message: "Nested indefinite byte strings not allowed",
           });
         }
 
         const { length: chunkLength, bytesRead } = yield* decodeLength(
           data,
-          offset,
+          offset
         );
         const chunkData = data.slice(
           offset + bytesRead,
-          offset + bytesRead + chunkLength,
+          offset + bytesRead + chunkLength
         );
         chunks.push(chunkData);
         offset += bytesRead + chunkLength;
       }
 
       if (!foundBreak) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Missing break marker for indefinite byte string",
         });
       }
@@ -1145,7 +1143,7 @@ const decodeBytesWithLength = (
       const { length, bytesRead } = yield* decodeLength(data, 0);
 
       if (data.length < bytesRead + length) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: `Insufficient data for byte string: expected ${bytesRead + length} bytes, got ${data.length}`,
         });
       }
@@ -1156,8 +1154,8 @@ const decodeBytesWithLength = (
   });
 
 const decodeTextWithLength = (
-  data: Uint8Array,
-): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORValueError> =>
+  data: Uint8Array
+): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORError> =>
   Effect.gen(function* () {
     const firstByte = data[0];
     const additionalInfo = firstByte & 0x1f;
@@ -1180,34 +1178,34 @@ const decodeTextWithLength = (
         const chunkMajorType = (chunkFirstByte >> 5) & 0x07;
 
         if (chunkMajorType !== CBOR_MAJOR_TYPE.TEXT_STRING) {
-          return yield* new CBORValueError({
+          return yield* new CBORError({
             message: "Expected text string chunk in indefinite text string",
           });
         }
 
         const chunkAdditionalInfo = chunkFirstByte & 0x1f;
         if (chunkAdditionalInfo === CBOR_ADDITIONAL_INFO.INDEFINITE) {
-          return yield* new CBORValueError({
+          return yield* new CBORError({
             message: "Nested indefinite text strings not allowed",
           });
         }
 
         const { length: chunkLength, bytesRead } = yield* decodeLength(
           data,
-          offset,
+          offset
         );
         const chunkBytes = data.slice(
           offset + bytesRead,
-          offset + bytesRead + chunkLength,
+          offset + bytesRead + chunkLength
         );
 
         try {
           const chunkText = new TextDecoder("utf-8", { fatal: true }).decode(
-            chunkBytes,
+            chunkBytes
           );
           chunks.push(chunkText);
         } catch (error) {
-          return yield* new CBORValueError({
+          return yield* new CBORError({
             message: "Invalid UTF-8 in text string chunk",
             cause: error,
           });
@@ -1217,7 +1215,7 @@ const decodeTextWithLength = (
       }
 
       if (!foundBreak) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Missing break marker for indefinite text string",
         });
       }
@@ -1229,7 +1227,7 @@ const decodeTextWithLength = (
       const { length, bytesRead } = yield* decodeLength(data, 0);
 
       if (data.length < bytesRead + length) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: `Insufficient data for text string: expected ${bytesRead + length} bytes, got ${data.length}`,
         });
       }
@@ -1237,11 +1235,11 @@ const decodeTextWithLength = (
       const textBytes = data.slice(bytesRead, bytesRead + length);
       try {
         const text = new TextDecoder("utf-8", { fatal: true }).decode(
-          textBytes,
+          textBytes
         );
         return { item: text, bytesConsumed: bytesRead + length };
       } catch (error) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Invalid UTF-8 in text string",
           cause: error,
         });
@@ -1251,11 +1249,11 @@ const decodeTextWithLength = (
 
 // Helper function to decode an item and return both the item and bytes consumed
 const decodeItemWithLength = (
-  data: Uint8Array,
-): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORValueError> =>
+  data: Uint8Array
+): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORError> =>
   Effect.gen(function* () {
     if (data.length === 0) {
-      return yield* new CBORValueError({ message: "Empty CBOR data" });
+      return yield* new CBORError({ message: "Empty CBOR data" });
     }
 
     const firstByte = data[0];
@@ -1279,7 +1277,7 @@ const decodeItemWithLength = (
         } else if (additionalInfo === 27) {
           bytesConsumed = 9;
         } else {
-          return yield* new CBORValueError({
+          return yield* new CBORError({
             message: `Unsupported additional info for unsigned integer: ${additionalInfo}`,
           });
         }
@@ -1298,7 +1296,7 @@ const decodeItemWithLength = (
         } else if (additionalInfo === 27) {
           bytesConsumed = 9;
         } else {
-          return yield* new CBORValueError({
+          return yield* new CBORError({
             message: `Unsupported additional info for negative integer: ${additionalInfo}`,
           });
         }
@@ -1352,14 +1350,14 @@ const decodeItemWithLength = (
         } else if (additionalInfo === 27) {
           bytesConsumed = 9;
         } else {
-          return yield* new CBORValueError({
+          return yield* new CBORError({
             message: `Unsupported simple/float encoding: ${additionalInfo}`,
           });
         }
         break;
       }
       default:
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: `Unknown CBOR major type: ${majorType}`,
         });
     }
@@ -1368,8 +1366,8 @@ const decodeItemWithLength = (
   });
 
 const decodeArrayWithLength = (
-  data: Uint8Array,
-): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORValueError> =>
+  data: Uint8Array
+): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORError> =>
   Effect.gen(function* () {
     const firstByte = data[0];
     const additionalInfo = firstByte & 0x1f;
@@ -1388,14 +1386,14 @@ const decodeArrayWithLength = (
         }
 
         const { item, bytesConsumed } = yield* decodeItemWithLength(
-          data.slice(offset),
+          data.slice(offset)
         );
         result.push(item);
         offset += bytesConsumed;
       }
 
       if (!foundBreak) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Missing break marker for indefinite array",
         });
       }
@@ -1412,13 +1410,13 @@ const decodeArrayWithLength = (
 
       for (let i = 0; i < length; i++) {
         if (offset >= data.length) {
-          return yield* new CBORValueError({
+          return yield* new CBORError({
             message: `Insufficient data for array element ${i}`,
           });
         }
 
         const { item, bytesConsumed } = yield* decodeItemWithLength(
-          data.slice(offset),
+          data.slice(offset)
         );
         result.push(item);
         offset += bytesConsumed;
@@ -1432,8 +1430,8 @@ const decodeArrayWithLength = (
   });
 
 const decodeMapWithLength = (
-  data: Uint8Array,
-): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORValueError> =>
+  data: Uint8Array
+): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORError> =>
   Effect.gen(function* () {
     const firstByte = data[0];
     const additionalInfo = firstByte & 0x1f;
@@ -1458,7 +1456,7 @@ const decodeMapWithLength = (
 
         // Decode value
         if (offset >= data.length) {
-          return yield* new CBORValueError({
+          return yield* new CBORError({
             message: "Missing value in indefinite map",
           });
         }
@@ -1471,7 +1469,7 @@ const decodeMapWithLength = (
       }
 
       if (!foundBreak) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Missing break marker for indefinite map",
         });
       }
@@ -1486,7 +1484,7 @@ const decodeMapWithLength = (
       for (let i = 0; i < length; i++) {
         // Decode key
         if (offset >= data.length) {
-          return yield* new CBORValueError({
+          return yield* new CBORError({
             message: `Insufficient data for map key ${i}`,
           });
         }
@@ -1497,7 +1495,7 @@ const decodeMapWithLength = (
 
         // Decode value
         if (offset >= data.length) {
-          return yield* new CBORValueError({
+          return yield* new CBORError({
             message: `Insufficient data for map value ${i}`,
           });
         }
@@ -1514,8 +1512,8 @@ const decodeMapWithLength = (
   });
 
 const decodeTagWithLength = (
-  data: Uint8Array,
-): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORValueError> =>
+  data: Uint8Array
+): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORError> =>
   Effect.gen(function* () {
     const firstByte = data[0];
     const additionalInfo = firstByte & 0x1f;
@@ -1527,7 +1525,7 @@ const decodeTagWithLength = (
       dataOffset = 1;
     } else if (additionalInfo === 24) {
       if (data.length < 2) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Insufficient data for 1-byte tag",
         });
       }
@@ -1535,20 +1533,20 @@ const decodeTagWithLength = (
       dataOffset = 2;
     } else if (additionalInfo === 25) {
       if (data.length < 3) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Insufficient data for 2-byte tag",
         });
       }
       tagValue = (data[1] << 8) | data[2];
       dataOffset = 3;
     } else {
-      return yield* new CBORValueError({
+      return yield* new CBORError({
         message: `Unsupported tag encoding: ${additionalInfo}`,
       });
     }
 
     const { item: innerValue, bytesConsumed } = yield* decodeItemWithLength(
-      data.slice(dataOffset),
+      data.slice(dataOffset)
     );
 
     // Handle special tags that should be converted to plain values
@@ -1560,7 +1558,7 @@ const decodeTagWithLength = (
           bytesConsumed: dataOffset + bytesConsumed,
         };
       } else {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: `Expected bytes for tag 2 (big_uint), got ${typeof innerValue}`,
         });
       }
@@ -1573,7 +1571,7 @@ const decodeTagWithLength = (
           bytesConsumed: dataOffset + bytesConsumed,
         };
       } else {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: `Expected bytes for tag 3 (big_nint), got ${typeof innerValue}`,
         });
       }
@@ -1587,8 +1585,8 @@ const decodeTagWithLength = (
   });
 
 const decodeSimpleOrFloat = (
-  data: Uint8Array,
-): Effect.Effect<CBOR, CBORValueError> =>
+  data: Uint8Array
+): Effect.Effect<CBOR, CBORError> =>
   Effect.gen(function* () {
     const firstByte = data[0];
     const additionalInfo = firstByte & 0x1f;
@@ -1608,7 +1606,7 @@ const decodeSimpleOrFloat = (
     } else if (additionalInfo === 24) {
       // Simple value with 1-byte payload
       if (data.length < 2) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Insufficient data for 1-byte simple value",
         });
       }
@@ -1619,7 +1617,7 @@ const decodeSimpleOrFloat = (
     } else if (additionalInfo === 25) {
       // Half-precision float
       if (data.length < 3) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Insufficient data for half-precision float",
         });
       }
@@ -1629,7 +1627,7 @@ const decodeSimpleOrFloat = (
     } else if (additionalInfo === 26) {
       // Single-precision float
       if (data.length < 5) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Insufficient data for single-precision float",
         });
       }
@@ -1638,14 +1636,14 @@ const decodeSimpleOrFloat = (
     } else if (additionalInfo === 27) {
       // Double-precision float
       if (data.length < 9) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Insufficient data for double-precision float",
         });
       }
       const view = new DataView(data.buffer, data.byteOffset + 1, 8);
       return view.getFloat64(0, false); // big-endian
     } else {
-      return yield* new CBORValueError({
+      return yield* new CBORError({
         message: `Unsupported simple/float encoding: ${additionalInfo}`,
       });
     }
@@ -1694,11 +1692,11 @@ const bytesToBigint = (bytes: Uint8Array): bigint => {
 
 const decodeLength = (
   data: Uint8Array,
-  offset: number,
-): Effect.Effect<{ length: number; bytesRead: number }, CBORValueError> =>
+  offset: number
+): Effect.Effect<{ length: number; bytesRead: number }, CBORError> =>
   Effect.gen(function* () {
     if (offset >= data.length) {
-      return yield* new CBORValueError({
+      return yield* new CBORError({
         message: "Insufficient data for length decoding",
       });
     }
@@ -1710,14 +1708,14 @@ const decodeLength = (
       return { length: additionalInfo, bytesRead: 1 };
     } else if (additionalInfo === 24) {
       if (data.length < offset + 2) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Insufficient data for 1-byte length",
         });
       }
       return { length: data[offset + 1], bytesRead: 2 };
     } else if (additionalInfo === 25) {
       if (data.length < offset + 3) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Insufficient data for 2-byte length",
         });
       }
@@ -1727,7 +1725,7 @@ const decodeLength = (
       };
     } else if (additionalInfo === 26) {
       if (data.length < offset + 5) {
-        return yield* new CBORValueError({
+        return yield* new CBORError({
           message: "Insufficient data for 4-byte length",
         });
       }
@@ -1740,7 +1738,7 @@ const decodeLength = (
         bytesRead: 5,
       };
     } else {
-      return yield* new CBORValueError({
+      return yield* new CBORError({
         message: `Unsupported length encoding: ${additionalInfo}`,
       });
     }
@@ -1800,7 +1798,7 @@ const encodeFloat16 = (value: number): number => {
  * @since 1.0.0
  * @category schemas
  */
-export const CBORBytesSchema = (options: CodecOptions) =>
+export const FromBytes = (options: CodecOptions) =>
   Schema.transformOrFail(Schema.Uint8ArrayFromSelf, CBORValueSchema, {
     strict: true,
     decode: (fromA, _, ast) =>
@@ -1810,8 +1808,8 @@ export const CBORBytesSchema = (options: CodecOptions) =>
           new ParseResult.Type(
             ast,
             fromA,
-            `Failed to decode CBOR value: ${error instanceof CBORValueError ? error.message : String(error)}`,
-          ),
+            `Failed to decode CBOR value: ${error instanceof CBORError ? error.message : String(error)}`
+          )
       ),
     encode: (toA, _, ast) =>
       Effect.mapError(
@@ -1820,16 +1818,19 @@ export const CBORBytesSchema = (options: CodecOptions) =>
           new ParseResult.Type(
             ast,
             toA,
-            `Failed to encode CBOR value: ${error instanceof CBORValueError ? error.message : String(error)}`,
-          ),
+            `Failed to encode CBOR value: ${error instanceof CBORError ? error.message : String(error)}`
+          )
       ),
   });
 
 export const CBORHexSchema = (options: CodecOptions) =>
-  Schema.compose(Bytes.BytesSchema, CBORBytesSchema(options));
+  Schema.compose(Bytes.FromHex, FromBytes(options));
 
 export const Codec = (options: CodecOptions = DEFAULT_OPTIONS) =>
-  _Codec.createCodec({
-    cborBytes: CBORBytesSchema(options),
-    cborHex: CBORHexSchema(options),
-  });
+  _Codec.createEncoders(
+    {
+      cborBytes: FromBytes(options),
+      cborHex: CBORHexSchema(options),
+    },
+    CBORError
+  );

@@ -1,15 +1,18 @@
-import { Effect, FastCheck, ParseResult, pipe, Schema } from "effect";
+import { Data, Effect, FastCheck, ParseResult, Schema } from "effect";
 import * as Credential from "./Credential.js";
 import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
 import * as NetworkId from "./NetworkId.js";
 import * as Bytes from "./Bytes.js";
 import * as Bytes29 from "./Bytes29.js";
+import * as _Codec from "./Codec.js";
 
-export declare const NominalType: unique symbol;
-export interface EnterpriseAddress {
-  readonly [NominalType]: unique symbol;
-}
+export class EnterpriseAddressError extends Data.TaggedError(
+  "EnterpriseAddressError"
+)<{
+  message?: string;
+  cause?: unknown;
+}> {}
 
 /**
  * Enterprise address with only payment credential
@@ -18,7 +21,7 @@ export interface EnterpriseAddress {
  * @category schemas
  */
 export class EnterpriseAddress extends Schema.TaggedClass<EnterpriseAddress>(
-  "EnterpriseAddress",
+  "EnterpriseAddress"
 )("EnterpriseAddress", {
   networkId: NetworkId.NetworkId,
   paymentCredential: Credential.Credential,
@@ -32,29 +35,30 @@ export class EnterpriseAddress extends Schema.TaggedClass<EnterpriseAddress>(
   }
 }
 
-export const BytesSchema = Schema.transformOrFail(
+export const FromBytes = Schema.transformOrFail(
   Bytes29.BytesSchema,
   EnterpriseAddress,
   {
     strict: true,
-    encode: (_, __, ___, toA) => {
-      const paymentBit = toA.paymentCredential._tag === "KeyHash" ? 0 : 1;
-      const header =
-        (0b01 << 6) |
-        (0b1 << 5) |
-        (paymentBit << 4) |
-        (toA.networkId & 0b00001111);
+    encode: (_, __, ___, toA) =>
+      Effect.gen(function* () {
+        const paymentBit = toA.paymentCredential._tag === "KeyHash" ? 0 : 1;
+        const header =
+          (0b01 << 6) |
+          (0b1 << 5) |
+          (paymentBit << 4) |
+          (toA.networkId & 0b00001111);
 
-      const result = new Uint8Array(29);
-      result[0] = header;
+        const result = new Uint8Array(29);
+        result[0] = header;
 
-      const paymentCredentialBytes = Bytes.Decode.hex(
-        toA.paymentCredential.hash,
-      );
-      result.set(paymentCredentialBytes, 1);
+        const paymentCredentialBytes = yield* ParseResult.decode(Bytes.FromHex)(
+          toA.paymentCredential.hash
+        );
+        result.set(paymentCredentialBytes, 1);
 
-      return ParseResult.succeed(result);
-    },
+        return yield* ParseResult.succeed(result);
+      }),
     decode: (_, __, ___, fromA) =>
       Effect.gen(function* () {
         const header = fromA[0];
@@ -68,14 +72,14 @@ export const BytesSchema = Schema.transformOrFail(
         const paymentCredential: Credential.Credential = isPaymentKey
           ? {
               _tag: "KeyHash",
-              hash: yield* ParseResult.decode(KeyHash.BytesSchema)(
-                fromA.slice(1, 29),
+              hash: yield* ParseResult.decode(KeyHash.FromBytes)(
+                fromA.slice(1, 29)
               ),
             }
           : {
               _tag: "ScriptHash",
               hash: yield* ParseResult.decode(ScriptHash.BytesSchema)(
-                fromA.slice(1, 29),
+                fromA.slice(1, 29)
               ),
             };
         return yield* ParseResult.decode(EnterpriseAddress)({
@@ -84,19 +88,12 @@ export const BytesSchema = Schema.transformOrFail(
           paymentCredential,
         });
       }),
-  },
+  }
 );
 
-export const HexSchema = Schema.transformOrFail(
-  Schema.typeSchema(Bytes29.HexSchema),
-  EnterpriseAddress,
-  {
-    strict: true,
-    encode: (_, __, ___, toA) =>
-      pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Bytes.Encode.hex)),
-    decode: (fromI) =>
-      pipe(Bytes.Decode.hex(fromI), ParseResult.decode(BytesSchema)),
-  },
+export const FromHex = Schema.compose(
+  Bytes.FromHex, // string → Uint8Array
+  FromBytes // Uint8Array → EnterpriseAddress
 );
 
 /**
@@ -132,55 +129,19 @@ export const equals = (a: EnterpriseAddress, b: EnterpriseAddress): boolean => {
  */
 export const generator = FastCheck.tuple(
   NetworkId.generator,
-  Credential.generator,
+  Credential.generator
 ).map(
   ([networkId, paymentCredential]) =>
     new EnterpriseAddress({
       networkId,
       paymentCredential,
-    }),
+    })
 );
 
-/**
- * Synchronous encoding utilities for enterprise address.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Encode = {
-  hex: Schema.encodeSync(HexSchema),
-  bytes: Schema.encodeSync(BytesSchema),
-};
-
-/**
- * Synchronous decoding utilities for enterprise address.
- *
- @since 2.0.0
- * @category encoding/decoding
- */
-export const Decode = {
-  hex: Schema.decodeUnknownSync(HexSchema),
-  bytes: Schema.decodeUnknownSync(BytesSchema),
-};
-
-/**
- * Either encoding utilities for enterprise address.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  hex: Schema.encodeEither(HexSchema),
-  bytes: Schema.encodeEither(BytesSchema),
-};
-
-/**
- * Either decoding utilities for enterprise address.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  hex: Schema.decodeUnknownEither(HexSchema),
-  bytes: Schema.decodeUnknownEither(BytesSchema),
-};
+export const Codec = _Codec.createEncoders(
+  {
+    bytes: FromBytes,
+    hex: FromHex,
+  },
+  EnterpriseAddressError
+);

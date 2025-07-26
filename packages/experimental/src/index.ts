@@ -1,5 +1,5 @@
 export * as EffectCML from "./CML/index.js";
-export * as Bytes from "./Bytes.js";
+export * as Bytes from "./Hex.js";
 export * as Network from "./Network.js";
 // export * as Script from "./old/Script.js"; // Temporarily disabled due to API incompatibility
 // export * as TSchema from "./TSchema.js"; // Temporarily disabled due to API incompatibility
@@ -22,7 +22,7 @@ export * as TransactionInput from "./TransactionInput.js";
 export * as CBOR from "./CBOR.js";
 export * as Bech32 from "./Bech32.js";
 export * as Natural from "./Natural.js";
-export * as Hex from "./Bytes.js";
+export * as Hex from "./Hex.js";
 export * as NetworkId from "./NetworkId.js";
 export * as DatumOption from "./DatumOption.js";
 export * as Devnet from "./Devnet/Devnet.js";

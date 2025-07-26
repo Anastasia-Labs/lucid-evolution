@@ -1,69 +1,51 @@
-import { Schema, Data } from "effect";
-import * as Hash32 from "./Hash32.js";
-import * as Bytes from "./Bytes.js";
+import { Schema, Data, FastCheck, pipe } from "effect";
+import * as Bytes32 from "./Bytes32.js";
+import { createEncoders } from "./Codec.js";
 
 /**
  * Error class for BlockBodyHash related operations.
- *
- * @example
- * import { BlockBodyHash } from "@evolution-sdk/experimental";
- * import assert from "assert";
- *
- * const error = new BlockBodyHash.BlockBodyHashError({ message: "Invalid block body hash" });
- * assert(error.message === "Invalid block body hash");
  *
  * @since 2.0.0
  * @category errors
  */
 export class BlockBodyHashError extends Data.TaggedError("BlockBodyHashError")<{
   message?: string;
-  reason?:
-    | "InvalidHexLength"
-    | "InvalidBytesLength"
-    | "InvalidHexFormat"
-    | "InvalidCBORFormat";
+  cause?: unknown;
 }> {}
 
 /**
  * Schema for BlockBodyHash representing a block body hash.
- * block_body_hash = hash32
+ * block_body_hash = Bytes32
  * Follows the Conway-era CDDL specification.
  *
  * @since 2.0.0
  * @category schemas
  */
-export const BlockBodyHash = Hash32.HexSchema.pipe(
-  Schema.brand("BlockBodyHash"),
-);
+export const BlockBodyHash = pipe(
+  Bytes32.HexSchema,
+  Schema.brand("BlockBodyHash")
+).annotations({
+  identifier: "BlockBodyHash",
+});
+
 export type BlockBodyHash = typeof BlockBodyHash.Type;
 
-export const BytesSchema = Schema.transform(
-  Hash32.BytesSchema,
-  Schema.typeSchema(BlockBodyHash),
-  {
-    strict: true,
-    encode: (_, toA) => Bytes.Decode.hex(toA),
-    decode: (_, fromA) =>
-      Schema.decodeSync(BlockBodyHash)(Bytes.Encode.hex(fromA)),
-  },
-);
+export const FromBytes = Schema.compose(
+  Bytes32.FromBytes, // Uint8Array -> hex string
+  BlockBodyHash // hex string -> BlockBodyHash
+).annotations({
+  identifier: "BlockBodyHash.Bytes",
+});
 
-export const HexSchema = Schema.transform(
-  Schema.typeSchema(Hash32.HexSchema),
-  BlockBodyHash,
-  {
-    strict: true,
-    encode: (_, toA) => toA,
-    decode: (fromI) => Schema.decodeSync(BlockBodyHash)(fromI),
-  },
-);
+export const FromHex = Schema.compose(
+  Bytes32.HexSchema, // string -> hex string
+  BlockBodyHash // hex string -> BlockBodyHash
+).annotations({
+  identifier: "BlockBodyHash.Hex",
+});
 
 /**
  * Check if two BlockBodyHash instances are equal.
- *
- * @example
- * import { BlockBodyHash } from "@evolution-sdk/experimental";
- * import assert from "assert";
  *
  * @since 2.0.0
  * @category equality
@@ -71,45 +53,26 @@ export const HexSchema = Schema.transform(
 export const equals = (a: BlockBodyHash, b: BlockBodyHash): boolean => a === b;
 
 /**
- * Synchronous encoding utilities.
+ * Generate a random BlockBodyHash.
  *
  * @since 2.0.0
- * @category encoding/decoding
+ * @category generators
  */
-export const Encode = {
-  hex: Schema.encodeSync(HexSchema),
-  bytes: Schema.encodeSync(BytesSchema),
-};
+export const generator = FastCheck.uint8Array({
+  minLength: Bytes32.Bytes32_BYTES_LENGTH,
+  maxLength: Bytes32.Bytes32_BYTES_LENGTH,
+}).map((bytes) => Codec.Decode.bytes(bytes));
 
 /**
- * Synchronous decoding utilities.
+ * Codec utilities for BlockBodyHash encoding and decoding operations.
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const Decode = {
-  hex: Schema.decodeUnknownSync(HexSchema),
-  bytes: Schema.decodeUnknownSync(BytesSchema),
-};
-
-/**
- * Either encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  hex: Schema.encodeEither(HexSchema),
-  bytes: Schema.encodeEither(BytesSchema),
-};
-
-/**
- * Either decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  hex: Schema.decodeUnknownEither(HexSchema),
-  bytes: Schema.decodeUnknownEither(BytesSchema),
-};
+export const Codec = createEncoders(
+  {
+    bytes: FromBytes,
+    hex: FromHex,
+  },
+  BlockBodyHashError
+);

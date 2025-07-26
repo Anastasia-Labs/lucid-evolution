@@ -70,7 +70,7 @@ export const DRepCDDLSchema = Schema.transformOrFail(
       Effect.gen(function* () {
         switch (toA._tag) {
           case "KeyHashDRep": {
-            const keyHashBytes = yield* ParseResult.encode(KeyHash.BytesSchema)(
+            const keyHashBytes = yield* ParseResult.encode(KeyHash.FromBytes)(
               toA.keyHash,
             );
             return [0, keyHashBytes] as const;
@@ -92,7 +92,7 @@ export const DRepCDDLSchema = Schema.transformOrFail(
         const [tag, ...rest] = fromA;
         switch (tag) {
           case 0: {
-            const keyHash = yield* ParseResult.decode(KeyHash.BytesSchema)(
+            const keyHash = yield* ParseResult.decode(KeyHash.FromBytes)(
               rest[0] as Uint8Array,
             );
             return yield* ParseResult.decode(DRep)({
@@ -175,7 +175,7 @@ export const CBORBytesSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    CBOR.FromBytes(options), // Uint8Array → CBOR
     DRepCDDLSchema, // CBOR → DRep
   );
 
@@ -189,7 +189,7 @@ export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
+    Bytes.FromBytes, // string → Uint8Array
     CBORBytesSchema(options), // Uint8Array → DRep
   );
 
