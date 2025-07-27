@@ -18,7 +18,8 @@
     "nextra": "^4.2.17",
     "nextra-theme-docs": "^4.2.17",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "zod": "^3.25.0"
   },
   "devDependencies": {
     "@evolution-sdk/eslint-config": "workspace:*",

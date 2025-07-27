@@ -446,7 +446,7 @@ export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.FromBytes, // string → Uint8Array
+    Bytes.FromHex, // string → Uint8Array
     CBORBytesSchema(options), // Uint8Array → NativeScript
   );
 
