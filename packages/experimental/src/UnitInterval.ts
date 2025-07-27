@@ -1,127 +1,114 @@
-import { Schema, Data, FastCheck, Effect, ParseResult } from "effect";
+import {
+  Schema,
+  Data,
+  FastCheck,
+  Effect,
+  ParseResult,
+  BigDecimal,
+} from "effect";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
+import * as Numeric from "./Numeric.js";
+import { createEncoders } from "./Codec.js";
 
 /**
  * Error class for UnitInterval related operations.
- *
- * @example
- * import { UnitInterval } from "@evolution-sdk/experimental";
- * import assert from "assert";
- *
- * const error = new UnitInterval.UnitIntervalError({ message: "Invalid unit interval" });
- * assert(error.message === "Invalid unit interval");
  *
  * @since 2.0.0
  * @category errors
  */
 export class UnitIntervalError extends Data.TaggedError("UnitIntervalError")<{
   message?: string;
-  reason?:
-    | "InvalidNumerator"
-    | "InvalidDenominator"
-    | "DenominatorZero"
-    | "InvalidRange";
+  cause?: unknown;
 }> {}
 
 /**
  * Schema for UnitInterval representing a fractional value between 0 and 1.
- * unit_interval = #6.30([uint, uint])
- * Constraints:
- * 1. numerator <= denominator
- * 2. denominator > 0
  *
- * @example
- * import { UnitInterval } from "@evolution-sdk/experimental";
+ * CDDL: unit_interval = #6.30([uint, uint])
  *
- * const ratio = new UnitInterval.UnitInterval({
- *   numerator: 1n,
- *   denominator: 2n
- * });
- * console.log(ratio.numerator); // 1n
- * console.log(ratio.denominator); // 2n
- *
- * @since 2.0.0
- * @category model
- */
-export class UnitInterval extends Schema.TaggedClass<UnitInterval>()(
-  "UnitInterval",
-  {
-    numerator: Schema.BigIntFromSelf.pipe(
-      Schema.filter((n) => n >= 0n),
-    ).annotations({
-      message: () => "numerator must be non-negative",
-    }),
-    denominator: Schema.BigIntFromSelf.pipe(
-      Schema.filter((d) => d > 0n),
-    ).annotations({
-      message: () => "denominator must be positive",
-    }),
-  },
-) {
-  [Symbol.for("nodejs.util.inspect.custom")]() {
-    return {
-      _tag: "UnitInterval",
-      numerator: this.numerator,
-      denominator: this.denominator,
-    };
-  }
-}
-
-/**
- * CDDL schema for UnitInterval as defined in the specification:
- * unit_interval = #6.30([uint, uint])
- *
- * Transforms between CBOR tag structure and UnitInterval model.
+ * A unit interval is a number in the range between 0 and 1, which
+ * means there are two extra constraints:
+ *   1. numerator <= denominator
+ *   2. denominator > 0
  *
  * @since 2.0.0
  * @category schemas
  */
-export const UnitIntervalCDDLSchema = Schema.transformOrFail(
-  CBOR.Tag,
-  Schema.typeSchema(UnitInterval),
-  {
-    strict: true,
-    encode: (unitInterval) =>
-      Effect.succeed({
+export const UnitInterval = Schema.Struct({
+  numerator: Numeric.Uint64Schema,
+  denominator: Numeric.Uint64Schema,
+})
+  .pipe(
+    Schema.filter((interval) => {
+      if (interval.denominator <= 0n) {
+        return {
+          path: ["denominator"],
+          message: `denominator (${interval.denominator}) must be > 0`,
+        };
+      }
+      if (interval.numerator > interval.denominator) {
+        return {
+          path: ["numerator"],
+          message: `numerator (${interval.numerator}) must be <= denominator (${interval.denominator})`,
+        };
+      }
+      return true;
+    }),
+  )
+  .annotations({
+    identifier: "UnitInterval",
+  });
+
+export type UnitInterval = typeof UnitInterval.Type;
+
+/**
+ * CDDL schema for UnitInterval following the Conway specification.
+ * unit_interval = #6.30([uint, uint])
+ *
+ * Transforms between CBOR tag 30 structure and UnitInterval model.
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const FromCDDL = Schema.transformOrFail(CBOR.Tag, UnitInterval, {
+  strict: true,
+  encode: (_, __, ___, unitInterval) =>
+    Effect.succeed(
+      new CBOR.Tag({
         tag: 30,
         value: [unitInterval.numerator, unitInterval.denominator],
       }),
-    decode: (taggedValue) =>
-      Effect.gen(function* () {
-        // Validate tag number
-        if (taggedValue.tag !== 30) {
-          return yield* Effect.fail(
-            new ParseResult.Type(
-              Schema.typeSchema(UnitInterval).ast,
-              taggedValue,
-              `Expected tag 30 for UnitInterval, got ${taggedValue.tag}`,
-            ),
-          );
-        }
+    ),
+  decode: (_, __, ___, taggedValue) =>
+    Effect.gen(function* () {
+      // Validate tag number
+      if (taggedValue.tag !== 30) {
+        return yield* Effect.fail(
+          new ParseResult.Type(
+            UnitInterval.ast,
+            taggedValue,
+            `Expected tag 30 for UnitInterval, got ${taggedValue.tag}`,
+          ),
+        );
+      }
 
-        // Validate that the value is a tuple of two integers
-        const tupleValue = yield* ParseResult.decodeUnknown(
-          Schema.Tuple(CBOR.Integer, CBOR.Integer),
-        )(taggedValue.value);
+      // Validate that the value is a tuple of two integers
+      const tupleValue = yield* ParseResult.decodeUnknown(
+        Schema.Tuple(CBOR.Integer, CBOR.Integer),
+      )(taggedValue.value);
 
-        const [numerator, denominator] = tupleValue;
+      const [numerator, denominator] = tupleValue;
 
-        // Validate numerator <= denominator constraint
-        if (numerator > denominator) {
-          return yield* Effect.fail(
-            new ParseResult.Type(
-              Schema.typeSchema(UnitInterval).ast,
-              taggedValue,
-              `numerator (${numerator}) must be <= denominator (${denominator})`,
-            ),
-          );
-        }
-
-        return new UnitInterval({ numerator, denominator });
-      }),
-  },
-);
+      // Create and validate UnitInterval using the validated schema
+      return yield* ParseResult.decode(UnitInterval)({
+        numerator,
+        denominator,
+      });
+    }),
+}).annotations({
+  identifier: "UnitInterval.CDDL",
+});
 
 /**
  * CBOR bytes transformation schema for UnitInterval.
@@ -130,13 +117,15 @@ export const UnitIntervalCDDLSchema = Schema.transformOrFail(
  * @since 2.0.0
  * @category schemas
  */
-export const CBORBytesSchema = (
+export const FromCBORBytes = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
-    UnitIntervalCDDLSchema, // CBOR → UnitInterval
-  );
+    CBOR.FromBytes(options), // Uint8Array → CBOR
+    FromCDDL, // CBOR → UnitInterval
+  ).annotations({
+    identifier: "UnitInterval.CBORBytes",
+  });
 
 /**
  * CBOR hex transformation schema for UnitInterval.
@@ -145,52 +134,18 @@ export const CBORBytesSchema = (
  * @since 2.0.0
  * @category schemas
  */
-export const CBORHexSchema = (
+export const FromCBORHex = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
-    CBORBytesSchema(options), // Uint8Array → UnitInterval
-  );
-
-/**
- * Create a UnitInterval from numerator and denominator.
- *
- * @example
- * import { UnitInterval } from "@evolution-sdk/experimental";
- *
- * const half = UnitInterval.make(1n, 2n);
- * console.log(half.numerator); // 1n
- * console.log(half.denominator); // 2n
- *
- * @since 2.0.0
- * @category constructors
- */
-export const make = (numerator: bigint, denominator: bigint): UnitInterval => {
-  if (denominator <= 0n) {
-    throw new UnitIntervalError({
-      message: "denominator must be positive",
-      reason: "DenominatorZero",
-    });
-  }
-  if (numerator > denominator) {
-    throw new UnitIntervalError({
-      message: `numerator (${numerator}) must be <= denominator (${denominator})`,
-      reason: "InvalidRange",
-    });
-  }
-  return new UnitInterval({ numerator, denominator });
-};
+    Bytes.FromHex, // string → Uint8Array
+    FromCBORBytes(options), // Uint8Array → UnitInterval
+  ).annotations({
+    identifier: "UnitInterval.CBORHex",
+  });
 
 /**
  * Check if two UnitInterval instances are equal.
- *
- * @example
- * import { UnitInterval } from "@evolution-sdk/experimental";
- *
- * const a = UnitInterval.make(1n, 2n);
- * const b = UnitInterval.make(1n, 2n);
- * console.log(UnitInterval.equals(a, b)); // true
  *
  * @since 2.0.0
  * @category equality
@@ -199,131 +154,55 @@ export const equals = (a: UnitInterval, b: UnitInterval): boolean =>
   a.numerator === b.numerator && a.denominator === b.denominator;
 
 /**
- * Convert UnitInterval to decimal value.
- *
- * @example
- * import { UnitInterval } from "@evolution-sdk/experimental";
- *
- * const half = UnitInterval.make(1n, 2n);
- * console.log(UnitInterval.toDecimal(half)); // 0.5
+ * Convert UnitInterval to BigDecimal value.
  *
  * @since 2.0.0
  * @category transformation
  */
-export const toDecimal = (interval: UnitInterval): number =>
-  Number(interval.numerator) / Number(interval.denominator);
+export const toBigDecimal = (interval: UnitInterval) =>
+  BigDecimal.unsafeDivide(
+    BigDecimal.fromBigInt(interval.numerator),
+    BigDecimal.fromBigInt(interval.denominator),
+  );
 
 /**
- * Create UnitInterval from decimal value (approximate).
- *
- * @example
- * import { UnitInterval } from "@evolution-sdk/experimental";
- *
- * const half = UnitInterval.fromDecimal(0.5);
- * console.log(half.numerator); // 1n
- * console.log(half.denominator); // 2n
+ * Create UnitInterval from BigDecimal value.
  *
  * @since 2.0.0
  * @category constructors
  */
-export const fromDecimal = (value: number): UnitInterval => {
-  if (value < 0 || value > 1) {
-    throw new UnitIntervalError({
-      message: `value must be between 0 and 1, got ${value}`,
-      reason: "InvalidRange",
-    });
-  }
+export const fromBigDecimal = (value: BigDecimal.BigDecimal): UnitInterval => {
+  const normalized = BigDecimal.normalize(value);
+  const denominator = BigInt(10) ** BigInt(Math.max(0, normalized.scale));
+  const numerator = normalized.value;
 
-  // Convert to fraction with reasonable precision
-  const precision = 1000000n; // 6 decimal places
-  const numerator = BigInt(Math.round(value * Number(precision)));
-  return make(numerator, precision);
+  return UnitInterval.make({ numerator, denominator });
 };
-
-/**
- * Create a UnitInterval from a percentage (0-100).
- *
- * @example
- * import { UnitInterval } from "@evolution-sdk/experimental";
- *
- * const fiftyPercent = UnitInterval.fromPercentage(50);
- * console.log(UnitInterval.toDecimal(fiftyPercent)); // 0.5
- *
- * @since 2.0.0
- * @category constructors
- */
-export const fromPercentage = (percentage: number): UnitInterval => {
-  if (percentage < 0 || percentage > 100) {
-    throw new UnitIntervalError({
-      message: `percentage must be between 0 and 100, got ${percentage}`,
-      reason: "InvalidRange",
-    });
-  }
-  return fromDecimal(percentage / 100);
-};
-
-/**
- * Convert UnitInterval to percentage (0-100).
- *
- * @example
- * import { UnitInterval } from "@evolution-sdk/experimental";
- *
- * const half = UnitInterval.make(1n, 2n);
- * console.log(UnitInterval.toPercentage(half)); // 50
- *
- * @since 2.0.0
- * @category transformation
- */
-export const toPercentage = (interval: UnitInterval): number =>
-  toDecimal(interval) * 100;
 
 /**
  * Generate a random UnitInterval.
- *
- * @example
- * import { UnitInterval } from "@evolution-sdk/experimental";
- * import { FastCheck } from "effect";
- * import assert from "assert";
- *
- * const randomSamples = FastCheck.sample(UnitInterval.generator, 20);
- * randomSamples.forEach((interval) => {
- *   assert(interval.numerator <= interval.denominator);
- *   assert(interval.denominator > 0n);
- * });
  *
  * @since 2.0.0
  * @category generators
  */
 export const generator = FastCheck.bigInt({ min: 1n, max: 1000000n }).chain(
   (denominator) =>
-    FastCheck.bigInt({ min: 0n, max: denominator }).map(
-      (numerator) => new UnitInterval({ numerator, denominator }),
+    FastCheck.bigInt({ min: 0n, max: denominator }).map((numerator) =>
+      UnitInterval.make({ numerator, denominator }),
     ),
 );
 
-export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
-  Encode: {
-    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
-    cborHex: Schema.encodeSync(CBORHexSchema(options)),
-  },
-  Decode: {
-    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
-  },
-  EncodeEither: {
-    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.encodeEither(CBORHexSchema(options)),
-  },
-  DecodeEither: {
-    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.decodeEither(CBORHexSchema(options)),
-  },
-  EncodeEffect: {
-    cborBytes: Schema.encode(CBORBytesSchema(options)),
-    cborHex: Schema.encode(CBORHexSchema(options)),
-  },
-  DecodeEffect: {
-    cborBytes: Schema.decode(CBORBytesSchema(options)),
-    cborHex: Schema.decode(CBORHexSchema(options)),
-  },
-});
+/**
+ * CBOR codec utilities for UnitInterval.
+ *
+ * @since 2.0.0
+ * @category codecs
+ */
+export const CBORCodec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
+  createEncoders(
+    {
+      cborBytes: FromCBORBytes(options),
+      cborHex: FromCBORHex(options),
+    },
+    UnitIntervalError,
+  );

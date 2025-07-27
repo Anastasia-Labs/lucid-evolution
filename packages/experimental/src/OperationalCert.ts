@@ -4,6 +4,7 @@ import * as Ed25519Signature from "./Ed25519Signature.js";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
 import * as Numeric from "./Numeric.js";
+import * as _Codec from "./Codec.js";
 
 /**
  * Error class for OperationalCert operations
@@ -83,7 +84,7 @@ export const equals = (a: OperationalCert, b: OperationalCert): boolean =>
  * @since 2.0.0
  * @category schemas
  */
-export const OperationalCertCDDLSchema = Schema.transformOrFail(
+export const FromCDDL = Schema.transformOrFail(
   Schema.Tuple(
     CBOR.ByteArray, // hot_vkey as bytes
     CBOR.Integer, // sequence_number as bigint
@@ -95,11 +96,11 @@ export const OperationalCertCDDLSchema = Schema.transformOrFail(
     strict: true,
     encode: (toA) =>
       Effect.gen(function* () {
-        const hotVkeyBytes = yield* ParseResult.encode(KESVkey.BytesSchema)(
+        const hotVkeyBytes = yield* ParseResult.encode(KESVkey.FromBytes)(
           toA.hotVkey,
         );
         const sigmaBytes = yield* ParseResult.encode(
-          Ed25519Signature.BytesSchema,
+          Ed25519Signature.FromBytes,
         )(toA.sigma);
         return [
           hotVkeyBytes,
@@ -110,10 +111,10 @@ export const OperationalCertCDDLSchema = Schema.transformOrFail(
       }),
     decode: ([hotVkeyBytes, sequenceNumber, kesPeriod, sigmaBytes]) =>
       Effect.gen(function* () {
-        const hotVkey = yield* ParseResult.decode(KESVkey.BytesSchema)(
+        const hotVkey = yield* ParseResult.decode(KESVkey.FromBytes)(
           hotVkeyBytes,
         );
-        const sigma = yield* ParseResult.decode(Ed25519Signature.BytesSchema)(
+        const sigma = yield* ParseResult.decode(Ed25519Signature.FromBytes)(
           sigmaBytes,
         );
         return yield* ParseResult.decode(OperationalCert)({
@@ -137,8 +138,8 @@ export const CBORBytesSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
-    OperationalCertCDDLSchema, // CBOR → OperationalCert
+    CBOR.FromBytes(options), // Uint8Array → CBOR
+    FromCDDL, // CBOR → OperationalCert
   );
 
 /**
@@ -151,33 +152,15 @@ export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
+    Bytes.FromHex, // string → Uint8Array
     CBORBytesSchema(options), // Uint8Array → OperationalCert
   );
 
-export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
-  Encode: {
-    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
-    cborHex: Schema.encodeSync(CBORHexSchema(options)),
-  },
-  Decode: {
-    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
-  },
-  EncodeEither: {
-    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.encodeEither(CBORHexSchema(options)),
-  },
-  DecodeEither: {
-    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.decodeEither(CBORHexSchema(options)),
-  },
-  EncodeEffect: {
-    cborBytes: Schema.encode(CBORBytesSchema(options)),
-    cborHex: Schema.encode(CBORHexSchema(options)),
-  },
-  DecodeEffect: {
-    cborBytes: Schema.decode(CBORBytesSchema(options)),
-    cborHex: Schema.decode(CBORHexSchema(options)),
-  },
-});
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
+  _Codec.createEncoders(
+    {
+      cborBytes: CBORBytesSchema(options),
+      cborHex: CBORHexSchema(options),
+    },
+    OperationalCertError,
+  );

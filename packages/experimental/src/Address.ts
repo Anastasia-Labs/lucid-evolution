@@ -64,7 +64,7 @@ export const Address = Schema.Union(
   EnterpriseAddress.EnterpriseAddress,
   PointerAddress.PointerAddress,
   RewardAccount.RewardAccount,
-  ByronAddress.ByronAddress
+  ByronAddress.ByronAddress,
 );
 
 /**
@@ -120,7 +120,7 @@ export const FromBytes = Schema.transformOrFail(
           case 0b0110: // Key payment
           case 0b0111:
             return yield* ParseResult.decode(EnterpriseAddress.FromBytes)(
-              fromA
+              fromA,
             );
 
           // Pointer address types (0100, 0101)
@@ -141,12 +141,12 @@ export const FromBytes = Schema.transformOrFail(
               new ParseResult.Type(
                 ast,
                 fromA,
-                `Unknown address type: ${addressType}`
-              )
+                `Unknown address type: ${addressType}`,
+              ),
             );
         }
       }),
-  }
+  },
 );
 
 /**
@@ -163,36 +163,38 @@ export const FromHex = Schema.compose(Bytes.FromHex, FromBytes);
  * @since 2.0.0
  * @category schema
  */
-export const FromBech32 = Schema.transformOrFail(Schema.typeSchema(Bech32.Bech32Schema), Address, {
-  strict: true,
-  encode: (_, __, ___, toA) =>
-    Effect.gen(function* () {
-      const bytes = yield* ParseResult.encode(FromBytes)(toA);
-      let prefix: string;
-      switch (toA._tag) {
-        case "BaseAddress":
-        case "EnterpriseAddress":
-        case "PointerAddress":
-          prefix = toA.networkId === 0 ? "addr_test" : "addr";
-          break;
-        case "RewardAccount":
-          prefix = toA.networkId === 0 ? "stake_test" : "stake";
-          break;
-        case "ByronAddress":
-          prefix = "";
-          break;
-      }
-      const b = yield* ParseResult.decode(Bech32.FromBytes(prefix))(
-        bytes
-      );
-      return b;
-    }),
-  decode: (fromI) =>
-    pipe(
-      ParseResult.encode(Bech32.FromBytes())(fromI),
-      Effect.flatMap(ParseResult.decode(FromBytes))
-    ),
-});
+export const FromBech32 = Schema.transformOrFail(
+  Schema.typeSchema(Bech32.Bech32Schema),
+  Address,
+  {
+    strict: true,
+    encode: (_, __, ___, toA) =>
+      Effect.gen(function* () {
+        const bytes = yield* ParseResult.encode(FromBytes)(toA);
+        let prefix: string;
+        switch (toA._tag) {
+          case "BaseAddress":
+          case "EnterpriseAddress":
+          case "PointerAddress":
+            prefix = toA.networkId === 0 ? "addr_test" : "addr";
+            break;
+          case "RewardAccount":
+            prefix = toA.networkId === 0 ? "stake_test" : "stake";
+            break;
+          case "ByronAddress":
+            prefix = "";
+            break;
+        }
+        const b = yield* ParseResult.decode(Bech32.FromBytes(prefix))(bytes);
+        return b;
+      }),
+    decode: (fromI) =>
+      pipe(
+        ParseResult.encode(Bech32.FromBytes())(fromI),
+        Effect.flatMap(ParseResult.decode(FromBytes)),
+      ),
+  },
+);
 
 /**
  * Checks if two addresses are equal.
@@ -210,7 +212,7 @@ export const equals = (a: Address, b: Address): boolean => {
     case "EnterpriseAddress":
       return EnterpriseAddress.equals(
         a,
-        b as EnterpriseAddress.EnterpriseAddress
+        b as EnterpriseAddress.EnterpriseAddress,
       );
     case "PointerAddress":
       return PointerAddress.equals(a, b as PointerAddress.PointerAddress);
@@ -231,7 +233,7 @@ export const generator = FastCheck.oneof(
   BaseAddress.generator,
   EnterpriseAddress.generator,
   PointerAddress.generator,
-  RewardAccount.generator
+  RewardAccount.generator,
 );
 
 /**
@@ -246,5 +248,5 @@ export const Codec = createEncoders(
     hex: FromHex,
     bytes: FromBytes,
   },
-  AddressError
+  AddressError,
 );

@@ -45,14 +45,14 @@ export type DnsName = typeof DnsName.Type;
 
 export const FromBytes = Schema.compose(
   Text128.FromVariableBytes,
-  DnsName
+  DnsName,
 ).annotations({
   identifier: "DnsName.FromBytes",
 });
 
 export const FromHex = Schema.compose(
   Text128.FromVariableHex,
-  DnsName
+  DnsName,
 ).annotations({
   identifier: "DnsName.FromHex",
 });
@@ -115,5 +115,5 @@ export const Codec = _Codec.createEncoders(
     bytes: FromBytes,
     hex: FromHex,
   },
-  DnsNameError
+  DnsNameError,
 );

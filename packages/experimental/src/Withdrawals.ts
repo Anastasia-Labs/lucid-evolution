@@ -91,7 +91,7 @@ export const WithdrawalsCDDLSchema = Schema.transformOrFail(
         const withdrawalsMap = new Map<Uint8Array, bigint>();
         for (const [rewardAccount, coin] of toA.withdrawals.entries()) {
           const accountBytes = yield* ParseResult.encode(
-            RewardAccount.BytesSchema,
+            RewardAccount.FromBytes,
           )(rewardAccount);
           withdrawalsMap.set(accountBytes, BigInt(coin));
         }
@@ -105,7 +105,7 @@ export const WithdrawalsCDDLSchema = Schema.transformOrFail(
         >();
         for (const [accountBytes, coinAmount] of fromA.entries()) {
           const rewardAccount = yield* ParseResult.decode(
-            RewardAccount.BytesSchema,
+            RewardAccount.FromBytes,
           )(accountBytes);
           const coin = Coin.make(coinAmount);
           decodedWithdrawals.set(rewardAccount, coin);
@@ -128,7 +128,7 @@ export const CBORBytesSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    CBOR.FromBytes(options), // Uint8Array → CBOR
     WithdrawalsCDDLSchema, // CBOR → Withdrawals
   );
 
@@ -142,7 +142,7 @@ export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
+    Bytes.FromHex, // string → Uint8Array
     CBORBytesSchema(options), // Uint8Array → Withdrawals
   );
 

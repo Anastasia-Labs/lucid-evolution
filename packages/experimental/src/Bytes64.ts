@@ -10,7 +10,7 @@ export const BytesSchema = pipe(
     message: (issue) =>
       `${issue.actual} must be a byte array of length ${BYTES_LENGTH}, but got ${issue.actual}`,
     identifier: "Bytes64.Bytes",
-  })
+  }),
 );
 
 export const HexSchema = pipe(
@@ -19,7 +19,7 @@ export const HexSchema = pipe(
     message: (issue) =>
       `${issue.actual} must be a hex string of length ${HEX_LENGTH}, but got ${issue.actual}`,
     identifier: "Bytes64.Hex",
-  })
+  }),
 );
 
 export const FromHex = Schema.transform(HexSchema, BytesSchema, {
@@ -33,4 +33,3 @@ export const FromBytes = Schema.transform(BytesSchema, HexSchema, {
   encode: (toI) => Bytes.Codec.Decode.bytes(toI),
   decode: (fromA) => Bytes.Codec.Encode.bytes(fromA),
 });
-

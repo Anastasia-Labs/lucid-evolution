@@ -29,35 +29,23 @@ export class PoolKeyHashError extends Data.TaggedError("PoolKeyHashError")<{
  */
 export const PoolKeyHash = pipe(
   Hash28.HexSchema,
-  Schema.brand("PoolKeyHash")
+  Schema.brand("PoolKeyHash"),
 ).annotations({
   identifier: "PoolKeyHash",
 });
 
 export type PoolKeyHash = typeof PoolKeyHash.Type;
 
-/**
- * Schema for transforming between Uint8Array and PoolKeyHash.
- *
- * @since 2.0.0
- * @category schemas
- */
-export const BytesSchema = Schema.compose(
-  Hash28.BytesHexTransformer, // Uint8Array -> hex string
-  PoolKeyHash // hex string -> PoolKeyHash
+export const FromBytes = Schema.compose(
+  Hash28.FromBytes, // Uint8Array -> hex string
+  PoolKeyHash, // hex string -> PoolKeyHash
 ).annotations({
   identifier: "PoolKeyHash.Bytes",
 });
 
-/**
- * Schema for transforming between hex string and PoolKeyHash.
- *
- * @since 2.0.0
- * @category schemas
- */
-export const HexSchema = Schema.compose(
+export const FromHex = Schema.compose(
   Hash28.HexSchema, // string -> hex string
-  PoolKeyHash // hex string -> PoolKeyHash
+  PoolKeyHash, // hex string -> PoolKeyHash
 ).annotations({
   identifier: "PoolKeyHash.Hex",
 });
@@ -99,8 +87,8 @@ export const generator = FastCheck.uint8Array({
  */
 export const Codec = createEncoders(
   {
-    bytes: BytesSchema,
-    hex: HexSchema,
+    bytes: FromBytes,
+    hex: FromHex,
   },
-  PoolKeyHashError
+  PoolKeyHashError,
 );

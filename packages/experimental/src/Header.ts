@@ -89,36 +89,36 @@ export const isHeader = (value: unknown): value is Header =>
 export const FromCDDL = Schema.transformOrFail(
   Schema.Tuple(
     Schema.encodedSchema(HeaderBody.FromCDDL), // header_body using HeaderBody CDDL schema
-    CBOR.ByteArray // body_signature as bytes
+    CBOR.ByteArray, // body_signature as bytes
   ),
   Schema.typeSchema(Header),
   {
     strict: true,
     encode: (toA) =>
       Effect.gen(function* () {
-        const headerBodyCddl = yield* ParseResult.encode(
-          HeaderBody.FromCDDL
-        )(toA.headerBody);
+        const headerBodyCddl = yield* ParseResult.encode(HeaderBody.FromCDDL)(
+          toA.headerBody,
+        );
         const bodySignatureBytes = yield* ParseResult.encode(
-          KesSignature.FromBytes
+          KesSignature.FromBytes,
         )(toA.bodySignature);
         return [headerBodyCddl, bodySignatureBytes] as const;
       }),
     decode: ([headerBodyCddl, bodySignatureBytes]) =>
       Effect.gen(function* () {
-        const headerBody = yield* ParseResult.decode(
-          HeaderBody.FromCDDL
-        )(headerBodyCddl);
-        const bodySignature = yield* ParseResult.decode(
-          KesSignature.FromBytes
-        )(bodySignatureBytes);
+        const headerBody = yield* ParseResult.decode(HeaderBody.FromCDDL)(
+          headerBodyCddl,
+        );
+        const bodySignature = yield* ParseResult.decode(KesSignature.FromBytes)(
+          bodySignatureBytes,
+        );
         return yield* ParseResult.decode(Header)({
           _tag: "Header",
           headerBody,
           bodySignature,
         });
       }),
-  }
+  },
 );
 
 /**
@@ -128,11 +128,11 @@ export const FromCDDL = Schema.transformOrFail(
  * @category schemas
  */
 export const CBORBytesSchema = (
-  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
     CBOR.FromBytes(options), // Uint8Array → CBOR
-    FromCDDL // CBOR → Header
+    FromCDDL, // CBOR → Header
   );
 
 /**
@@ -142,11 +142,11 @@ export const CBORBytesSchema = (
  * @category schemas
  */
 export const CBORHexSchema = (
-  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
     Bytes.FromHex, // string → Uint8Array
-    CBORBytesSchema(options) // Uint8Array → Header
+    CBORBytesSchema(options), // Uint8Array → Header
   );
 
 export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
@@ -155,5 +155,5 @@ export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
       cborBytes: CBORBytesSchema(options),
       cborHex: CBORHexSchema(options),
     },
-    HeaderError
+    HeaderError,
   );

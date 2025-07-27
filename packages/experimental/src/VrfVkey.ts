@@ -1,27 +1,16 @@
-import { Schema, Data } from "effect";
-import * as Hash32 from "./Hash32.js";
-import * as Bytes from "./Bytes.js";
+import { Schema, Data, FastCheck, pipe } from "effect";
+import * as Bytes32 from "./Bytes32.js";
+import { createEncoders } from "./Codec.js";
 
 /**
  * Error class for VrfVkey related operations.
- *
- * @example
- * import { VrfVkey } from "@evolution-sdk/experimental";
- * import assert from "assert";
- *
- * const error = new VrfVkey.VrfVkeyError({ message: "Invalid VRF verification key" });
- * assert(error.message === "Invalid VRF verification key");
  *
  * @since 2.0.0
  * @category errors
  */
 export class VrfVkeyError extends Data.TaggedError("VrfVkeyError")<{
   message?: string;
-  reason?:
-    | "InvalidHexLength"
-    | "InvalidBytesLength"
-    | "InvalidHexFormat"
-    | "InvalidCBORFormat";
+  cause?: unknown;
 }> {}
 
 /**
@@ -32,35 +21,31 @@ export class VrfVkeyError extends Data.TaggedError("VrfVkeyError")<{
  * @since 2.0.0
  * @category schemas
  */
-export const VrfVkey = Hash32.HexSchema.pipe(Schema.brand("VrfVkey"));
+export const VrfVkey = pipe(
+  Bytes32.HexSchema,
+  Schema.brand("VrfVkey"),
+).annotations({
+  identifier: "VrfVkey",
+});
+
 export type VrfVkey = typeof VrfVkey.Type;
 
-export const BytesSchema = Schema.transform(
-  Hash32.BytesSchema,
-  Schema.typeSchema(VrfVkey),
-  {
-    strict: true,
-    encode: (_, toA) => Bytes.Decode.hex(toA),
-    decode: (_, fromA) => Schema.decodeSync(VrfVkey)(Bytes.Encode.hex(fromA)),
-  },
-);
+export const FromBytes = Schema.compose(
+  Bytes32.FromBytes, // Uint8Array -> hex string
+  VrfVkey, // hex string -> VrfVkey
+).annotations({
+  identifier: "VrfVkey.Bytes",
+});
 
-export const HexSchema = Schema.transform(
-  Schema.typeSchema(Hash32.HexSchema),
-  VrfVkey,
-  {
-    strict: true,
-    encode: (_, toA) => toA,
-    decode: (fromI) => Schema.decodeSync(VrfVkey)(fromI),
-  },
-);
+export const FromHex = Schema.compose(
+  Bytes32.HexSchema, // string -> hex string
+  VrfVkey, // hex string -> VrfVkey
+).annotations({
+  identifier: "VrfVkey.Hex",
+});
 
 /**
  * Check if two VrfVkey instances are equal.
- *
- * @example
- * import { VrfVkey } from "@evolution-sdk/experimental";
- * import assert from "assert";
  *
  * @since 2.0.0
  * @category equality
@@ -68,45 +53,26 @@ export const HexSchema = Schema.transform(
 export const equals = (a: VrfVkey, b: VrfVkey): boolean => a === b;
 
 /**
- * Synchronous encoding utilities.
+ * Generate a random VrfVkey.
  *
  * @since 2.0.0
- * @category encoding/decoding
+ * @category generators
  */
-export const Encode = {
-  hex: Schema.encodeSync(HexSchema),
-  bytes: Schema.encodeSync(BytesSchema),
-};
+export const generator = FastCheck.uint8Array({
+  minLength: Bytes32.Bytes32_BYTES_LENGTH,
+  maxLength: Bytes32.Bytes32_BYTES_LENGTH,
+}).map((bytes) => Codec.Decode.bytes(bytes));
 
 /**
- * Synchronous decoding utilities.
+ * Codec utilities for VrfVkey encoding and decoding operations.
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const Decode = {
-  hex: Schema.decodeUnknownSync(HexSchema),
-  bytes: Schema.decodeUnknownSync(BytesSchema),
-};
-
-/**
- * Either encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  hex: Schema.encodeEither(HexSchema),
-  bytes: Schema.encodeEither(BytesSchema),
-};
-
-/**
- * Either decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  hex: Schema.decodeUnknownEither(HexSchema),
-  bytes: Schema.decodeUnknownEither(BytesSchema),
-};
+export const Codec = createEncoders(
+  {
+    bytes: FromBytes,
+    hex: FromHex,
+  },
+  VrfVkeyError,
+);

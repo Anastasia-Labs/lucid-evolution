@@ -1,15 +1,16 @@
-import { Effect, FastCheck, ParseResult, pipe, Schema } from "effect";
+import { Data, Effect, FastCheck, ParseResult, Schema } from "effect";
 import * as Credential from "./Credential.js";
 import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
 import * as NetworkId from "./NetworkId.js";
 import * as Bytes from "./Bytes.js";
 import * as Bytes29 from "./Bytes29.js";
+import * as _Codec from "./Codec.js";
 
-export declare const NominalType: unique symbol;
-export interface RewardAccount {
-  readonly [NominalType]: unique symbol;
-}
+export class RewardAccountError extends Data.TaggedError("RewardAccountError")<{
+  message?: string;
+  cause?: unknown;
+}> {}
 
 /**
  * Reward/stake address with only staking credential
@@ -32,21 +33,24 @@ export class RewardAccount extends Schema.TaggedClass<RewardAccount>(
   }
 }
 
-export const BytesSchema = Schema.transformOrFail(
+export const FromBytes = Schema.transformOrFail(
   Bytes29.BytesSchema,
   RewardAccount,
   {
     strict: true,
-    encode: (_, __, ___, toA) => {
-      const stakingBit = toA.stakeCredential._tag === "KeyHash" ? 0 : 1;
-      const header =
-        (0b111 << 5) | (stakingBit << 4) | (toA.networkId & 0b00001111);
-      const result = new Uint8Array(29);
-      result[0] = header;
-      const stakeCredentialBytes = Bytes.Decode.hex(toA.stakeCredential.hash);
-      result.set(stakeCredentialBytes, 1);
-      return ParseResult.succeed(result);
-    },
+    encode: (_, __, ___, toA) =>
+      Effect.gen(function* () {
+        const stakingBit = toA.stakeCredential._tag === "KeyHash" ? 0 : 1;
+        const header =
+          (0b111 << 5) | (stakingBit << 4) | (toA.networkId & 0b00001111);
+        const result = new Uint8Array(29);
+        result[0] = header;
+        const stakeCredentialBytes = yield* ParseResult.decode(Bytes.FromHex)(
+          toA.stakeCredential.hash,
+        );
+        result.set(stakeCredentialBytes, 1);
+        return yield* ParseResult.succeed(result);
+      }),
     decode: (_, __, ___, fromA) =>
       Effect.gen(function* () {
         const header = fromA[0];
@@ -59,7 +63,7 @@ export const BytesSchema = Schema.transformOrFail(
         const stakeCredential: Credential.Credential = isStakeKey
           ? {
               _tag: "KeyHash",
-              hash: yield* ParseResult.decode(KeyHash.BytesSchema)(
+              hash: yield* ParseResult.decode(KeyHash.FromBytes)(
                 fromA.slice(1, 29),
               ),
             }
@@ -78,16 +82,9 @@ export const BytesSchema = Schema.transformOrFail(
   },
 );
 
-export const HexSchema = Schema.transformOrFail(
-  Schema.typeSchema(Bytes29.HexSchema),
-  RewardAccount,
-  {
-    strict: true,
-    encode: (_, __, ___, toA) =>
-      pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Bytes.Encode.hex)),
-    decode: (fromI) =>
-      pipe(Bytes.Decode.hex(fromI), ParseResult.decode(BytesSchema)),
-  },
+export const FromHex = Schema.compose(
+  Bytes.FromHex, // string → Uint8Array
+  FromBytes, // Uint8Array → RewardAccount
 );
 
 /**
@@ -132,46 +129,10 @@ export const generator = FastCheck.tuple(
     }),
 );
 
-/**
- * Synchronous encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Encode = {
-  hex: Schema.encodeSync(HexSchema),
-  bytes: Schema.encodeSync(BytesSchema),
-};
-
-/**
- * Synchronous decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Decode = {
-  hex: Schema.decodeUnknownSync(HexSchema),
-  bytes: Schema.decodeUnknownSync(BytesSchema),
-};
-
-/**
- * Either encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  hex: Schema.encodeEither(HexSchema),
-  bytes: Schema.encodeEither(BytesSchema),
-};
-
-/**
- * Either decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  hex: Schema.decodeUnknownEither(HexSchema),
-  bytes: Schema.decodeUnknownEither(BytesSchema),
-};
+export const Codec = _Codec.createEncoders(
+  {
+    bytes: FromBytes,
+    hex: FromHex,
+  },
+  RewardAccountError,
+);

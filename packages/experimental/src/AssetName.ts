@@ -21,7 +21,7 @@ export class AssetNameError extends Data.TaggedError("AssetNameError")<{
  * @category model
  */
 export const AssetName = Bytes32.VariableHexSchema.pipe(
-  Schema.brand("AssetName")
+  Schema.brand("AssetName"),
 ).annotations({
   identifier: "AssetName",
 });
@@ -36,7 +36,7 @@ export type AssetName = typeof AssetName.Type;
  */
 export const FromBytes = Schema.compose(
   Bytes32.FromVariableBytes,
-  AssetName
+  AssetName,
 ).annotations({
   identifier: "AssetName.Bytes",
 });
@@ -49,7 +49,7 @@ export const FromBytes = Schema.compose(
  */
 export const FromHex = Schema.compose(
   Bytes32.VariableHexSchema,
-  AssetName
+  AssetName,
 ).annotations({
   identifier: "AssetName.Hex",
 });
@@ -84,5 +84,5 @@ export const Codec = createEncoders(
     bytes: FromBytes,
     hex: FromHex,
   },
-  AssetNameError
+  AssetNameError,
 );

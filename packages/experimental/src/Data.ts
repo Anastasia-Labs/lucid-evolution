@@ -132,7 +132,7 @@ export const MapSchema = Schema.MapFromSelf({
  * @since 2.0.0
  */
 export const ListSchema = Schema.Array(
-  Schema.suspend((): Schema.Schema<Data> => DataSchema)
+  Schema.suspend((): Schema.Schema<Data> => DataSchema),
 );
 
 /**
@@ -181,7 +181,7 @@ export const DataSchema: Schema.Schema<Data> = Schema.Union(
   Schema.typeSchema(MapSchema),
   ListSchema,
   Schema.typeSchema(IntSchema),
-  BytesSchema
+  BytesSchema,
 ).annotations({
   identifier: "Data",
 });
@@ -356,7 +356,7 @@ export const matchConstr = <T>(
   cases: {
     [key: number]: (fields: readonly Data[]) => T;
     _: (index: number, fields: readonly Data[]) => T;
-  }
+  },
 ): T => {
   const specificCase = cases[Number(constr.index)];
   if (specificCase) {
@@ -390,7 +390,7 @@ export const matchData = <T>(
     Int: (value: bigint) => T;
     Bytes: (bytes: string) => T;
     Constr: (constr: Constr) => T;
-  }
+  },
 ): T => {
   if (isMap(data)) {
     return cases.Map(Array.from(data.entries()));
@@ -439,7 +439,7 @@ export const genPlutusData = (depth: number = 3): FastCheck.Arbitrary<Data> => {
     genPlutusBytes(),
     genConstr(depth - 1),
     genPlutusList(depth - 1),
-    genPlutusMap(depth - 1)
+    genPlutusMap(depth - 1),
   );
 };
 
@@ -454,7 +454,7 @@ export const genPlutusBytes = (): FastCheck.Arbitrary<ByteArray> =>
   FastCheck.uint8Array({
     minLength: 0, // Allow empty arrays (valid for PlutusBytes)
     maxLength: 32, // Max 32 bytes
-  }).map((bytes) => bytearray(Bytes.Codec.encode.bytes(bytes)));
+  }).map((bytes) => bytearray(Bytes.Codec.Encode.bytes(bytes)));
 
 /**
  * Creates an arbitrary that generates PlutusBigInt values
@@ -492,7 +492,7 @@ export const genConstr = (depth: number): FastCheck.Arbitrary<Constr> =>
     FastCheck.array(genPlutusData(depth), {
       minLength: 0,
       maxLength: 5,
-    })
+    }),
   ).map(([index, data]) => constr(index, data));
 
 /**
@@ -517,7 +517,7 @@ export const genPlutusMap = (depth: number): FastCheck.Arbitrary<MapList> => {
   // Helper to create key-value pairs with unique keys
   const uniqueKeyValuePairs = <T extends Data>(
     keyGen: FastCheck.Arbitrary<T>,
-    maxSize: number
+    maxSize: number,
   ) =>
     FastCheck.uniqueArray(
       FastCheck.tuple(keyGen, genPlutusData(depth > 0 ? depth - 1 : 0)),
@@ -533,7 +533,7 @@ export const genPlutusMap = (depth: number): FastCheck.Arbitrary<MapList> => {
               : JSON.stringify(pair[0]);
           return keyStr;
         },
-      }
+      },
     ).map((pairs) => pairs.map(([key, value]) => ({ key, value })));
 
   // PlutusBigInt keys (more frequent)
@@ -545,11 +545,11 @@ export const genPlutusMap = (depth: number): FastCheck.Arbitrary<MapList> => {
   // Complex keys (less frequent)
   const complexPairs = uniqueKeyValuePairs(
     genPlutusData(depth > 1 ? depth - 2 : 0),
-    2
+    2,
   );
 
   return FastCheck.oneof(bigIntPairs, bytesPairs, complexPairs).map((pairs) =>
-    map(pairs)
+    map(pairs),
   );
 };
 
@@ -570,24 +570,24 @@ export const generator = genPlutusData(3);
  */
 
 export const CBORBytesSchema = (
-  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.transformOrFail(Schema.Uint8ArrayFromSelf, DataSchema, {
     strict: true,
     encode: (toI) =>
       pipe(plutusDataToCBORValue(toI), (cborValue) =>
-        ParseResult.encode(CBOR.FromBytes(options))(cborValue)
+        ParseResult.encode(CBOR.FromBytes(options))(cborValue),
       ),
     decode: (fromI) =>
       pipe(
         ParseResult.decode(CBOR.FromBytes(options))(fromI),
-        Effect.map(cborValueToPlutusData)
+        Effect.map(cborValueToPlutusData),
       ),
   });
 
 export const CBORHexSchema = (
-  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS
-) => Schema.compose(Bytes.FromBytes, CBORBytesSchema(options));
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
+) => Schema.compose(Bytes.FromHex, CBORBytesSchema(options));
 
 /**
  * Convert PlutusData to CBORValue
@@ -601,7 +601,7 @@ export const plutusDataToCBORValue = (data: Data): CBOR.CBOR => {
       // PlutusData Map -> CBOR map directly (no extra tag needed for top-level maps)
       const cborEntries = entries.map(
         ([key, value]) =>
-          [plutusDataToCBORValue(key), plutusDataToCBORValue(value)] as const
+          [plutusDataToCBORValue(key), plutusDataToCBORValue(value)] as const,
       );
       return new Map(cborEntries);
     },
@@ -663,7 +663,7 @@ export const cborValueToPlutusData = (cborValue: CBOR.CBOR): Data => {
     if (cborValue.length === 0) {
       return "";
     }
-    return Bytes.Codec.encode.bytes(cborValue);
+    return Bytes.Codec.Encode.bytes(cborValue);
   }
 
   // Handle tagged values
@@ -760,7 +760,7 @@ export const cborValueToPlutusData = (cborValue: CBOR.CBOR): Data => {
   if (CBOR.isMap(cborValue)) {
     // Maps are Maps
     const entries = Array.from(cborValue.entries()).map(
-      ([k, v]) => [cborValueToPlutusData(k), cborValueToPlutusData(v)] as const
+      ([k, v]) => [cborValueToPlutusData(k), cborValueToPlutusData(v)] as const,
     );
     return new Map(entries);
   }
@@ -794,5 +794,5 @@ export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
       cborBytes: CBORBytesSchema(options),
       cborHex: CBORHexSchema(options),
     },
-    DataError
+    DataError,
   );

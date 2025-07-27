@@ -23,7 +23,7 @@ export class KeyHashError extends Data.TaggedError("KeyHashError")<{
  */
 export const KeyHash = pipe(
   Hash28.HexSchema,
-  Schema.brand("KeyHash")
+  Schema.brand("KeyHash"),
 ).annotations({
   identifier: "KeyHash",
 });
@@ -32,14 +32,14 @@ export type KeyHash = typeof KeyHash.Type;
 
 export const FromBytes = Schema.compose(
   Hash28.FromBytes, // Uint8Array -> hex string
-  KeyHash // hex string -> KeyHash
+  KeyHash, // hex string -> KeyHash
 ).annotations({
   identifier: "KeyHash.FromBytes",
 });
 
 export const FromHex = Schema.compose(
   Hash28.HexSchema, // string -> hex string
-  KeyHash // hex string -> KeyHash
+  KeyHash, // hex string -> KeyHash
 ).annotations({
   identifier: "KeyHash.FromHex",
 });
@@ -74,5 +74,5 @@ export const Codec = createEncoders(
     bytes: FromBytes,
     string: FromHex,
   },
-  KeyHashError
+  KeyHashError,
 );

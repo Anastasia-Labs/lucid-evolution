@@ -21,15 +21,12 @@ export const createEncoders = <
   },
 >(
   schemas: T,
-  ErrorClass: ErrorClass
+  ErrorClass: ErrorClass,
 ) => {
-  const createSyncMethods = (
-    fn: any,
-    operationType: "encode" | "decode"
-  ) =>
+  const createSyncMethods = (fn: any, operationType: "encode" | "decode") =>
     Object.fromEntries(
       Object.entries(schemas).map(([key, schema]) => [
-        key, 
+        key,
         (input: any) => {
           try {
             return fn(schema)(input);
@@ -39,45 +36,41 @@ export const createEncoders = <
               cause,
             });
           }
-        }
+        },
       ]),
     );
 
-  const createEffectMethods = (
-    fn: any,
-    operationType: "encode" | "decode"
-  ) =>
+  const createEffectMethods = (fn: any, operationType: "encode" | "decode") =>
     Object.fromEntries(
       Object.entries(schemas).map(([key, schema]) => [
-        key, 
-        (input: any) => 
+        key,
+        (input: any) =>
           fn(schema)(input).pipe(
-            Effect.mapError((cause: ParseResult.ParseError) => 
-              new ErrorClass({
-                message: `Failed to ${operationType} ${key}`,
-                cause,
-              })
-            )
-          )
+            Effect.mapError(
+              (cause: ParseResult.ParseError) =>
+                new ErrorClass({
+                  message: `Failed to ${operationType} ${key}`,
+                  cause,
+                }),
+            ),
+          ),
       ]),
     );
 
-  const createEitherMethods = (
-    fn: any,
-    operationType: "encode" | "decode"
-  ) =>
+  const createEitherMethods = (fn: any, operationType: "encode" | "decode") =>
     Object.fromEntries(
       Object.entries(schemas).map(([key, schema]) => [
-        key, 
-        (input: any) => 
+        key,
+        (input: any) =>
           fn(schema)(input).pipe(
-            Either.mapLeft((cause: ParseResult.ParseError) => 
-              new ErrorClass({
-                message: `Failed to ${operationType} ${key}`,
-                cause,
-              })
-            )
-          )
+            Either.mapLeft(
+              (cause: ParseResult.ParseError) =>
+                new ErrorClass({
+                  message: `Failed to ${operationType} ${key}`,
+                  cause,
+                }),
+            ),
+          ),
       ]),
     );
 

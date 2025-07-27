@@ -1,10 +1,10 @@
 import { Schema } from "effect";
-import * as Hash32 from "./Hash32.js";
+import * as Bytes32 from "./Bytes32.js";
 
 /**
  * ScriptDataHash based on Conway CDDL specification
  *
- * CDDL: script_data_hash = hash32
+ * CDDL: script_data_hash = Bytes32
  *
  * This is a hash of data which may affect evaluation of a script.
  * This data consists of:
@@ -16,7 +16,7 @@ import * as Hash32 from "./Hash32.js";
  * @since 2.0.0
  * @category model
  */
-export const ScriptDataHash = Hash32.HexSchema.pipe(
+export const ScriptDataHash = Bytes32.HexSchema.pipe(
   Schema.brand("ScriptDataHash"),
 );
 

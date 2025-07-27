@@ -2,6 +2,7 @@ import { Schema, Data, Effect, ParseResult } from "effect";
 import * as Url from "./Url.js";
 import * as Bytes from "./Bytes.js";
 import * as CBOR from "./CBOR.js";
+import * as _Codec from "./Codec.js";
 
 /**
  * Error class for PoolMetadata related operations.
@@ -42,15 +43,7 @@ export class PoolMetadata extends Schema.TaggedClass<PoolMetadata>()(
     url: Url.Url,
     hash: Schema.Uint8ArrayFromSelf,
   },
-) {
-  [Symbol.for("nodejs.util.inspect.custom")]() {
-    return {
-      _tag: "PoolMetadata",
-      url: this.url,
-      hash: Bytes.Encode.hex(this.hash),
-    };
-  }
-}
+) {}
 
 /**
  * CDDL schema for PoolMetadata as defined in the specification:
@@ -61,7 +54,7 @@ export class PoolMetadata extends Schema.TaggedClass<PoolMetadata>()(
  * @since 2.0.0
  * @category schemas
  */
-export const PoolMetadataCDDLSchema = Schema.transformOrFail(
+export const FromCDDL = Schema.transformOrFail(
   Schema.Tuple(
     CBOR.Text, // url as CBOR text string
     CBOR.ByteArray, // hash as CBOR byte string
@@ -90,8 +83,8 @@ export const CBORBytesSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
-    PoolMetadataCDDLSchema, // CBOR → PoolMetadata
+    CBOR.FromBytes(options), // Uint8Array → CBOR
+    FromCDDL, // CBOR → PoolMetadata
   );
 
 /**
@@ -105,33 +98,15 @@ export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
+    Bytes.FromHex, // string → Uint8Array
     CBORBytesSchema(options), // Uint8Array → PoolMetadata
   );
 
-export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
-  Encode: {
-    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
-    cborHex: Schema.encodeSync(CBORHexSchema(options)),
-  },
-  Decode: {
-    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
-  },
-  EncodeEither: {
-    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.encodeEither(CBORHexSchema(options)),
-  },
-  DecodeEither: {
-    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.decodeEither(CBORHexSchema(options)),
-  },
-  EncodeEffect: {
-    cborBytes: Schema.encode(CBORBytesSchema(options)),
-    cborHex: Schema.encode(CBORHexSchema(options)),
-  },
-  DecodeEffect: {
-    cborBytes: Schema.decode(CBORBytesSchema(options)),
-    cborHex: Schema.decode(CBORHexSchema(options)),
-  },
-});
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
+  _Codec.createEncoders(
+    {
+      cborBytes: CBORBytesSchema(options),
+      cborHex: CBORHexSchema(options),
+    },
+    PoolMetadataError,
+  );

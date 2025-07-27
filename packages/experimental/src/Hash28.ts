@@ -18,7 +18,7 @@ export const HASH28_HEX_LENGTH = 56;
  * @category schemas
  */
 export const BytesSchema = Schema.Uint8ArrayFromSelf.pipe(
-  Schema.filter((a) => a.length === HASH28_BYTES_LENGTH)
+  Schema.filter((a) => a.length === HASH28_BYTES_LENGTH),
 ).annotations({
   identifier: "Hash28.Bytes",
   message: (issue) =>
@@ -32,7 +32,7 @@ export const BytesSchema = Schema.Uint8ArrayFromSelf.pipe(
  * @category schemas
  */
 export const HexSchema = Bytes.HexSchema.pipe(
-  Schema.filter((a: string) => a.length === HASH28_HEX_LENGTH)
+  Schema.filter((a: string) => a.length === HASH28_HEX_LENGTH),
 ).annotations({
   identifier: "Hash28.Hex",
   message: (issue) =>
@@ -47,7 +47,7 @@ export const HexSchema = Bytes.HexSchema.pipe(
  * @category schemas
  */
 export const VariableBytesSchema = Schema.Uint8ArrayFromSelf.pipe(
-  Schema.filter((a) => a.length >= 0 && a.length <= HASH28_BYTES_LENGTH)
+  Schema.filter((a) => a.length >= 0 && a.length <= HASH28_BYTES_LENGTH),
 ).annotations({
   message: (issue) =>
     `must be a byte array of length 0 to ${HASH28_BYTES_LENGTH}, but got ${(issue.actual as Uint8Array).length}`,
@@ -62,7 +62,7 @@ export const VariableBytesSchema = Schema.Uint8ArrayFromSelf.pipe(
  * @category schemas
  */
 export const VariableHexSchema = Bytes.HexSchema.pipe(
-  Schema.filter((a: string) => a.length >= 0 && a.length <= HASH28_HEX_LENGTH)
+  Schema.filter((a: string) => a.length >= 0 && a.length <= HASH28_HEX_LENGTH),
 ).annotations({
   message: (issue) =>
     `must be a hex string of length 0 to ${HASH28_HEX_LENGTH}, but got ${(issue.actual as string).length}`,
@@ -146,7 +146,7 @@ export const FromVariableBytes = Schema.transform(
       }
       return array;
     },
-  }
+  },
 );
 
 /**
@@ -158,7 +158,7 @@ export const FromVariableBytes = Schema.transform(
 export const Codec = _Codec.createEncoders(
   {
     bytes: FromBytes,
-    variableBytes : FromVariableBytes,
+    variableBytes: FromVariableBytes,
   },
-  Hash28Error
+  Hash28Error,
 );

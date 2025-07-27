@@ -1,7 +1,9 @@
 import { Schema, Data, ParseResult, Effect } from "effect";
 import * as Bytes from "./Bytes.js";
 import * as Bytes80 from "./Bytes80.js";
+import * as Bytes32 from "./Bytes32.js";
 import * as CBOR from "./CBOR.js";
+import * as _Codec from "./Codec.js";
 
 /**
  * Error class for VrfCert related operations.
@@ -28,7 +30,7 @@ export class VrfCertError extends Data.TaggedError("VrfCertError")<{
  * @since 2.0.0
  * @category schemas
  */
-export const VRFOutput = Bytes.HexSchema.pipe(Schema.brand("VrfOutput"));
+export const VRFOutput = Bytes32.HexSchema.pipe(Schema.brand("VrfOutput"));
 
 /**
  * Type alias for VRF output.
@@ -37,6 +39,34 @@ export const VRFOutput = Bytes.HexSchema.pipe(Schema.brand("VrfOutput"));
  * @category model
  */
 export type VRFOutput = typeof VRFOutput.Type;
+
+/**
+ * Schema for VRF output as a byte array.
+ * vrf_output = bytes .size 32
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const VRFOutputFromBytes = Schema.compose(
+  Bytes32.FromBytes, // Uint8Array -> hex string
+  VRFOutput, // hex string -> VRFOutput
+).annotations({
+  identifier: "VrfOutput.Bytes",
+});
+
+/**
+ * Schema for VRF output as a hex string.
+ * vrf_output = bytes .size 32
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const VRFOutputHexSchema = Schema.compose(
+  Bytes32.HexSchema, // string -> hex string
+  VRFOutput, // hex string -> VRFOutput
+).annotations({
+  identifier: "VrfOutput.Hex",
+});
 
 /**
  * Schema for VRF proof (80 bytes).
@@ -56,6 +86,34 @@ export const VRFProof = Bytes80.HexSchema.pipe(Schema.brand("VrfProof"));
 export type VRFProof = typeof VRFProof.Type;
 
 /**
+ * Schema for VRF proof as a byte array.
+ * vrf_proof = bytes .size 80
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const VRFProofFromBytes = Schema.compose(
+  Bytes80.FromBytes, // Uint8Array -> hex string
+  VRFProof, // hex string -> VRFProof
+).annotations({
+  identifier: "VrfProof.Bytes",
+});
+
+/**
+ * Schema for VRF proof as a hex string.
+ * vrf_proof = bytes .size 80
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const VRFProofHexSchema = Schema.compose(
+  Bytes80.HexSchema, // string -> hex string
+  VRFProof, // hex string -> VRFProof
+).annotations({
+  identifier: "VrfProof.Hex",
+});
+
+/**
  * Schema for VrfCert representing a VRF certificate.
  * vrf_cert = [vrf_output, vrf_proof]
  *
@@ -73,15 +131,7 @@ export type VRFProof = typeof VRFProof.Type;
 export class VrfCert extends Schema.TaggedClass<VrfCert>()("VrfCert", {
   output: VRFOutput,
   proof: VRFProof,
-}) {
-  [Symbol.for("nodejs.util.inspect.custom")]() {
-    return {
-      _tag: this._tag,
-      output: this.output,
-      proof: this.proof,
-    };
-  }
-}
+}) {}
 
 /**
  * Check if the given value is a valid VrfCert.
@@ -116,20 +166,18 @@ export const VrfCertCDDLSchema = Schema.transformOrFail(
     strict: true,
     encode: (vrfCert) =>
       Effect.gen(function* () {
-        const outputBytes = yield* ParseResult.decode(Bytes.BytesSchema)(
+        const outputBytes = yield* ParseResult.encode(Bytes.FromBytes)(
           vrfCert.output,
         );
-        const proofBytes = yield* ParseResult.decode(Bytes.BytesSchema)(
+        const proofBytes = yield* ParseResult.encode(Bytes.FromBytes)(
           vrfCert.proof,
         );
         return [outputBytes, proofBytes] as const;
       }),
     decode: ([outputBytes, proofBytes]) =>
       Effect.gen(function* () {
-        const output = yield* ParseResult.encode(Bytes.BytesSchema)(
-          outputBytes,
-        );
-        const proof = yield* ParseResult.encode(Bytes.BytesSchema)(proofBytes);
+        const output = yield* ParseResult.decode(Bytes.FromBytes)(outputBytes);
+        const proof = yield* ParseResult.decode(Bytes.FromBytes)(proofBytes);
         return new VrfCert({
           output: VRFOutput.make(output),
           proof: VRFProof.make(proof),
@@ -148,7 +196,7 @@ export const CBORBytesSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    CBOR.FromBytes(options), // Uint8Array → CBOR
     VrfCertCDDLSchema, // CBOR → VrfCert
   );
 
@@ -162,43 +210,9 @@ export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
+    Bytes.FromHex, // string → Uint8Array
     CBORBytesSchema(options), // Uint8Array → VrfCert
   );
-
-/**
- * Bytes transformation schema for VRFOutput.
- * Converts between Uint8Array and VRFOutput hex string.
- *
- * @since 2.0.0
- * @category schemas
- */
-export const VRFOutputBytesSchema = Schema.transform(
-  Schema.Uint8ArrayFromSelf,
-  Schema.typeSchema(VRFOutput),
-  {
-    strict: true,
-    encode: (_, toA) => Bytes.Decode.hex(toA),
-    decode: (_, fromA) => Schema.decodeSync(VRFOutput)(Bytes.Encode.hex(fromA)),
-  },
-);
-
-/**
- * Bytes transformation schema for VRFProof.
- * Converts between Uint8Array and VRFProof hex string.
- *
- * @since 2.0.0
- * @category schemas
- */
-export const VRFProofBytesSchema = Schema.transform(
-  Schema.Uint8ArrayFromSelf,
-  Schema.typeSchema(VRFProof),
-  {
-    strict: true,
-    encode: (_, toA) => Bytes.Decode.hex(toA),
-    decode: (_, fromA) => Schema.decodeSync(VRFProof)(Bytes.Encode.hex(fromA)),
-  },
-);
 
 /**
  * Check if two VrfCert instances are equal.
@@ -233,29 +247,11 @@ export const equals = (a: VrfCert, b: VrfCert): boolean =>
 export const make = (output: VRFOutput, proof: VRFProof): VrfCert =>
   new VrfCert({ output, proof });
 
-export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
-  Encode: {
-    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
-    cborHex: Schema.encodeSync(CBORHexSchema(options)),
-  },
-  Decode: {
-    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
-  },
-  EncodeEither: {
-    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.encodeEither(CBORHexSchema(options)),
-  },
-  DecodeEither: {
-    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.decodeEither(CBORHexSchema(options)),
-  },
-  EncodeEffect: {
-    cborBytes: Schema.encode(CBORBytesSchema(options)),
-    cborHex: Schema.encode(CBORHexSchema(options)),
-  },
-  DecodeEffect: {
-    cborBytes: Schema.decode(CBORBytesSchema(options)),
-    cborHex: Schema.decode(CBORHexSchema(options)),
-  },
-});
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
+  _Codec.createEncoders(
+    {
+      cborBytes: CBORBytesSchema(options),
+      cborHex: CBORHexSchema(options),
+    },
+    VrfCertError,
+  );

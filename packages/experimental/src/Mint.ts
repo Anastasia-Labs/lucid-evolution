@@ -350,15 +350,15 @@ export const MintCDDLSchema = Schema.transformOrFail(
         const outerMap = new Map<Uint8Array, Map<Uint8Array, bigint>>();
 
         for (const [policyId, assetMap] of toA.entries()) {
-          const policyIdBytes = yield* ParseResult.decode(Bytes.BytesSchema)(
+          const policyIdBytes = yield* ParseResult.encode(PolicyId.FromBytes)(
             policyId,
           );
           const innerMap = new Map<Uint8Array, bigint>();
 
           for (const [assetName, amount] of assetMap.entries()) {
-            const assetNameBytes = yield* ParseResult.decode(Bytes.BytesSchema)(
-              assetName,
-            );
+            const assetNameBytes = yield* ParseResult.encode(
+              AssetName.FromBytes,
+            )(assetName);
             innerMap.set(assetNameBytes, amount);
           }
 
@@ -373,7 +373,7 @@ export const MintCDDLSchema = Schema.transformOrFail(
         const mint = new Map<PolicyId.PolicyId, AssetMap>();
 
         for (const [policyIdBytes, assetMapCddl] of fromA.entries()) {
-          const policyId = yield* ParseResult.decode(PolicyId.BytesSchema)(
+          const policyId = yield* ParseResult.decode(PolicyId.FromBytes)(
             policyIdBytes,
           );
 
@@ -382,7 +382,7 @@ export const MintCDDLSchema = Schema.transformOrFail(
             NonZeroInt64.NonZeroInt64
           >();
           for (const [assetNameBytes, amount] of assetMapCddl.entries()) {
-            const assetName = yield* ParseResult.decode(AssetName.BytesSchema)(
+            const assetName = yield* ParseResult.decode(AssetName.FromBytes)(
               assetNameBytes,
             );
             const nonZeroAmount = yield* ParseResult.decode(
@@ -411,7 +411,7 @@ export const CBORBytesSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    CBOR.FromBytes(options), // Uint8Array → CBOR
     MintCDDLSchema, // CBOR → Mint
   );
 
@@ -426,12 +426,15 @@ export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
+    Bytes.FromHex, // string → Uint8Array
     CBORBytesSchema(options), // Uint8Array → Mint
   );
 
 export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
-  _Codec.createCodec({
-    cborBytes: CBORBytesSchema(options),
-    cborHex: CBORHexSchema(options),
-  });
+  _Codec.createEncoders(
+    {
+      cborBytes: CBORBytesSchema(options),
+      cborHex: CBORHexSchema(options),
+    },
+    MintError,
+  );

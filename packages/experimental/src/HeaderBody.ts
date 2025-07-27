@@ -130,16 +130,16 @@ export const FromCDDL = Schema.transformOrFail(
     CBOR.ByteArray, // issuer_vkey as bytes (32 bytes)
     CBOR.ByteArray, // vrf_vkey as bytes (32 bytes)
     Schema.encodedSchema(
-      VrfCert.VrfCertCDDLSchema // vrf_result as VrfCert
+      VrfCert.VrfCertCDDLSchema, // vrf_result as VrfCert
     ),
     CBOR.Integer, // block_body_size as bigint
     CBOR.ByteArray, // block_body_hash as bytes
     Schema.encodedSchema(
-      OperationalCert.FromCDDL // operational_cert as OperationalCert
+      OperationalCert.FromCDDL, // operational_cert as OperationalCert
     ),
     Schema.encodedSchema(
-      ProtocolVersion.FromCDDL // protocol_version as ProtocolVersion
-    )
+      ProtocolVersion.FromCDDL, // protocol_version as ProtocolVersion
+    ),
   ),
   Schema.typeSchema(HeaderBody),
   {
@@ -150,25 +150,25 @@ export const FromCDDL = Schema.transformOrFail(
           ? yield* ParseResult.encode(BlockHeaderHash.FromBytes)(toA.prevHash)
           : null;
         const issuerVkeyBytes = yield* ParseResult.encode(VKey.FromBytes)(
-          toA.issuerVkey
+          toA.issuerVkey,
         );
         const vrfVkeyBytes = yield* ParseResult.encode(VrfVkey.FromBytes)(
-          toA.vrfVkey
+          toA.vrfVkey,
         );
         const vrfOutputBytes = yield* ParseResult.encode(
-          VrfCert.VRFOutputFromBytes
+          VrfCert.VRFOutputFromBytes,
         )(toA.vrfResult.output);
         const vrfProofBytes = yield* ParseResult.encode(
-          VrfCert.VRFProofFromBytes
+          VrfCert.VRFProofFromBytes,
         )(toA.vrfResult.proof);
         const blockBodyHashBytes = yield* ParseResult.encode(
-          BlockBodyHash.FromBytes
+          BlockBodyHash.FromBytes,
         )(toA.blockBodyHash);
         const hotVkeyBytes = yield* ParseResult.encode(KESVkey.FromBytes)(
-          toA.operationalCert.hotVkey
+          toA.operationalCert.hotVkey,
         );
         const sigmaBytes = yield* ParseResult.encode(
-          Ed25519Signature.FromBytes
+          Ed25519Signature.FromBytes,
         )(toA.operationalCert.sigma);
 
         return [
@@ -209,25 +209,25 @@ export const FromCDDL = Schema.transformOrFail(
           ? yield* ParseResult.decode(BlockHeaderHash.FromBytes)(prevHashBytes)
           : null;
         const issuerVkey = yield* ParseResult.decode(VKey.FromBytes)(
-          issuerVkeyBytes
+          issuerVkeyBytes,
         );
         const vrfVkey = yield* ParseResult.decode(VrfVkey.FromBytes)(
-          vrfVkeyBytes
+          vrfVkeyBytes,
         );
         const vrfOutput = yield* ParseResult.decode(VrfCert.VRFOutputFromBytes)(
-          vrfOutputBytes
+          vrfOutputBytes,
         );
         const vrfProof = yield* ParseResult.decode(VrfCert.VRFProofFromBytes)(
-          vrfProofBytes
+          vrfProofBytes,
         );
         const blockBodyHash = yield* ParseResult.decode(
-          BlockBodyHash.FromBytes
+          BlockBodyHash.FromBytes,
         )(blockBodyHashBytes);
         const hotVkey = yield* ParseResult.decode(KESVkey.FromBytes)(
-          hotVkeyBytes
+          hotVkeyBytes,
         );
         const sigma = yield* ParseResult.decode(Ed25519Signature.FromBytes)(
-          sigmaBytes
+          sigmaBytes,
         );
 
         return yield* ParseResult.decode(HeaderBody)({
@@ -255,7 +255,7 @@ export const FromCDDL = Schema.transformOrFail(
           }),
         });
       }),
-  }
+  },
 );
 
 /**
@@ -279,11 +279,11 @@ export const isHeaderBody = Schema.is(HeaderBody);
  * @category schemas
  */
 export const CBORBytesSchema = (
-  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
     CBOR.FromBytes(options), // Uint8Array → CBOR
-    FromCDDL // CBOR → HeaderBody
+    FromCDDL, // CBOR → HeaderBody
   );
 
 /**
@@ -293,11 +293,11 @@ export const CBORBytesSchema = (
  * @category schemas
  */
 export const CBORHexSchema = (
-  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
     Bytes.FromHex, // string → Uint8Array
-    CBORBytesSchema(options) // Uint8Array → HeaderBody
+    CBORBytesSchema(options), // Uint8Array → HeaderBody
   );
 
 export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
@@ -306,5 +306,5 @@ export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
       cborBytes: CBORBytesSchema(options),
       cborHex: CBORHexSchema(options),
     },
-    HeaderBodyError
+    HeaderBodyError,
   );

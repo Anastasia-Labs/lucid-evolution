@@ -21,7 +21,10 @@ export class KESVkeyError extends Data.TaggedError("KESVkeyError")<{
  * @since 2.0.0
  * @category schemas
  */
-export const KESVkey = pipe(Bytes32.HexSchema, Schema.brand("KESVkey")).annotations({
+export const KESVkey = pipe(
+  Bytes32.HexSchema,
+  Schema.brand("KESVkey"),
+).annotations({
   identifier: "KESVkey",
 });
 
@@ -29,14 +32,14 @@ export type KESVkey = typeof KESVkey.Type;
 
 export const FromBytes = Schema.compose(
   Bytes32.FromBytes, // Uint8Array -> hex string
-  KESVkey // hex string -> KESVkey
+  KESVkey, // hex string -> KESVkey
 ).annotations({
   identifier: "KESVkey.Bytes",
 });
 
 export const FromHex = Schema.compose(
   Bytes32.HexSchema, // string -> hex string
-  KESVkey // hex string -> KESVkey
+  KESVkey, // hex string -> KESVkey
 ).annotations({
   identifier: "KESVkey.Hex",
 });
@@ -71,5 +74,5 @@ export const Codec = createEncoders(
     bytes: FromBytes,
     hex: FromHex,
   },
-  KESVkeyError
+  KESVkeyError,
 );

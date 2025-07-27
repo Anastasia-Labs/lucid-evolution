@@ -8,7 +8,7 @@ import * as Bytes29 from "./Bytes29.js";
 import * as _Codec from "./Codec.js";
 
 export class EnterpriseAddressError extends Data.TaggedError(
-  "EnterpriseAddressError"
+  "EnterpriseAddressError",
 )<{
   message?: string;
   cause?: unknown;
@@ -21,7 +21,7 @@ export class EnterpriseAddressError extends Data.TaggedError(
  * @category schemas
  */
 export class EnterpriseAddress extends Schema.TaggedClass<EnterpriseAddress>(
-  "EnterpriseAddress"
+  "EnterpriseAddress",
 )("EnterpriseAddress", {
   networkId: NetworkId.NetworkId,
   paymentCredential: Credential.Credential,
@@ -53,7 +53,7 @@ export const FromBytes = Schema.transformOrFail(
         result[0] = header;
 
         const paymentCredentialBytes = yield* ParseResult.decode(Bytes.FromHex)(
-          toA.paymentCredential.hash
+          toA.paymentCredential.hash,
         );
         result.set(paymentCredentialBytes, 1);
 
@@ -73,13 +73,13 @@ export const FromBytes = Schema.transformOrFail(
           ? {
               _tag: "KeyHash",
               hash: yield* ParseResult.decode(KeyHash.FromBytes)(
-                fromA.slice(1, 29)
+                fromA.slice(1, 29),
               ),
             }
           : {
               _tag: "ScriptHash",
               hash: yield* ParseResult.decode(ScriptHash.BytesSchema)(
-                fromA.slice(1, 29)
+                fromA.slice(1, 29),
               ),
             };
         return yield* ParseResult.decode(EnterpriseAddress)({
@@ -88,12 +88,12 @@ export const FromBytes = Schema.transformOrFail(
           paymentCredential,
         });
       }),
-  }
+  },
 );
 
 export const FromHex = Schema.compose(
   Bytes.FromHex, // string → Uint8Array
-  FromBytes // Uint8Array → EnterpriseAddress
+  FromBytes, // Uint8Array → EnterpriseAddress
 );
 
 /**
@@ -129,13 +129,13 @@ export const equals = (a: EnterpriseAddress, b: EnterpriseAddress): boolean => {
  */
 export const generator = FastCheck.tuple(
   NetworkId.generator,
-  Credential.generator
+  Credential.generator,
 ).map(
   ([networkId, paymentCredential]) =>
     new EnterpriseAddress({
       networkId,
       paymentCredential,
-    })
+    }),
 );
 
 export const Codec = _Codec.createEncoders(
@@ -143,5 +143,5 @@ export const Codec = _Codec.createEncoders(
     bytes: FromBytes,
     hex: FromHex,
   },
-  EnterpriseAddressError
+  EnterpriseAddressError,
 );

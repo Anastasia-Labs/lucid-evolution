@@ -60,7 +60,7 @@ export const isHexLenient = (input: string): boolean => {
 };
 
 const hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) =>
-  i.toString(16).padStart(2, "0")
+  i.toString(16).padStart(2, "0"),
 );
 
 // We use optimized technique to convert hex string to byte array
@@ -85,7 +85,7 @@ export const HexSchema = Schema.String.pipe(
     message: (issue) =>
       `${issue.actual} must be a valid hex string (0-9, A-F, a-f)`,
     identifier: "Bytes.Hex",
-  })
+  }),
 );
 
 export const FromHex = Schema.transform(HexSchema, Schema.Uint8ArrayFromSelf, {
@@ -129,7 +129,7 @@ export const FromBytes = Schema.transform(
       }
       return array;
     },
-  }
+  },
 ).annotations({
   identifier: "Bytes.FromBytes",
 });
@@ -147,7 +147,7 @@ export const HexLenientSchema = Schema.String.pipe(
     message: (issue) =>
       `${issue.actual} must be a valid hex string (0-9, A-F, a-f) or empty string`,
     identifier: "HexLenient",
-  })
+  }),
 );
 
 export const FromHexLenient = Schema.transform(
@@ -173,7 +173,7 @@ export const FromHexLenient = Schema.transform(
       }
       return array;
     },
-  }
+  },
 );
 
 export const Codec = _Codec.createEncoders(
@@ -181,5 +181,5 @@ export const Codec = _Codec.createEncoders(
     bytes: FromHex,
     bytesLenient: FromHexLenient,
   },
-  BytesError
+  BytesError,
 );

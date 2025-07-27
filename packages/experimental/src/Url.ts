@@ -1,5 +1,6 @@
 import { Schema, Data } from "effect";
 import * as Text128 from "./Text128.js";
+import * as _Codec from "./Codec.js";
 
 /**
  * CDDL specification:
@@ -41,7 +42,7 @@ export class UrlError extends Data.TaggedError("UrlError")<{
  * @since 2.0.0
  * @category model
  */
-export const Url = Text128.VariableTextSchema.pipe(Schema.brand("Url"));
+export const Url = Text128.FromVariableHex.pipe(Schema.brand("Url"));
 
 /**
  * Type alias for Url.
@@ -51,21 +52,21 @@ export const Url = Text128.VariableTextSchema.pipe(Schema.brand("Url"));
  */
 export type Url = typeof Url.Type;
 
-/**
- * Schema for transforming between Text128 and Url.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const UrlTextSchema = Schema.transform(
-  Schema.typeSchema(Text128.TextSchema),
-  Url,
-  {
-    strict: true,
-    encode: (_, url) => url,
-    decode: (value) => Url.make(value),
-  },
-);
+export const make = Url.make;
+
+export const FromBytes = Schema.compose(
+  Text128.FromVariableBytes, // Uint8Array -> hex string
+  Url, // hex string -> Url
+).annotations({
+  identifier: "Url.Bytes",
+});
+
+export const FromHex = Schema.compose(
+  Text128.FromVariableHex, // string -> hex string
+  Url, // hex string -> Url
+).annotations({
+  identifier: "Url.Hex",
+});
 
 /**
  * Check if two Url instances are equal.
@@ -81,34 +82,6 @@ export const UrlTextSchema = Schema.transform(
  * @category equality
  */
 export const equals = (a: Url, b: Url): boolean => a === b;
-
-/**
- * Check if a URL is empty.
- *
- * @example
- * import { Url } from "@evolution-sdk/experimental";
- *
- * const emptyUrl = Url.make("");
- * console.log(Url.isEmpty(emptyUrl)); // true
- *
- * @since 2.0.0
- * @category predicates
- */
-export const isEmpty = (url: Url): boolean => url.length === 0;
-
-/**
- * Get the length of a URL.
- *
- * @example
- * import { Url } from "@evolution-sdk/experimental";
- *
- * const url = Url.make("https://example.com");
- * console.log(Url.length(url)); // 19
- *
- * @since 2.0.0
- * @category transformation
- */
-export const length = (url: Url): number => url.length;
 
 /**
  * Generate a random Url.
@@ -129,64 +102,10 @@ export const length = (url: Url): number => url.length;
  */
 export const generator = Text128.generator.map((text) => Url.make(text));
 
-/**
- * Synchronous encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Encode = {
-  text: Schema.encodeSync(UrlTextSchema),
-};
-
-/**
- * Synchronous decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const Decode = {
-  text: Schema.decodeUnknownSync(UrlTextSchema),
-};
-
-/**
- * Either-based encoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeEither = {
-  text: Schema.encodeEither(UrlTextSchema),
-};
-
-/**
- * Either-based decoding utilities.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeEither = {
-  text: Schema.decodeUnknownEither(UrlTextSchema),
-};
-
-/**
- * Create a Url from a text string.
- *
- * @example
- * import { Url } from "@evolution-sdk/experimental";
- *
- * const url = Url.make("https://example.com/metadata.json");
- * console.log(url); // "https://example.com/metadata.json"
- *
- * @since 2.0.0
- * @category constructors
- */
-export const make = (value: string): Url => Url.make(value);
-
-/**
- * Check if the given value is a valid Url
- *
- * @since 2.0.0
- * @category predicates
- */
-export const isUrl = Schema.is(Url);
+export const Codec = _Codec.createEncoders(
+  {
+    bytes: FromBytes,
+    hex: FromHex,
+  },
+  UrlError,
+);

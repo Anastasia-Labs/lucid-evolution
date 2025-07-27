@@ -182,7 +182,7 @@ export const toCBOR = <Source, Target extends Data>(
         CML.BigInteger.from_str(data.int.toString()),
       );
     } else if (isByteArray(data)) {
-      return CML.PlutusData.new_bytes(Bytes.Decode.hex(data.bytes));
+      return CML.PlutusData.new_bytes(Bytes.Codec.Decode.bytes(data.bytes));
     } else if (isList(data)) {
       const list = CML.PlutusDataList.new();
       data.forEach((item) => list.add(toCMLPlutusData(item)));
@@ -190,7 +190,9 @@ export const toCBOR = <Source, Target extends Data>(
     } else if (isMap(data)) {
       const map = CML.PlutusMap.new();
       Object.entries(data).forEach(([key, value]) => {
-        const plutusKey = CML.PlutusData.new_bytes(Bytes.Decode.hex(key));
+        const plutusKey = CML.PlutusData.new_bytes(
+          Bytes.Codec.Decode.bytes(key),
+        );
         map.set(plutusKey, toCMLPlutusData(value));
       });
       return CML.PlutusData.new_map(map);
@@ -247,7 +249,9 @@ export const resolveCBOR = (input: string): Data => {
     case CML.PlutusDataKind.Integer:
       return Integer.make({ int: Number(data.as_integer()!.to_str()) });
     case CML.PlutusDataKind.Bytes:
-      return ByteArray.make({ bytes: Bytes.Encode.hex(data.as_bytes()!) });
+      return ByteArray.make({
+        bytes: Bytes.Codec.Encode.bytes(data.as_bytes()!),
+      });
     case CML.PlutusDataKind.List: {
       const list = data.as_list()!;
       const array = [];

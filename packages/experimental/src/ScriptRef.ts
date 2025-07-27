@@ -1,24 +1,17 @@
-import { Schema, Data, FastCheck, Effect, ParseResult } from "effect";
+import { Schema, Data, FastCheck, Effect, ParseResult, pipe } from "effect";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
-import * as _Codec from "./Codec.js";
+import { createEncoders } from "./Codec.js";
 
 /**
  * Error class for ScriptRef related operations.
- *
- * @example
- * import { ScriptRef } from "@evolution-sdk/experimental";
- * import assert from "assert";
- *
- * const error = new ScriptRef.ScriptRefError({ message: "Invalid script ref" });
- * assert(error.message === "Invalid script ref");
  *
  * @since 2.0.0
  * @category errors
  */
 export class ScriptRefError extends Data.TaggedError("ScriptRefError")<{
   message?: string;
-  reason?: "InvalidFormat" | "EncodingError" | "DecodingError" | "InvalidTag";
+  cause?: unknown;
 }> {}
 
 /**
@@ -29,77 +22,62 @@ export class ScriptRefError extends Data.TaggedError("ScriptRefError")<{
  * This is a branded hex string that represents the CBOR-encoded script bytes.
  * The script_ref uses CBOR tag 24 to indicate it contains CBOR-encoded script data.
  *
- * @example
- * import { ScriptRef } from "@evolution-sdk/experimental";
- * import { Schema } from "effect";
- *
- * const scriptRef = Schema.decodeSync(ScriptRef.ScriptRef)("deadbeef"); // hex bytes
- * console.log(scriptRef); // "deadbeef"
- *
  * @since 2.0.0
- * @category model
+ * @category schemas
  */
-export const ScriptRef = Bytes.HexSchema.pipe(Schema.brand("ScriptRef"));
+export const ScriptRef = pipe(
+  Bytes.HexSchema,
+  Schema.brand("ScriptRef"),
+).annotations({
+  identifier: "ScriptRef",
+});
+
 export type ScriptRef = typeof ScriptRef.Type;
 
 /**
- * Check if a value is a valid ScriptRef.
- *
- * @example
- * import { ScriptRef } from "@evolution-sdk/experimental";
- *
- * const scriptRef = ScriptRef.make("deadbeef");
- * const isValid = ScriptRef.isScriptRef(scriptRef); // true
+ * Schema for transforming from bytes to ScriptRef.
  *
  * @since 2.0.0
- * @category predicates
+ * @category schemas
  */
-export const isScriptRef = Schema.is(ScriptRef);
+export const FromBytes = Schema.compose(
+  Bytes.FromBytes, // Uint8Array -> hex string
+  ScriptRef, // hex string -> ScriptRef
+).annotations({
+  identifier: "ScriptRef.Bytes",
+});
 
 /**
- * Check if two ScriptRef instances are equal.
- *
- * @example
- * import { ScriptRef } from "@evolution-sdk/experimental";
- *
- * const ref1 = ScriptRef.make("deadbeef");
- * const ref2 = ScriptRef.make("deadbeef");
- * const isEqual = ScriptRef.equals(ref1, ref2); // true
+ * Schema for transforming from hex to ScriptRef.
  *
  * @since 2.0.0
- * @category equality
+ * @category schemas
  */
-export const equals = (self: ScriptRef, that: ScriptRef): boolean =>
-  self === that;
-
-/**
- * FastCheck generator for ScriptRef instances.
- *
- * @since 2.0.0
- * @category generators
- */
-export const generator = FastCheck.uint8Array({
-  minLength: 1,
-  maxLength: 100,
-}).map((bytes) => Schema.decodeSync(ScriptRef)(Bytes.Encode.hex(bytes)));
+export const FromHex = Schema.compose(
+  Bytes.HexSchema, // string -> hex string
+  ScriptRef, // hex string -> ScriptRef
+).annotations({
+  identifier: "ScriptRef.Hex",
+});
 
 /**
  * CDDL schema for ScriptRef following the Conway specification.
  * script_ref = #6.24(bytes .cbor script)
  *
  * This transforms between CBOR tag 24 structure and ScriptRef model.
- * The tag 24 contains bytes that represent a CBOR-encoded script.
  *
  * @since 2.0.0
  * @category schemas
  */
-export const ScriptRefCDDLSchema = Schema.transformOrFail(CBOR.Tag, ScriptRef, {
+export const FromCDDL = Schema.transformOrFail(CBOR.Tag, ScriptRef, {
   strict: true,
   encode: (_, __, ___, toA) =>
     Effect.gen(function* () {
+      // Convert ScriptRef (hex string) to bytes for CBOR tag
+      const bytes = yield* ParseResult.decode(Bytes.FromHex)(toA);
       return new CBOR.Tag({
         tag: 24, // tag 24 for CBOR script reference
-        value: yield* ParseResult.decode(Bytes.BytesSchema)(toA),
+        value: bytes,
       });
     }),
 
@@ -125,50 +103,76 @@ export const ScriptRefCDDLSchema = Schema.transformOrFail(CBOR.Tag, ScriptRef, {
         );
       }
 
-      return ScriptRef.make(
-        yield* ParseResult.encode(Bytes.BytesSchema)(taggedValue.value),
-      );
+      // Convert bytes to hex string for ScriptRef
+      const hex = yield* ParseResult.encode(Bytes.FromHex)(taggedValue.value);
+      return ScriptRef.make(hex);
     }),
 });
 
 /**
  * CBOR bytes transformation schema for ScriptRef.
- * Transforms between Uint8Array and ScriptRef using CBOR encoding.
  *
  * @since 2.0.0
  * @category schemas
  */
-export const CBORBytesSchema = (
+export const FromCBORBytes = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
-    ScriptRefCDDLSchema, // CBOR → ScriptRef
-  );
+    CBOR.FromBytes(options), // Uint8Array → CBOR
+    FromCDDL, // CBOR → ScriptRef
+  ).annotations({
+    identifier: "ScriptRef.CBORBytes",
+  });
 
 /**
  * CBOR hex transformation schema for ScriptRef.
- * Transforms between hex string and ScriptRef using CBOR encoding.
  *
  * @since 2.0.0
  * @category schemas
  */
-export const CBORHexSchema = (
+export const FromCBORHex = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
-    CBORBytesSchema(options), // Uint8Array → ScriptRef
-  );
+    Bytes.FromHex, // string → Uint8Array
+    FromCBORBytes(options), // Uint8Array → ScriptRef
+  ).annotations({
+    identifier: "ScriptRef.CBORHex",
+  });
 
 /**
- * Codec for ScriptRef with all encoding/decoding variants.
+ * Check if two ScriptRef instances are equal.
  *
  * @since 2.0.0
- * @category codecs
+ * @category equality
+ */
+export const equals = (a: ScriptRef, b: ScriptRef): boolean => a === b;
+
+/**
+ * Generate a random ScriptRef.
+ *
+ * @since 2.0.0
+ * @category generators
+ */
+export const generator = FastCheck.uint8Array({
+  minLength: 1,
+  maxLength: 100,
+}).map((bytes) => Codec().Decode.bytes(bytes));
+
+/**
+ * Extended Codec with CBOR support for ScriptRef.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
  */
 export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
-  _Codec.createCodec({
-    cborBytes: CBORBytesSchema(options),
-    cborHex: CBORHexSchema(options),
-  });
+  createEncoders(
+    {
+      bytes: FromBytes,
+      hex: FromHex,
+      cborBytes: FromCBORBytes(options),
+      cborHex: FromCBORHex(options),
+    },
+    ScriptRefError,
+  );

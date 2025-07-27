@@ -1,5 +1,17 @@
-import { FastCheck, pipe, Schema } from "effect";
+import { Data, FastCheck, Schema } from "effect";
 import * as Text from "./Text.js";
+import { createEncoders } from "./Codec.js";
+
+/**
+ * Error class for Text128 related operations.
+ *
+ * @since 2.0.0
+ * @category errors
+ */
+export class Text128Error extends Data.TaggedError("Text128Error")<{
+  message?: string;
+  cause?: unknown;
+}> {}
 
 /**
  * Constants for Text128 validation.
@@ -18,35 +30,39 @@ export const TEXT128_MAX_LENGTH = 128;
  * @since 2.0.0
  * @category schemas
  */
-export const VariableTextSchema = pipe(
-  Text.TextSchema,
+export const FromVariableBytes = Text.FromBytes.pipe(
   Schema.filter(
     (text) =>
       text.length >= TEXT128_MIN_LENGTH && text.length <= TEXT128_MAX_LENGTH,
+    {
+      message: (issue) =>
+        `Text128 must be between ${TEXT128_MIN_LENGTH} and ${TEXT128_MAX_LENGTH} characters, but got ${(issue.actual as string).length} characters.`,
+    },
+  ),
+);
+
+export const FromVariableHex = Text.FromHex.pipe(
+  Schema.filter(
+    (text) =>
+      text.length >= TEXT128_MIN_LENGTH && text.length <= TEXT128_MAX_LENGTH,
+    {
+      message: (issue) =>
+        `Text128 must be between ${TEXT128_MIN_LENGTH} and ${TEXT128_MAX_LENGTH} characters, but got ${(issue.actual as string).length} characters.`,
+    },
   ),
 ).annotations({
-  message: (issue) =>
-    `Text must be between ${TEXT128_MIN_LENGTH} and ${TEXT128_MAX_LENGTH} characters, but got ${(issue.actual as string).length}`,
-  identifier: "Text128Variable",
-});
-
-/**
- * Schema for validating text with exactly 128 characters.
- * text .size 128
- *
- * @since 2.0.0
- * @category schemas
- */
-export const TextSchema = pipe(
-  Text.TextSchema,
-  Schema.filter((text) => text.length === TEXT128_MAX_LENGTH),
-).annotations({
-  message: (issue) =>
-    `Text must be exactly ${TEXT128_MAX_LENGTH} characters, but got ${(issue.actual as string).length}`,
-  identifier: "Text128",
+  identifier: "Text128.FromHex",
 });
 
 export const generator = FastCheck.string({
   minLength: TEXT128_MIN_LENGTH,
   maxLength: TEXT128_MAX_LENGTH,
 });
+
+export const Codec = createEncoders(
+  {
+    bytes: FromVariableBytes,
+    hex: FromVariableHex,
+  },
+  Text128Error,
+);

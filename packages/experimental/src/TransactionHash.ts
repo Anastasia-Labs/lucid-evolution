@@ -1,5 +1,5 @@
 import { Schema, Data, FastCheck, pipe } from "effect";
-import * as Hash32 from "./Hash32.js";
+import * as Bytes32 from "./Bytes32.js";
 import { createEncoders } from "./Codec.js";
 
 /**
@@ -24,14 +24,14 @@ export class TransactionHashError extends Data.TaggedError(
 
 /**
  * Schema for TransactionHash.
- * transaction_hash = hash32
+ * transaction_hash = Bytes32
  *
  * @since 2.0.0
  * @category schemas
  */
 export const TransactionHash = pipe(
-  Hash32.HexSchema,
-  Schema.brand("TransactionHash")
+  Bytes32.HexSchema,
+  Schema.brand("TransactionHash"),
 ).annotations({
   identifier: "TransactionHash",
 });
@@ -45,8 +45,8 @@ export type TransactionHash = typeof TransactionHash.Type;
  * @category schemas
  */
 export const BytesSchema = Schema.compose(
-  Hash32.BytesHexTransformer, // Uint8Array -> hex string
-  TransactionHash // hex string -> TransactionHash
+  Bytes32.FromBytes, // Uint8Array -> hex string
+  TransactionHash, // hex string -> TransactionHash
 ).annotations({
   identifier: "TransactionHash.Bytes",
 });
@@ -58,8 +58,8 @@ export const BytesSchema = Schema.compose(
  * @category schemas
  */
 export const HexSchema = Schema.compose(
-  Hash32.HexSchema, // string -> hex string
-  TransactionHash // hex string -> TransactionHash
+  Bytes32.HexSchema, // string -> hex string
+  TransactionHash, // hex string -> TransactionHash
 ).annotations({
   identifier: "TransactionHash.Hex",
 });
@@ -90,8 +90,8 @@ export const equals = (a: TransactionHash, b: TransactionHash): boolean =>
  * @category generators
  */
 export const generator = FastCheck.uint8Array({
-  minLength: Hash32.HASH32_BYTES_LENGTH,
-  maxLength: Hash32.HASH32_BYTES_LENGTH,
+  minLength: Bytes32.Bytes32_BYTES_LENGTH,
+  maxLength: Bytes32.Bytes32_BYTES_LENGTH,
 }).map((bytes) => Codec.Decode.bytes(bytes));
 
 /**
@@ -105,5 +105,5 @@ export const Codec = createEncoders(
     bytes: BytesSchema,
     hex: HexSchema,
   },
-  TransactionHashError
+  TransactionHashError,
 );

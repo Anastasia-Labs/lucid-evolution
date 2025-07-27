@@ -9,7 +9,7 @@ import { createEncoders } from "./Codec.js";
  * @category errors
  */
 export class BlockHeaderHashError extends Data.TaggedError(
-  "BlockHeaderHashError"
+  "BlockHeaderHashError",
 )<{
   message?: string;
   cause?: unknown;
@@ -25,7 +25,7 @@ export class BlockHeaderHashError extends Data.TaggedError(
  */
 export const BlockHeaderHash = pipe(
   Bytes32.HexSchema,
-  Schema.brand("BlockHeaderHash")
+  Schema.brand("BlockHeaderHash"),
 ).annotations({
   identifier: "BlockHeaderHash",
 });
@@ -34,14 +34,14 @@ export type BlockHeaderHash = typeof BlockHeaderHash.Type;
 
 export const FromBytes = Schema.compose(
   Bytes32.FromBytes, // Uint8Array -> hex string
-  BlockHeaderHash // hex string -> BlockHeaderHash
+  BlockHeaderHash, // hex string -> BlockHeaderHash
 ).annotations({
   identifier: "BlockHeaderHash.Bytes",
 });
 
 export const FromHex = Schema.compose(
   Bytes32.HexSchema, // string -> hex string
-  BlockHeaderHash // hex string -> BlockHeaderHash
+  BlockHeaderHash, // hex string -> BlockHeaderHash
 ).annotations({
   identifier: "BlockHeaderHash.Hex",
 });
@@ -77,5 +77,5 @@ export const Codec = createEncoders(
     bytes: FromBytes,
     hex: FromHex,
   },
-  BlockHeaderHashError
+  BlockHeaderHashError,
 );

@@ -29,7 +29,7 @@ export const POS_INT64_MAX = 9223372036854775807n;
  */
 export class NonZeroInt64Error extends Data.TaggedError("NonZeroInt64Error")<{
   message?: string;
-  reason?: "ZeroValue" | "OutOfRange" | "InvalidValue";
+  cause?: unknown;
 }> {}
 
 /**
@@ -103,9 +103,7 @@ export type NonZeroInt64 = typeof NonZeroInt64Schema.Type;
  * @since 2.0.0
  * @category constructors
  */
-export const make = (value: bigint): NonZeroInt64 => {
-  return Schema.decodeSync(NonZeroInt64Schema)(value);
-};
+export const make = Schema.decodeSync(NonZeroInt64Schema);
 
 /**
  * Check if a value is a valid NonZeroInt64.
@@ -120,8 +118,7 @@ export const make = (value: bigint): NonZeroInt64 => {
  * @since 2.0.0
  * @category predicates
  */
-export const is = (value: unknown): value is NonZeroInt64 =>
-  Schema.is(NonZeroInt64Schema)(value);
+export const is = Schema.is(NonZeroInt64Schema);
 
 /**
  * Check if a NonZeroInt64 is positive.

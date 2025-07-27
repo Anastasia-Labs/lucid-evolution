@@ -30,7 +30,7 @@ export class ScriptHashError extends Data.TaggedError("ScriptHashError")<{
  */
 export const ScriptHash = pipe(
   Hash28.HexSchema,
-  Schema.brand("ScriptHash")
+  Schema.brand("ScriptHash"),
 ).annotations({
   identifier: "ScriptHash",
 });
@@ -44,8 +44,8 @@ export type ScriptHash = typeof ScriptHash.Type;
  * @category schemas
  */
 export const BytesSchema = Schema.compose(
-  Hash28.BytesHexTransformer, // Uint8Array -> hex string
-  ScriptHash // hex string -> ScriptHash
+  Hash28.FromBytes, // Uint8Array -> hex string
+  ScriptHash, // hex string -> ScriptHash
 ).annotations({
   identifier: "ScriptHash.Bytes",
 });
@@ -58,7 +58,7 @@ export const BytesSchema = Schema.compose(
  */
 export const HexSchema = Schema.compose(
   Hash28.HexSchema, // string -> hex string
-  ScriptHash // hex string -> ScriptHash
+  ScriptHash, // hex string -> ScriptHash
 ).annotations({
   identifier: "ScriptHash.Hex",
 });
@@ -103,5 +103,5 @@ export const Codec = createEncoders(
     bytes: BytesSchema,
     hex: HexSchema,
   },
-  ScriptHashError
+  ScriptHashError,
 );

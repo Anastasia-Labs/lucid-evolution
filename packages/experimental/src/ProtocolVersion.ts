@@ -2,6 +2,7 @@ import { Schema, Data, Effect, ParseResult } from "effect";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
 import * as Numeric from "./Numeric.js";
+import * as _Codec from "./Codec.js";
 
 /**
  * Error class for ProtocolVersion related operations.
@@ -63,7 +64,7 @@ export const equals = (a: ProtocolVersion, b: ProtocolVersion): boolean =>
  * @since 2.0.0
  * @category schemas
  */
-export const ProtocolVersionCDDLSchema = Schema.transformOrFail(
+export const FromCDDL = Schema.transformOrFail(
   Schema.Tuple(CBOR.Integer, CBOR.Integer),
   Schema.typeSchema(ProtocolVersion),
   {
@@ -85,12 +86,12 @@ export const ProtocolVersionCDDLSchema = Schema.transformOrFail(
  * @since 2.0.0
  * @category schemas
  */
-export const CBORBytesSchema = (
+export const FromCBORBytes = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
-    ProtocolVersionCDDLSchema, // CBOR → ProtocolVersion
+    CBOR.FromBytes(options), // Uint8Array → CBOR
+    FromCDDL, // CBOR → ProtocolVersion
   );
 
 /**
@@ -99,37 +100,19 @@ export const CBORBytesSchema = (
  * @since 2.0.0
  * @category schemas
  */
-export const CBORHexSchema = (
+export const FromCBORHex = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
-    CBORBytesSchema(options), // Uint8Array → ProtocolVersion
+    Bytes.FromHex, // string → Uint8Array
+    FromCBORBytes(options), // Uint8Array → ProtocolVersion
   );
 
-export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
-  Encode: {
-    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
-    cborHex: Schema.encodeSync(CBORHexSchema(options)),
-  },
-  Decode: {
-    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
-  },
-  EncodeEither: {
-    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.encodeEither(CBORHexSchema(options)),
-  },
-  DecodeEither: {
-    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.decodeEither(CBORHexSchema(options)),
-  },
-  EncodeEffect: {
-    cborBytes: Schema.encode(CBORBytesSchema(options)),
-    cborHex: Schema.encode(CBORHexSchema(options)),
-  },
-  DecodeEffect: {
-    cborBytes: Schema.decode(CBORBytesSchema(options)),
-    cborHex: Schema.decode(CBORHexSchema(options)),
-  },
-});
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
+  _Codec.createEncoders(
+    {
+      bytes: FromCBORBytes(options),
+      variableBytes: FromCBORHex(options),
+    },
+    ProtocolVersionError,
+  );

@@ -1,18 +1,26 @@
-import { Schema, Effect, ParseResult } from "effect";
+import { Schema, Effect, ParseResult, Data } from "effect";
 import * as Address from "./Address.js";
 import * as Value from "./Value.js";
-import * as Hash32 from "./Hash32.js";
+import * as Bytes32 from "./Bytes32.js";
 import * as DatumOption from "./DatumOption.js";
 import * as ScriptRef from "./ScriptRef.js";
 import * as Bytes from "./Bytes.js";
 import * as CBOR from "./CBOR.js";
+import * as _Codec from "./Codec.js";
+
+export class TransactionOutputError extends Data.TaggedError(
+  "TransactionOutputError",
+)<{
+  message?: string;
+  cause?: unknown;
+}> {}
 
 /**
  * TransactionOutput types based on Conway CDDL specification
  *
  * CDDL: transaction_output = shelley_transaction_output / babbage_transaction_output
  *
- * shelley_transaction_output = [address, amount : value, ? hash32]
+ * shelley_transaction_output = [address, amount : value, ? Bytes32]
  *
  * babbage_transaction_output =
  *   {0 : address, 1 : value, ? 2 : datum_option, ? 3 : script_ref}
@@ -24,7 +32,7 @@ import * as CBOR from "./CBOR.js";
 /**
  * Shelley-era transaction output format
  *
- * CDDL: shelley_transaction_output = [address, amount : value, ? hash32]
+ * CDDL: shelley_transaction_output = [address, amount : value, ? Bytes32]
  *
  * @since 2.0.0
  * @category model
@@ -34,7 +42,7 @@ export class ShelleyTransactionOutput extends Schema.TaggedClass<ShelleyTransact
   {
     address: Address.Address,
     amount: Value.Value,
-    datumHash: Schema.optional(Hash32.HexSchema),
+    datumHash: Schema.optional(Bytes32.HexSchema),
   },
 ) {}
 
@@ -75,7 +83,7 @@ export type TransactionOutput = Schema.Schema.Type<typeof TransactionOutput>;
 /**
  * CDDL schema for Shelley transaction outputs
  *
- * CDDL: shelley_transaction_output = [address, amount : value, ? hash32]
+ * CDDL: shelley_transaction_output = [address, amount : value, ? Bytes32]
  *
  * @since 2.0.0
  * @category schemas
@@ -91,7 +99,7 @@ export const ShelleyTransactionOutputCDDLSchema = Schema.transformOrFail(
     strict: true,
     encode: (toI) =>
       Effect.gen(function* () {
-        const addressBytes = yield* ParseResult.encode(Address.BytesSchema)(
+        const addressBytes = yield* ParseResult.encode(Address.FromBytes)(
           toI.address,
         );
         const valueBytes = yield* ParseResult.encode(Value.ValueCDDLSchema)(
@@ -99,7 +107,7 @@ export const ShelleyTransactionOutputCDDLSchema = Schema.transformOrFail(
         );
 
         if (toI.datumHash !== undefined) {
-          const hashBytes = yield* ParseResult.decode(Bytes.BytesSchema)(
+          const hashBytes = yield* ParseResult.encode(Bytes.FromBytes)(
             toI.datumHash,
           );
           return [addressBytes, valueBytes, hashBytes] as const;
@@ -111,7 +119,7 @@ export const ShelleyTransactionOutputCDDLSchema = Schema.transformOrFail(
       Effect.gen(function* () {
         const [addressBytes, valueBytes, datumHashBytes] = fromI;
 
-        const address = yield* ParseResult.decode(Address.BytesSchema)(
+        const address = yield* ParseResult.decode(Address.FromBytes)(
           addressBytes,
         );
         const amount = yield* ParseResult.decode(Value.ValueCDDLSchema)(
@@ -120,7 +128,7 @@ export const ShelleyTransactionOutputCDDLSchema = Schema.transformOrFail(
 
         let datumHash: string | undefined;
         if (datumHashBytes !== undefined) {
-          datumHash = yield* ParseResult.encode(Bytes.BytesSchema)(
+          datumHash = yield* ParseResult.decode(Bytes.FromBytes)(
             datumHashBytes,
           );
         }
@@ -147,14 +155,14 @@ export const BabbageTransactionOutputCDDLSchema = Schema.transformOrFail(
     0: Schema.Uint8ArrayFromSelf, // address as bytes
     1: Schema.encodedSchema(Value.ValueCDDLSchema), // value
     2: Schema.optional(Schema.encodedSchema(DatumOption.DatumOptionCDDLSchema)), // optional datum_option
-    3: Schema.optional(Schema.encodedSchema(ScriptRef.ScriptRefCDDLSchema)), // optional script_ref
+    3: Schema.optional(Schema.encodedSchema(ScriptRef.FromCDDL)), // optional script_ref
   }),
   Schema.typeSchema(BabbageTransactionOutput),
   {
     strict: true,
     encode: (toI) =>
       Effect.gen(function* () {
-        const addressBytes = yield* ParseResult.encode(Address.BytesSchema)(
+        const addressBytes = yield* ParseResult.encode(Address.FromBytes)(
           toI.address,
         );
         const valueBytes = yield* ParseResult.encode(Value.ValueCDDLSchema)(
@@ -171,9 +179,7 @@ export const BabbageTransactionOutputCDDLSchema = Schema.transformOrFail(
 
         const scriptRefBytes =
           toI.scriptRef !== undefined
-            ? yield* ParseResult.encode(ScriptRef.ScriptRefCDDLSchema)(
-                toI.scriptRef,
-              )
+            ? yield* ParseResult.encode(ScriptRef.FromCDDL)(toI.scriptRef)
             : undefined;
 
         // Build result object with conditional properties
@@ -197,7 +203,7 @@ export const BabbageTransactionOutputCDDLSchema = Schema.transformOrFail(
           );
         }
 
-        const address = yield* ParseResult.decode(Address.BytesSchema)(
+        const address = yield* ParseResult.decode(Address.FromBytes)(
           addressBytes,
         );
         const amount = yield* ParseResult.decode(Value.ValueCDDLSchema)(
@@ -213,7 +219,7 @@ export const BabbageTransactionOutputCDDLSchema = Schema.transformOrFail(
 
         let scriptRef: ScriptRef.ScriptRef | undefined;
         if (scriptRefBytes !== undefined) {
-          scriptRef = yield* ParseResult.decode(ScriptRef.ScriptRefCDDLSchema)(
+          scriptRef = yield* ParseResult.decode(ScriptRef.FromCDDL)(
             scriptRefBytes,
           );
         }
@@ -232,7 +238,7 @@ export const BabbageTransactionOutputCDDLSchema = Schema.transformOrFail(
  * CDDL schema for transaction outputs
  *
  * CDDL: transaction_output = shelley_transaction_output / babbage_transaction_output
- * shelley_transaction_output = [address, amount : value, ? hash32]
+ * shelley_transaction_output = [address, amount : value, ? Bytes32]
  * babbage_transaction_output = {0 : address, 1 : value, ? 2 : datum_option, ? 3 : script_ref}
  *
  * @since 2.0.0
@@ -254,7 +260,7 @@ export const CBORBytesSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    CBOR.FromBytes(options), // Uint8Array → CBOR
     TransactionOutputCDDLSchema, // CBOR → TransactionOutput
   );
 
@@ -269,39 +275,15 @@ export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
+    Bytes.FromHex, // string → Uint8Array
     CBORBytesSchema(options), // Uint8Array → TransactionOutput
   );
 
-/**
- * Codec providing all encoding/decoding variants for TransactionOutput.
- *
- * @since 2.0.0
- * @category codecs
- */
-export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
-  Encode: {
-    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
-    cborHex: Schema.encodeSync(CBORHexSchema(options)),
-  },
-  Decode: {
-    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
-  },
-  EncodeEither: {
-    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.encodeEither(CBORHexSchema(options)),
-  },
-  DecodeEither: {
-    cborBytes: Schema.decodeUnknownEither(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknownEither(CBORHexSchema(options)),
-  },
-  EncodeEffect: {
-    cborBytes: Schema.encode(CBORBytesSchema(options)),
-    cborHex: Schema.encode(CBORHexSchema(options)),
-  },
-  DecodeEffect: {
-    cborBytes: Schema.decode(CBORBytesSchema(options)),
-    cborHex: Schema.decode(CBORHexSchema(options)),
-  },
-});
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
+  _Codec.createEncoders(
+    {
+      cborBytes: CBORBytesSchema(options),
+      cborHex: CBORHexSchema(options),
+    },
+    TransactionOutputError,
+  );

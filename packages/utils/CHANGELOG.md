@@ -14,7 +14,6 @@
 - [#667](https://github.com/no-witness-labs/evolution-sdk/pull/667) [`93b87f6`](https://github.com/no-witness-labs/evolution-sdk/commit/93b87f6105da464cb129b56a4029a9d8068311bc) Thanks [@hadelive](https://github.com/hadelive)! - Library ownership and entity transferred to No Witness Labs.
 
   This major release reflects the transition of the Evolution SDK library to No Witness Labs, including:
-
   - Updated maintainer and organization details
   - Revised package ownership and publishing rights
   - Continued development under new entity management
@@ -38,7 +37,6 @@
 - [#663](https://github.com/no-witness-labs/evolution-sdk/pull/663) [`12aaf90`](https://github.com/no-witness-labs/evolution-sdk/commit/12aaf904d753d9765872c18ad141feee29418a9d) Thanks [@hadelive](https://github.com/hadelive)! - Library ownership and entity transferred to No Witness Labs.
 
   This major release reflects the transition of the Evolution SDK library to No Witness Labs, including:
-
   - Updated maintainer and organization details
   - Revised package ownership and publishing rights
   - Continued development under new entity management
@@ -523,7 +521,6 @@
 ### Patch Changes
 
 - [#86](https://github.com/Anastasia-Labs/evolution-sdk/pull/86) [`6eacab5`](https://github.com/Anastasia-Labs/evolution-sdk/commit/6eacab5c108485877879a2deffd2f8a1369ac172) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - - fix: use TransactionOutputBuilder.() instead of TransactionOutput.new()
-
   - test: enable all preprod tests
   - test: update test
   - refactor: code structure

@@ -21,7 +21,10 @@ export class KesSignatureError extends Data.TaggedError("KesSignatureError")<{
  * @since 2.0.0
  * @category schemas
  */
-export const KesSignature = pipe(Bytes448.HexSchema, Schema.brand("KesSignature")).annotations({
+export const KesSignature = pipe(
+  Bytes448.HexSchema,
+  Schema.brand("KesSignature"),
+).annotations({
   identifier: "KesSignature",
 });
 
@@ -29,14 +32,14 @@ export type KesSignature = typeof KesSignature.Type;
 
 export const FromBytes = Schema.compose(
   Bytes448.FromBytes, // Uint8Array -> hex string
-  KesSignature // hex string -> KesSignature
+  KesSignature, // hex string -> KesSignature
 ).annotations({
   identifier: "KesSignature.Bytes",
 });
 
 export const FromHex = Schema.compose(
   Bytes448.HexSchema, // string -> hex string
-  KesSignature // hex string -> KesSignature
+  KesSignature, // hex string -> KesSignature
 ).annotations({
   identifier: "KesSignature.Hex",
 });
@@ -71,5 +74,5 @@ export const Codec = createEncoders(
     bytes: FromBytes,
     hex: FromHex,
   },
-  KesSignatureError
+  KesSignatureError,
 );

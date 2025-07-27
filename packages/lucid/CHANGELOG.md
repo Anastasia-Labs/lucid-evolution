@@ -17,7 +17,6 @@
 - [#667](https://github.com/no-witness-labs/evolution-sdk/pull/667) [`93b87f6`](https://github.com/no-witness-labs/evolution-sdk/commit/93b87f6105da464cb129b56a4029a9d8068311bc) Thanks [@hadelive](https://github.com/hadelive)! - Library ownership and entity transferred to No Witness Labs.
 
   This major release reflects the transition of the Evolution SDK library to No Witness Labs, including:
-
   - Updated maintainer and organization details
   - Revised package ownership and publishing rights
   - Continued development under new entity management
@@ -44,7 +43,6 @@
 - [#663](https://github.com/no-witness-labs/evolution-sdk/pull/663) [`12aaf90`](https://github.com/no-witness-labs/evolution-sdk/commit/12aaf904d753d9765872c18ad141feee29418a9d) Thanks [@hadelive](https://github.com/hadelive)! - Library ownership and entity transferred to No Witness Labs.
 
   This major release reflects the transition of the Evolution SDK library to No Witness Labs, including:
-
   - Updated maintainer and organization details
   - Revised package ownership and publishing rights
   - Continued development under new entity management
@@ -907,7 +905,6 @@
 ### Patch Changes
 
 - [#168](https://github.com/Anastasia-Labs/evolution-sdk/pull/168) [`26dc344`](https://github.com/Anastasia-Labs/evolution-sdk/commit/26dc34466e74a8af6b6952dcd705d6f67f9660d0) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - Changes
-
   - Add kupos and ogmios schemas
   - Support jsonrpc v2
   - Effectful http request
@@ -926,7 +923,6 @@
 ### Patch Changes
 
 - [#164](https://github.com/Anastasia-Labs/evolution-sdk/pull/164) [`7a8956f`](https://github.com/Anastasia-Labs/evolution-sdk/commit/7a8956f95a4ae08e520a8a5f0b0ea4a3eabe869a) Thanks [@itsmestale](https://github.com/itsmestale)! - -
-
   - remove nativeFromJson and nativeJSFromJSon, use scriptFromNative instead
   - add scriptFromCMLNative for CML Native type
   - add parseCMLNative
@@ -999,7 +995,6 @@
 ### Patch Changes
 
 - [#141](https://github.com/Anastasia-Labs/evolution-sdk/pull/141) [`eef3d42`](https://github.com/Anastasia-Labs/evolution-sdk/commit/eef3d421b4cdf12638169ece49e4c00fce6e3356) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - Transaction chaining is a feature that allows to chain multiple transactions in one block , the endpoint chain() allows to accomplish this by returning a tuple with three elements:
-
   1. **newWalletInputs**: This includes all UTXOs that were not spent in the transaction and the new wallet UTXOs derived from the output transaction.
   2. **derivedOutputs**: The derived outputs extracted from the completed transaction.
   3. **tx**: The new transaction that is ready to be submitted.
@@ -1249,7 +1244,6 @@
 ### Patch Changes
 
 - [#86](https://github.com/Anastasia-Labs/evolution-sdk/pull/86) [`6eacab5`](https://github.com/Anastasia-Labs/evolution-sdk/commit/6eacab5c108485877879a2deffd2f8a1369ac172) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - - fix: use TransactionOutputBuilder.() instead of TransactionOutput.new()
-
   - test: enable all preprod tests
   - test: update test
   - refactor: code structure
@@ -1473,7 +1467,6 @@
 ### Minor Changes
 
 - [#32](https://github.com/Anastasia-Labs/evolution-sdk/pull/32) [`bb295f2`](https://github.com/Anastasia-Labs/evolution-sdk/commit/bb295f204f91c4beec9a284bb7abff15e0e675b3) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - set the following packages to dependencies
-
   - @anastasia-labs/cardano-multiplatform-lib-nodejs
   - @emurgo/cardano-message-signing-nodejs
 

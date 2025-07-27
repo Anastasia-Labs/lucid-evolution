@@ -128,7 +128,7 @@ export function applyParamsToScript<
 // Apply double bytestring enconding of type `major type 2`
 export const applyDoubleCborEncoding = (script: string): string => {
   try {
-    CBOR.Decode.bytes(CBOR.Encode.bytes(Bytes.Decode.hex(script)));
+    CBOR.Codec().Decode.cborBytes(CBOR.Encode.bytes(Bytes.Decode.hex(script)));
     return script;
   } catch (error) {
     try {

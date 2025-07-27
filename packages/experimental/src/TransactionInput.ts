@@ -3,10 +3,11 @@ import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
 import * as TransactionHash from "./TransactionHash.js";
 import * as Numeric from "./Numeric.js";
+import * as _Codec from "./Codec.js";
 
 /**
  * CDDL specs
- * transaction_input = [transaction_id : $hash32, index : uint .size 2]
+ * transaction_input = [transaction_id : $Bytes32, index : uint .size 2]
  */
 
 /**
@@ -31,7 +32,7 @@ export class TransactionInputError extends Data.TaggedError(
 
 /**
  * Schema for TransactionInput representing a transaction input with transaction id and index.
- * transaction_input = [transaction_id : $hash32, index : uint .size 2]
+ * transaction_input = [transaction_id : $Bytes32, index : uint .size 2]
  *
  * @example
  * import { TransactionInput, TransactionHash, Numeric } from "@evolution-sdk/experimental";
@@ -51,15 +52,7 @@ export class TransactionInput extends Schema.TaggedClass<TransactionInput>()(
     transactionId: TransactionHash.TransactionHash,
     index: Numeric.Uint16Schema,
   },
-) {
-  [Symbol.for("nodejs.util.inspect.custom")]() {
-    return {
-      _tag: this._tag,
-      transactionId: this.transactionId,
-      index: this.index,
-    };
-  }
-}
+) {}
 
 /**
  * Check if the given value is a valid TransactionInput.
@@ -78,7 +71,7 @@ export const isTransactionInput = Schema.is(TransactionInput);
 
 /**
  * CDDL schema for TransactionInput.
- * transaction_input = [transaction_id : $hash32, index : uint .size 2]
+ * transaction_input = [transaction_id : $Bytes32, index : uint .size 2]
  *
  * @since 2.0.0
  * @category schemas
@@ -122,7 +115,7 @@ export const CBORBytesSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    CBOR.FromBytes(options), // Uint8Array → CBOR
     TransactionInputCDDLSchema, // CBOR → TransactionInput
   );
 
@@ -136,7 +129,7 @@ export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
+    Bytes.FromHex, // string → Uint8Array
     CBORBytesSchema(options), // Uint8Array → TransactionInput
   );
 
@@ -168,29 +161,17 @@ export const generator = FastCheck.tuple(
     }),
 );
 
-export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
-  Encode: {
-    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
-    cborHex: Schema.encodeSync(CBORHexSchema(options)),
-  },
-  Decode: {
-    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
-  },
-  EncodeEither: {
-    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.encodeEither(CBORHexSchema(options)),
-  },
-  DecodeEither: {
-    cborBytes: Schema.decodeUnknownEither(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknownEither(CBORHexSchema(options)),
-  },
-  EncodeEffect: {
-    cborBytes: Schema.encode(CBORBytesSchema(options)),
-    cborHex: Schema.encode(CBORHexSchema(options)),
-  },
-  DecodeEffect: {
-    cborBytes: Schema.decodeUnknown(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknown(CBORHexSchema(options)),
-  },
-});
+/**
+ * Extended Codec with CBOR support for TransactionInput.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
+  _Codec.createEncoders(
+    {
+      cborBytes: CBORBytesSchema(options),
+      cborHex: CBORHexSchema(options),
+    },
+    TransactionInputError,
+  );

@@ -4,6 +4,7 @@ import * as IPv4 from "./IPv4.js";
 import * as IPv6 from "./IPv6.js";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
+import * as _Codec from "./Codec.js";
 
 /**
  * Error class for SingleHostAddr related operations.
@@ -225,11 +226,11 @@ export const SingleHostAddrCDDLSchema = Schema.transformOrFail(
         const port = Option.isSome(toA.port) ? BigInt(toA.port.value) : null;
 
         const ipv4 = Option.isSome(toA.ipv4)
-          ? IPv4.Encode.bytes(toA.ipv4.value)
+          ? yield* ParseResult.encode(IPv4.FromBytes)(toA.ipv4.value)
           : null;
 
         const ipv6 = Option.isSome(toA.ipv6)
-          ? IPv6.Encode.bytes(toA.ipv6.value)
+          ? yield* ParseResult.encode(IPv6.FromBytes)(toA.ipv6.value)
           : null;
 
         return yield* Effect.succeed([0n, port, ipv4, ipv6] as const);
@@ -244,16 +245,12 @@ export const SingleHostAddrCDDLSchema = Schema.transformOrFail(
         const ipv4 =
           ipv4Value === null || ipv4Value === undefined
             ? Option.none()
-            : Option.some(
-                yield* ParseResult.decode(IPv4.IPv4BytesSchema)(ipv4Value),
-              );
+            : Option.some(yield* ParseResult.decode(IPv4.FromBytes)(ipv4Value));
 
         const ipv6 =
           ipv6Value === null || ipv6Value === undefined
             ? Option.none()
-            : Option.some(
-                yield* ParseResult.decode(IPv6.IPv6BytesSchema)(ipv6Value),
-              );
+            : Option.some(yield* ParseResult.decode(IPv6.FromBytes)(ipv6Value));
 
         return yield* Effect.succeed(new SingleHostAddr({ port, ipv4, ipv6 }));
       }),
@@ -270,7 +267,7 @@ export const CBORBytesSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    CBOR.FromBytes(options), // Uint8Array → CBOR
     SingleHostAddrCDDLSchema, // CBOR → SingleHostAddr
   );
 
@@ -284,33 +281,15 @@ export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
+    Bytes.FromHex, // string → Uint8Array
     CBORBytesSchema(options), // Uint8Array → SingleHostAddr
   );
 
-export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
-  Encode: {
-    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
-    cborHex: Schema.encodeSync(CBORHexSchema(options)),
-  },
-  Decode: {
-    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
-  },
-  EncodeEither: {
-    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.encodeEither(CBORHexSchema(options)),
-  },
-  DecodeEither: {
-    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.decodeEither(CBORHexSchema(options)),
-  },
-  EncodeEffect: {
-    cborBytes: Schema.encode(CBORBytesSchema(options)),
-    cborHex: Schema.encode(CBORHexSchema(options)),
-  },
-  DecodeEffect: {
-    cborBytes: Schema.decode(CBORBytesSchema(options)),
-    cborHex: Schema.decode(CBORHexSchema(options)),
-  },
-});
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
+  _Codec.createEncoders(
+    {
+      cborBytes: CBORBytesSchema(options),
+      cborHex: CBORHexSchema(options),
+    },
+    SingleHostAddrError,
+  );

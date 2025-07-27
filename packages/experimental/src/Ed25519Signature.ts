@@ -23,7 +23,10 @@ export class Ed25519SignatureError extends Data.TaggedError(
  * @since 2.0.0
  * @category schemas
  */
-export const Ed25519Signature = pipe(Bytes64.HexSchema, Schema.brand("Ed25519Signature")).annotations({
+export const Ed25519Signature = pipe(
+  Bytes64.HexSchema,
+  Schema.brand("Ed25519Signature"),
+).annotations({
   identifier: "Ed25519Signature",
 });
 
@@ -31,14 +34,14 @@ export type Ed25519Signature = typeof Ed25519Signature.Type;
 
 export const FromBytes = Schema.compose(
   Bytes64.FromBytes, // Uint8Array -> hex string
-  Ed25519Signature // hex string -> Ed25519Signature
+  Ed25519Signature, // hex string -> Ed25519Signature
 ).annotations({
   identifier: "Ed25519Signature.Bytes",
 });
 
 export const FromHex = Schema.compose(
   Bytes64.HexSchema, // string -> hex string
-  Ed25519Signature // hex string -> Ed25519Signature
+  Ed25519Signature, // hex string -> Ed25519Signature
 ).annotations({
   identifier: "Ed25519Signature.Hex",
 });
@@ -74,5 +77,5 @@ export const Codec = createEncoders(
     bytes: FromBytes,
     hex: FromHex,
   },
-  Ed25519SignatureError
+  Ed25519SignatureError,
 );

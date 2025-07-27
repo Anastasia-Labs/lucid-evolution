@@ -2,6 +2,7 @@ import { Schema, Data, FastCheck, Effect, ParseResult } from "effect";
 import * as DnsName from "./DnsName.js";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
+import * as _Codec from "./Codec.js";
 
 /**
  * Error class for MultiHostName related operations.
@@ -40,14 +41,7 @@ export class MultiHostName extends Schema.TaggedClass<MultiHostName>()(
   {
     dnsName: DnsName.DnsName,
   },
-) {
-  [Symbol.for("nodejs.util.inspect.custom")]() {
-    return {
-      _tag: "MultiHostName",
-      dnsName: this.dnsName,
-    };
-  }
-}
+) {}
 
 /**
  * CDDL schema for MultiHostName.
@@ -56,7 +50,7 @@ export class MultiHostName extends Schema.TaggedClass<MultiHostName>()(
  * @since 2.0.0
  * @category schemas
  */
-export const MultiHostNameCDDLSchema = Schema.transformOrFail(
+export const FromCDDL = Schema.transformOrFail(
   Schema.Tuple(
     Schema.Literal(2n), // tag (literal 2)
     Schema.String, // dns_name (string)
@@ -89,8 +83,8 @@ export const CBORBytesSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
-    MultiHostNameCDDLSchema, // CBOR → MultiHostName
+    CBOR.FromBytes(options), // Uint8Array → CBOR
+    FromCDDL, // CBOR → MultiHostName
   );
 
 /**
@@ -103,7 +97,7 @@ export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
+    Bytes.FromHex, // string → Uint8Array
     CBORBytesSchema(options), // Uint8Array → MultiHostName
   );
 
@@ -120,21 +114,6 @@ export const CBORHexSchema = (
  */
 export const make = (dnsName: DnsName.DnsName): MultiHostName =>
   new MultiHostName({ dnsName });
-
-/**
- * Get the DNS name from a MultiHostName.
- *
- * @example
- * import { MultiHostName } from "@evolution-sdk/experimental";
- *
- * const dnsName = MultiHostName.getDnsName(hostName);
- * console.log(dnsName); // "pool.example.com"
- *
- * @since 2.0.0
- * @category transformation
- */
-export const getDnsName = (hostName: MultiHostName): DnsName.DnsName =>
-  hostName.dnsName;
 
 /**
  * Check if two MultiHostName instances are equal.
@@ -162,29 +141,11 @@ export const generator = FastCheck.record({
   dnsName: DnsName.generator,
 }).map((props) => new MultiHostName(props));
 
-export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
-  Encode: {
-    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
-    cborHex: Schema.encodeSync(CBORHexSchema(options)),
-  },
-  Decode: {
-    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
-  },
-  EncodeEither: {
-    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.encodeEither(CBORHexSchema(options)),
-  },
-  DecodeEither: {
-    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.decodeEither(CBORHexSchema(options)),
-  },
-  EncodeEffect: {
-    cborBytes: Schema.encode(CBORBytesSchema(options)),
-    cborHex: Schema.encode(CBORHexSchema(options)),
-  },
-  DecodeEffect: {
-    cborBytes: Schema.decode(CBORBytesSchema(options)),
-    cborHex: Schema.decode(CBORHexSchema(options)),
-  },
-});
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
+  _Codec.createEncoders(
+    {
+      cborBytes: CBORBytesSchema(options),
+      cborHex: CBORHexSchema(options),
+    },
+    MultiHostNameError,
+  );

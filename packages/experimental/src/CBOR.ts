@@ -172,7 +172,7 @@ export const isTag = Schema.is(Tag);
 export const Simple = Schema.Union(
   Schema.Boolean,
   Schema.Null,
-  Schema.Undefined
+  Schema.Undefined,
 );
 
 // Float (Major Type 7)
@@ -194,7 +194,7 @@ export const CBORSchema: Schema.Schema<CBOR> = Schema.Union(
   RecordSchema,
   Tag,
   Simple,
-  Float
+  Float,
 );
 
 /**
@@ -256,7 +256,7 @@ export const match = <R>(
     null: () => R;
     undefined: () => R;
     float: (value: number) => R;
-  }
+  },
 ): R => {
   if (typeof value === "bigint") {
     return patterns.integer(value);
@@ -306,7 +306,7 @@ export const match = <R>(
 // Internal encoding function used by Schema.transformOrFail
 const internalEncode = (
   value: CBOR,
-  options: CodecOptions = DEFAULT_OPTIONS
+  options: CodecOptions = DEFAULT_OPTIONS,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     if (typeof value === "bigint") {
@@ -341,7 +341,7 @@ const internalEncode = (
     ) {
       return yield* encodeRecord(
         value as { readonly [key: string]: CBOR },
-        options
+        options,
       );
     }
     if (typeof value === "boolean" || value === null || value === undefined) {
@@ -379,7 +379,7 @@ const internalDecode = (data: Uint8Array): Effect.Effect<CBOR, CBORError> =>
 
 const encodeUint = (
   value: bigint,
-  options: CodecOptions
+  options: CodecOptions,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     if (value < 0n) {
@@ -434,7 +434,7 @@ const encodeUint = (
 
 const encodeNint = (
   value: bigint,
-  options: CodecOptions
+  options: CodecOptions,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     if (value >= 0n) {
@@ -496,7 +496,7 @@ const encodeNint = (
 
 const encodeBytes = (
   value: Uint8Array,
-  options: CodecOptions
+  options: CodecOptions,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     const length = value.length;
@@ -533,7 +533,7 @@ const encodeBytes = (
 
 const encodeText = (
   value: string,
-  options: CodecOptions
+  options: CodecOptions,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     const utf8Bytes = new TextEncoder().encode(value);
@@ -571,7 +571,7 @@ const encodeText = (
 
 const encodeArray = (
   value: ReadonlyArray<CBOR>,
-  options: CodecOptions
+  options: CodecOptions,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     const length = value.length;
@@ -610,7 +610,7 @@ const encodeArray = (
             (length >> 16) & 0xff,
             (length >> 8) & 0xff,
             length & 0xff,
-          ])
+          ]),
         );
       } else {
         return yield* new CBORError({
@@ -639,7 +639,7 @@ const encodeArray = (
 
 const encodeMap = (
   value: ReadonlyMap<CBOR, CBOR>,
-  options: CodecOptions
+  options: CodecOptions,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     // Convert Map to array of pairs for processing
@@ -668,8 +668,8 @@ const encodeMap = (
             const encodedKey = yield* internalEncode(key, options);
             const encodedValue = yield* internalEncode(val, options);
             return { encodedKey, encodedValue };
-          })
-        )
+          }),
+        ),
       );
 
       // Sort by encoded key length only (not full lexicographic order)
@@ -719,7 +719,7 @@ const encodeMap = (
             (length >> 16) & 0xff,
             (length >> 8) & 0xff,
             length & 0xff,
-          ])
+          ]),
         );
       } else {
         return yield* new CBORError({
@@ -759,7 +759,7 @@ const encodeMap = (
 
 const encodeRecord = (
   value: { readonly [key: string]: CBOR },
-  options: CodecOptions
+  options: CodecOptions,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     // Convert Record to array of pairs for processing
@@ -788,8 +788,8 @@ const encodeRecord = (
             const encodedKey = yield* internalEncode(key, options);
             const encodedValue = yield* internalEncode(val, options);
             return { encodedKey, encodedValue };
-          })
-        )
+          }),
+        ),
       );
 
       // Sort by encoded key length only (not full lexicographic order)
@@ -839,7 +839,7 @@ const encodeRecord = (
             (length >> 16) & 0xff,
             (length >> 8) & 0xff,
             length & 0xff,
-          ])
+          ]),
         );
       } else {
         return yield* new CBORError({
@@ -880,7 +880,7 @@ const encodeRecord = (
 const encodeTag = (
   tag: number,
   value: CBOR,
-  options: CodecOptions
+  options: CodecOptions,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     const chunks: Uint8Array[] = [];
@@ -916,7 +916,7 @@ const encodeTag = (
   });
 
 const encodeSimple = (
-  value: boolean | null | undefined
+  value: boolean | null | undefined,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     if (value === false) return new Uint8Array([0xf4]);
@@ -931,7 +931,7 @@ const encodeSimple = (
 
 const encodeFloat = (
   value: number,
-  options: CodecOptions
+  options: CodecOptions,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.succeed(
     (() => {
@@ -965,7 +965,7 @@ const encodeFloat = (
         view.setFloat64(0, value, false); // big-endian
         return new Uint8Array([0xfb, ...new Uint8Array(buffer)]);
       }
-    })()
+    })(),
   );
 
 // Internal decoding functions
@@ -1074,7 +1074,7 @@ const decodeNint = (data: Uint8Array): Effect.Effect<CBOR, CBORError> =>
   });
 
 const decodeBytesWithLength = (
-  data: Uint8Array
+  data: Uint8Array,
 ): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORError> =>
   Effect.gen(function* () {
     const firstByte = data[0];
@@ -1112,11 +1112,11 @@ const decodeBytesWithLength = (
 
         const { length: chunkLength, bytesRead } = yield* decodeLength(
           data,
-          offset
+          offset,
         );
         const chunkData = data.slice(
           offset + bytesRead,
-          offset + bytesRead + chunkLength
+          offset + bytesRead + chunkLength,
         );
         chunks.push(chunkData);
         offset += bytesRead + chunkLength;
@@ -1154,7 +1154,7 @@ const decodeBytesWithLength = (
   });
 
 const decodeTextWithLength = (
-  data: Uint8Array
+  data: Uint8Array,
 ): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORError> =>
   Effect.gen(function* () {
     const firstByte = data[0];
@@ -1192,16 +1192,16 @@ const decodeTextWithLength = (
 
         const { length: chunkLength, bytesRead } = yield* decodeLength(
           data,
-          offset
+          offset,
         );
         const chunkBytes = data.slice(
           offset + bytesRead,
-          offset + bytesRead + chunkLength
+          offset + bytesRead + chunkLength,
         );
 
         try {
           const chunkText = new TextDecoder("utf-8", { fatal: true }).decode(
-            chunkBytes
+            chunkBytes,
           );
           chunks.push(chunkText);
         } catch (error) {
@@ -1235,7 +1235,7 @@ const decodeTextWithLength = (
       const textBytes = data.slice(bytesRead, bytesRead + length);
       try {
         const text = new TextDecoder("utf-8", { fatal: true }).decode(
-          textBytes
+          textBytes,
         );
         return { item: text, bytesConsumed: bytesRead + length };
       } catch (error) {
@@ -1249,7 +1249,7 @@ const decodeTextWithLength = (
 
 // Helper function to decode an item and return both the item and bytes consumed
 const decodeItemWithLength = (
-  data: Uint8Array
+  data: Uint8Array,
 ): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORError> =>
   Effect.gen(function* () {
     if (data.length === 0) {
@@ -1366,7 +1366,7 @@ const decodeItemWithLength = (
   });
 
 const decodeArrayWithLength = (
-  data: Uint8Array
+  data: Uint8Array,
 ): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORError> =>
   Effect.gen(function* () {
     const firstByte = data[0];
@@ -1386,7 +1386,7 @@ const decodeArrayWithLength = (
         }
 
         const { item, bytesConsumed } = yield* decodeItemWithLength(
-          data.slice(offset)
+          data.slice(offset),
         );
         result.push(item);
         offset += bytesConsumed;
@@ -1416,7 +1416,7 @@ const decodeArrayWithLength = (
         }
 
         const { item, bytesConsumed } = yield* decodeItemWithLength(
-          data.slice(offset)
+          data.slice(offset),
         );
         result.push(item);
         offset += bytesConsumed;
@@ -1430,7 +1430,7 @@ const decodeArrayWithLength = (
   });
 
 const decodeMapWithLength = (
-  data: Uint8Array
+  data: Uint8Array,
 ): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORError> =>
   Effect.gen(function* () {
     const firstByte = data[0];
@@ -1512,7 +1512,7 @@ const decodeMapWithLength = (
   });
 
 const decodeTagWithLength = (
-  data: Uint8Array
+  data: Uint8Array,
 ): Effect.Effect<{ item: CBOR; bytesConsumed: number }, CBORError> =>
   Effect.gen(function* () {
     const firstByte = data[0];
@@ -1546,7 +1546,7 @@ const decodeTagWithLength = (
     }
 
     const { item: innerValue, bytesConsumed } = yield* decodeItemWithLength(
-      data.slice(dataOffset)
+      data.slice(dataOffset),
     );
 
     // Handle special tags that should be converted to plain values
@@ -1585,7 +1585,7 @@ const decodeTagWithLength = (
   });
 
 const decodeSimpleOrFloat = (
-  data: Uint8Array
+  data: Uint8Array,
 ): Effect.Effect<CBOR, CBORError> =>
   Effect.gen(function* () {
     const firstByte = data[0];
@@ -1692,7 +1692,7 @@ const bytesToBigint = (bytes: Uint8Array): bigint => {
 
 const decodeLength = (
   data: Uint8Array,
-  offset: number
+  offset: number,
 ): Effect.Effect<{ length: number; bytesRead: number }, CBORError> =>
   Effect.gen(function* () {
     if (offset >= data.length) {
@@ -1808,8 +1808,8 @@ export const FromBytes = (options: CodecOptions) =>
           new ParseResult.Type(
             ast,
             fromA,
-            `Failed to decode CBOR value: ${error instanceof CBORError ? error.message : String(error)}`
-          )
+            `Failed to decode CBOR value: ${error instanceof CBORError ? error.message : String(error)}`,
+          ),
       ),
     encode: (toA, _, ast) =>
       Effect.mapError(
@@ -1818,8 +1818,8 @@ export const FromBytes = (options: CodecOptions) =>
           new ParseResult.Type(
             ast,
             toA,
-            `Failed to encode CBOR value: ${error instanceof CBORError ? error.message : String(error)}`
-          )
+            `Failed to encode CBOR value: ${error instanceof CBORError ? error.message : String(error)}`,
+          ),
       ),
   });
 
@@ -1832,5 +1832,5 @@ export const Codec = (options: CodecOptions = DEFAULT_OPTIONS) =>
       cborBytes: FromBytes(options),
       cborHex: CBORHexSchema(options),
     },
-    CBORError
+    CBORError,
   );

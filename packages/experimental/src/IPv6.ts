@@ -28,14 +28,14 @@ export type IPv6 = typeof IPv6.Type;
 
 export const FromBytes = Schema.compose(
   Bytes16.FromBytes, // Uint8Array -> hex string
-  IPv6 // hex string -> IPv6
+  IPv6, // hex string -> IPv6
 ).annotations({
   identifier: "IPv6.Bytes",
 });
 
 export const FromHex = Schema.compose(
   Bytes16.HexSchema, // string -> hex string
-  IPv6 // hex string -> IPv6
+  IPv6, // hex string -> IPv6
 ).annotations({
   identifier: "IPv6.Hex",
 });
@@ -70,5 +70,5 @@ export const Codec = createEncoders(
     bytes: FromBytes,
     hex: FromHex,
   },
-  IPv6Error
+  IPv6Error,
 );

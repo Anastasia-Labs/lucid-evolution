@@ -6,6 +6,7 @@ import * as AssetName from "./AssetName.js";
 import * as PositiveCoin from "./PositiveCoin.js";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
+import * as _Codec from "./Codec.js";
 
 /**
  * Error class for Value related operations.
@@ -353,14 +354,14 @@ export const ValueCDDLSchema = Schema.transformOrFail(
           const outerMap = new Map<Uint8Array, Map<Uint8Array, bigint>>();
 
           for (const [policyId, assetMap] of toI.assets.entries()) {
-            const policyIdBytes = yield* ParseResult.encode(
-              PolicyId.BytesSchema,
-            )(policyId);
+            const policyIdBytes = yield* ParseResult.encode(PolicyId.FromBytes)(
+              policyId,
+            );
             const innerMap = new Map<Uint8Array, bigint>();
 
             for (const [assetName, amount] of assetMap.entries()) {
               const assetNameBytes = yield* ParseResult.encode(
-                AssetName.BytesSchema,
+                AssetName.FromBytes,
               )(assetName);
               innerMap.set(assetNameBytes, amount);
             }
@@ -389,7 +390,7 @@ export const ValueCDDLSchema = Schema.transformOrFail(
             policyIdBytes,
             assetMapCddl,
           ] of multiAssetCddl.entries()) {
-            const policyId = yield* ParseResult.decode(PolicyId.BytesSchema)(
+            const policyId = yield* ParseResult.decode(PolicyId.FromBytes)(
               policyIdBytes,
             );
 
@@ -398,9 +399,9 @@ export const ValueCDDLSchema = Schema.transformOrFail(
               PositiveCoin.PositiveCoin
             >();
             for (const [assetNameBytes, amount] of assetMapCddl.entries()) {
-              const assetName = yield* ParseResult.decode(
-                AssetName.BytesSchema,
-              )(assetNameBytes);
+              const assetName = yield* ParseResult.decode(AssetName.FromBytes)(
+                assetNameBytes,
+              );
               const positiveCoin = PositiveCoin.make(amount);
               assetMap.set(assetName, positiveCoin);
             }
@@ -436,7 +437,7 @@ export const CBORBytesSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
+    CBOR.FromBytes(options), // Uint8Array → CBOR
     ValueCDDLSchema, // CBOR → Value
   );
 
@@ -450,33 +451,15 @@ export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
+    Bytes.FromHex, // string → Uint8Array
     CBORBytesSchema(options), // Uint8Array → Value
   );
 
-export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
-  Encode: {
-    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
-    cborHex: Schema.encodeSync(CBORHexSchema(options)),
-  },
-  Decode: {
-    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
-  },
-  EncodeEither: {
-    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.encodeEither(CBORHexSchema(options)),
-  },
-  DecodeEither: {
-    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.decodeEither(CBORHexSchema(options)),
-  },
-  EncodeEffect: {
-    cborBytes: Schema.encode(CBORBytesSchema(options)),
-    cborHex: Schema.encode(CBORHexSchema(options)),
-  },
-  DecodeEffect: {
-    cborBytes: Schema.decode(CBORBytesSchema(options)),
-    cborHex: Schema.decode(CBORHexSchema(options)),
-  },
-});
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
+  _Codec.createEncoders(
+    {
+      cborBytes: CBORBytesSchema(options),
+      cborHex: CBORHexSchema(options),
+    },
+    ValueError,
+  );

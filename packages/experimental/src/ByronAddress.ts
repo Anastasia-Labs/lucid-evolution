@@ -9,7 +9,7 @@ import * as NetworkId from "./NetworkId.js";
  * @category schemas
  */
 export class ByronAddress extends Schema.TaggedClass<ByronAddress>(
-  "ByronAddress"
+  "ByronAddress",
 )("ByronAddress", {
   networkId: NetworkId.NetworkId,
   bytes: Bytes.HexSchema,
@@ -38,5 +38,5 @@ export const BytesSchema = Schema.transform(
         networkId: NetworkId.NetworkId.make(0),
         bytes: Bytes.Codec.Encode.bytes(fromA),
       }),
-  }
+  },
 );

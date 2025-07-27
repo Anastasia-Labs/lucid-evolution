@@ -43,7 +43,9 @@ export const FromCDDL = Schema.transformOrFail(
     encode: (toA) =>
       pipe(
         ParseResult.encode(Bytes32.FromBytes)(toA.anchorDataHash),
-        Effect.map((anchorDataHash) => [toA.anchorUrl, anchorDataHash] as const)
+        Effect.map(
+          (anchorDataHash) => [toA.anchorUrl, anchorDataHash] as const,
+        ),
       ),
     decode: ([anchorUrl, anchorDataHash]) =>
       pipe(
@@ -53,10 +55,10 @@ export const FromCDDL = Schema.transformOrFail(
             new Anchor({
               anchorUrl: Url.make(anchorUrl),
               anchorDataHash,
-            })
-        )
+            }),
+        ),
       ),
-  }
+  },
 );
 
 /**
@@ -66,11 +68,11 @@ export const FromCDDL = Schema.transformOrFail(
  * @category schemas
  */
 export const CBORBytesSchema = (
-  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
     CBOR.FromBytes(options), // Uint8Array → CBOR
-    FromCDDL // CBOR → Anchor
+    FromCDDL, // CBOR → Anchor
   );
 
 /**
@@ -80,11 +82,11 @@ export const CBORBytesSchema = (
  * @category schemas
  */
 export const CBORHexSchema = (
-  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS
+  options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
     Bytes.FromHex, // string → Uint8Array
-    CBORBytesSchema(options) // Uint8Array → Anchor
+    CBORBytesSchema(options), // Uint8Array → Anchor
   );
 
 /**
@@ -128,7 +130,7 @@ export const generator = FastCheck.record({
     new Anchor({
       anchorUrl,
       anchorDataHash: Bytes.Codec.Encode.bytes(anchorDataHash),
-    })
+    }),
 );
 
 export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
@@ -137,5 +139,5 @@ export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
       cborBytes: CBORBytesSchema(options),
       cborHex: CBORHexSchema(options),
     },
-    AnchorError
+    AnchorError,
   );

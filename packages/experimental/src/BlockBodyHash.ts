@@ -23,7 +23,7 @@ export class BlockBodyHashError extends Data.TaggedError("BlockBodyHashError")<{
  */
 export const BlockBodyHash = pipe(
   Bytes32.HexSchema,
-  Schema.brand("BlockBodyHash")
+  Schema.brand("BlockBodyHash"),
 ).annotations({
   identifier: "BlockBodyHash",
 });
@@ -32,14 +32,14 @@ export type BlockBodyHash = typeof BlockBodyHash.Type;
 
 export const FromBytes = Schema.compose(
   Bytes32.FromBytes, // Uint8Array -> hex string
-  BlockBodyHash // hex string -> BlockBodyHash
+  BlockBodyHash, // hex string -> BlockBodyHash
 ).annotations({
   identifier: "BlockBodyHash.Bytes",
 });
 
 export const FromHex = Schema.compose(
   Bytes32.HexSchema, // string -> hex string
-  BlockBodyHash // hex string -> BlockBodyHash
+  BlockBodyHash, // hex string -> BlockBodyHash
 ).annotations({
   identifier: "BlockBodyHash.Hex",
 });
@@ -74,5 +74,5 @@ export const Codec = createEncoders(
     bytes: FromBytes,
     hex: FromHex,
   },
-  BlockBodyHashError
+  BlockBodyHashError,
 );

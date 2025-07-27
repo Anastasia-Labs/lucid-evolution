@@ -3,6 +3,7 @@ import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
+import * as _Codec from "./Codec.js";
 
 /**
  * Extends TaggedError for better error handling and categorization
@@ -12,7 +13,7 @@ import * as Bytes from "./Bytes.js";
  */
 
 export class CredentialError extends Data.TaggedError("CredentialError")<{
-  message: string;
+  message?: string;
   cause?: unknown;
 }> {}
 
@@ -48,7 +49,12 @@ export type Credential = typeof Credential.Type;
  * @since 2.0.0
  * @category predicates
  */
-export const isCredential = Schema.is(Credential);
+export const is = Schema.is(Credential);
+
+export const CDDL = Schema.Tuple(
+  Schema.Literal(0n, 1n),
+  Schema.Uint8ArrayFromSelf, // hash bytes
+);
 
 /**
  * CDDL schema for Credential as defined in the specification:
@@ -57,11 +63,8 @@ export const isCredential = Schema.is(Credential);
  * @since 2.0.0
  * @category schemas
  */
-export const CredentialCDDLSchema = Schema.transformOrFail(
-  Schema.Tuple(
-    Schema.Literal(0n, 1n),
-    Schema.Uint8ArrayFromSelf, // hash bytes
-  ),
+export const FromCDDL = Schema.transformOrFail(
+  CDDL,
   Schema.typeSchema(Credential),
   {
     strict: true,
@@ -69,7 +72,7 @@ export const CredentialCDDLSchema = Schema.transformOrFail(
       Effect.gen(function* () {
         switch (toI._tag) {
           case "KeyHash": {
-            const keyHashBytes = yield* ParseResult.encode(KeyHash.BytesSchema)(
+            const keyHashBytes = yield* ParseResult.encode(KeyHash.FromBytes)(
               toI.hash,
             );
             return [0n, keyHashBytes] as const;
@@ -86,7 +89,7 @@ export const CredentialCDDLSchema = Schema.transformOrFail(
       Effect.gen(function* () {
         switch (tag) {
           case 0n: {
-            const keyHash = yield* ParseResult.decode(KeyHash.BytesSchema)(
+            const keyHash = yield* ParseResult.decode(KeyHash.FromBytes)(
               hashBytes,
             );
             return Credential.members[0].make({ hash: keyHash });
@@ -102,48 +105,30 @@ export const CredentialCDDLSchema = Schema.transformOrFail(
   },
 );
 
-export const CBORBytesSchema = (
+export const FromCBORBytes = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    CBOR.CBORBytesSchema(options), // Uint8Array → CBOR
-    CredentialCDDLSchema, // CBOR → Credential
+    CBOR.FromBytes(options), // Uint8Array → CBOR
+    FromCDDL, // CBOR → Credential
   );
 
-export const CBORHexSchema = (
+export const FromCBORHex = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.BytesSchema, // string → Uint8Array
-    CBORBytesSchema(options), // Uint8Array → Credential
+    Bytes.FromHex, // string → Uint8Array
+    FromCBORBytes(options), // Uint8Array → Credential
   );
 
-export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
-  Encode: {
-    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
-    cborHex: Schema.encodeSync(CBORHexSchema(options)),
-  },
-  Decode: {
-    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
-  },
-  EncodeEither: {
-    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.encodeEither(CBORHexSchema(options)),
-  },
-  DecodeEither: {
-    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.decodeEither(CBORHexSchema(options)),
-  },
-  EncodeEffect: {
-    cborBytes: Schema.encode(CBORBytesSchema(options)),
-    cborHex: Schema.encode(CBORHexSchema(options)),
-  },
-  DecodeEffect: {
-    cborBytes: Schema.decode(CBORBytesSchema(options)),
-    cborHex: Schema.decode(CBORHexSchema(options)),
-  },
-});
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
+  _Codec.createEncoders(
+    {
+      cborBytes: FromCBORBytes(options),
+      cborHex: FromCBORHex(options),
+    },
+    CredentialError,
+  );
 
 /**
  * Check if two Credential instances are equal.

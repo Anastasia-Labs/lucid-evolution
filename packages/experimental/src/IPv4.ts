@@ -28,14 +28,14 @@ export type IPv4 = typeof IPv4.Type;
 
 export const FromBytes = Schema.compose(
   Bytes4.FromBytes, // Uint8Array -> hex string
-  IPv4 // hex string -> IPv4
+  IPv4, // hex string -> IPv4
 ).annotations({
   identifier: "IPv4.Bytes",
 });
 
 export const FromHex = Schema.compose(
   Bytes4.HexSchema, // string -> hex string
-  IPv4 // hex string -> IPv4
+  IPv4, // hex string -> IPv4
 ).annotations({
   identifier: "IPv4.Hex",
 });
@@ -70,5 +70,5 @@ export const Codec = createEncoders(
     bytes: FromBytes,
     hex: FromHex,
   },
-  IPv4Error
+  IPv4Error,
 );

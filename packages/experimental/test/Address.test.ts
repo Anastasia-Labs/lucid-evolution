@@ -137,9 +137,9 @@ describe("Address Validation", () => {
   it("should encode and decode hex addresses correctly", () => {
     // Test encoding and decoding of valid hex addresses
     VALID_HEX_ADDRESSES.forEach((hex) => {
-      const address = Address.Decode.hex(hex);
+      const address = Address.Codec.Decode.hex(hex);
       expect(address).toBeDefined();
-      expect(Address.Encode.hex(address)).toBe(hex);
+      expect(Address.Codec.Encode.hex(address)).toBe(hex);
     });
   });
   it("should encode specific hex address to expected bech32 format", () => {
@@ -148,8 +148,8 @@ describe("Address Validation", () => {
     const expectedBech32 =
       "addr_test1vzap66mzs0ppngznpcmg9scky9w4tqvul9am7fj493hc2vq4ry02m";
 
-    const address = Address.Decode.hex(hexAddress);
-    const actualBech32 = Address.Encode.bech32(address);
+    const address = Address.Codec.Decode.hex(hexAddress);
+    const actualBech32 = Address.Codec.Encode.bech32(address);
 
     expect(actualBech32).toBe(expectedBech32);
   });

@@ -3,6 +3,7 @@ import * as Bytes32 from "./Bytes32.js";
 import * as PlutusData from "./Data.js";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
+import * as _Codec from "./Codec.js";
 
 /**
  * Error class for DatumOption related operations.
@@ -214,7 +215,7 @@ export const DatumOptionCDDLSchema = Schema.transformOrFail(
           toA._tag === "DatumHash"
             ? ([
                 0n,
-                yield* ParseResult.decode(Bytes.FromBytes)(toA.hash),
+                yield* ParseResult.encode(Bytes.FromBytes)(toA.hash),
               ] as const) // Encode as [0, Bytes32]
             : ([1n, PlutusData.plutusDataToCBORValue(toA.data)] as const); // Encode as [1, data]
         return result;
@@ -223,7 +224,7 @@ export const DatumOptionCDDLSchema = Schema.transformOrFail(
       Effect.gen(function* () {
         if (tag === 0n) {
           // Decode as DatumHash
-          const hash = yield* ParseResult.encode(Bytes.FromBytes)(value);
+          const hash = yield* ParseResult.decode(Bytes.FromBytes)(value);
           return new DatumHash({ hash });
         } else if (tag === 1n) {
           // Decode as InlineDatum
@@ -268,39 +269,15 @@ export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
   Schema.compose(
-    Bytes.FromBytes, // string → Uint8Array
+    Bytes.FromHex, // string → Uint8Array
     CBORBytesSchema(options), // Uint8Array → DatumOption
   );
 
-/**
- * Codec providing all encoding/decoding variants for DatumOption.
- *
- * @since 2.0.0
- * @category codecs
- */
-export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
-  Encode: {
-    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
-    cborHex: Schema.encodeSync(CBORHexSchema(options)),
-  },
-  Decode: {
-    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
-  },
-  EncodeEither: {
-    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.encodeEither(CBORHexSchema(options)),
-  },
-  DecodeEither: {
-    cborBytes: Schema.decodeUnknownEither(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknownEither(CBORHexSchema(options)),
-  },
-  EncodeEffect: {
-    cborBytes: Schema.encode(CBORBytesSchema(options)),
-    cborHex: Schema.encode(CBORHexSchema(options)),
-  },
-  DecodeEffect: {
-    cborBytes: Schema.decode(CBORBytesSchema(options)),
-    cborHex: Schema.decode(CBORHexSchema(options)),
-  },
-});
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
+  _Codec.createEncoders(
+    {
+      cborBytes: CBORBytesSchema(options),
+      cborHex: CBORHexSchema(options),
+    },
+    DatumOptionError,
+  );

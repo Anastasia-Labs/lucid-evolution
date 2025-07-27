@@ -7,8 +7,8 @@ describe("Address property tests", () => {
     it("should be a valid Bech32 address", () => {
       FastCheck.assert(
         FastCheck.property(Address.generator, (address) => {
-          const bech32 = Schema.encodeSync(Address.Bech32Schema)(address);
-          const decoded = Schema.decodeSync(Address.Bech32Schema)(bech32);
+          const bech32 = Schema.encodeSync(Address.FromBech32)(address);
+          const decoded = Schema.decodeSync(Address.FromBech32)(bech32);
           expect(decoded).toEqual(address);
         }),
       );
@@ -16,8 +16,8 @@ describe("Address property tests", () => {
     it("should be a valid HexString address", () => {
       FastCheck.assert(
         FastCheck.property(Address.generator, (address) => {
-          const hexString = Schema.encodeSync(Address.HexSchema)(address);
-          const decoded = Schema.decodeSync(Address.HexSchema)(hexString);
+          const hexString = Schema.encodeSync(Address.FromHex)(address);
+          const decoded = Schema.decodeSync(Address.FromHex)(hexString);
           expect(decoded).toEqual(address);
         }),
       );
@@ -25,8 +25,8 @@ describe("Address property tests", () => {
     it("should be a valid Bytes address", () => {
       FastCheck.assert(
         FastCheck.property(Address.generator, (address) => {
-          const bytes = Schema.encodeSync(Address.BytesSchema)(address);
-          const decoded = Schema.decodeSync(Address.BytesSchema)(bytes);
+          const bytes = Schema.encodeSync(Address.FromBytes)(address);
+          const decoded = Schema.decodeSync(Address.FromBytes)(bytes);
           expect(decoded).toEqual(address);
         }),
       );

@@ -1,9 +1,10 @@
-import { Schema, Data, FastCheck, Effect, ParseResult, pipe } from "effect";
+import { Schema, Data, FastCheck } from "effect";
 import * as SingleHostAddr from "./SingleHostAddr.js";
 import * as SingleHostName from "./SingleHostName.js";
 import * as MultiHostName from "./MultiHostName.js";
 import * as Bytes from "./Bytes.js";
 import * as CBOR from "./CBOR.js";
+import * as _Codec from "./Codec.js";
 
 /**
  * Error class for Relay related operations.
@@ -36,10 +37,10 @@ export const Relay = Schema.Union(
   MultiHostName.MultiHostName,
 );
 
-export const RelayCDDLSchema = Schema.Union(
+export const FromCDDL = Schema.Union(
   SingleHostAddr.SingleHostAddrCDDLSchema,
   SingleHostName.SingleHostNameCDDLSchema,
-  MultiHostName.MultiHostNameCDDLSchema,
+  MultiHostName.FromCDDL,
 );
 
 /**
@@ -76,46 +77,19 @@ export const CBORBytesSchema = (
 export const CBORHexSchema = (
   options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS,
 ) =>
-  Schema.transformOrFail(Bytes.HexSchema, Schema.typeSchema(Relay), {
-    strict: true,
-    encode: (_, __, ___, toA) =>
-      pipe(
-        ParseResult.encode(CBORBytesSchema(options))(toA),
-        Effect.map(Bytes.Encode.hex),
-      ),
-    decode: (fromA) =>
-      pipe(
-        Bytes.Decode.hex(fromA),
-        ParseResult.decode(CBORBytesSchema(options)),
-      ),
-  });
+  Schema.compose(
+    Bytes.FromHex, // string → Uint8Array
+    CBORBytesSchema(options), // Uint8Array → Relay
+  );
 
-export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) => ({
-  Encode: {
-    cborBytes: Schema.encodeSync(CBORBytesSchema(options)),
-    cborHex: Schema.encodeSync(CBORHexSchema(options)),
-  },
-  Decode: {
-    cborBytes: Schema.decodeUnknownSync(CBORBytesSchema(options)),
-    cborHex: Schema.decodeUnknownSync(CBORHexSchema(options)),
-  },
-  EncodeEither: {
-    cborBytes: Schema.encodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.encodeEither(CBORHexSchema(options)),
-  },
-  DecodeEither: {
-    cborBytes: Schema.decodeEither(CBORBytesSchema(options)),
-    cborHex: Schema.decodeEither(CBORHexSchema(options)),
-  },
-  EncodeEffect: {
-    cborBytes: Schema.encode(CBORBytesSchema(options)),
-    cborHex: Schema.encode(CBORHexSchema(options)),
-  },
-  DecodeEffect: {
-    cborBytes: Schema.decode(CBORBytesSchema(options)),
-    cborHex: Schema.decode(CBORHexSchema(options)),
-  },
-});
+export const Codec = (options: CBOR.CodecOptions = CBOR.DEFAULT_OPTIONS) =>
+  _Codec.createEncoders(
+    {
+      cborBytes: CBORBytesSchema(options),
+      cborHex: CBORHexSchema(options),
+    },
+    RelayError,
+  );
 
 /**
  * Pattern match on a Relay to handle different relay types.

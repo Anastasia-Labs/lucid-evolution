@@ -20,7 +20,7 @@ try {
 } catch (error) {
   console.error(
     "❌ Unexpected error in valid operations:",
-    (error as Error).message
+    (error as Error).message,
   );
 }
 
@@ -33,7 +33,7 @@ try {
   KeyHash.Codec.Decode.string(invalidHex);
 } catch (error) {
   console.log("❌ Invalid hex characters error:");
-  console.log(error)
+  console.log(error);
 }
 
 // Test invalid hex length (too short)
@@ -85,14 +85,18 @@ console.log("✅ Valid Either operations:");
 const hexEither = KeyHash.Codec.DecodeEither.string(validHex);
 if (hexEither._tag === "Right") {
   console.log("✅ DecodeEither.hex success:", hexEither.right);
-  
+
   const bytesEither = KeyHash.Codec.EncodeEither.bytes(hexEither.right);
   if (bytesEither._tag === "Right") {
-    console.log("✅ EncodeEither.bytes success:", bytesEither.right.length, "bytes");
+    console.log(
+      "✅ EncodeEither.bytes success:",
+      bytesEither.right.length,
+      "bytes",
+    );
   } else {
     console.log("❌ EncodeEither.bytes failed:", bytesEither.left);
   }
-  
+
   const hexEncodeEither = KeyHash.Codec.EncodeEither.string(hexEither.right);
   if (hexEncodeEither._tag === "Right") {
     console.log("✅ EncodeEither.hex success:", hexEncodeEither.right);
@@ -118,7 +122,7 @@ const invalidBytesEither = KeyHash.Codec.DecodeEither.bytes(new Uint8Array(10));
 if (invalidBytesEither._tag === "Left") {
   console.log("\n❌ DecodeEither.bytes with invalid length:");
   console.log("Error type:", invalidBytesEither.left._tag);
-  console.log("Error message:", invalidBytesEither.left.cause)
+  console.log("Error message:", invalidBytesEither.left.cause);
 } else {
   console.log("Unexpected success with invalid bytes");
 }

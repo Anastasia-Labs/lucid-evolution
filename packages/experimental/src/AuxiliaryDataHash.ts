@@ -33,7 +33,7 @@ export class AuxiliaryDataHashError extends Data.TaggedError(
  */
 export const AuxiliaryDataHash = pipe(
   Bytes32.HexSchema,
-  Schema.brand("AuxiliaryDataHash")
+  Schema.brand("AuxiliaryDataHash"),
 ).annotations({
   identifier: "AuxiliaryDataHash",
 });
@@ -42,14 +42,14 @@ export type AuxiliaryDataHash = typeof AuxiliaryDataHash.Type;
 
 export const BytesSchema = Schema.compose(
   Bytes32.FromBytes, // Uint8Array -> hex string
-  AuxiliaryDataHash // hex string -> AuxiliaryDataHash
+  AuxiliaryDataHash, // hex string -> AuxiliaryDataHash
 ).annotations({
   identifier: "AuxiliaryDataHash.Bytes",
 });
 
 export const HexSchema = Schema.compose(
   Bytes32.HexSchema, // string -> hex string
-  AuxiliaryDataHash // hex string -> AuxiliaryDataHash
+  AuxiliaryDataHash, // hex string -> AuxiliaryDataHash
 ).annotations({
   identifier: "AuxiliaryDataHash.Hex",
 });
@@ -60,7 +60,8 @@ export const HexSchema = Schema.compose(
  * @since 2.0.0
  * @category equality
  */
-export const equals = (a: AuxiliaryDataHash, b: AuxiliaryDataHash): boolean => a === b;
+export const equals = (a: AuxiliaryDataHash, b: AuxiliaryDataHash): boolean =>
+  a === b;
 
 /**
  * Generate a random AuxiliaryDataHash.
@@ -84,5 +85,5 @@ export const Codec = createEncoders(
     bytes: BytesSchema,
     hex: HexSchema,
   },
-  AuxiliaryDataHashError
+  AuxiliaryDataHashError,
 );

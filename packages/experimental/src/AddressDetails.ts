@@ -6,7 +6,7 @@ import * as Bytes from "./Bytes.js";
 import * as _Codec from "./Codec.js";
 
 export class AddressDetailsError extends Data.TaggedError(
-  "AddressDetailsError"
+  "AddressDetailsError",
 )<{
   message?: string;
   cause?: unknown;
@@ -27,7 +27,7 @@ export class AddressDetailsError extends Data.TaggedError(
  * @category schemas
  */
 export class AddressDetails extends Schema.TaggedClass<AddressDetails>(
-  "AddressDetails"
+  "AddressDetails",
 )("AddressDetails", {
   networkId: NetworkId.NetworkId,
   type: Schema.Union(
@@ -35,7 +35,7 @@ export class AddressDetails extends Schema.TaggedClass<AddressDetails>(
     Schema.Literal("EnterpriseAddress"),
     Schema.Literal("PointerAddress"),
     Schema.Literal("RewardAccount"),
-    Schema.Literal("ByronAddress")
+    Schema.Literal("ByronAddress"),
   ),
   address: Address.Address,
   bech32: _Bech32.Bech32Schema,
@@ -60,7 +60,7 @@ export const FromBech32 = Schema.transformOrFail(
           hex,
         });
       }),
-  }
+  },
 );
 
 export const FromHex = Schema.transformOrFail(Bytes.HexSchema, AddressDetails, {
@@ -85,5 +85,5 @@ export const Codec = _Codec.createEncoders(
     bech32: FromBech32,
     hex: FromHex,
   },
-  AddressDetailsError
+  AddressDetailsError,
 );

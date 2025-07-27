@@ -39,7 +39,7 @@ export class PolicyIdError extends Data.TaggedError("PolicyIdError")<{
  */
 export const PolicyId = pipe(
   Hash28.HexSchema,
-  Schema.brand("PolicyId")
+  Schema.brand("PolicyId"),
 ).annotations({
   identifier: "PolicyId",
 });
@@ -52,9 +52,9 @@ export type PolicyId = typeof PolicyId.Type;
  * @since 2.0.0
  * @category schemas
  */
-export const BytesSchema = Schema.compose(
-  Hash28.BytesHexTransformer, // Uint8Array -> hex string
-  PolicyId // hex string -> PolicyId
+export const FromBytes = Schema.compose(
+  Hash28.FromBytes, // Uint8Array -> hex string
+  PolicyId, // hex string -> PolicyId
 ).annotations({
   identifier: "PolicyId.Bytes",
 });
@@ -65,9 +65,9 @@ export const BytesSchema = Schema.compose(
  * @since 2.0.0
  * @category schemas
  */
-export const HexSchema = Schema.compose(
+export const FromHex = Schema.compose(
   Hash28.HexSchema, // string -> hex string
-  PolicyId // hex string -> PolicyId
+  PolicyId, // hex string -> PolicyId
 ).annotations({
   identifier: "PolicyId.Hex",
 });
@@ -114,8 +114,8 @@ export const generator = FastCheck.uint8Array({
  */
 export const Codec = createEncoders(
   {
-    bytes: BytesSchema,
-    hex: HexSchema,
+    bytes: FromBytes,
+    hex: FromHex,
   },
-  PolicyIdError
+  PolicyIdError,
 );

@@ -273,21 +273,21 @@ NEVER use `try-catch` blocks inside `Effect.gen` generators!
 
 ```ts
 // ❌ FORBIDDEN - Never do this in Effect.gen
-Effect.gen(function*() {
+Effect.gen(function* () {
   try {
-    const result = yield* someEffect
+    const result = yield* someEffect;
   } catch (error) {
     // This will never be reached and breaks Effect semantics
   }
-})
+});
 
 // ✅ CORRECT - Use Effect's built-in error handling
-Effect.gen(function*() {
-  const result = yield* Effect.result(someEffect)
+Effect.gen(function* () {
+  const result = yield* Effect.result(someEffect);
   if (result._tag === "Failure") {
     // Handle error case properly
   }
-})
+});
 ```
 
 #### MANDATORY: Return Yield Pattern for Errors
@@ -299,26 +299,26 @@ ALWAYS use `return yield*` when yielding errors or interrupts in Effect.gen!
 
 ```ts
 // ✅ CORRECT - Always use return yield* for errors
-Effect.gen(function*() {
+Effect.gen(function* () {
   if (someCondition) {
-    return yield* Effect.fail(new KeyHashError({ message: "error" }))
+    return yield* Effect.fail(new KeyHashError({ message: "error" }));
   }
-  
+
   if (shouldInterrupt) {
-    return yield* Effect.interrupt
+    return yield* Effect.interrupt;
   }
-  
+
   // Continue with normal flow...
-  const result = yield* someOtherEffect
-  return result
-})
+  const result = yield* someOtherEffect;
+  return result;
+});
 
 // ❌ WRONG - Missing return keyword
-Effect.gen(function*() {
+Effect.gen(function* () {
   if (someCondition) {
-    yield* Effect.fail("error message") // Unreachable code after error!
+    yield* Effect.fail("error message"); // Unreachable code after error!
   }
-})
+});
 ```
 
 ### Use const keyword over function keyword
@@ -365,12 +365,13 @@ NEVER use `as never`, `as any`, or `as unknown` type assertions!
 
 ```ts
 // ❌ FORBIDDEN - Never do any of these
-const value = something as any
-const value = something as never  
-const value = something as unknown
+const value = something as any;
+const value = something as never;
+const value = something as unknown;
 ```
 
 **CORRECT APPROACH:** Fix the actual type mismatch by:
+
 - Using proper generic type parameters
 - Importing correct types
 - Using proper Effect constructors and combinators
@@ -535,16 +536,19 @@ export class Header extends Schema.TaggedClass<Header>()("Header", {
 // Usage:
 // Creating an instance will automatically validate the input against the schema
 const header = new Header({
-  headerBody: new HeaderBody.HeaderBody({ /* ... */ }),
-  bodySignature: KesSignature.KesSignature.make("valid_kes_signature...")
+  headerBody: new HeaderBody.HeaderBody({
+    /* ... */
+  }),
+  bodySignature: KesSignature.KesSignature.make("valid_kes_signature..."),
 }); // Valid - creates instance
 
 // This will throw a validation error if the input doesn't match the schema
 const invalid = new Header({
   headerBody: "invalid", // Error - not a HeaderBody instance
-  bodySignature: "invalid" // Error - not a KesSignature instance
+  bodySignature: "invalid", // Error - not a KesSignature instance
 });
 ```
+
 ### Union Types
 
 For union types representing different variants of a concept:
@@ -609,10 +613,12 @@ export class PolicyIdError extends Data.TaggedError("PolicyIdError")<{
 ```
 
 **Required Properties:**
+
 - `message?: string` - Optional human-readable error description
 - `cause?: unknown` - Optional underlying error or exception that caused this error
 
 **Rationale**: This pattern ensures:
+
 - **Consistency** across all error types in the codebase
 - **Interoperability** with Effect-TS error handling patterns
 - **Debuggability** through consistent cause chaining
@@ -621,8 +627,8 @@ export class PolicyIdError extends Data.TaggedError("PolicyIdError")<{
 ```ts
 // ❌ FORBIDDEN - Custom error structures
 export class CustomError extends Data.TaggedError("CustomError")<{
-  reason: string;        // Don't use 'reason' instead of 'message'
-  details: object;       // Don't use custom property names
+  reason: string; // Don't use 'reason' instead of 'message'
+  details: object; // Don't use custom property names
 }> {}
 
 // ❌ FORBIDDEN - Missing cause property
@@ -871,7 +877,7 @@ All JSDoc examples and documentation code snippets MUST use the `Codec` utility 
 /**
  * @example
  * import { KeyHash } from "@evolution-sdk/experimental";
- * 
+ *
  * const bytes = new Uint8Array(28);
  * const keyHash = KeyHash.Codec.Decode.bytes(bytes);
  * const hexString = KeyHash.Codec.Encode.hex(keyHash);
@@ -879,9 +885,9 @@ All JSDoc examples and documentation code snippets MUST use the `Codec` utility 
 
 // ❌ FORBIDDEN - Never use direct Schema operations in examples
 /**
- * @example  
+ * @example
  * import { KeyHash, Schema } from "@evolution-sdk/experimental";
- * 
+ *
  * const keyHash = Schema.decodeUnknownSync(KeyHash.BytesSchema)(bytes); // DON'T DO THIS
  */
 ```
@@ -904,7 +910,7 @@ The key benefit of `Schema.compose` and `Schema.transform` is that they define b
 ```ts
 // Define the core branded type
 export const KeyHash = Hash28.HexSchema.pipe(
-  Schema.brand("KeyHash")
+  Schema.brand("KeyHash"),
 ).annotations({
   identifier: "KeyHash",
 });
@@ -915,24 +921,27 @@ export type KeyHash = typeof KeyHash.Type;
 // These schemas establish bidirectional mappings between raw data and typed objects
 export const BytesSchema = Schema.compose(
   Hash28.BytesHexTransformer, // Uint8Array -> hex string
-  KeyHash // hex string -> KeyHash
+  KeyHash, // hex string -> KeyHash
 ).annotations({
   identifier: "KeyHash.Bytes",
 });
 
 export const HexSchema = Schema.compose(
   Hash28.HexSchema, // string -> hex string
-  KeyHash // hex string -> KeyHash
+  KeyHash, // hex string -> KeyHash
 ).annotations({
   identifier: "KeyHash.Hex",
 });
 
 // Create comprehensive codec utilities with custom error mapping
 // Uses createEncoders function to generate all encoding/decoding variants
-export const Codec = createEncoders({
-  bytes: BytesSchema,
-  hex: HexSchema,
-}, KeyHashError);
+export const Codec = createEncoders(
+  {
+    bytes: BytesSchema,
+    hex: HexSchema,
+  },
+  KeyHashError,
+);
 
 // This automatically generates:
 // - Synchronous utilities (throw custom error on failure)
