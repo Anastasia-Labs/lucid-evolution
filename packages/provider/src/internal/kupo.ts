@@ -1,8 +1,13 @@
 import { Schema as S } from "effect";
 
+const QuantitySchema = S.Union(
+  S.Number.pipe(S.filter(Number.isSafeInteger)),
+  S.String.pipe(S.pattern(/^\d+$/)),
+);
+
 export const ValueSchema = S.Struct({
-  coins: S.Number,
-  assets: S.Record({ key: S.String, value: S.Number }),
+  coins: QuantitySchema,
+  assets: S.Record({ key: S.String, value: QuantitySchema }),
 });
 export interface Value extends S.Schema.Type<typeof ValueSchema> {}
 

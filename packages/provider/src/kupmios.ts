@@ -90,8 +90,10 @@ export class Kupmios implements Provider {
       params: {},
       id: null,
     };
-    const schema = Ogmios.JSONRPCSchema(Ogmios.ProtocolParametersSchema);
-    const { result } = await pipe(
+    const schema = Ogmios.JSONRPCResponseSchema(
+      Ogmios.ProtocolParametersSchema,
+    );
+    const response = await pipe(
       HttpUtils.makePostAsJson(
         this.ogmiosUrl,
         data,
@@ -103,6 +105,7 @@ export class Kupmios implements Provider {
       Effect.provide(FetchHttpClient.layer),
       Effect.runPromise,
     );
+    const result = Ogmios.getJSONRPCResult(response);
     return toProtocolParameters(result);
   }
 
@@ -115,7 +118,9 @@ export class Kupmios implements Provider {
     const schema = S.Array(Kupo.UTxOSchema);
     const utxos = await pipe(
       HttpUtils.makeGet(pattern, schema, this.headers?.kupoHeader),
-      Effect.flatMap((u) => kupmiosUtxosToUtxos(this.kupoUrl, u)),
+      Effect.flatMap((u) =>
+        kupmiosUtxosToUtxos(this.kupoUrl, u, this.headers?.kupoHeader),
+      ),
       Effect.timeout(10_000),
       Effect.catchAll((cause) => new KupmiosError({ cause })),
       Effect.provide(FetchHttpClient.layer),
@@ -137,7 +142,9 @@ export class Kupmios implements Provider {
     const schema = S.Array(Kupo.UTxOSchema);
     const utxos = await pipe(
       HttpUtils.makeGet(pattern, schema, this.headers?.kupoHeader),
-      Effect.flatMap((u) => kupmiosUtxosToUtxos(this.kupoUrl, u)),
+      Effect.flatMap((u) =>
+        kupmiosUtxosToUtxos(this.kupoUrl, u, this.headers?.kupoHeader),
+      ),
       Effect.timeout(10_000),
       Effect.catchAll((cause) => new KupmiosError({ cause })),
       Effect.provide(FetchHttpClient.layer),
@@ -152,12 +159,17 @@ export class Kupmios implements Provider {
     const schema = S.Array(Kupo.UTxOSchema);
     const utxos = await pipe(
       HttpUtils.makeGet(pattern, schema, this.headers?.kupoHeader),
-      Effect.flatMap((u) => kupmiosUtxosToUtxos(this.kupoUrl, u)),
+      Effect.flatMap((u) =>
+        kupmiosUtxosToUtxos(this.kupoUrl, u, this.headers?.kupoHeader),
+      ),
       Effect.timeout(10_000),
       Effect.catchAll((cause) => new KupmiosError({ cause })),
       Effect.provide(FetchHttpClient.layer),
       Effect.runPromise,
     );
+    if (utxos.length === 0) {
+      throw new Error("Unit not found.");
+    }
     if (utxos.length > 1) {
       throw new Error("Unit needs to be an NFT or only held by one address.");
     }
@@ -175,7 +187,9 @@ export class Kupmios implements Provider {
     const program = Effect.forEach(queryHashes, (txHash) =>
       pipe(
         HttpUtils.makeGet(mkPattern(txHash), schema, this.headers?.kupoHeader),
-        Effect.flatMap((u) => kupmiosUtxosToUtxos(this.kupoUrl, u)),
+        Effect.flatMap((u) =>
+          kupmiosUtxosToUtxos(this.kupoUrl, u, this.headers?.kupoHeader),
+        ),
         Effect.timeout(10_000),
         Effect.catchAll((cause) => new KupmiosError({ cause })),
       ),
@@ -202,8 +216,8 @@ export class Kupmios implements Provider {
       params: { keys: [rewardAddress] },
       id: null,
     };
-    const schema = Ogmios.JSONRPCSchema(Ogmios.Delegation);
-    const { result } = await pipe(
+    const schema = Ogmios.JSONRPCResponseSchema(Ogmios.Delegation);
+    const response = await pipe(
       HttpUtils.makePostAsJson(
         this.ogmiosUrl,
         data,
@@ -215,12 +229,9 @@ export class Kupmios implements Provider {
       Effect.catchAll((cause) => new KupmiosError({ cause })),
       Effect.runPromise,
     );
-    const delegation = result ? Object.values(result)[0] : null;
+    const result = Ogmios.getJSONRPCResult(response);
 
-    return {
-      poolId: delegation?.delegate?.id || null,
-      rewards: BigInt(delegation?.rewards?.ada?.lovelace || 0),
-    };
+    return toDelegation(result);
   }
 
   async getDatum(datumHash: DatumHash): Promise<Datum> {
@@ -267,14 +278,14 @@ export class Kupmios implements Provider {
       },
       id: null,
     };
-    const schema = Ogmios.JSONRPCSchema(
+    const schema = Ogmios.JSONRPCResponseSchema(
       S.Struct({
         transaction: S.Struct({
           id: S.String,
         }),
       }),
     );
-    const { result } = await pipe(
+    const response = await pipe(
       HttpUtils.makePostAsJson(
         this.ogmiosUrl,
         data,
@@ -286,6 +297,7 @@ export class Kupmios implements Provider {
       Effect.catchAll((cause) => new KupmiosError({ cause })),
       Effect.runPromise,
     );
+    const result = Ogmios.getJSONRPCResult(response);
     return result.transaction.id;
   }
 
@@ -305,10 +317,10 @@ export class Kupmios implements Provider {
     };
 
     // Define the schema
-    const schema = Ogmios.JSONRPCSchema(S.Array(Ogmios.RedeemerSchema));
+    const schema = Ogmios.JSONRPCResponseSchema(S.Array(Ogmios.RedeemerSchema));
 
     // Perform the request and handle the response
-    const { result } = await pipe(
+    const response = await pipe(
       HttpUtils.makePostAsJson(
         this.ogmiosUrl,
         data,
@@ -320,6 +332,7 @@ export class Kupmios implements Provider {
       Effect.catchAll((cause) => new KupmiosError({ cause })),
       Effect.runPromise,
     );
+    const result = Ogmios.getJSONRPCResult(response);
 
     const evalRedeemers: EvalRedeemer[] = result.map((item) => ({
       ex_units: {
@@ -456,6 +469,27 @@ const toProtocolParameters = (
         ]),
       ),
     },
+  };
+};
+
+const toDelegation = (result: Ogmios.Delegation): Delegation => {
+  if (!result) {
+    return { poolId: null, rewards: 0n };
+  }
+
+  const delegation = Array.isArray(result)
+    ? result[0]
+    : Object.values(result)[0];
+  if (!delegation) {
+    return { poolId: null, rewards: 0n };
+  }
+
+  return {
+    poolId:
+      "stakePool" in delegation
+        ? delegation.stakePool?.id || null
+        : delegation.delegate?.id || null,
+    rewards: BigInt(delegation.rewards.ada.lovelace),
   };
 };
 

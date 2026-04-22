@@ -74,7 +74,7 @@
     "tsup": "^8.3.6",
     "tsx": "^4.19.2",
     "typescript": "5.5.0-dev.20240430",
-    "vite-plugin-wasm": "^3.4.1",
+    "vite-plugin-wasm": "^3.6.0",
     "vitest": "^2.1.8"
   }
 }

@@ -11,6 +11,50 @@ export const JSONRPCSchema = <A, I, R>(schema: S.Schema<A, I, R>) =>
     result: schema,
   }).annotations({ identifier: "JSONRPCSchema" });
 
+export const JSONRPCErrorSchema = S.Struct({
+  code: S.Number,
+  message: S.String,
+  data: S.optional(S.Unknown),
+});
+export type JSONRPCError = S.Schema.Type<typeof JSONRPCErrorSchema>;
+
+const JSONRPCErrorResponseSchema = S.Struct({
+  jsonrpc: S.String,
+  method: S.optional(S.String),
+  id: S.NullOr(S.Number),
+  error: JSONRPCErrorSchema,
+});
+export type JSONRPCErrorResponse = S.Schema.Type<
+  typeof JSONRPCErrorResponseSchema
+>;
+
+export type JSONRPCResponse<A> =
+  | {
+      jsonrpc: string;
+      method?: string;
+      id: number | null;
+      result: A;
+    }
+  | JSONRPCErrorResponse;
+
+export const JSONRPCResponseSchema = <A, I, R>(schema: S.Schema<A, I, R>) =>
+  S.Union(JSONRPCSchema(schema), JSONRPCErrorResponseSchema).annotations({
+    identifier: "JSONRPCResponseSchema",
+  });
+
+export const getJSONRPCResult = <A>(response: JSONRPCResponse<A>): A => {
+  if ("error" in response) {
+    const data =
+      response.error.data === undefined
+        ? ""
+        : `: ${JSON.stringify(response.error.data)}`;
+    throw new Error(
+      `Ogmios JSON-RPC error ${response.error.code}: ${response.error.message}${data}`,
+    );
+  }
+  return response.result;
+};
+
 const LovelaceAsset = S.Struct({
   lovelace: S.Number,
 });
@@ -104,16 +148,33 @@ export const ProtocolParametersSchema = S.Struct({
 export interface ProtocolParameters
   extends S.Schema.Type<typeof ProtocolParametersSchema> {}
 
-export const Delegation = S.NullOr(
+const RewardAccountAdaSchema = S.Struct({
+  ada: LovelaceAsset,
+});
+
+const LegacyDelegationSummarySchema = S.Struct({
+  delegate: S.optional(S.NullOr(S.Struct({ id: S.String }))),
+  rewards: RewardAccountAdaSchema,
+  deposit: RewardAccountAdaSchema,
+});
+
+const RewardAccountSummarySchema = S.Struct({
+  from: S.optional(S.Literal("key", "script")),
+  credential: S.optional(S.String),
+  stakePool: S.optional(S.NullOr(S.Struct({ id: S.String }))),
+  rewards: RewardAccountAdaSchema,
+  deposit: RewardAccountAdaSchema,
+});
+
+export const Delegation = S.Union(
+  S.Null,
   S.Record({
     key: S.String,
-    value: S.Struct({
-      delegate: S.Struct({ id: S.String }),
-      rewards: S.Struct({ ada: S.Struct({ lovelace: S.Number }) }),
-      deposit: S.Struct({ ada: S.Struct({ lovelace: S.Number }) }),
-    }),
+    value: LegacyDelegationSummarySchema,
   }),
+  S.Array(RewardAccountSummarySchema),
 );
+export type Delegation = S.Schema.Type<typeof Delegation>;
 
 type Script = {
   language: "plutus:v1" | "plutus:v2" | "plutus:v3";
@@ -134,6 +195,16 @@ export type UTxO = {
   datumHash?: string | null;
   datum?: string | null;
   script?: Script | null;
+};
+
+const toOgmiosQuantity = (amount: bigint): number => {
+  const quantity = Number(amount);
+  if (amount < 0n || !Number.isSafeInteger(quantity)) {
+    throw new Error(
+      `Cannot encode Ogmios quantity ${amount.toString()}. Ogmios expects JSON numbers, so quantities must be non-negative safe integers.`,
+    );
+  }
+  return quantity;
 };
 
 export const RedeemerSchema = S.Struct({
@@ -193,7 +264,8 @@ export const toOgmiosUTxOs = (utxos: CoreType.UTxO[] | undefined): UTxO[] => {
       if (!newAssets[policyId]) {
         newAssets[policyId] = {};
       }
-      return (newAssets[policyId][assetName ? assetName : ""] = Number(amount));
+      return (newAssets[policyId][assetName ? assetName : ""] =
+        toOgmiosQuantity(amount));
     });
     return newAssets;
   };
@@ -206,7 +278,7 @@ export const toOgmiosUTxOs = (utxos: CoreType.UTxO[] | undefined): UTxO[] => {
       index: utxo.outputIndex,
       address: utxo.address,
       value: {
-        ada: { lovelace: Number(utxo.assets["lovelace"]) },
+        ada: { lovelace: toOgmiosQuantity(utxo.assets["lovelace"]) },
         ...toOgmiosAssets(utxo.assets),
       },
       datumHash: utxo.datumHash,
