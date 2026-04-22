@@ -1,5 +1,14 @@
 # @lucid-evolution/lucid
 
+## 0.4.30
+
+### Patch Changes
+
+- [`479014c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/479014c031a52ab5ba9bc0381b584634fac06e04) Thanks [@colll78](https://github.com/colll78)! - Fix Kupmios Kupo quantity decoding and harden Ogmios response handling.
+
+- Updated dependencies [[`479014c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/479014c031a52ab5ba9bc0381b584634fac06e04)]:
+  - @lucid-evolution/provider@0.1.91
+
 ## 0.4.29
 
 ### Patch Changes
