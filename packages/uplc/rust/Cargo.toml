@@ -8,7 +8,7 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-uplc = "1.1.17"
+uplc = "1.1.21"
 wasm-bindgen = "0.2.93"
 js-sys = "0.3.70"
 wee_alloc = "0.4.5"
