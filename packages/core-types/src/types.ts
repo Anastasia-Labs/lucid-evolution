@@ -1,7 +1,6 @@
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
-type CostModel = Record<string, number>;
 
-export type CostModels = Record<PlutusVersion, CostModel>;
+export type CostModels = Record<PlutusVersion, number[]>;
 
 export type ProtocolParameters = {
   minFeeA: number;

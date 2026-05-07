@@ -56,7 +56,7 @@ export class Blockfrost implements Provider {
       minFeeRefScriptCostPerByte: parseInt(
         result.min_fee_ref_script_cost_per_byte,
       ),
-      costModels: result.cost_models,
+      costModels: result.cost_models_raw,
     };
   }
 

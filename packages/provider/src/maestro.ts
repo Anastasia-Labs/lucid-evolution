@@ -80,21 +80,9 @@ export class Maestro implements Provider {
         result.min_fee_reference_scripts.base,
       ),
       costModels: {
-        PlutusV1: Object.fromEntries(
-          result.plutus_cost_models.plutus_v1.map(
-            (value: number, index: number) => [index.toString(), value],
-          ),
-        ),
-        PlutusV2: Object.fromEntries(
-          result.plutus_cost_models.plutus_v2.map(
-            (value: number, index: number) => [index.toString(), value],
-          ),
-        ),
-        PlutusV3: Object.fromEntries(
-          result.plutus_cost_models.plutus_v3.map(
-            (value: number, index: number) => [index.toString(), value],
-          ),
-        ),
+        PlutusV1: result.plutus_cost_models.plutus_v1,
+        PlutusV2: result.plutus_cost_models.plutus_v2,
+        PlutusV3: result.plutus_cost_models.plutus_v3,
       },
     };
   }
