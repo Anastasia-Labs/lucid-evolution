@@ -450,24 +450,9 @@ const toProtocolParameters = (
     maxCollateralInputs: result.maxCollateralInputs,
     minFeeRefScriptCostPerByte: result.minFeeReferenceScripts.base,
     costModels: {
-      PlutusV1: Object.fromEntries(
-        result.plutusCostModels["plutus:v1"].map((value, index) => [
-          index.toString(),
-          value,
-        ]),
-      ),
-      PlutusV2: Object.fromEntries(
-        result.plutusCostModels["plutus:v2"].map((value, index) => [
-          index.toString(),
-          value,
-        ]),
-      ),
-      PlutusV3: Object.fromEntries(
-        result.plutusCostModels["plutus:v3"].map((value, index) => [
-          index.toString(),
-          value,
-        ]),
-      ),
+      PlutusV1: [...result.plutusCostModels["plutus:v1"]],
+      PlutusV2: [...result.plutusCostModels["plutus:v2"]],
+      PlutusV3: [...result.plutusCostModels["plutus:v3"]],
     },
   };
 };

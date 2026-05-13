@@ -99,7 +99,11 @@ export class Koios implements Provider {
       collateralPercentage: result.collateral_percent,
       maxCollateralInputs: result.max_collateral_inputs,
       minFeeRefScriptCostPerByte: result.min_fee_ref_script_cost_per_byte,
-      costModels: result.cost_models,
+      costModels: {
+        PlutusV1: [...result.cost_models.PlutusV1],
+        PlutusV2: [...result.cost_models.PlutusV2],
+        PlutusV3: [...result.cost_models.PlutusV3],
+      },
     };
   }
 
