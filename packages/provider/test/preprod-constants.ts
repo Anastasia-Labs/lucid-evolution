@@ -78,22 +78,22 @@ export const evalSample1 = {
     {
       redeemer_tag: "spend",
       redeemer_index: 0,
-      ex_units: { mem: 26285, steps: 7849385 },
+      ex_units: { mem: 26285, steps: 7850649 },
     },
     {
       redeemer_tag: "spend",
       redeemer_index: 1,
-      ex_units: { mem: 26285, steps: 7849385 },
+      ex_units: { mem: 26285, steps: 7850649 },
     },
     {
       redeemer_tag: "spend",
       redeemer_index: 2,
-      ex_units: { mem: 26285, steps: 7849385 },
+      ex_units: { mem: 26285, steps: 7850649 },
     },
     {
       redeemer_tag: "spend",
       redeemer_index: 3,
-      ex_units: { mem: 26285, steps: 7849385 },
+      ex_units: { mem: 26285, steps: 7850649 },
     },
   ],
 };
