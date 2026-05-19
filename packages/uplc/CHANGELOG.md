@@ -1,5 +1,11 @@
 # @lucid-evolution/uplc
 
+## 0.2.21
+
+### Patch Changes
+
+- [`3c2bce0`](https://github.com/Anastasia-Labs/lucid-evolution/commit/3c2bce05f10f14eb436b5d7c1f0301774f89524e) Thanks [@colll78](https://github.com/colll78)! - Release the latest main branch fixes for provider cost models and the UPLC dependency update. This also bumps lucid so consumers receive the updated internal package versions.
+
 ## 0.2.20
 
 ### Patch Changes
