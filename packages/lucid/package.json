@@ -45,8 +45,9 @@
   ],
   "scripts": {
     "test": "vitest run",
-    "lint": "tsc --noEmit",
-    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
+    "build:deps": "pnpm --filter @lucid-evolution/core-types build",
+    "lint": "pnpm build:deps && tsc --noEmit",
+    "build": "pnpm build:deps && tsup src/index.ts --format esm,cjs --dts --clean",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "browser": {

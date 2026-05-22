@@ -1,30 +1,22 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [
-    "**/.env.*local"
-  ],
+  "globalDependencies": ["**/.env.*local"],
   "tasks": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": false
     },
     "clean": {},
     "test": {},
     "lint": {
-      "dependsOn": [
-        "^lint"
-      ]
+      "dependsOn": ["^build", "^lint"]
     },
     "dev": {
       "cache": false,
       "persistent": true
     },
     "@lucid-evolution/lucid#test": {
-      "dependsOn": [
-        "@lucid-evolution/provider#test"
-      ]
+      "dependsOn": ["@lucid-evolution/provider#test"]
     }
   }
 }

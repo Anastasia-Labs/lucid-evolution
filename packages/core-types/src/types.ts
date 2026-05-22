@@ -151,6 +151,59 @@ export type RedeemerBuilder =
       makeRedeemer: (inputIndex: bigint) => Redeemer;
       inputs?: UTxO[];
     };
+
+export type RedeemerPurpose =
+  | {
+      readonly tag: "spend";
+      readonly index: bigint;
+      readonly input: OutRef;
+      readonly redeemerListIndex: bigint | undefined;
+    }
+  | {
+      readonly tag: "mint";
+      readonly index: bigint;
+      readonly policyId: PolicyId;
+      readonly redeemerListIndex: bigint | undefined;
+    }
+  | {
+      readonly tag: "withdraw";
+      readonly index: bigint;
+      readonly rewardAddress: RewardAddress;
+      readonly redeemerListIndex: bigint | undefined;
+    }
+  | {
+      readonly tag: "publish" | "vote" | "propose";
+      readonly index: bigint;
+      readonly redeemerListIndex: bigint | undefined;
+    };
+
+export type WithdrawalEntry = Readonly<{
+  rewardAddress: RewardAddress;
+  amount: Lovelace;
+}>;
+
+export type RedeemerContext = Readonly<{
+  /**
+   * The final canonical transaction body. The structured fields below are the
+   * script-context projection; raw body internals may expose additional body
+   * details that scripts cannot inspect.
+   */
+  txBody: CML.TransactionBody;
+  inputs: ReadonlyArray<UTxO>;
+  referenceInputs: ReadonlyArray<UTxO>;
+  outputs: ReadonlyArray<TxOutput>;
+  mint: Readonly<Assets>;
+  withdrawals: ReadonlyArray<WithdrawalEntry>;
+  redeemers: ReadonlyArray<RedeemerPurpose>;
+  ownPurpose: RedeemerPurpose;
+  inputIndex: (input: OutRef) => bigint | undefined;
+  outputIndex: (predicate: (output: TxOutput) => boolean) => bigint | undefined;
+  withdrawalIndex: (rewardAddress: RewardAddress) => bigint | undefined;
+  mintPolicyIndex: (policyId: PolicyId) => bigint | undefined;
+  redeemerIndex: (purpose: RedeemerPurpose) => bigint | undefined;
+}>;
+
+export type BuildTxWithRedeemer = (ctx: RedeemerContext) => Redeemer;
 export type Lovelace = bigint;
 export type Label = number;
 /** Hex */
