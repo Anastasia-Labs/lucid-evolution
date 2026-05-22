@@ -35,7 +35,7 @@ While it is pretty straightforward to determine output indices (the order in
 which ouputs are created during transaction building), obtaining input indices
 is more involved. Currently, all inputs in a transaction need to be sorted
 lexicographically (ascending order of transaction id and transaction
-index). 
+index).
 
 So even if a user obtains the required input indicies beforehand, coin
 selection (post calculating the required fees and transaction balancing)
@@ -43,6 +43,51 @@ performed by a transaction builder could introduce new inputs thereby changing
 the indices. Evolution library provides a high-level interface called
 `RedeemerBuilder` that abstracts away this complexity and makes it easy to
 obtain redeemer with required input indices.
+
+## Context-Dependent Redeemers
+
+For redeemers that need more than input indices, `collectFrom`, `mintAssets`,
+and `withdraw` also accept `BuildTxWithRedeemer`:
+
+```ts
+const redeemer: BuildTxWithRedeemer = (ctx) => {
+  if (ctx.ownPurpose.tag !== "spend") return Data.void();
+
+  const ownInputIndex = ctx.inputIndex(ctx.ownPurpose.input);
+  const firstReturnOutput = ctx.outputIndex(
+    (output) => output.address === scriptAddress,
+  );
+  if (ownInputIndex === undefined || firstReturnOutput === undefined) {
+    return Data.void();
+  }
+
+  return Data.to(new Constr(0, [ownInputIndex, firstReturnOutput]));
+};
+
+const tx = await lucid
+  .newTx()
+  .collectFrom(scriptInputs, redeemer)
+  .pay.ToContract(scriptAddress, datum, { lovelace: 10_000_000n })
+  .complete();
+```
+
+The callback receives a `RedeemerContext` derived from the final canonical
+transaction after balancing, change, collateral, and evaluation. Its ordered
+fields follow script-context ordering: inputs are canonical input order,
+outputs preserve transaction-body order, withdrawals follow ledger credential
+order, mint is the normalized final mint value, and `redeemers` contains only
+script witnesses in final redeemer order.
+
+`ctx.inputs` and `ctx.referenceInputs` are `UTxO[]`, so each entry includes both
+the out ref and the resolved output. The raw `ctx.txBody` is exposed for
+advanced use, but the structured fields and helper functions are the
+script-context-safe API.
+
+Context-dependent redeemers are built by fixed-point replay. If a redeemer
+depends circularly on fields it changes, such as fees or execution units, the
+builder stops after eight attempts and reports a convergence error.
+Callbacks should be deterministic and free of side effects because completion
+may invoke them more than once while searching for a fixed point.
 
 ## Redeemer Builder Kinds
 
@@ -105,7 +150,7 @@ obtain redeemer with required input indices.
         address: "randomAddress",
         assets: { lovelace: 60_000000n },
       },
-    ];    
+    ];
 
     const tx = await lucid
         .newTx()
@@ -121,6 +166,7 @@ obtain redeemer with required input indices.
         .addSigner("randomAddress")
         .complete();
     ```
+
   </Tabs.Tab>
   <Tabs.Tab>
     ```ts

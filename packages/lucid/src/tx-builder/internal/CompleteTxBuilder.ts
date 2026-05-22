@@ -6,6 +6,7 @@ import {
   BigInt as _BigInt,
   Tuple,
   Option,
+  Layer,
 } from "effect";
 import {
   Address,
@@ -40,6 +41,22 @@ import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
 import { collectFromUTxO } from "./Collect.js";
 import { TxConfig } from "./Service.js";
 import { isError } from "effect/Predicate";
+import {
+  hasDelayedActions,
+  makeReplayConfig,
+  replayTxActions,
+} from "../TxBuilder.js";
+import {
+  buildCanonicalRedeemerInfo,
+  buildRedeemersFromCanonicalContext,
+  cloneUTxOs,
+  normalizeEvalUTxO,
+  RedeemerBuilderCache,
+  redeemerMapsEqual,
+  resolveCanonicalInputs,
+  resolveCanonicalReferenceInputs,
+  transactionFixedPointFingerprint,
+} from "./RedeemerContext.js";
 
 export type CompleteOptions = {
   /**
@@ -97,7 +114,38 @@ type CoinSelectionResult = {
 export const completeTxError = (cause: unknown) =>
   new TxBuilderError({ cause: `{ Complete: ${cause} }` });
 
-export const complete = (options: CompleteOptions = {}) =>
+type InternalCompleteOptions = {
+  bootstrapExUnits?: boolean;
+  forceCanonical?: boolean;
+  walletInputs?: UTxO[];
+};
+
+type ExUnitSetter = Pick<CML.TransactionBuilder, "set_exunits">;
+
+const splitBootstrapBudget = (
+  total: bigint,
+  redeemerCount: number,
+  index: number,
+): bigint =>
+  total / BigInt(redeemerCount) +
+  (BigInt(index) < total % BigInt(redeemerCount) ? 1n : 0n);
+
+export const bootstrapRedeemerExUnits = (
+  redeemerCount: number,
+  maxTxExMem: bigint,
+  maxTxExSteps: bigint,
+): CML.ExUnits[] =>
+  Array.from({ length: redeemerCount }, (_, index) =>
+    CML.ExUnits.new(
+      splitBootstrapBudget(maxTxExMem, redeemerCount, index),
+      splitBootstrapBudget(maxTxExSteps, redeemerCount, index),
+    ),
+  );
+
+const completeCurrentConfig = (
+  options: CompleteOptions = {},
+  internalOptions: InternalCompleteOptions = {},
+) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
     const wallet: Wallet = yield* pipe(
@@ -117,13 +165,15 @@ export const complete = (options: CompleteOptions = {}) =>
       presetWalletInputs = [],
     } = options;
 
-    const walletInputs: UTxO[] =
-      presetWalletInputs.length === 0
+    const walletInputs: UTxO[] = internalOptions.walletInputs
+      ? cloneUTxOs(internalOptions.walletInputs)
+      : presetWalletInputs.length === 0
         ? yield* Effect.tryPromise({
             try: () => wallet.getUtxos(),
             catch: (error) => completeTxError(error),
           })
         : presetWalletInputs;
+    config.walletInputs = walletInputs;
 
     // Execute programs sequentially
     yield* Effect.all(config.programs);
@@ -140,6 +190,7 @@ export const complete = (options: CompleteOptions = {}) =>
       localUPLCEval,
       includeLeftoverLovelaceAsFee,
       false,
+      internalOptions.bootstrapExUnits === true,
     );
     // Second round of coin selection by including script execution costs in fee estimation.
     // UPLC evaluation need to be performed again if new inputs are selected during coin selection.
@@ -173,6 +224,7 @@ export const complete = (options: CompleteOptions = {}) =>
         localUPLCEval,
         includeLeftoverLovelaceAsFee,
         true,
+        internalOptions.bootstrapExUnits === true,
       );
     }
     config.txBuilder.add_change_if_needed(
@@ -207,7 +259,7 @@ export const complete = (options: CompleteOptions = {}) =>
       derivedInputs,
       TxSignBuilder.makeTxSignBuilder(
         config.lucidConfig.wallet,
-        canonical
+        canonical || internalOptions.forceCanonical
           ? CML.Transaction.from_cbor_bytes(
               transaction.to_canonical_cbor_bytes(),
             )
@@ -216,6 +268,105 @@ export const complete = (options: CompleteOptions = {}) =>
     );
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
+const completeStaticFromActions = (
+  sourceConfig: TxBuilder.TxBuilderConfig,
+  options: CompleteOptions,
+) => {
+  const replayConfig = makeReplayConfig(sourceConfig);
+  return pipe(
+    Effect.gen(function* () {
+      yield* replayTxActions(sourceConfig.actions);
+      return yield* completeCurrentConfig(options);
+    }),
+    Effect.provide(Layer.succeed(TxConfig, { config: replayConfig })),
+  );
+};
+
+const completeDelayedFromActions = (
+  sourceConfig: TxBuilder.TxBuilderConfig,
+  options: CompleteOptions,
+) =>
+  Effect.gen(function* () {
+    const wallet: Wallet = yield* pipe(
+      Effect.fromNullable(sourceConfig.lucidConfig.wallet),
+      Effect.orElseFail(() => completeTxError(ERROR_MESSAGE.MISSING_WALLET)),
+    );
+    const presetWalletInputs = options.presetWalletInputs ?? [];
+    const fixedWalletInputs =
+      presetWalletInputs.length === 0
+        ? yield* Effect.tryPromise({
+            try: () => wallet.getUtxos(),
+            catch: (error) => completeTxError(error),
+          })
+        : presetWalletInputs;
+
+    let currentRedeemers = new Map<number, string>();
+    const redeemerBuilderCache: RedeemerBuilderCache = new Map();
+    let previousFingerprint: string | undefined;
+
+    for (let attempt = 0; attempt < 8; attempt++) {
+      const replayConfig = makeReplayConfig(sourceConfig);
+      const result = yield* pipe(
+        Effect.gen(function* () {
+          yield* replayTxActions(sourceConfig.actions, currentRedeemers);
+          const missingRedeemers = replayConfig.pendingRedeemers.some(
+            (pending) => !currentRedeemers.has(pending.id),
+          );
+          return yield* completeCurrentConfig(
+            { ...options, canonical: true },
+            {
+              forceCanonical: true,
+              bootstrapExUnits: missingRedeemers,
+              walletInputs: fixedWalletInputs,
+            },
+          );
+        }),
+        Effect.provide(Layer.succeed(TxConfig, { config: replayConfig })),
+      );
+
+      const tx = result[2].toTransaction();
+      const allResolvedInputs = [
+        ...replayConfig.walletInputs,
+        ...replayConfig.collectedInputs,
+        ...replayConfig.readInputs,
+      ];
+      const redeemerInfo = yield* buildCanonicalRedeemerInfo(
+        tx,
+        allResolvedInputs,
+      );
+      const nextRedeemers = yield* buildRedeemersFromCanonicalContext(
+        redeemerInfo,
+        replayConfig.pendingRedeemers,
+        redeemerBuilderCache,
+      );
+
+      if (!redeemerMapsEqual(currentRedeemers, nextRedeemers)) {
+        currentRedeemers = nextRedeemers;
+        previousFingerprint = undefined;
+        continue;
+      }
+
+      const fingerprint = transactionFixedPointFingerprint(tx);
+      if (fingerprint === previousFingerprint) return result;
+      previousFingerprint = fingerprint;
+    }
+
+    return yield* completeTxError(
+      "Context-dependent redeemers did not converge after 8 attempts. Check for circular redeemer dependencies on the final transaction body, fees, or ex-units.",
+    );
+  });
+
+export const complete = (options: CompleteOptions = {}) =>
+  Effect.gen(function* () {
+    const { config } = yield* TxConfig;
+    if (config.actions.length === 0)
+      return yield* completeCurrentConfig(options);
+    if (hasDelayedActions(config)) {
+      return yield* completeDelayedFromActions(config, options);
+    }
+    return yield* completeStaticFromActions(config, options);
+  });
+
 export const selectionAndEvaluation = (
   walletInputs: UTxO[],
   changeAddress: string,
@@ -223,6 +374,7 @@ export const selectionAndEvaluation = (
   localUPLCEval: boolean,
   includeLeftoverLovelaceAsFee: boolean,
   script_calculation: boolean,
+  bootstrapExUnits: boolean = false,
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
@@ -288,6 +440,17 @@ export const selectionAndEvaluation = (
     });
 
     if (txRedeemerBuilder.draft_tx().witness_set().redeemers()) {
+      if (bootstrapExUnits) {
+        // Unresolved delayed redeemers prevent phase-two evaluation of the
+        // draft, but fee and collateral selection still need script costs.
+        applyBootstrapRedeemerExUnits(
+          txRedeemerBuilder.draft_tx().witness_set().redeemers()!,
+          config.txBuilder,
+          config.lucidConfig.protocolParameters.maxTxExMem,
+          config.lucidConfig.protocolParameters.maxTxExSteps,
+        );
+        return;
+      }
       if (localUPLCEval !== false) {
         applyUPLCEval(
           yield* evalTransaction(config, txRedeemerBuilder, walletInputs),
@@ -408,6 +571,58 @@ export const applyUPLCEvalProvider = (
   }
 };
 
+export const redeemerWitnessKeys = (redeemers: CML.Redeemers) => {
+  const keys: Array<{
+    key: CML.RedeemerWitnessKey;
+    tag: CML.RedeemerTag;
+    index: bigint;
+  }> = [];
+  const arrLegacyRedeemer = redeemers.as_arr_legacy_redeemer();
+  if (arrLegacyRedeemer) {
+    for (let i = 0; i < arrLegacyRedeemer.len(); i++) {
+      const redeemer = arrLegacyRedeemer.get(i);
+      keys.push({
+        key: CML.RedeemerWitnessKey.from_redeemer(redeemer),
+        tag: redeemer.tag(),
+        index: redeemer.index(),
+      });
+    }
+  }
+
+  const mapRedeemerKeyToRedeemerVal =
+    redeemers.as_map_redeemer_key_to_redeemer_val();
+  if (mapRedeemerKeyToRedeemerVal) {
+    const mapKeys = mapRedeemerKeyToRedeemerVal.keys();
+    for (let i = 0; i < mapKeys.len(); i++) {
+      const key = mapKeys.get(i);
+      keys.push({
+        key: CML.RedeemerWitnessKey.new(key.tag(), key.index()),
+        tag: key.tag(),
+        index: key.index(),
+      });
+    }
+  }
+  return keys;
+};
+
+export const applyBootstrapRedeemerExUnits = (
+  redeemers: CML.Redeemers,
+  txbuilder: ExUnitSetter,
+  maxTxExMem: bigint,
+  maxTxExSteps: bigint,
+): void => {
+  const keys = redeemerWitnessKeys(redeemers);
+  const budgets = bootstrapRedeemerExUnits(
+    keys.length,
+    maxTxExMem,
+    maxTxExSteps,
+  );
+  for (const [index, { key }] of keys.entries()) {
+    const exUnits = budgets[index];
+    txbuilder.set_exunits(key, CML.ExUnits.new(exUnits.mem(), exUnits.steps()));
+  }
+};
+
 export const setRedeemerstoZero = (tx: CML.Transaction): CML.Transaction => {
   const redeemers = tx.witness_set().redeemers();
   if (!redeemers) return tx;
@@ -439,11 +654,19 @@ export const setRedeemerstoZero = (tx: CML.Transaction): CML.Transaction => {
   const mapRedeemerKeyToRedeemerVal =
     redeemers.as_map_redeemer_key_to_redeemer_val();
   if (mapRedeemerKeyToRedeemerVal) {
+    const dummyRedeemerMap = CML.MapRedeemerKeyToRedeemerVal.new();
+    const keys = mapRedeemerKeyToRedeemerVal.keys();
+    for (let i = 0; i < keys.len(); i++) {
+      const key = keys.get(i);
+      const value = mapRedeemerKeyToRedeemerVal.get(key)!;
+      dummyRedeemerMap.insert(
+        key,
+        CML.RedeemerVal.new(value.data(), CML.ExUnits.new(0n, 0n)),
+      );
+    }
     const dummyWitnessSet = tx.witness_set();
     dummyWitnessSet.set_redeemers(
-      CML.Redeemers.new_map_redeemer_key_to_redeemer_val(
-        mapRedeemerKeyToRedeemerVal,
-      ),
+      CML.Redeemers.new_map_redeemer_key_to_redeemer_val(dummyRedeemerMap),
     );
     return CML.Transaction.new(
       tx.body(),
@@ -596,6 +819,25 @@ const estimateFee = (
     return estimatedFee;
   });
 
+const resolveEvaluationUTxOs = (
+  tx: CML.Transaction,
+  walletInputs: UTxO[],
+  config: TxBuilder.TxBuilderConfig,
+): Effect.Effect<UTxO[], TxBuilderError> =>
+  Effect.gen(function* () {
+    const candidates = [
+      ...walletInputs,
+      ...config.collectedInputs,
+      ...config.readInputs,
+    ];
+    const inputs = yield* resolveCanonicalInputs(tx, candidates);
+    const referenceInputs = yield* resolveCanonicalReferenceInputs(
+      tx,
+      candidates,
+    );
+    return [...inputs, ...referenceInputs].map(normalizeEvalUTxO);
+  });
+
 const evalTransactionProvider = (
   config: TxBuilder.TxBuilderConfig,
   txRedeemerBuilder: CML.TxRedeemerBuilder,
@@ -603,15 +845,10 @@ const evalTransactionProvider = (
 ): Effect.Effect<EvalRedeemer[], TxBuilderError> =>
   Effect.gen(function* () {
     const txEvaluation = setRedeemerstoZero(txRedeemerBuilder.draft_tx())!;
-    // Normalize UTXOs that include both a datum and a datumHash.
-    // If a datumHash is present, the datum field is removed.
-    // This ensures consistency when preparing UTXOs for evaluation.
-    const txUtxos = [...config.collectedInputs, ...config.readInputs].map(
-      ({ datumHash, datum, ...rest }) => ({
-        ...rest,
-        datumHash,
-        datum: datumHash ? undefined : datum,
-      }),
+    const txUtxos = yield* resolveEvaluationUTxOs(
+      txEvaluation,
+      walletInputs,
+      config,
     );
     const uplc_eval = yield* Effect.tryPromise({
       try: () =>
@@ -631,18 +868,11 @@ const evalTransaction = (
 ): Effect.Effect<Uint8Array[], TxBuilderError> =>
   Effect.gen(function* () {
     const txEvaluation = setRedeemerstoZero(txRedeemerBuilder.draft_tx())!;
-    // Normalize UTXOs that include both a datum and a datumHash.
-    // If a datumHash is present, the datum field is removed.
-    // This ensures consistency when preparing UTXOs for evaluation.
-    const txUtxos = [
-      ...walletInputs,
-      ...config.collectedInputs,
-      ...config.readInputs,
-    ].map(({ datumHash, datum, ...rest }) => ({
-      ...rest,
-      datumHash,
-      datum: datumHash ? undefined : datum,
-    }));
+    const txUtxos = yield* resolveEvaluationUTxOs(
+      txEvaluation,
+      walletInputs,
+      config,
+    );
     const ins = txUtxos.map((utxo) => utxoToTransactionInput(utxo));
     const outs = txUtxos.map((utxo) => utxoToTransactionOutput(utxo));
     const slotConfig = SLOT_CONFIG_NETWORK[config.lucidConfig.network];

@@ -1,16 +1,13 @@
 import { Label } from "@lucid-evolution/core-types";
-import * as TxBuilder from "../TxBuilder.js";
 import { Effect } from "effect";
 import { CML } from "../../core.js";
 import * as S from "@effect/schema/Schema";
 import { toHex } from "@lucid-evolution/core-utils";
+import { TxConfig } from "./Service.js";
 
-export const attachMetadata = (
-  config: TxBuilder.TxBuilderConfig,
-  label: Label,
-  metadata: TransactionMetadata,
-) =>
+export const attachMetadata = (label: Label, metadata: TransactionMetadata) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const auxiliaryData = CML.AuxiliaryData.new();
     const meta = CML.Metadata.new();
     meta.set(
@@ -97,4 +94,20 @@ export const toCardanoMetadata = (
     return { map: mapEntries };
   }
   throw new Error("Unsupported type");
+};
+
+export const cloneTransactionMetadata = (
+  metadata: TransactionMetadata,
+): TransactionMetadata => {
+  if (metadata instanceof Uint8Array) return new Uint8Array(metadata);
+  if (Array.isArray(metadata)) return metadata.map(cloneTransactionMetadata);
+  if (typeof metadata === "object" && metadata !== null) {
+    return Object.fromEntries(
+      Object.entries(metadata).map(([key, value]) => [
+        key,
+        cloneTransactionMetadata(value),
+      ]),
+    );
+  }
+  return metadata;
 };
