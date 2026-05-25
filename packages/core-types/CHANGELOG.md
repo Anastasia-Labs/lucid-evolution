@@ -1,5 +1,11 @@
 # @lucid-evolution/core-types
 
+## 0.1.24
+
+### Patch Changes
+
+- [#689](https://github.com/Anastasia-Labs/lucid-evolution/pull/689) [`775c4e9`](https://github.com/Anastasia-Labs/lucid-evolution/commit/775c4e94b1306f440b4170eee07cf63c48c0119f) Thanks [@colll78](https://github.com/colll78)! - Add BuildTxWithRedeemer and RedeemerContext support for constructing redeemers from the finalized transaction context across script interactions.
+
 ## 0.1.23
 
 ### Patch Changes
