@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.4.33
+
+### Patch Changes
+
+- [#691](https://github.com/Anastasia-Labs/lucid-evolution/pull/691) [`2c267e9`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2c267e99d31dd04073fd222a919b614103dfb16c) Thanks [@colll78](https://github.com/colll78)! - Support `BuildTxWithRedeemer` for certificate transactions, including stake, DRep, delegation, and committee certificate redeemers.
+
 ## 0.4.32
 
 ### Patch Changes
