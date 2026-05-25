@@ -69,6 +69,8 @@ export type TxAction = {
   readonly cloneWithIds: (id: number, pendingIds: number[]) => TxAction;
 };
 
+type CertificateRedeemer = Redeemer | BuildTxWithRedeemer;
+
 export type TxBuilderConfig = {
   readonly lucidConfig: LucidConfig;
   readonly txBuilder: CML.TransactionBuilder;
@@ -89,6 +91,7 @@ export type TxBuilderConfig = {
   nextActionId: number;
   pendingRedeemers: PendingRedeemer[];
   witnessRegistry: Set<string>;
+  certificateIndex: bigint;
   minFee: bigint | undefined;
 };
 
@@ -163,6 +166,7 @@ export const makeTxBuilderConfig = (
   nextActionId: source?.nextActionId ?? 0,
   pendingRedeemers: [],
   witnessRegistry: new Set(),
+  certificateIndex: 0n,
   minFee: source?.minFee,
 });
 
@@ -375,6 +379,100 @@ const replayWithdrawWithDelayedRedeemer = (
     )(redeemerFor(currentRedeemers, pendingId));
   });
 
+const withCertificateIndex = (
+  program: Effect.Effect<void, TransactionError, TxConfig>,
+) =>
+  Effect.gen(function* () {
+    const { config } = yield* TxConfig;
+    yield* program;
+    config.certificateIndex += 1n;
+  });
+
+const replayCertificateWithDelayedRedeemer = (
+  actionId: number,
+  pendingIds: readonly number[],
+  witnessRewardAddress: RewardAddress,
+  redeemer: BuildTxWithRedeemer,
+  makeProgram: (
+    redeemer?: Redeemer,
+  ) => Effect.Effect<void, TransactionError, TxConfig>,
+  currentRedeemers: ReadonlyMap<number, Redeemer>,
+) =>
+  Effect.gen(function* () {
+    const { config } = yield* TxConfig;
+    const addressDetails = yield* validateAddressDetails(
+      witnessRewardAddress,
+      config.lucidConfig,
+    );
+    const stakeCredential = addressDetails.stakeCredential;
+    if (!stakeCredential || stakeCredential.type !== "Script") {
+      yield* txActionError(
+        "Delayed certificate redeemer requires a Plutus certificate witness",
+      );
+      return;
+    }
+    const script = config.scripts.get(stakeCredential.hash);
+    const pendingId = pendingIds[0];
+    const delayedRedeemer = redeemerFor(currentRedeemers, pendingId);
+    if (!script) {
+      yield* makeProgram(delayedRedeemer);
+      return;
+    }
+    if (!isPlutusScriptType(script.type)) {
+      yield* txActionError(
+        "Delayed certificate redeemer requires a Plutus certificate witness",
+      );
+    }
+    yield* registerPendingRedeemer(config, {
+      id: pendingId,
+      actionId,
+      source: redeemer,
+      purposeKey: { tag: "publish", index: config.certificateIndex },
+    });
+    yield* withCertificateIndex(makeProgram(delayedRedeemer));
+  });
+
+const recordCertificateAction = (
+  config: TxBuilderConfig,
+  kind: string,
+  makeProgram: (
+    redeemer?: Redeemer,
+  ) => Effect.Effect<void, TransactionError, TxConfig>,
+  redeemer?: CertificateRedeemer,
+  witnessRewardAddress?: RewardAddress,
+) => {
+  const redeemerSnapshot = cloneRedeemerInput(redeemer);
+  const isDelayed = isBuildTxWithRedeemer(redeemerSnapshot);
+  recordAction(config, isDelayed ? 1 : 0, (id, pendingIds) =>
+    makeAction(
+      id,
+      kind,
+      pendingIds,
+      isDelayed,
+      (actionId, actionPendingIds) => (currentRedeemers) =>
+        isDelayed
+          ? replayCertificateWithDelayedRedeemer(
+              actionId,
+              actionPendingIds,
+              witnessRewardAddress!,
+              redeemerSnapshot,
+              makeProgram,
+              currentRedeemers,
+            )
+          : withCertificateIndex(
+              makeProgram(redeemerSnapshot as Redeemer | undefined),
+            ),
+    ),
+  );
+  if (!isDelayed) {
+    config.programs.push(
+      withCertificateIndex(
+        makeProgram(redeemerSnapshot as Redeemer | undefined),
+      ),
+    );
+  }
+};
+
 export type TxBuilder = {
   readFrom: (utxos: UTxO[]) => TxBuilder;
   collectFrom: (
@@ -459,7 +557,7 @@ export type TxBuilder = {
    */
   deRegisterStake: (
     rewardAddress: RewardAddress,
-    redeemer?: string,
+    redeemer?: CertificateRedeemer,
   ) => TxBuilder;
   withdraw: (
     rewardAddress: RewardAddress,
@@ -471,12 +569,18 @@ export type TxBuilder = {
     DRep: (
       rewardAddress: RewardAddress,
       anchor?: Anchor,
-      redeemer?: string,
+      redeemer?: CertificateRedeemer,
     ) => TxBuilder;
   };
   deregister: {
-    Stake: (rewardAddress: RewardAddress, redeemer?: string) => TxBuilder;
-    DRep: (rewardAddress: RewardAddress, redeemer?: string) => TxBuilder;
+    Stake: (
+      rewardAddress: RewardAddress,
+      redeemer?: CertificateRedeemer,
+    ) => TxBuilder;
+    DRep: (
+      rewardAddress: RewardAddress,
+      redeemer?: CertificateRedeemer,
+    ) => TxBuilder;
   };
   mintAssets: (
     assets: Assets,
@@ -490,56 +594,58 @@ export type TxBuilder = {
   delegateTo: (
     rewardAddress: RewardAddress,
     poolId: PoolId,
-    redeemer?: Redeemer,
+    redeemer?: CertificateRedeemer,
   ) => TxBuilder;
   delegate: {
     ToPool: (
       rewardAddress: RewardAddress,
       poolId: PoolId,
-      redeemer?: Redeemer,
+      redeemer?: CertificateRedeemer,
     ) => TxBuilder;
     VoteToDRep: (
       rewardAddress: RewardAddress,
       drep: DRep,
-      redeemer?: Redeemer,
+      redeemer?: CertificateRedeemer,
     ) => TxBuilder;
     VoteToPoolAndDRep: (
       rewardAddress: RewardAddress,
       poolId: PoolId,
       drep: DRep,
-      redeemer?: Redeemer,
+      redeemer?: CertificateRedeemer,
     ) => TxBuilder;
   };
   registerAndDelegate: {
     ToPool: (
       rewardAddress: RewardAddress,
       poolId: PoolId,
-      redeemer?: Redeemer,
+      redeemer?: CertificateRedeemer,
     ) => TxBuilder;
     ToDRep: (
       rewardAddress: RewardAddress,
       drep: DRep,
-      redeemer?: Redeemer,
+      redeemer?: CertificateRedeemer,
     ) => TxBuilder;
     ToPoolAndDRep: (
       rewardAddress: RewardAddress,
       poolId: PoolId,
       drep: DRep,
-      redeemer?: Redeemer,
+      redeemer?: CertificateRedeemer,
     ) => TxBuilder;
   };
   updateDRep: (
     rewardAddress: RewardAddress,
     anchor?: Anchor,
-    redeemer?: Redeemer,
+    redeemer?: CertificateRedeemer,
   ) => TxBuilder;
   authCommitteeHot: (
     coldAddress: RewardAddress,
     hotAddress: RewardAddress,
+    redeemer?: CertificateRedeemer,
   ) => TxBuilder;
   resignCommitteeHot: (
     coldAddress: RewardAddress,
     anchor?: Anchor,
+    redeemer?: CertificateRedeemer,
   ) => TxBuilder;
   attachMetadata: (
     label: Label,
@@ -779,99 +885,69 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       return txBuilder;
     },
     registerStake: (rewardAddress: RewardAddress) => {
-      recordAction(config, 0, (id, pendingIds) =>
-        makeAction(
-          id,
-          "registerStake",
-          pendingIds,
-          false,
-          () => () => Stake.registerStake(rewardAddress),
-        ),
+      recordCertificateAction(config, "registerStake", () =>
+        Stake.registerStake(rewardAddress),
       );
-      const program = Stake.registerStake(rewardAddress);
-      config.programs.push(program);
       return txBuilder;
     },
     register: {
       Stake: (rewardAddress: RewardAddress) => {
-        recordAction(config, 0, (id, pendingIds) =>
-          makeAction(
-            id,
-            "register.Stake",
-            pendingIds,
-            false,
-            () => () => Stake.registerStake(rewardAddress),
-          ),
+        recordCertificateAction(config, "register.Stake", () =>
+          Stake.registerStake(rewardAddress),
         );
-        const program = Stake.registerStake(rewardAddress);
-        config.programs.push(program);
         return txBuilder;
       },
       DRep: (
         rewardAddress: RewardAddress,
         anchor?: Anchor,
-        redeemer?: string,
+        redeemer?: CertificateRedeemer,
       ) => {
-        recordAction(config, 0, (id, pendingIds) =>
-          makeAction(
-            id,
-            "register.DRep",
-            pendingIds,
-            false,
-            () => () =>
-              Governance.registerDRep(rewardAddress, anchor, redeemer),
-          ),
-        );
-        const program = Governance.registerDRep(
-          rewardAddress,
-          anchor,
+        recordCertificateAction(
+          config,
+          "register.DRep",
+          (resolvedRedeemer) =>
+            Governance.registerDRep(rewardAddress, anchor, resolvedRedeemer),
           redeemer,
+          rewardAddress,
         );
-        config.programs.push(program);
         return txBuilder;
       },
     },
-    deRegisterStake: (rewardAddress: RewardAddress, redeemer?: string) => {
-      recordAction(config, 0, (id, pendingIds) =>
-        makeAction(
-          id,
-          "deRegisterStake",
-          pendingIds,
-          false,
-          () => () => Stake.deRegisterStake(rewardAddress, redeemer),
-        ),
+    deRegisterStake: (
+      rewardAddress: RewardAddress,
+      redeemer?: CertificateRedeemer,
+    ) => {
+      recordCertificateAction(
+        config,
+        "deRegisterStake",
+        (resolvedRedeemer) =>
+          Stake.deRegisterStake(rewardAddress, resolvedRedeemer),
+        redeemer,
+        rewardAddress,
       );
-      const program = Stake.deRegisterStake(rewardAddress, redeemer);
-      config.programs.push(program);
       return txBuilder;
     },
     deregister: {
-      Stake: (rewardAddress: RewardAddress, redeemer?: string) => {
-        recordAction(config, 0, (id, pendingIds) =>
-          makeAction(
-            id,
-            "deregister.Stake",
-            pendingIds,
-            false,
-            () => () => Stake.deRegisterStake(rewardAddress, redeemer),
-          ),
+      Stake: (rewardAddress: RewardAddress, redeemer?: CertificateRedeemer) => {
+        recordCertificateAction(
+          config,
+          "deregister.Stake",
+          (resolvedRedeemer) =>
+            Stake.deRegisterStake(rewardAddress, resolvedRedeemer),
+          redeemer,
+          rewardAddress,
         );
-        const program = Stake.deRegisterStake(rewardAddress, redeemer);
-        config.programs.push(program);
         return txBuilder;
       },
-      DRep: (rewardAddress: RewardAddress, redeemer?: string) => {
-        recordAction(config, 0, (id, pendingIds) =>
-          makeAction(
-            id,
-            "deregister.DRep",
-            pendingIds,
-            false,
-            () => () => Governance.deregisterDRep(rewardAddress, redeemer),
-          ),
+      DRep: (rewardAddress: RewardAddress, redeemer?: CertificateRedeemer) => {
+        recordCertificateAction(
+          config,
+          "deregister.DRep",
+          (resolvedRedeemer) =>
+            Governance.deregisterDRep(rewardAddress, resolvedRedeemer),
+          redeemer,
+          rewardAddress,
         );
-        const program = Governance.deregisterDRep(rewardAddress, redeemer);
-        config.programs.push(program);
         return txBuilder;
       },
     },
@@ -976,62 +1052,52 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     delegateTo: (
       rewardAddress: RewardAddress,
       poolId: PoolId,
-      redeemer?: Redeemer,
+      redeemer?: CertificateRedeemer,
     ) => {
-      recordAction(config, 0, (id, pendingIds) =>
-        makeAction(
-          id,
-          "delegateTo",
-          pendingIds,
-          false,
-          () => () => Pool.delegateTo(rewardAddress, poolId, redeemer),
-        ),
+      recordCertificateAction(
+        config,
+        "delegateTo",
+        (resolvedRedeemer) =>
+          Pool.delegateTo(rewardAddress, poolId, resolvedRedeemer),
+        redeemer,
+        rewardAddress,
       );
-      const program = Pool.delegateTo(rewardAddress, poolId, redeemer);
-      config.programs.push(program);
       return txBuilder;
     },
     delegate: {
       ToPool: (
         rewardAddress: RewardAddress,
         poolId: PoolId,
-        redeemer?: Redeemer,
+        redeemer?: CertificateRedeemer,
       ) => {
-        recordAction(config, 0, (id, pendingIds) =>
-          makeAction(
-            id,
-            "delegate.ToPool",
-            pendingIds,
-            false,
-            () => () => Pool.delegateTo(rewardAddress, poolId, redeemer),
-          ),
+        recordCertificateAction(
+          config,
+          "delegate.ToPool",
+          (resolvedRedeemer) =>
+            Pool.delegateTo(rewardAddress, poolId, resolvedRedeemer),
+          redeemer,
+          rewardAddress,
         );
-        const program = Pool.delegateTo(rewardAddress, poolId, redeemer);
-        config.programs.push(program);
         return txBuilder;
       },
 
       VoteToDRep: (
         rewardAddress: RewardAddress,
         drep: DRep,
-        redeemer?: Redeemer,
+        redeemer?: CertificateRedeemer,
       ) => {
-        recordAction(config, 0, (id, pendingIds) =>
-          makeAction(
-            id,
-            "delegate.VoteToDRep",
-            pendingIds,
-            false,
-            () => () =>
-              Governance.delegateVoteToDRep(rewardAddress, drep, redeemer),
-          ),
-        );
-        const program = Governance.delegateVoteToDRep(
-          rewardAddress,
-          drep,
+        recordCertificateAction(
+          config,
+          "delegate.VoteToDRep",
+          (resolvedRedeemer) =>
+            Governance.delegateVoteToDRep(
+              rewardAddress,
+              drep,
+              resolvedRedeemer,
+            ),
           redeemer,
+          rewardAddress,
         );
-        config.programs.push(program);
         return txBuilder;
       },
 
@@ -1039,30 +1105,21 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         rewardAddress: RewardAddress,
         poolId: PoolId,
         drep: DRep,
-        redeemer?: Redeemer,
+        redeemer?: CertificateRedeemer,
       ) => {
-        recordAction(config, 0, (id, pendingIds) =>
-          makeAction(
-            id,
-            "delegate.VoteToPoolAndDRep",
-            pendingIds,
-            false,
-            () => () =>
-              Governance.delegateVoteToPoolAndDRep(
-                rewardAddress,
-                poolId,
-                drep,
-                redeemer,
-              ),
-          ),
-        );
-        const program = Governance.delegateVoteToPoolAndDRep(
-          rewardAddress,
-          poolId,
-          drep,
+        recordCertificateAction(
+          config,
+          "delegate.VoteToPoolAndDRep",
+          (resolvedRedeemer) =>
+            Governance.delegateVoteToPoolAndDRep(
+              rewardAddress,
+              poolId,
+              drep,
+              resolvedRedeemer,
+            ),
           redeemer,
+          rewardAddress,
         );
-        config.programs.push(program);
         return txBuilder;
       },
     },
@@ -1070,150 +1127,110 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       ToPool: (
         rewardAddress: RewardAddress,
         poolId: PoolId,
-        redeemer?: Redeemer,
+        redeemer?: CertificateRedeemer,
       ) => {
-        recordAction(config, 0, (id, pendingIds) =>
-          makeAction(
-            id,
-            "registerAndDelegate.ToPool",
-            pendingIds,
-            false,
-            () => () =>
-              Governance.registerAndDelegateToPool(
-                rewardAddress,
-                poolId,
-                redeemer,
-              ),
-          ),
-        );
-        const program = Governance.registerAndDelegateToPool(
-          rewardAddress,
-          poolId,
+        recordCertificateAction(
+          config,
+          "registerAndDelegate.ToPool",
+          (resolvedRedeemer) =>
+            Governance.registerAndDelegateToPool(
+              rewardAddress,
+              poolId,
+              resolvedRedeemer,
+            ),
           redeemer,
+          rewardAddress,
         );
-        config.programs.push(program);
         return txBuilder;
       },
       ToDRep: (
         rewardAddress: RewardAddress,
         drep: DRep,
-        redeemer?: Redeemer,
+        redeemer?: CertificateRedeemer,
       ) => {
-        recordAction(config, 0, (id, pendingIds) =>
-          makeAction(
-            id,
-            "registerAndDelegate.ToDRep",
-            pendingIds,
-            false,
-            () => () =>
-              Governance.registerAndDelegateToDRep(
-                rewardAddress,
-                drep,
-                redeemer,
-              ),
-          ),
-        );
-        const program = Governance.registerAndDelegateToDRep(
-          rewardAddress,
-          drep,
+        recordCertificateAction(
+          config,
+          "registerAndDelegate.ToDRep",
+          (resolvedRedeemer) =>
+            Governance.registerAndDelegateToDRep(
+              rewardAddress,
+              drep,
+              resolvedRedeemer,
+            ),
           redeemer,
+          rewardAddress,
         );
-        config.programs.push(program);
         return txBuilder;
       },
       ToPoolAndDRep: (
         rewardAddress: RewardAddress,
         poolId: PoolId,
         drep: DRep,
-        redeemer?: Redeemer,
+        redeemer?: CertificateRedeemer,
       ) => {
-        recordAction(config, 0, (id, pendingIds) =>
-          makeAction(
-            id,
-            "registerAndDelegate.ToPoolAndDRep",
-            pendingIds,
-            false,
-            () => () =>
-              Governance.registerAndDelegateToPoolAndDRep(
-                rewardAddress,
-                poolId,
-                drep,
-                redeemer,
-              ),
-          ),
-        );
-        const program = Governance.registerAndDelegateToPoolAndDRep(
-          rewardAddress,
-          poolId,
-          drep,
+        recordCertificateAction(
+          config,
+          "registerAndDelegate.ToPoolAndDRep",
+          (resolvedRedeemer) =>
+            Governance.registerAndDelegateToPoolAndDRep(
+              rewardAddress,
+              poolId,
+              drep,
+              resolvedRedeemer,
+            ),
           redeemer,
+          rewardAddress,
         );
-        config.programs.push(program);
         return txBuilder;
       },
     },
     updateDRep: (
       rewardAddress: RewardAddress,
       anchor?: Anchor,
-      redeemer?: Redeemer,
+      redeemer?: CertificateRedeemer,
     ) => {
-      recordAction(config, 0, (id, pendingIds) =>
-        makeAction(
-          id,
-          "updateDRep",
-          pendingIds,
-          false,
-          () => () => Governance.updateDRep(rewardAddress, anchor, redeemer),
-        ),
+      recordCertificateAction(
+        config,
+        "updateDRep",
+        (resolvedRedeemer) =>
+          Governance.updateDRep(rewardAddress, anchor, resolvedRedeemer),
+        redeemer,
+        rewardAddress,
       );
-      const program = Governance.updateDRep(rewardAddress, anchor, redeemer);
-      config.programs.push(program);
       return txBuilder;
     },
     authCommitteeHot: (
       coldAddress: RewardAddress,
       hotAddress: RewardAddress,
-      redeemer?: Redeemer,
+      redeemer?: CertificateRedeemer,
     ) => {
-      recordAction(config, 0, (id, pendingIds) =>
-        makeAction(
-          id,
-          "authCommitteeHot",
-          pendingIds,
-          false,
-          () => () =>
-            Governance.authCommitteeHot(coldAddress, hotAddress, redeemer),
-        ),
-      );
-      const program = Governance.authCommitteeHot(
-        coldAddress,
-        hotAddress,
+      recordCertificateAction(
+        config,
+        "authCommitteeHot",
+        (resolvedRedeemer) =>
+          Governance.authCommitteeHot(
+            coldAddress,
+            hotAddress,
+            resolvedRedeemer,
+          ),
         redeemer,
+        coldAddress,
       );
-      config.programs.push(program);
       return txBuilder;
     },
     resignCommitteeHot: (
       coldAddress: RewardAddress,
       anchor?: Anchor,
-      redeemer?: Redeemer,
+      redeemer?: CertificateRedeemer,
     ) => {
-      recordAction(config, 0, (id, pendingIds) =>
-        makeAction(
-          id,
-          "resignCommitteeHot",
-          pendingIds,
-          false,
-          () => () =>
-            Governance.resignCommitteeHot(coldAddress, anchor, redeemer),
-        ),
-      );
-      const program = Governance.resignCommitteeHot(
-        coldAddress,
-        anchor,
+      recordCertificateAction(
+        config,
+        "resignCommitteeHot",
+        (resolvedRedeemer) =>
+          Governance.resignCommitteeHot(coldAddress, anchor, resolvedRedeemer),
         redeemer,
+        coldAddress,
       );
-      config.programs.push(program);
       return txBuilder;
     },
     attachMetadata: (label: Label, metadata: Metadata.TransactionMetadata) => {

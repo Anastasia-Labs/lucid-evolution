@@ -8,7 +8,9 @@ import {
   Script,
   Wallet,
   UTxO,
+  credentialToRewardAddress,
   makeTxBuilder,
+  validatorToRewardAddress,
 } from "../src/index.js";
 import { Data } from "@lucid-evolution/plutus";
 import {
@@ -558,6 +560,118 @@ describe("context-dependent redeemers internal coverage", () => {
     );
     expect(redeemer.exUnits.mem()).toBe(500_000n);
     expect(redeemer.exUnits.steps()).toBe(500_000n);
+    expect(evaluateTx).toHaveBeenCalled();
+    expect(stableRedeemer).toHaveBeenCalled();
+  });
+
+  test("builder converges context-dependent certificate redeemers with provider evaluation", async () => {
+    const walletInput = makeUtxo("7a");
+    walletInput.assets = { lovelace: 100_000_000n };
+    const keyRewardAddress = credentialToRewardAddress("Custom", {
+      type: "Key",
+      hash: "12".repeat(28),
+    });
+    const scriptRewardAddress = validatorToRewardAddress(
+      "Custom",
+      alwaysSucceedScript,
+    );
+    const evaluateTx = vi.fn<Provider["evaluateTx"]>(async () => [
+      {
+        redeemer_tag: "publish",
+        redeemer_index: 1,
+        ex_units: { mem: 600_000, steps: 700_000 },
+      },
+    ]);
+    const stableRedeemer = vi.fn<BuildTxWithRedeemer>((ctx) => {
+      expect(ctx.ownPurpose.tag).toBe("publish");
+      return Data.to(ctx.ownPurpose.index);
+    });
+
+    const signBuilder = await makeTxBuilder({
+      ...lucidConfig,
+      provider: makeProvider(evaluateTx),
+      wallet: makeWallet([walletInput]),
+    })
+      .attach.CertificateValidator(alwaysSucceedScript)
+      .register.Stake(keyRewardAddress)
+      .deregister.Stake(scriptRewardAddress, stableRedeemer)
+      .complete({
+        localUPLCEval: false,
+        presetWalletInputs: [walletInput],
+      });
+
+    const redeemers = signBuilder.toTransaction().witness_set().redeemers();
+    expect(redeemers).toBeDefined();
+    const [redeemer] = canonicalRedeemerEntries(redeemers!);
+    expect(redeemer.tag).toBe("publish");
+    expect(redeemer.index).toBe(1n);
+    expect(redeemer.data.to_canonical_cbor_hex()).toBe(
+      redeemerData(1n).to_canonical_cbor_hex(),
+    );
+    expect(redeemer.exUnits.mem()).toBe(600_000n);
+    expect(redeemer.exUnits.steps()).toBe(700_000n);
+    expect(evaluateTx).toHaveBeenCalled();
+    expect(stableRedeemer).toHaveBeenCalled();
+  });
+
+  test("builder converges context-dependent committee certificate redeemers with provider evaluation", async () => {
+    const walletInput = makeUtxo("7b");
+    walletInput.assets = { lovelace: 100_000_000n };
+    const keyRewardAddress = credentialToRewardAddress("Custom", {
+      type: "Key",
+      hash: "13".repeat(28),
+    });
+    const scriptRewardAddress = validatorToRewardAddress(
+      "Custom",
+      alwaysSucceedScript,
+    );
+    const evaluateTx = vi.fn<Provider["evaluateTx"]>(async () => [
+      {
+        redeemer_tag: "publish",
+        redeemer_index: 0,
+        ex_units: { mem: 610_000, steps: 710_000 },
+      },
+      {
+        redeemer_tag: "publish",
+        redeemer_index: 1,
+        ex_units: { mem: 620_000, steps: 720_000 },
+      },
+    ]);
+    const stableRedeemer = vi.fn<BuildTxWithRedeemer>((ctx) => {
+      expect(ctx.ownPurpose.tag).toBe("publish");
+      return Data.to(ctx.ownPurpose.index);
+    });
+
+    const signBuilder = await makeTxBuilder({
+      ...lucidConfig,
+      provider: makeProvider(evaluateTx),
+      wallet: makeWallet([walletInput]),
+    })
+      .attach.CertificateValidator(alwaysSucceedScript)
+      .authCommitteeHot(scriptRewardAddress, keyRewardAddress, stableRedeemer)
+      .resignCommitteeHot(scriptRewardAddress, undefined, stableRedeemer)
+      .complete({
+        localUPLCEval: false,
+        presetWalletInputs: [walletInput],
+      });
+
+    const redeemers = signBuilder.toTransaction().witness_set().redeemers();
+    expect(redeemers).toBeDefined();
+    const entries = canonicalRedeemerEntries(redeemers!);
+    expect(entries.map(({ tag, index }) => [tag, index])).toEqual([
+      ["publish", 0n],
+      ["publish", 1n],
+    ]);
+    expect(entries[0].data.to_canonical_cbor_hex()).toBe(
+      redeemerData(0n).to_canonical_cbor_hex(),
+    );
+    expect(entries[1].data.to_canonical_cbor_hex()).toBe(
+      redeemerData(1n).to_canonical_cbor_hex(),
+    );
+    expect(entries[0].exUnits.mem()).toBe(610_000n);
+    expect(entries[0].exUnits.steps()).toBe(710_000n);
+    expect(entries[1].exUnits.mem()).toBe(620_000n);
+    expect(entries[1].exUnits.steps()).toBe(720_000n);
     expect(evaluateTx).toHaveBeenCalled();
     expect(stableRedeemer).toHaveBeenCalled();
   });
