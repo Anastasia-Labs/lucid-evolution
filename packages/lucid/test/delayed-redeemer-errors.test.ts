@@ -13,6 +13,7 @@ import {
   mintingPolicyToId,
   scriptFromNative,
   validatorToAddress,
+  validatorToRewardAddress,
 } from "../src/index.js";
 import { makeTxConfig } from "../src/tx-builder/TxConfig.js";
 import {
@@ -74,6 +75,94 @@ const selectedRedeemerFor = (utxo: UTxO): RedeemerBuilder => ({
 });
 
 describe("delayed redeemer missing script errors", () => {
+  test("certificate action signatures accept delayed redeemers", () => {
+    const rewardAddress = credentialToRewardAddress("Custom", {
+      type: "Script",
+      hash: missingScriptHash,
+    });
+    const poolId =
+      "pool1qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq0l0f7j";
+    const drep = { __typename: "AlwaysAbstain" as const };
+
+    const builders = [
+      makeTxBuilder(lucidConfig).deRegisterStake(
+        rewardAddress,
+        delayedRedeemer,
+      ),
+      makeTxBuilder(lucidConfig).deregister.Stake(
+        rewardAddress,
+        delayedRedeemer,
+      ),
+      makeTxBuilder(lucidConfig).delegateTo(
+        rewardAddress,
+        poolId,
+        delayedRedeemer,
+      ),
+      makeTxBuilder(lucidConfig).delegate.ToPool(
+        rewardAddress,
+        poolId,
+        delayedRedeemer,
+      ),
+      makeTxBuilder(lucidConfig).register.DRep(
+        rewardAddress,
+        undefined,
+        delayedRedeemer,
+      ),
+      makeTxBuilder(lucidConfig).deregister.DRep(
+        rewardAddress,
+        delayedRedeemer,
+      ),
+      makeTxBuilder(lucidConfig).delegate.VoteToDRep(
+        rewardAddress,
+        drep,
+        delayedRedeemer,
+      ),
+      makeTxBuilder(lucidConfig).delegate.VoteToPoolAndDRep(
+        rewardAddress,
+        poolId,
+        drep,
+        delayedRedeemer,
+      ),
+      makeTxBuilder(lucidConfig).registerAndDelegate.ToPool(
+        rewardAddress,
+        poolId,
+        delayedRedeemer,
+      ),
+      makeTxBuilder(lucidConfig).registerAndDelegate.ToDRep(
+        rewardAddress,
+        drep,
+        delayedRedeemer,
+      ),
+      makeTxBuilder(lucidConfig).registerAndDelegate.ToPoolAndDRep(
+        rewardAddress,
+        poolId,
+        drep,
+        delayedRedeemer,
+      ),
+      makeTxBuilder(lucidConfig).updateDRep(
+        rewardAddress,
+        undefined,
+        delayedRedeemer,
+      ),
+      makeTxBuilder(lucidConfig).authCommitteeHot(
+        rewardAddress,
+        rewardAddress,
+        delayedRedeemer,
+      ),
+      makeTxBuilder(lucidConfig).resignCommitteeHot(
+        rewardAddress,
+        undefined,
+        delayedRedeemer,
+      ),
+    ];
+
+    expect(
+      builders.every(
+        (builder) => builder.rawConfig().actions[0]?.hasDelayedRedeemer,
+      ),
+    ).toBe(true);
+  });
+
   test("collectFrom selected redeemer preserves missing spending script error", async () => {
     const scriptAddress = credentialToAddress("Custom", {
       type: "Script",
@@ -121,10 +210,29 @@ describe("delayed redeemer missing script errors", () => {
     );
   });
 
+  test("certificate redeemer preserves missing certificate script error", async () => {
+    const rewardAddress = credentialToRewardAddress("Custom", {
+      type: "Script",
+      hash: missingScriptHash,
+    });
+
+    await expect(
+      replay(
+        makeTxBuilder(lucidConfig).deregister.Stake(
+          rewardAddress,
+          delayedRedeemer,
+        ),
+      ),
+    ).rejects.toThrow(
+      new RegExp(`MISSING_SCRIPT:.*script_hash: ${missingScriptHash}`),
+    );
+  });
+
   test("delayed redeemers still reject native and key witnesses clearly", async () => {
     const native = nativeScript();
     const nativePolicyId = mintingPolicyToId(native);
     const nativeAddress = validatorToAddress("Custom", native);
+    const nativeRewardAddress = validatorToRewardAddress("Custom", native);
     const nativeUtxo = utxoAt(nativeAddress);
     const keyRewardAddress = credentialToRewardAddress("Custom", {
       type: "Key",
@@ -161,6 +269,27 @@ describe("delayed redeemer missing script errors", () => {
       ),
     ).rejects.toThrow(
       /Delayed withdraw redeemer requires a Plutus withdrawal witness/,
+    );
+
+    await expect(
+      replay(
+        makeTxBuilder(lucidConfig).deregister.Stake(
+          keyRewardAddress,
+          delayedRedeemer,
+        ),
+      ),
+    ).rejects.toThrow(
+      /Delayed certificate redeemer requires a Plutus certificate witness/,
+    );
+
+    await expect(
+      replay(
+        makeTxBuilder(lucidConfig)
+          .attach.CertificateValidator(native)
+          .deregister.Stake(nativeRewardAddress, delayedRedeemer),
+      ),
+    ).rejects.toThrow(
+      /Delayed certificate redeemer requires a Plutus certificate witness/,
     );
   });
 });
