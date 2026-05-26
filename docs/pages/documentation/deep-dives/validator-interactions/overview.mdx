@@ -126,6 +126,8 @@ Corresponding transaction operations:
 ```typescript
 .collectFrom(utxos, redeemer)           // Spending UTxOs
 .mintAssets(assets, redeemer)           // Minting tokens
+.registerStake(stakeAddress, redeemer)  // Witnessed stake registration
+.register.Stake(stakeAddress, redeemer) // Witnessed stake registration
 .delegateTo(stakeAddress, poolId, redeemer) // Stake delegation
 .deRegisterStake(stakeAddress, redeemer)    // Stake deregistration
 .withdraw(stakeAddress, rewardAmount, redeemer) // Reward withdrawal

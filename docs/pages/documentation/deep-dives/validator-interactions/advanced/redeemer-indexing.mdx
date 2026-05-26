@@ -47,7 +47,8 @@ obtain redeemer with required input indices.
 ## Context-Dependent Redeemers
 
 For redeemers that need more than input indices, `collectFrom`, `mintAssets`,
-and `withdraw` also accept `BuildTxWithRedeemer`:
+`withdraw`, and certificate operations such as `registerStake` /
+`register.Stake` also accept `BuildTxWithRedeemer`:
 
 ```ts
 const redeemer: BuildTxWithRedeemer = (ctx) => {
@@ -88,6 +89,8 @@ depends circularly on fields it changes, such as fees or execution units, the
 builder stops after eight attempts and reports a convergence error.
 Callbacks should be deterministic and free of side effects because completion
 may invoke them more than once while searching for a fixed point.
+
+Certificate redeemers use the `publish` script purpose in the final context.
 
 ## Redeemer Builder Kinds
 

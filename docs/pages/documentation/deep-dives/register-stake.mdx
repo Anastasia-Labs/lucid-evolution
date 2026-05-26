@@ -15,6 +15,18 @@ When registering a stake key with the Cardano network, a deposit of `2 ADA` is r
 const tx = await lucid.newTx().registerStake(rewardAddress).complete();
 ```
 
+For script stake credentials that require a certificate witness, attach the certificate validator and pass the registration redeemer:
+
+```typescript
+const tx = await lucid
+  .newTx()
+  .attach.CertificateValidator(certificateValidator)
+  .register.Stake(scriptRewardAddress, Data.void())
+  .complete();
+```
+
+Omitting the redeemer uses the witnessless stake-registration certificate. Passing a redeemer uses the witnessed registration certificate and attaches the matching certificate validator.
+
 <Callout>
 Query the reward address (`stake_...`) of the selected wallet:
 
@@ -61,10 +73,10 @@ const tx = await lucid
 ```
 
 <Callout type="info">
-  With updates to on-chain governance model of Cardano, staking rewards are only withdrawable if your wallet
-  is delegated to a DRep (Delegated Representative). For more information about
-  DReps and governance delegation, see the [Governance
-  documentation](/documentation/deep-dives/governance).
+  With updates to on-chain governance model of Cardano, staking rewards are only
+  withdrawable if your wallet is delegated to a DRep (Delegated Representative).
+  For more information about DReps and governance delegation, see the
+  [Governance documentation](/documentation/deep-dives/governance).
 </Callout>
 
 </Steps>

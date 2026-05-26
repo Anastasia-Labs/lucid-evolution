@@ -23,6 +23,19 @@ export const registerStake = Effect.gen(function* () {
   } as const;
 });
 
+export const registerScriptStakeWithRedeemer = Effect.gen(function* () {
+  const { emulator } = yield* EmulatorInstance;
+  const { signBuilder, rewardAddress } =
+    yield* StakeBuilder.registerScriptWithRedeemer;
+  yield* handleSignSubmitWithoutValidation(signBuilder);
+  emulator.awaitBlock(1);
+  const userUTxOs = yield* User.getUtxos;
+  return {
+    rewardAddress,
+    userUTxOs,
+  } as const;
+});
+
 export const deregisterStake = Effect.gen(function* () {
   const { emulator } = yield* EmulatorInstance;
   yield* pipe(

@@ -85,6 +85,8 @@ describe("delayed redeemer missing script errors", () => {
     const drep = { __typename: "AlwaysAbstain" as const };
 
     const builders = [
+      makeTxBuilder(lucidConfig).registerStake(rewardAddress, delayedRedeemer),
+      makeTxBuilder(lucidConfig).register.Stake(rewardAddress, delayedRedeemer),
       makeTxBuilder(lucidConfig).deRegisterStake(
         rewardAddress,
         delayedRedeemer,
@@ -218,6 +220,17 @@ describe("delayed redeemer missing script errors", () => {
 
     await expect(
       replay(
+        makeTxBuilder(lucidConfig).registerStake(
+          rewardAddress,
+          delayedRedeemer,
+        ),
+      ),
+    ).rejects.toThrow(
+      new RegExp(`MISSING_SCRIPT:.*script_hash: ${missingScriptHash}`),
+    );
+
+    await expect(
+      replay(
         makeTxBuilder(lucidConfig).deregister.Stake(
           rewardAddress,
           delayedRedeemer,
@@ -273,10 +286,31 @@ describe("delayed redeemer missing script errors", () => {
 
     await expect(
       replay(
+        makeTxBuilder(lucidConfig).registerStake(
+          keyRewardAddress,
+          delayedRedeemer,
+        ),
+      ),
+    ).rejects.toThrow(
+      /Delayed certificate redeemer requires a Plutus certificate witness/,
+    );
+
+    await expect(
+      replay(
         makeTxBuilder(lucidConfig).deregister.Stake(
           keyRewardAddress,
           delayedRedeemer,
         ),
+      ),
+    ).rejects.toThrow(
+      /Delayed certificate redeemer requires a Plutus certificate witness/,
+    );
+
+    await expect(
+      replay(
+        makeTxBuilder(lucidConfig)
+          .attach.CertificateValidator(native)
+          .registerStake(nativeRewardAddress, delayedRedeemer),
       ),
     ).rejects.toThrow(
       /Delayed certificate redeemer requires a Plutus certificate witness/,

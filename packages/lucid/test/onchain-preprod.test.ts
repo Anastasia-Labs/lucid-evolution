@@ -7,6 +7,7 @@ import {
   User,
   NetworkConfig,
   SimpleStakeContract,
+  SimplePublishStakeContract,
   SimpleMintContract,
   AlwaysYesDrepContract,
 } from "./specs/services.js";
@@ -186,6 +187,17 @@ describe.sequential("Onchain testing", () => {
     const program = pipe(
       StakeEndpoints.registerStake,
       Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("register script stake with redeemer", async () => {
+    const program = pipe(
+      StakeEndpoints.registerScriptStakeWithRedeemer,
+      Effect.provide(User.layer),
+      Effect.provide(SimplePublishStakeContract.layer),
       Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
