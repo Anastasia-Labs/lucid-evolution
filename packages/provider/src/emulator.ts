@@ -708,9 +708,10 @@ export class Emulator implements Provider {
     for (let index = 0; index < (body.certs()?.len() || 0); index++) {
       /*
         Checking only:
-        1. Stake registration
+        1. Witnessless stake registration
         2. Stake deregistration
         3. Stake delegation
+        4. Witnessed stake registration
 
         All other certificate types are not checked and considered valid.
       */
@@ -724,6 +725,24 @@ export class Emulator implements Provider {
           )
             .to_address()
             .to_bech32(undefined);
+          if (this.chain[rewardAddress]?.registeredStake) {
+            throw new Error(
+              `Stake key is already registered. Reward address: ${rewardAddress}`,
+            );
+          }
+          certRequests.push({ type: "Registration", rewardAddress });
+          break;
+        }
+        case CML.CertificateKind.RegCert: {
+          const registration = cert.as_reg_cert()!;
+          const rewardAddress = CML.RewardAddress.new(
+            CML.NetworkInfo.testnet().network_id(),
+            registration.stake_credential(),
+          )
+            .to_address()
+            .to_bech32(undefined);
+          const { stakeCredential } = getAddressDetails(rewardAddress);
+          checkAndConsumeHash(stakeCredential!, "Cert", index);
           if (this.chain[rewardAddress]?.registeredStake) {
             throw new Error(
               `Stake key is already registered. Reward address: ${rewardAddress}`,

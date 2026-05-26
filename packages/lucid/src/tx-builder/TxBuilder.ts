@@ -551,7 +551,10 @@ export type TxBuilder = {
   /**
    * NOTE: Deprecate in future version
    */
-  registerStake: (rewardAddress: RewardAddress) => TxBuilder;
+  registerStake: (
+    rewardAddress: RewardAddress,
+    redeemer?: CertificateRedeemer,
+  ) => TxBuilder;
   /**
    * NOTE: Deprecate in future version
    */
@@ -565,7 +568,10 @@ export type TxBuilder = {
     redeemer?: Redeemer | RedeemerBuilder | BuildTxWithRedeemer,
   ) => TxBuilder;
   register: {
-    Stake: (rewardAddress: RewardAddress) => TxBuilder;
+    Stake: (
+      rewardAddress: RewardAddress,
+      redeemer?: CertificateRedeemer,
+    ) => TxBuilder;
     DRep: (
       rewardAddress: RewardAddress,
       anchor?: Anchor,
@@ -884,16 +890,29 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       config.programs.push(program);
       return txBuilder;
     },
-    registerStake: (rewardAddress: RewardAddress) => {
-      recordCertificateAction(config, "registerStake", () =>
-        Stake.registerStake(rewardAddress),
+    registerStake: (
+      rewardAddress: RewardAddress,
+      redeemer?: CertificateRedeemer,
+    ) => {
+      recordCertificateAction(
+        config,
+        "registerStake",
+        (resolvedRedeemer) =>
+          Stake.registerStake(rewardAddress, resolvedRedeemer),
+        redeemer,
+        rewardAddress,
       );
       return txBuilder;
     },
     register: {
-      Stake: (rewardAddress: RewardAddress) => {
-        recordCertificateAction(config, "register.Stake", () =>
-          Stake.registerStake(rewardAddress),
+      Stake: (rewardAddress: RewardAddress, redeemer?: CertificateRedeemer) => {
+        recordCertificateAction(
+          config,
+          "register.Stake",
+          (resolvedRedeemer) =>
+            Stake.registerStake(rewardAddress, resolvedRedeemer),
+          redeemer,
+          rewardAddress,
         );
         return txBuilder;
       },

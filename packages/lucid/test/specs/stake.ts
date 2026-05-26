@@ -1,14 +1,19 @@
 import { Effect, pipe } from "effect";
-import { NetworkConfig, User } from "./services.js";
-import { handleSignSubmit, withLogRetry } from "./utils.js";
+import { NetworkConfig, SimplePublishStakeContract, User } from "./services.js";
+import {
+  handleSignSubmit,
+  handleSignSubmitWithHash,
+  withLogRetry,
+} from "./utils.js";
 import { Network } from "@lucid-evolution/core-types";
+import { fromText } from "@lucid-evolution/core-utils";
 import {
   scriptFromNative,
   unixTimeToSlot,
   paymentCredentialOf,
   validatorToRewardAddress,
 } from "@lucid-evolution/utils";
-import { Data } from "@lucid-evolution/plutus";
+import { Constr, Data } from "@lucid-evolution/plutus";
 
 const mkSlotRangeStakePolicy = (address: string) => {
   return scriptFromNative({
@@ -21,6 +26,12 @@ const mkSlotRangeStakePolicy = (address: string) => {
     ],
   });
 };
+
+const isStakeNotRegistered = (message: string) =>
+  message.includes("StakeKeyNotRegistered") ||
+  message.includes("StakeKeyNotRegisteredDELEG");
+
+const scriptStakeRegistrationRedeemer = Data.to(new Constr(0, [fromText("1")]));
 
 export const registerStake = Effect.gen(function* ($) {
   const { user } = yield* User;
@@ -203,3 +214,41 @@ export const deRegisterNativeStake = Effect.gen(function* ($) {
     .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
+
+const deregisterScriptStakeWithRedeemerHash = Effect.gen(function* () {
+  const { user } = yield* User;
+  const { stake, rewardAddress } = yield* SimplePublishStakeContract;
+  const signBuilder = yield* user
+    .newTx()
+    .deregister.Stake(rewardAddress, scriptStakeRegistrationRedeemer)
+    .attach.CertificateValidator(stake)
+    .completeProgram();
+  return yield* handleSignSubmitWithHash(signBuilder);
+});
+
+export const registerScriptStakeWithRedeemer = Effect.gen(function* () {
+  const { user } = yield* User;
+  const { stake, rewardAddress } = yield* SimplePublishStakeContract;
+
+  yield* pipe(
+    deregisterScriptStakeWithRedeemerHash,
+    Effect.catchTag("TxSubmitError", (error) =>
+      isStakeNotRegistered(error.message)
+        ? Effect.log("Script stake was not registered before test")
+        : Effect.fail(error),
+    ),
+  );
+
+  const signBuilder = yield* user
+    .newTx()
+    .attach.CertificateValidator(stake)
+    .register.Stake(rewardAddress, scriptStakeRegistrationRedeemer)
+    .completeProgram();
+  const registrationTxHash = yield* handleSignSubmitWithHash(signBuilder);
+  const cleanupTxHash = yield* deregisterScriptStakeWithRedeemerHash;
+  return {
+    rewardAddress,
+    registrationTxHash,
+    cleanupTxHash,
+  };
+}).pipe(withLogRetry, Effect.orDie);

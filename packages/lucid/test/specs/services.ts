@@ -23,8 +23,8 @@ const preprod = Effect.gen(function* ($) {
     Config.string("VITE_BLOCKFROST_API_URL_PREPROD"),
     Config.string("VITE_BLOCKFROST_KEY_PREPROD"),
     Config.string("VITE_WALLET_SEED_2"),
-    Config.string("VITE_KUPO_KEY"),
-    Config.string("VITE_OGMIOS_KEY"),
+    Config.string("VITE_KUPO_KEY").pipe(Config.withDefault("")),
+    Config.string("VITE_OGMIOS_KEY").pipe(Config.withDefault("")),
   ]);
   return {
     BLOCKFROST_API_URL: config[0],
@@ -257,6 +257,40 @@ export class SimpleStakeContract extends Context.Tag("SimpleStakeContract")<
   static readonly layer = Layer.effect(
     SimpleStakeContract,
     makeSimpleStakeService,
+  );
+}
+
+const makeSimplePublishStakeService = Effect.gen(function* () {
+  const networkConfig = yield* NetworkConfig;
+  const stakeCBOR = yield* pipe(
+    Effect.fromNullable(
+      scripts.validators.find(
+        (v) => v.title === "simple_mint.mint_policy.publish",
+      ),
+    ),
+    Effect.andThen((script) => script.compiledCode),
+  );
+  const stake: Script = {
+    type: "PlutusV3",
+    script: applyDoubleCborEncoding(stakeCBOR),
+  };
+  const rewardAddress = validatorToRewardAddress(networkConfig.NETWORK, stake);
+  return {
+    stakeCBOR,
+    stake,
+    rewardAddress,
+  };
+}).pipe(Effect.orDie);
+
+export class SimplePublishStakeContract extends Context.Tag(
+  "SimplePublishStakeContract",
+)<
+  SimplePublishStakeContract,
+  Effect.Effect.Success<typeof makeSimplePublishStakeService>
+>() {
+  static readonly layer = Layer.effect(
+    SimplePublishStakeContract,
+    makeSimplePublishStakeService,
   );
 }
 

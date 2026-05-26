@@ -4,6 +4,7 @@ import { Effect, pipe } from "effect";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import {
+  processCertificate,
   toPartial,
   toV1,
   toV2,
@@ -15,7 +16,10 @@ import { TxConfig } from "./Service.js";
 export const stakeError = (cause: unknown) =>
   new TxBuilderError({ cause: `{ Stake: ${cause} }` });
 
-export const registerStake = (rewardAddress: RewardAddress) =>
+export const registerStake = (
+  rewardAddress: RewardAddress,
+  redeemer?: Redeemer,
+) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
     const addressDetails = yield* pipe(
@@ -42,6 +46,19 @@ export const registerStake = (rewardAddress: RewardAddress) =>
         : CML.Credential.new_script(
             CML.ScriptHash.from_hex(stakeCredential.hash),
           );
+
+    if (redeemer !== undefined) {
+      const buildCert = (credential: CML.Credential) =>
+        CML.SingleCertificateBuilder.new(
+          CML.Certificate.new_reg_cert(
+            credential,
+            config.lucidConfig.protocolParameters.keyDeposit,
+          ),
+        );
+      yield* processCertificate(stakeCredential, config, buildCert, redeemer);
+      return;
+    }
+
     const certBuilder = CML.SingleCertificateBuilder.new(
       CML.Certificate.new_stake_registration(credential),
     );

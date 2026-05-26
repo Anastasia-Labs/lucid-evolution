@@ -10,15 +10,18 @@ import {
   UTxO,
   credentialToRewardAddress,
   makeTxBuilder,
+  scriptFromNative,
   validatorToRewardAddress,
 } from "../src/index.js";
 import { Data } from "@lucid-evolution/plutus";
 import {
   createCostModels,
+  mintingPolicyToId,
   PROTOCOL_PARAMETERS_DEFAULT,
   validatorToAddress,
 } from "@lucid-evolution/utils";
 import { makeTxConfig } from "../src/tx-builder/TxConfig.js";
+import { alwaysSucceedV3Script } from "./fixtures/scripts.js";
 import {
   PendingRedeemer,
   buildCanonicalRedeemerInfo,
@@ -92,6 +95,9 @@ const redeemerExUnits = (value: bigint): CML.ExUnits =>
 
 const redeemerVal = (value: bigint): CML.RedeemerVal =>
   CML.RedeemerVal.new(redeemerData(value), redeemerExUnits(value));
+
+const firstCertificate = (tx: CML.Transaction): CML.Certificate | undefined =>
+  tx.body().certs()?.get(0);
 
 const legacyRedeemer = (
   tag: CML.RedeemerTag,
@@ -562,6 +568,275 @@ describe("context-dependent redeemers internal coverage", () => {
     expect(redeemer.exUnits.steps()).toBe(500_000n);
     expect(evaluateTx).toHaveBeenCalled();
     expect(stableRedeemer).toHaveBeenCalled();
+  });
+
+  test("registerStake with redeemer emits witnessed RegCert and publish redeemer", async () => {
+    const walletInput = makeUtxo("b0");
+    walletInput.assets = { lovelace: 100_000_000n };
+    const scriptRewardAddress = validatorToRewardAddress(
+      "Custom",
+      alwaysSucceedV3Script,
+    );
+    const evaluateTx = vi.fn<Provider["evaluateTx"]>(async () => [
+      {
+        redeemer_tag: "publish",
+        redeemer_index: 0,
+        ex_units: { mem: 600_000, steps: 700_000 },
+      },
+    ]);
+
+    const signBuilder = await makeTxBuilder({
+      ...lucidConfig,
+      provider: makeProvider(evaluateTx),
+      wallet: makeWallet([walletInput]),
+    })
+      .attach.CertificateValidator(alwaysSucceedV3Script)
+      .registerStake(scriptRewardAddress, Data.void())
+      .complete({
+        localUPLCEval: false,
+        presetWalletInputs: [walletInput],
+      });
+
+    const tx = signBuilder.toTransaction();
+    const cert = firstCertificate(tx);
+    expect(cert).toBeDefined();
+    expect(cert!.kind()).toBe(CML.CertificateKind.RegCert);
+    expect(cert!.as_reg_cert()?.deposit()).toBe(
+      lucidConfig.protocolParameters.keyDeposit,
+    );
+
+    const redeemers = tx.witness_set().redeemers();
+    expect(redeemers).toBeDefined();
+    const [redeemer] = canonicalRedeemerEntries(redeemers!);
+    expect(redeemer.tag).toBe("publish");
+    expect(redeemer.index).toBe(0n);
+    expect(redeemer.data.to_canonical_cbor_hex()).toBe(
+      CML.PlutusData.from_cbor_hex(Data.void()).to_canonical_cbor_hex(),
+    );
+    expect(redeemer.exUnits.mem()).toBe(600_000n);
+    expect(redeemer.exUnits.steps()).toBe(700_000n);
+    expect(evaluateTx).toHaveBeenCalled();
+  });
+
+  test("register.Stake with redeemer uses the same witnessed registration path", async () => {
+    const walletInput = makeUtxo("b1");
+    walletInput.assets = { lovelace: 100_000_000n };
+    const scriptRewardAddress = validatorToRewardAddress(
+      "Custom",
+      alwaysSucceedV3Script,
+    );
+    const evaluateTx = vi.fn<Provider["evaluateTx"]>(async () => [
+      {
+        redeemer_tag: "publish",
+        redeemer_index: 0,
+        ex_units: { mem: 610_000, steps: 710_000 },
+      },
+    ]);
+
+    const signBuilder = await makeTxBuilder({
+      ...lucidConfig,
+      provider: makeProvider(evaluateTx),
+      wallet: makeWallet([walletInput]),
+    })
+      .attach.CertificateValidator(alwaysSucceedV3Script)
+      .register.Stake(scriptRewardAddress, Data.void())
+      .complete({
+        localUPLCEval: false,
+        presetWalletInputs: [walletInput],
+      });
+
+    const tx = signBuilder.toTransaction();
+    const cert = firstCertificate(tx);
+    expect(cert).toBeDefined();
+    expect(cert!.kind()).toBe(CML.CertificateKind.RegCert);
+    expect(cert!.as_reg_cert()?.deposit()).toBe(
+      lucidConfig.protocolParameters.keyDeposit,
+    );
+
+    const redeemers = tx.witness_set().redeemers();
+    expect(redeemers).toBeDefined();
+    const [redeemer] = canonicalRedeemerEntries(redeemers!);
+    expect(redeemer.tag).toBe("publish");
+    expect(redeemer.index).toBe(0n);
+    expect(redeemer.exUnits.mem()).toBe(610_000n);
+    expect(redeemer.exUnits.steps()).toBe(710_000n);
+  });
+
+  test("registerStake without redeemer remains witnessless StakeRegistration", async () => {
+    const walletInput = makeUtxo("b2");
+    walletInput.assets = { lovelace: 100_000_000n };
+    const scriptRewardAddress = validatorToRewardAddress(
+      "Custom",
+      alwaysSucceedV3Script,
+    );
+
+    const signBuilder = await makeTxBuilder({
+      ...lucidConfig,
+      wallet: makeWallet([walletInput]),
+    })
+      .registerStake(scriptRewardAddress)
+      .complete({
+        localUPLCEval: false,
+        presetWalletInputs: [walletInput],
+      });
+
+    const tx = signBuilder.toTransaction();
+    const cert = firstCertificate(tx);
+    expect(cert).toBeDefined();
+    expect(cert!.kind()).toBe(CML.CertificateKind.StakeRegistration);
+    expect(cert!.as_stake_registration()).toBeDefined();
+    expect(cert!.as_reg_cert()).toBeUndefined();
+    expect(tx.witness_set().redeemers()).toBeUndefined();
+  });
+
+  test("context-dependent registerStake redeemer can inspect event NFT mint", async () => {
+    const walletInput = makeUtxo("b3");
+    walletInput.assets = { lovelace: 100_000_000n };
+    const scriptRewardAddress = validatorToRewardAddress(
+      "Custom",
+      alwaysSucceedV3Script,
+    );
+    const policyId = mintingPolicyToId(alwaysSucceedV3Script);
+    const eventNft = `${policyId}01`;
+    const mintedAssets = { [eventNft]: 1n };
+    const evaluateTx = vi.fn<Provider["evaluateTx"]>(async () => [
+      {
+        redeemer_tag: "mint",
+        redeemer_index: 0,
+        ex_units: { mem: 500_000, steps: 600_000 },
+      },
+      {
+        redeemer_tag: "publish",
+        redeemer_index: 0,
+        ex_units: { mem: 700_000, steps: 800_000 },
+      },
+    ]);
+    const stableRedeemer = vi.fn<BuildTxWithRedeemer>((ctx) => {
+      expect(ctx.ownPurpose.tag).toBe("publish");
+      expect(ctx.ownPurpose.index).toBe(0n);
+      expect(ctx.mint[eventNft]).toBe(1n);
+      return Data.to(ctx.mint[eventNft] ?? 0n);
+    });
+
+    const signBuilder = await makeTxBuilder({
+      ...lucidConfig,
+      provider: makeProvider(evaluateTx),
+      wallet: makeWallet([walletInput]),
+    })
+      .attach.MintingPolicy(alwaysSucceedV3Script)
+      .attach.CertificateValidator(alwaysSucceedV3Script)
+      .mintAssets(mintedAssets, Data.void())
+      .registerStake(scriptRewardAddress, stableRedeemer)
+      .complete({
+        localUPLCEval: false,
+        presetWalletInputs: [walletInput],
+      });
+
+    const redeemers = signBuilder.toTransaction().witness_set().redeemers();
+    expect(redeemers).toBeDefined();
+    const publishRedeemer = canonicalRedeemerEntries(redeemers!).find(
+      ({ tag }) => tag === "publish",
+    );
+    expect(publishRedeemer).toBeDefined();
+    expect(publishRedeemer!.index).toBe(0n);
+    expect(publishRedeemer!.data.to_canonical_cbor_hex()).toBe(
+      redeemerData(1n).to_canonical_cbor_hex(),
+    );
+    expect(publishRedeemer!.exUnits.mem()).toBe(700_000n);
+    expect(publishRedeemer!.exUnits.steps()).toBe(800_000n);
+    expect(evaluateTx).toHaveBeenCalled();
+    expect(stableRedeemer).toHaveBeenCalled();
+  });
+
+  test("registerStake plain redeemer on key and native credentials emits no Plutus redeemer", async () => {
+    const keyWalletInput = makeUtxo("b4");
+    keyWalletInput.assets = { lovelace: 100_000_000n };
+    const keyRewardAddress = credentialToRewardAddress("Custom", {
+      type: "Key",
+      hash: "33".repeat(28),
+    });
+
+    const keySignBuilder = await makeTxBuilder({
+      ...lucidConfig,
+      wallet: makeWallet([keyWalletInput]),
+    })
+      .registerStake(keyRewardAddress, Data.void())
+      .complete({
+        localUPLCEval: false,
+        presetWalletInputs: [keyWalletInput],
+      });
+
+    const keyTx = keySignBuilder.toTransaction();
+    expect(firstCertificate(keyTx)?.kind()).toBe(CML.CertificateKind.RegCert);
+    expect(firstCertificate(keyTx)?.as_reg_cert()?.deposit()).toBe(
+      lucidConfig.protocolParameters.keyDeposit,
+    );
+    expect(keyTx.witness_set().redeemers()).toBeUndefined();
+
+    const nativeWalletInput = makeUtxo("b5");
+    nativeWalletInput.assets = { lovelace: 100_000_000n };
+    const nativeScript = scriptFromNative({
+      type: "sig",
+      keyHash: "34".repeat(28),
+    });
+    const nativeRewardAddress = validatorToRewardAddress(
+      "Custom",
+      nativeScript,
+    );
+
+    const nativeSignBuilder = await makeTxBuilder({
+      ...lucidConfig,
+      wallet: makeWallet([nativeWalletInput]),
+    })
+      .attach.CertificateValidator(nativeScript)
+      .registerStake(nativeRewardAddress, Data.void())
+      .complete({
+        localUPLCEval: false,
+        presetWalletInputs: [nativeWalletInput],
+      });
+
+    const nativeTx = nativeSignBuilder.toTransaction();
+    expect(firstCertificate(nativeTx)?.kind()).toBe(
+      CML.CertificateKind.RegCert,
+    );
+    expect(firstCertificate(nativeTx)?.as_reg_cert()?.deposit()).toBe(
+      lucidConfig.protocolParameters.keyDeposit,
+    );
+    expect(nativeTx.witness_set().redeemers()).toBeUndefined();
+  });
+
+  test("registerStake redeemer preserves missing script and reward validation errors", async () => {
+    const missingScriptHash = "35".repeat(28);
+    const missingScriptRewardAddress = credentialToRewardAddress("Custom", {
+      type: "Script",
+      hash: missingScriptHash,
+    });
+
+    await expect(
+      makeTxBuilder({
+        ...lucidConfig,
+        wallet: makeWallet([]),
+      })
+        .registerStake(missingScriptRewardAddress, Data.void())
+        .complete({
+          localUPLCEval: false,
+          presetWalletInputs: [],
+        }),
+    ).rejects.toThrow(
+      new RegExp(`MISSING_SCRIPT:.*script_hash: ${missingScriptHash}`),
+    );
+
+    await expect(
+      makeTxBuilder({
+        ...lucidConfig,
+        wallet: makeWallet([]),
+      })
+        .registerStake(address, Data.void())
+        .complete({
+          localUPLCEval: false,
+          presetWalletInputs: [],
+        }),
+    ).rejects.toThrow(/Stake:.*MISSING_REWARD_TYPE/);
   });
 
   test("builder converges context-dependent certificate redeemers with provider evaluation", async () => {

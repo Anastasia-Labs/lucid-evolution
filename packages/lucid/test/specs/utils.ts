@@ -3,6 +3,9 @@ import { TxSignBuilder } from "../../src/index.js";
 import { User } from "./services.js";
 
 export const handleSignSubmit = (signBuilder: TxSignBuilder) =>
+  pipe(handleSignSubmitWithHash(signBuilder), Effect.asVoid);
+
+export const handleSignSubmitWithHash = (signBuilder: TxSignBuilder) =>
   Effect.gen(function* () {
     const { user } = yield* User;
     const signed = yield* signBuilder.sign.withWallet().completeProgram();
@@ -13,6 +16,7 @@ export const handleSignSubmit = (signBuilder: TxSignBuilder) =>
     yield* Effect.logDebug(`✅ Transaction confirmed: ${txHash}`);
     yield* Effect.logDebug("Pausing for 10 seconds...");
     yield* Effect.sleep("10 seconds");
+    return txHash;
   });
 
 export const handleSubmit = (signBuilder: TxSignBuilder) =>

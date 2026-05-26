@@ -101,6 +101,23 @@ describe("Emulator", () => {
       }).pipe(Effect.provide(TestEnvironment)),
   );
 
+  it.effect("should register script stake address with redeemer", () =>
+    Effect.gen(function* () {
+      const { emulator } = yield* EmulatorInstance;
+      const { rewardAddress, userUTxOs } =
+        yield* StakeExecutor.registerScriptStakeWithRedeemer;
+      const [utxo] = userUTxOs;
+      expect(utxo.assets["lovelace"]).toBeLessThan(75_000_000_000n);
+      expect(emulator.chain[rewardAddress]).toEqual({
+        registeredStake: true,
+        delegation: {
+          poolId: null,
+          rewards: 0n,
+        },
+      });
+    }).pipe(Effect.provide(TestEnvironment)),
+  );
+
   it.effect(
     "should deposit funds to Hello contract and verify successful collection",
     () =>
