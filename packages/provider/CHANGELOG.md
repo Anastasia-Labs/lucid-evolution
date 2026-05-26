@@ -1,5 +1,13 @@
 # @lucid-evolution/provider
 
+## 0.1.94
+
+### Patch Changes
+
+- [#693](https://github.com/Anastasia-Labs/lucid-evolution/pull/693) [`92bcf1e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/92bcf1eb91bca2470584f288b60eb171446e17ab) Thanks [@colll78](https://github.com/colll78)! - Add optional certificate redeemer support to `registerStake` and `register.Stake`, using witnessed registration certificates when a redeemer is supplied while preserving the existing witnessless registration path otherwise.
+
+  The emulator now recognizes witnessed stake registration certificates when validating certificate witnesses.
+
 ## 0.1.93
 
 ### Patch Changes
