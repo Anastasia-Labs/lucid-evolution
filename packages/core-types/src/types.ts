@@ -271,6 +271,7 @@ export interface Wallet {
   getUtxosCore(): Promise<Array<CML.TransactionUnspentOutput>>;
   getDelegation(): Promise<Delegation>;
   signTx(tx: CML.Transaction): Promise<CML.TransactionWitnessSet>;
+  signTxs?(txs: CML.Transaction[]): Promise<CML.TransactionWitnessSet[]>;
   signMessage(
     address: Address | RewardAddress,
     payload: Payload,
