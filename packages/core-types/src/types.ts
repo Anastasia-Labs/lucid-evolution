@@ -277,6 +277,7 @@ export interface Wallet {
     payload: Payload,
   ): Promise<SignedMessage>;
   submitTx(signedTx: Transaction): Promise<TxHash>;
+  submitTxs?(signedTxs: Transaction[]): Promise<TxHash[]>;
 }
 
 /** JSON object */

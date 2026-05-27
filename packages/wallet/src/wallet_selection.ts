@@ -41,6 +41,26 @@ const signTxsSequentially = async (
   return witnessSets;
 };
 
+const submitTxsSequentially = async (
+  txs: Transaction[],
+  submitTx: (tx: Transaction) => Promise<TxHash>,
+): Promise<TxHash[]> => {
+  const results: Array<TxHash | unknown> = [];
+  let hasFailure = false;
+  for (const tx of txs) {
+    try {
+      results.push(await submitTx(tx));
+    } catch (error) {
+      results.push(error);
+      hasFailure = true;
+    }
+  }
+  if (hasFailure) {
+    throw results;
+  }
+  return results as TxHash[];
+};
+
 const decodeWitnessSets = (
   witnessSets: string[],
   expectedLength: number,
@@ -51,6 +71,18 @@ const decodeWitnessSets = (
   return witnessSets.map((witnessSet) =>
     CML.TransactionWitnessSet.from_cbor_hex(witnessSet),
   );
+};
+
+const validateTxHashes = (
+  txHashes: TxHash[],
+  expectedLength: number,
+): TxHash[] => {
+  if (txHashes.length !== expectedLength) {
+    throw new Error(
+      "Wallet returned an unexpected number of transaction hashes.",
+    );
+  }
+  return txHashes;
 };
 
 export const makeWalletFromSeed = (
@@ -163,6 +195,8 @@ export const makeWalletFromSeed = (
       return signData(hexAddress, payload, privateKey);
     },
     submitTx: async (tx: Transaction): Promise<TxHash> => provider.submitTx(tx),
+    submitTxs: async (txs: Transaction[]): Promise<TxHash[]> =>
+      submitTxsSequentially(txs, (tx) => provider.submitTx(tx)),
   };
 };
 
@@ -246,6 +280,8 @@ export const makeWalletFromPrivateKey = (
     submitTx: async (tx: Transaction): Promise<TxHash> => {
       return await provider.submitTx(tx);
     },
+    submitTxs: async (txs: Transaction[]): Promise<TxHash[]> =>
+      submitTxsSequentially(txs, (tx) => provider.submitTx(tx)),
   };
 };
 
@@ -338,6 +374,13 @@ export const makeWalletFromAPI = (
       return await api.signData(hexAddress, payload);
     },
     submitTx: async (tx: Transaction): Promise<TxHash> => api.submitTx(tx),
+    submitTxs: async (txs: Transaction[]): Promise<TxHash[]> => {
+      const submitTxs = api.cip103?.submitTxs?.bind(api.cip103);
+      const txHashes = submitTxs
+        ? await submitTxs(txs)
+        : await submitTxsSequentially(txs, (tx) => api.submitTx(tx));
+      return validateTxHashes(txHashes, txs.length);
+    },
   };
 };
 
@@ -394,5 +437,7 @@ export const makeWalletFromAddress = (
       throw new Error("Not implemented");
     },
     submitTx: async (tx: Transaction): Promise<TxHash> => provider.submitTx(tx),
+    submitTxs: async (txs: Transaction[]): Promise<TxHash[]> =>
+      submitTxsSequentially(txs, (tx) => provider.submitTx(tx)),
   };
 };

@@ -18,7 +18,8 @@ export type WalletApi = {
     payload: string,
   ): Promise<{ signature: string; key: string }>;
   cip103?: {
-    signTxs(txs: TransactionSignatureRequest[]): Promise<string[]>;
+    signTxs?(txs: TransactionSignatureRequest[]): Promise<string[]>;
+    submitTxs?(txs: string[]): Promise<string[]>;
   };
   signTxs?(txs: TransactionSignatureRequest[]): Promise<string[]>;
   submitTx(tx: string): Promise<string>;
