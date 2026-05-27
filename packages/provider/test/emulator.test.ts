@@ -19,6 +19,12 @@ describe.sequential("Emulator", () => {
     assert.deepEqual(pp, PROTOCOL_PARAMETERS_DEFAULT);
   });
 
+  test("Get Treasury", async () => {
+    const treasury = 42_000_000n;
+    const localEmulator = new Emulator([EMULATOR_ACCOUNT], undefined, treasury);
+    assert.equal(await localEmulator.getTreasury(), treasury);
+  });
+
   test("Correct Start Balance", async () => {
     const utxos = await emulator.getUtxos(EMULATOR_ACCOUNT.address);
     const lovelace = utxos.reduce(

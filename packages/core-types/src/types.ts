@@ -37,6 +37,8 @@ export interface Provider {
   getUtxoByUnit(unit: Unit): Promise<UTxO>;
   /** Query UTxOs by the output reference (tx hash and index). */
   getUtxosByOutRef(outRefs: Array<OutRef>): Promise<UTxO[]>;
+  /** Query the current treasury amount in lovelace, when supported by the provider. */
+  getTreasury?(): Promise<bigint>;
   getDelegation(rewardAddress: RewardAddress): Promise<Delegation>;
   getDatum(datumHash: DatumHash): Promise<Datum>;
   awaitTx(txHash: TxHash, checkInterval?: number): Promise<boolean>;
@@ -65,6 +67,24 @@ export type EvalRedeemer = {
   };
   redeemer_index: number;
   redeemer_tag: RedeemerTag;
+};
+
+export type EvaluationContext = {
+  network: Network;
+  slotConfig: SlotConfig;
+  protocolParameters: ProtocolParameters;
+  costModels: CML.CostModels;
+};
+
+export type EvaluationInput = {
+  tx: Transaction;
+  additionalUTxOs: UTxO[];
+  context: EvaluationContext;
+};
+
+export type EvaluatorAdapter = {
+  name?: string;
+  evaluate(input: EvaluationInput): Promise<EvalRedeemer[]>;
 };
 
 export type Credential = {

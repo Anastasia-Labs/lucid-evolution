@@ -144,6 +144,19 @@ export const registerPool = (poolParams: PoolParams) =>
     config.txBuilder.add_cert(certBuilder.skip_witness());
   });
 
+export const retirePool = (poolId: PoolId, epoch: bigint) =>
+  Effect.gen(function* () {
+    const { config } = yield* TxConfig;
+    const certBuilder = CML.SingleCertificateBuilder.new(
+      CML.Certificate.new_pool_retirement(
+        CML.Ed25519KeyHash.from_bech32(poolId),
+        epoch,
+      ),
+    );
+
+    config.txBuilder.add_cert(certBuilder.skip_witness());
+  });
+
 const createPoolRegistration = (poolParams: PoolParams, lucid: LucidConfig) =>
   Effect.gen(function* () {
     const poolOwners = CML.Ed25519KeyHashList.new();

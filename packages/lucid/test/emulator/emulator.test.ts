@@ -8,6 +8,7 @@ import * as PayExecutor from "./executor/PayExecutor.js";
 import * as MintExecutor from "./executor/MintExecutor.js";
 import * as HelloExecutor from "./executor/HelloExecutor.js";
 import * as SignExecutor from "./executor/SignExecutor.js";
+import * as GovExecutor from "./executor/GovExecutor.js";
 import { HelloContract } from "../specs/services.js";
 import { Data } from "@lucid-evolution/plutus";
 import { CONSTANTS } from "./Constants.js";
@@ -52,12 +53,19 @@ describe("Emulator", () => {
       }).pipe(Effect.provide(TestEnvironment)),
   );
 
-  //NOTE: This test is failing because the stake address is not being deregistered
-  // TxSubmitError: Error: Extraneous vkey witness. Key hash: 2f1d5aa2f580814c5ce8658c18c0a35be369edcb047d5f7a455b185a
-  it.effect.fails("should register and then deregister stake address", () =>
+  it.effect("should register and then deregister stake address", () =>
     Effect.gen(function* () {
+      const { emulator } = yield* EmulatorInstance;
+      const { rewardAddress } = yield* User;
       yield* StakeExecutor.registerStake;
       yield* StakeExecutor.deregisterStake;
+      expect(emulator.chain[rewardAddress]).toEqual({
+        registeredStake: false,
+        delegation: {
+          poolId: null,
+          rewards: 0n,
+        },
+      });
     }).pipe(Effect.provide(TestEnvironment)),
   );
 
@@ -147,6 +155,29 @@ describe("Emulator", () => {
           rewards: CONSTANTS.REWARD_AMOUNT,
         },
       });
+    }).pipe(Effect.provide(TestEnvironment)),
+  );
+
+  it.effect("should successfully register DRep in emulator", () =>
+    Effect.gen(function* () {
+      const { userUTxOs } = yield* GovExecutor.registerDRep;
+      const [utxo] = userUTxOs;
+      expect(utxo.assets["lovelace"]).toBeLessThan(75_000_000_000n);
+    }).pipe(Effect.provide(TestEnvironment)),
+  );
+
+  it.effect("should successfully delegate vote to always abstain", () =>
+    Effect.gen(function* () {
+      const { userUTxOs } = yield* GovExecutor.delegateVoteToAlwaysAbstain;
+      expect(userUTxOs.length).toBeGreaterThan(0);
+    }).pipe(Effect.provide(TestEnvironment)),
+  );
+
+  it.effect("should successfully register and retire stake pool", () =>
+    Effect.gen(function* () {
+      const { poolId, userUTxOs } = yield* GovExecutor.registerAndRetirePool;
+      expect(poolId.startsWith("pool")).toBe(true);
+      expect(userUTxOs.length).toBeGreaterThan(0);
     }).pipe(Effect.provide(TestEnvironment)),
   );
 

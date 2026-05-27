@@ -1,0 +1,53 @@
+{
+  "name": "@lucid-evolution/scalus-uplc",
+  "version": "0.0.0",
+  "description": "Scalus-backed local UPLC evaluator adapter for Lucid Evolution",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "browser": {
+    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "@anastasia-labs/cardano-multiplatform-lib-browser"
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
+    "lint": "tsc --noEmit",
+    "test": "vitest run",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "keywords": [
+    "cardano",
+    "lucid",
+    "scalus",
+    "uplc",
+    "evaluator"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-3",
+    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-3",
+    "@lucid-evolution/core-types": "workspace:*",
+    "@lucid-evolution/core-utils": "workspace:*",
+    "cbor-x": "^1.6.0",
+    "scalus": "^0.17.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.8",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5",
+    "vitest": "^2.0.4"
+  }
+}

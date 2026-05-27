@@ -12,6 +12,7 @@ import {
   PaymentKeyHash,
   PolicyId,
   PoolId,
+  PoolParams,
   Redeemer,
   RedeemerBuilder,
   RewardAddress,
@@ -33,6 +34,7 @@ import * as Stake from "./internal/Stake.js";
 import * as Pool from "./internal/Pool.js";
 import * as Governance from "./internal/Governance.js";
 import * as Metadata from "./internal/Metadata.js";
+import * as Treasury from "./internal/Treasury.js";
 import * as CompleteTxBuilder from "./internal/CompleteTxBuilder.js";
 import * as TxSignBuilder from "../tx-sign-builder/TxSignBuilder.js";
 import { TransactionError } from "../Errors.js";
@@ -92,6 +94,7 @@ export type TxBuilderConfig = {
   pendingRedeemers: PendingRedeemer[];
   witnessRegistry: Set<string>;
   certificateIndex: bigint;
+  treasuryDonation: Treasury.TreasuryDonation | undefined;
   minFee: bigint | undefined;
 };
 
@@ -167,6 +170,7 @@ export const makeTxBuilderConfig = (
   pendingRedeemers: [],
   witnessRegistry: new Set(),
   certificateIndex: 0n,
+  treasuryDonation: undefined,
   minFee: source?.minFee,
 });
 
@@ -280,6 +284,12 @@ const mintPolicyId = (assets: Assets): PolicyId => {
 const cloneOutputDatum = (
   outputDatum: OutputDatum | undefined,
 ): OutputDatum | undefined => (outputDatum ? { ...outputDatum } : undefined);
+
+const clonePoolParams = (poolParams: PoolParams): PoolParams => ({
+  ...poolParams,
+  owners: [...poolParams.owners],
+  relays: poolParams.relays.map((relay) => ({ ...relay })),
+});
 
 const preserveSelfRedeemerBuilderInputs = (
   redeemer: BuildTxRedeemer | undefined,
@@ -577,6 +587,7 @@ export type TxBuilder = {
       anchor?: Anchor,
       redeemer?: CertificateRedeemer,
     ) => TxBuilder;
+    Pool: (poolParams: PoolParams) => TxBuilder;
   };
   deregister: {
     Stake: (
@@ -588,9 +599,16 @@ export type TxBuilder = {
       redeemer?: CertificateRedeemer,
     ) => TxBuilder;
   };
+  retire: {
+    Pool: (poolId: PoolId, epoch: number | bigint) => TxBuilder;
+  };
   mintAssets: (
     assets: Assets,
     redeemer?: Redeemer | RedeemerBuilder | BuildTxWithRedeemer,
+  ) => TxBuilder;
+  donateToTreasury: (
+    donation: Lovelace,
+    currentTreasuryValue?: Lovelace,
   ) => TxBuilder;
   validFrom: (unixTime: number) => TxBuilder;
   validTo: (unixTime: number) => TxBuilder;
@@ -931,6 +949,25 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         );
         return txBuilder;
       },
+      Pool: (poolParams: PoolParams) => {
+        const snapshot = clonePoolParams(poolParams);
+        recordAction(config, 0, (id, pendingIds) =>
+          makeAction(
+            id,
+            "register.Pool",
+            pendingIds,
+            false,
+            () => () =>
+              withCertificateIndex(
+                Pool.registerPool(clonePoolParams(snapshot)),
+              ),
+          ),
+        );
+        config.programs.push(
+          withCertificateIndex(Pool.registerPool(clonePoolParams(snapshot))),
+        );
+        return txBuilder;
+      },
     },
     deRegisterStake: (
       rewardAddress: RewardAddress,
@@ -966,6 +1003,25 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
             Governance.deregisterDRep(rewardAddress, resolvedRedeemer),
           redeemer,
           rewardAddress,
+        );
+        return txBuilder;
+      },
+    },
+    retire: {
+      Pool: (poolId: PoolId, epoch: number | bigint) => {
+        const epochSnapshot = BigInt(epoch);
+        recordAction(config, 0, (id, pendingIds) =>
+          makeAction(
+            id,
+            "retire.Pool",
+            pendingIds,
+            false,
+            () => () =>
+              withCertificateIndex(Pool.retirePool(poolId, epochSnapshot)),
+          ),
+        );
+        config.programs.push(
+          withCertificateIndex(Pool.retirePool(poolId, epochSnapshot)),
         );
         return txBuilder;
       },
@@ -1038,6 +1094,33 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         return txBuilder;
       }
       handleRedeemerBuilder(config, partialProgram, redeemerSnapshot);
+      return txBuilder;
+    },
+    donateToTreasury: (donation: Lovelace, currentTreasuryValue?: Lovelace) => {
+      const donationSnapshot = BigInt(donation);
+      const currentTreasuryValueSnapshot =
+        currentTreasuryValue === undefined
+          ? undefined
+          : BigInt(currentTreasuryValue);
+      recordAction(config, 0, (id, pendingIds) =>
+        makeAction(
+          id,
+          "donateToTreasury",
+          pendingIds,
+          false,
+          () => () =>
+            Treasury.donateToTreasury(
+              donationSnapshot,
+              currentTreasuryValueSnapshot,
+            ),
+        ),
+      );
+      config.programs.push(
+        Treasury.donateToTreasury(
+          donationSnapshot,
+          currentTreasuryValueSnapshot,
+        ),
+      );
       return txBuilder;
     },
     validFrom: (unixTime: number) => {

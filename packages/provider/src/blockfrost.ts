@@ -72,6 +72,16 @@ export class Blockfrost implements Provider {
     };
   }
 
+  async getTreasury(): Promise<bigint> {
+    const result = await fetch(`${this.url}/network`, {
+      headers: { project_id: this.projectId, lucid },
+    }).then((res) => res.json());
+    if (!result || result.error || result.supply?.treasury === undefined) {
+      throw new Error("Could not fetch treasury amount from Blockfrost.");
+    }
+    return BigInt(result.supply.treasury);
+  }
+
   async getUtxos(addressOrCredential: Address | Credential): Promise<UTxO[]> {
     const queryPredicate = toBlockfrostQueryPredicate(addressOrCredential);
     let result: BlockfrostUtxoResult = [];

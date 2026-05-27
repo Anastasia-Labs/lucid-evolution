@@ -52,7 +52,14 @@ export class TxBuilderError extends Data.TaggedError("TxBuilderError")<{
     return `${this.cause}`;
   }
 }
-export type TransactionError = RunTimeError | TxBuilderError;
+
+export class EvaluatorError extends Data.TaggedError("EvaluatorError")<{
+  readonly evaluator?: string;
+  readonly message: string;
+  readonly cause?: unknown;
+}> {}
+
+export type TransactionError = RunTimeError | TxBuilderError | EvaluatorError;
 
 export class TxSignerError extends Data.TaggedError("TxSignerError")<{
   readonly cause: unknown;

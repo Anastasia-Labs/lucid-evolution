@@ -12,11 +12,16 @@ import {
   Address,
   Assets,
   EvalRedeemer,
+  EvaluationContext,
+  EvaluatorAdapter,
+  Provider,
+  RedeemerTag,
   UTxO,
   Wallet,
 } from "@lucid-evolution/core-types";
 import {
   ERROR_MESSAGE,
+  EvaluatorError,
   RunTimeError,
   TransactionError,
   TxBuilderError,
@@ -33,6 +38,7 @@ import {
   sortUTxOs,
   stringify,
   utxoToCore,
+  fromCMLRedeemerTag,
   utxoToTransactionInput,
   utxoToTransactionOutput,
   toCMLRedeemerTag,
@@ -76,6 +82,13 @@ export type CompleteOptions = {
    * @default true
    */
   localUPLCEval?: boolean;
+
+  /**
+   * Local phase-two evaluator to use when local UPLC evaluation is enabled.
+   * `localUPLCEval: false` forces provider evaluation and bypasses this option.
+   * @default built-in Aiken/WASM-backed evaluator
+   */
+  evaluator?: EvaluatorAdapter;
 
   /**
    * Amount to set as collateral
@@ -122,6 +135,53 @@ type InternalCompleteOptions = {
 
 type ExUnitSetter = Pick<CML.TransactionBuilder, "set_exunits">;
 
+const TREASURY_DONATION_FEE_PADDING_BYTES = 32n;
+
+const hasTreasuryDonation = (config: TxBuilder.TxBuilderConfig): boolean =>
+  config.treasuryDonation !== undefined;
+
+const treasuryDonationFeePadding = (
+  config: TxBuilder.TxBuilderConfig,
+): bigint =>
+  hasTreasuryDonation(config)
+    ? BigInt(config.lucidConfig.protocolParameters.minFeeA) *
+      TREASURY_DONATION_FEE_PADDING_BYTES
+    : 0n;
+
+const feeWithTreasuryPadding = (
+  config: TxBuilder.TxBuilderConfig,
+  fee: bigint,
+): bigint => fee + treasuryDonationFeePadding(config);
+
+const balancingFee = (config: TxBuilder.TxBuilderConfig, fee: bigint): bigint =>
+  feeWithTreasuryPadding(config, fee) +
+  (config.treasuryDonation?.donation ?? 0n);
+
+const makeLinearFee = (config: TxBuilder.TxBuilderConfig): CML.LinearFee => {
+  const protocolParameters = config.lucidConfig.protocolParameters;
+  return CML.LinearFee.new(
+    BigInt(protocolParameters.minFeeA),
+    BigInt(protocolParameters.minFeeB),
+    BigInt(protocolParameters.minFeeRefScriptCostPerByte),
+  );
+};
+
+const makeExUnitPrices = (
+  config: TxBuilder.TxBuilderConfig,
+): CML.ExUnitPrices => {
+  const protocolParameters = config.lucidConfig.protocolParameters;
+  return CML.ExUnitPrices.new(
+    CML.Rational.new(
+      BigInt(protocolParameters.priceMem * 100_000_000),
+      100_000_000n,
+    ),
+    CML.Rational.new(
+      BigInt(protocolParameters.priceStep * 100_000_000),
+      100_000_000n,
+    ),
+  );
+};
+
 const splitBootstrapBudget = (
   total: bigint,
   redeemerCount: number,
@@ -159,6 +219,7 @@ const completeCurrentConfig = (
       coinSelection = true,
       changeAddress = walletAddress,
       localUPLCEval = true,
+      evaluator,
       setCollateral = 5_000_000n,
       canonical = false,
       includeLeftoverLovelaceAsFee = false,
@@ -188,6 +249,7 @@ const completeCurrentConfig = (
       changeAddress,
       coinSelection,
       localUPLCEval,
+      evaluator,
       includeLeftoverLovelaceAsFee,
       false,
       internalOptions.bootstrapExUnits === true,
@@ -199,7 +261,7 @@ const completeCurrentConfig = (
     if (hasPlutusScriptExecutions) {
       const minFee = config.txBuilder.min_fee(true);
       const refScriptFee = yield* calculateMinRefScriptFee(config);
-      let estimatedFee = minFee + refScriptFee;
+      let estimatedFee = feeWithTreasuryPadding(config, minFee + refScriptFee);
 
       const totalCollateral = BigInt(
         Math.ceil(
@@ -222,16 +284,18 @@ const completeCurrentConfig = (
         changeAddress,
         coinSelection,
         localUPLCEval,
+        evaluator,
         includeLeftoverLovelaceAsFee,
         true,
         internalOptions.bootstrapExUnits === true,
       );
     }
+    yield* estimateFee(config, true);
     config.txBuilder.add_change_if_needed(
       CML.Address.from_bech32(changeAddress),
       true,
     );
-    const transaction = yield* Effect.try({
+    const builtTransaction = yield* Effect.try({
       try: () =>
         config.txBuilder
           .build(
@@ -241,6 +305,11 @@ const completeCurrentConfig = (
           .build_unchecked(),
       catch: (error) => completeTxError(error),
     });
+    const transaction = yield* withTreasuryDonationFields(
+      builtTransaction,
+      config,
+    );
+    yield* assertTreasuryDonationFee(transaction, config);
 
     const derivedInputs = deriveInputsFromTransaction(transaction);
 
@@ -372,6 +441,7 @@ export const selectionAndEvaluation = (
   changeAddress: string,
   coinSelection: boolean,
   localUPLCEval: boolean,
+  evaluator: EvaluatorAdapter | undefined,
   includeLeftoverLovelaceAsFee: boolean,
   script_calculation: boolean,
   bootstrapExUnits: boolean = false,
@@ -399,7 +469,12 @@ export const selectionAndEvaluation = (
     // Skip UPLC evaluation for the second time if no new inputs are added
     let estimatedFee = 0n;
     if (_Array.isEmptyArray(inputsToAdd)) {
-      if (script_calculation) return;
+      if (script_calculation) {
+        if (hasTreasuryDonation(config)) {
+          yield* estimateFee(config, script_calculation);
+        }
+        return;
+      }
       estimatedFee += burnable.lovelace;
     }
     if (_Array.isNonEmptyArray(inputsToAdd)) {
@@ -429,6 +504,10 @@ export const selectionAndEvaluation = (
       } else yield* completePartialPrograms();
     }
 
+    if (hasTreasuryDonation(config)) {
+      yield* estimateFee(config, script_calculation);
+    }
+
     // Build transaction to begin with UPLC evaluation
     const txRedeemerBuilder = yield* Effect.try({
       try: () =>
@@ -451,21 +530,13 @@ export const selectionAndEvaluation = (
         );
         return;
       }
-      if (localUPLCEval !== false) {
-        applyUPLCEval(
-          yield* evalTransaction(config, txRedeemerBuilder, walletInputs),
-          config.txBuilder,
-        );
-      } else {
-        applyUPLCEvalProvider(
-          yield* evalTransactionProvider(
-            config,
-            txRedeemerBuilder,
-            walletInputs,
-          ),
-          config.txBuilder,
-        );
-      }
+      yield* evaluateTransaction(
+        config,
+        txRedeemerBuilder,
+        walletInputs,
+        localUPLCEval,
+        evaluator,
+      );
     }
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
@@ -535,39 +606,148 @@ export const completePartialPrograms = () =>
     yield* Effect.all(newPrograms);
   });
 
-export const applyUPLCEval = (
+const lucidRedeemerTags: ReadonlySet<string> = new Set([
+  "spend",
+  "mint",
+  "publish",
+  "withdraw",
+  "vote",
+  "propose",
+]);
+
+const isLucidRedeemerTag = (tag: string): tag is RedeemerTag =>
+  lucidRedeemerTags.has(tag);
+
+const evaluatorError = (message: string, evaluator?: string, cause?: unknown) =>
+  new EvaluatorError({
+    evaluator,
+    message,
+    cause,
+  });
+
+const evaluatorName = (evaluator: EvaluatorAdapter): string =>
+  evaluator.name ?? "custom";
+
+export const decodeLegacyRedeemers = (
   uplcEval: Uint8Array[],
-  txbuilder: CML.TransactionBuilder,
-): void => {
+): EvalRedeemer[] => {
+  const evalRedeemers: EvalRedeemer[] = [];
   for (const bytes of uplcEval) {
     const redeemer = CML.LegacyRedeemer.from_cbor_bytes(bytes);
-    const exUnits = CML.ExUnits.new(
-      redeemer.ex_units().mem(),
-      redeemer.ex_units().steps(),
+    evalRedeemers.push({
+      ex_units: {
+        mem: Number(redeemer.ex_units().mem()),
+        steps: Number(redeemer.ex_units().steps()),
+      },
+      redeemer_index: Number(redeemer.index()),
+      redeemer_tag: fromCMLRedeemerTag(redeemer.tag()),
+    });
+  }
+  return evalRedeemers;
+};
+
+const evalRedeemerKey = (evalRedeemer: EvalRedeemer): string =>
+  `${evalRedeemer.redeemer_tag}:${evalRedeemer.redeemer_index}`;
+
+export const expectedRedeemerKeySet = (redeemers: CML.Redeemers): Set<string> =>
+  new Set(
+    redeemerWitnessKeys(redeemers).map(
+      ({ tag, index }) => `${fromCMLRedeemerTag(tag)}:${index.toString()}`,
+    ),
+  );
+
+const validateEvalRedeemer = (
+  evalRedeemer: EvalRedeemer,
+  evaluator?: string,
+): void => {
+  if (!isLucidRedeemerTag(evalRedeemer.redeemer_tag)) {
+    throw evaluatorError(
+      `Evaluator returned unknown redeemer tag "${evalRedeemer.redeemer_tag}"`,
+      evaluator,
     );
-    txbuilder.set_exunits(
-      CML.RedeemerWitnessKey.new(redeemer.tag(), redeemer.index()),
-      exUnits,
+  }
+  if (
+    !Number.isSafeInteger(evalRedeemer.redeemer_index) ||
+    evalRedeemer.redeemer_index < 0
+  ) {
+    throw evaluatorError(
+      `Evaluator returned invalid redeemer index ${evalRedeemer.redeemer_index}`,
+      evaluator,
+    );
+  }
+  if (
+    !evalRedeemer.ex_units ||
+    !Number.isSafeInteger(evalRedeemer.ex_units.mem) ||
+    evalRedeemer.ex_units.mem < 0 ||
+    !Number.isSafeInteger(evalRedeemer.ex_units.steps) ||
+    evalRedeemer.ex_units.steps < 0
+  ) {
+    throw evaluatorError(
+      `Evaluator returned invalid execution units for ${evalRedeemerKey(evalRedeemer)}`,
+      evaluator,
     );
   }
 };
 
-export const applyUPLCEvalProvider = (
+export const applyEvaluationResult = (
   evalRedeemerList: EvalRedeemer[],
   txbuilder: CML.TransactionBuilder,
+  expectedKeys: Set<string>,
+  evaluator?: string,
 ): void => {
+  if (expectedKeys.size > 0 && evalRedeemerList.length === 0) {
+    throw evaluatorError(
+      `Evaluator returned zero results for ${expectedKeys.size} redeemer(s)`,
+      evaluator,
+    );
+  }
+
+  const seen = new Set<string>();
+  const updates: Array<{
+    key: CML.RedeemerWitnessKey;
+    exUnits: CML.ExUnits;
+  }> = [];
+
   for (const evalRedeemer of evalRedeemerList) {
+    validateEvalRedeemer(evalRedeemer, evaluator);
+    const key = evalRedeemerKey(evalRedeemer);
+    if (seen.has(key)) {
+      throw evaluatorError(
+        `Evaluator returned duplicate result for redeemer ${key}`,
+        evaluator,
+      );
+    }
+    seen.add(key);
+    if (!expectedKeys.has(key)) {
+      throw evaluatorError(
+        `Evaluator returned result for unexpected redeemer ${key}`,
+        evaluator,
+      );
+    }
     const exUnits = CML.ExUnits.new(
       BigInt(evalRedeemer.ex_units.mem),
       BigInt(evalRedeemer.ex_units.steps),
     );
-    txbuilder.set_exunits(
-      CML.RedeemerWitnessKey.new(
+    updates.push({
+      key: CML.RedeemerWitnessKey.new(
         toCMLRedeemerTag(evalRedeemer.redeemer_tag),
         BigInt(evalRedeemer.redeemer_index),
       ),
       exUnits,
-    );
+    });
+  }
+
+  for (const expectedKey of expectedKeys) {
+    if (!seen.has(expectedKey)) {
+      throw evaluatorError(
+        `Evaluator did not return a result for redeemer ${expectedKey}`,
+        evaluator,
+      );
+    }
+  }
+
+  for (const { key, exUnits } of updates) {
+    txbuilder.set_exunits(key, exUnits);
   }
 };
 
@@ -622,6 +802,106 @@ export const applyBootstrapRedeemerExUnits = (
     txbuilder.set_exunits(key, CML.ExUnits.new(exUnits.mem(), exUnits.steps()));
   }
 };
+
+const copyOptionalBodyFields = (
+  source: CML.TransactionBody,
+  target: CML.TransactionBody,
+) => {
+  const ttl = source.ttl();
+  if (ttl !== undefined) target.set_ttl(ttl);
+  const certs = source.certs();
+  if (certs !== undefined) target.set_certs(certs);
+  const withdrawals = source.withdrawals();
+  if (withdrawals !== undefined) target.set_withdrawals(withdrawals);
+  const auxiliaryDataHash = source.auxiliary_data_hash();
+  if (auxiliaryDataHash !== undefined)
+    target.set_auxiliary_data_hash(auxiliaryDataHash);
+  const validityIntervalStart = source.validity_interval_start();
+  if (validityIntervalStart !== undefined)
+    target.set_validity_interval_start(validityIntervalStart);
+  const mint = source.mint();
+  if (mint !== undefined) target.set_mint(mint);
+  const scriptDataHash = source.script_data_hash();
+  if (scriptDataHash !== undefined) target.set_script_data_hash(scriptDataHash);
+  const collateralInputs = source.collateral_inputs();
+  if (collateralInputs !== undefined)
+    target.set_collateral_inputs(collateralInputs);
+  const requiredSigners = source.required_signers();
+  if (requiredSigners !== undefined)
+    target.set_required_signers(requiredSigners);
+  const networkId = source.network_id();
+  if (networkId !== undefined) target.set_network_id(networkId);
+  const collateralReturn = source.collateral_return();
+  if (collateralReturn !== undefined)
+    target.set_collateral_return(collateralReturn);
+  const totalCollateral = source.total_collateral();
+  if (totalCollateral !== undefined)
+    target.set_total_collateral(totalCollateral);
+  const referenceInputs = source.reference_inputs();
+  if (referenceInputs !== undefined)
+    target.set_reference_inputs(referenceInputs);
+  const votingProcedures = source.voting_procedures();
+  if (votingProcedures !== undefined)
+    target.set_voting_procedures(votingProcedures);
+  const proposalProcedures = source.proposal_procedures();
+  if (proposalProcedures !== undefined)
+    target.set_proposal_procedures(proposalProcedures);
+};
+
+const withTreasuryDonationFields = (
+  tx: CML.Transaction,
+  config: TxBuilder.TxBuilderConfig,
+): Effect.Effect<CML.Transaction, TxBuilderError> =>
+  Effect.gen(function* () {
+    const treasuryDonation = config.treasuryDonation;
+    if (!treasuryDonation) return tx;
+
+    const sourceBody = tx.body();
+    const fee = sourceBody.fee();
+    if (fee < treasuryDonation.donation) {
+      yield* completeTxError(
+        `Treasury donation ${treasuryDonation.donation} exceeds the transaction fee field ${fee}; unable to rebalance donation transaction.`,
+      );
+    }
+
+    const targetBody = CML.TransactionBody.new(
+      sourceBody.inputs(),
+      sourceBody.outputs(),
+      fee - treasuryDonation.donation,
+    );
+    copyOptionalBodyFields(sourceBody, targetBody);
+    targetBody.set_current_treasury_value(
+      treasuryDonation.currentTreasuryValue,
+    );
+    targetBody.set_donation(treasuryDonation.donation);
+
+    return CML.Transaction.new(
+      targetBody,
+      tx.witness_set(),
+      tx.is_valid(),
+      tx.auxiliary_data(),
+    );
+  });
+
+const assertTreasuryDonationFee = (
+  tx: CML.Transaction,
+  config: TxBuilder.TxBuilderConfig,
+): Effect.Effect<void, TxBuilderError> =>
+  Effect.gen(function* () {
+    if (!config.treasuryDonation) return;
+    const requiredFee = CML.min_fee(
+      tx,
+      makeLinearFee(config),
+      makeExUnitPrices(config),
+      BigInt(calculateTotalRefScriptSize(config)),
+    );
+    const actualFee = tx.body().fee();
+    if (actualFee < requiredFee) {
+      yield* completeTxError(
+        `Treasury donation transaction fee ${actualFee} is below required minimum fee ${requiredFee}. Try setting a minimum fee of ${requiredFee} lovelaces.`,
+      );
+    }
+  });
 
 export const setRedeemerstoZero = (tx: CML.Transaction): CML.Transaction => {
   const redeemers = tx.witness_set().redeemers();
@@ -804,19 +1084,22 @@ const estimateFee = (
     let estimatedFee = minFee + refScriptFee;
     const customMinFee = config.minFee;
 
+    estimatedFee = customMinFee
+      ? customMinFee > estimatedFee
+        ? customMinFee
+        : estimatedFee
+      : estimatedFee;
+
+    const feeForBalancing = balancingFee(config, estimatedFee);
     if (
       (customMinFee !== undefined && customMinFee > minFee) ||
-      refScriptFee > 0n
+      refScriptFee > 0n ||
+      hasTreasuryDonation(config)
     ) {
-      estimatedFee = customMinFee
-        ? customMinFee > estimatedFee
-          ? customMinFee
-          : estimatedFee
-        : estimatedFee;
-
-      config.txBuilder.set_fee(estimatedFee);
+      config.txBuilder.set_fee(feeForBalancing);
     }
-    return estimatedFee;
+
+    return feeForBalancing;
   });
 
 const resolveEvaluationUTxOs = (
@@ -838,69 +1121,113 @@ const resolveEvaluationUTxOs = (
     return [...inputs, ...referenceInputs].map(normalizeEvalUTxO);
   });
 
-const evalTransactionProvider = (
-  config: TxBuilder.TxBuilderConfig,
-  txRedeemerBuilder: CML.TxRedeemerBuilder,
-  walletInputs: UTxO[],
-): Effect.Effect<EvalRedeemer[], TxBuilderError> =>
-  Effect.gen(function* () {
-    const txEvaluation = setRedeemerstoZero(txRedeemerBuilder.draft_tx())!;
-    const txUtxos = yield* resolveEvaluationUTxOs(
-      txEvaluation,
-      walletInputs,
-      config,
-    );
-    const uplc_eval = yield* Effect.tryPromise({
-      try: () =>
-        config.lucidConfig.provider.evaluateTx(
-          txEvaluation.to_cbor_hex(),
-          txUtxos,
-        ),
-      catch: (error) => completeTxError(error),
-    });
-    return uplc_eval;
-  });
+const makeProviderEvaluator = (provider: Provider): EvaluatorAdapter => ({
+  name: "provider",
+  evaluate: ({ tx, additionalUTxOs }) =>
+    provider.evaluateTx(tx, additionalUTxOs),
+});
 
-const evalTransaction = (
+const makeDefaultAikenEvaluator = (): EvaluatorAdapter => ({
+  name: "aiken",
+  evaluate: async ({ tx, additionalUTxOs, context }) => {
+    const ins = additionalUTxOs.map((utxo) => utxoToTransactionInput(utxo));
+    const outs = additionalUTxOs.map((utxo) => utxoToTransactionOutput(utxo));
+    const uplcEval = UPLC.eval_phase_two_raw(
+      CML.Transaction.from_cbor_hex(tx).to_cbor_bytes(),
+      ins.map((value) => value.to_cbor_bytes()),
+      outs.map((value) => value.to_cbor_bytes()),
+      context.costModels.to_cbor_bytes(),
+      context.protocolParameters.maxTxExSteps,
+      context.protocolParameters.maxTxExMem,
+      BigInt(context.slotConfig.zeroTime),
+      BigInt(context.slotConfig.zeroSlot),
+      context.slotConfig.slotLength,
+    );
+    return decodeLegacyRedeemers(uplcEval);
+  },
+});
+
+const resolveEvaluatorAdapter = (
+  config: TxBuilder.TxBuilderConfig,
+  localUPLCEval: boolean,
+  evaluator: EvaluatorAdapter | undefined,
+): EvaluatorAdapter =>
+  localUPLCEval === false
+    ? makeProviderEvaluator(config.lucidConfig.provider)
+    : (evaluator ??
+      config.lucidConfig.evaluator ??
+      makeDefaultAikenEvaluator());
+
+const makeEvaluationContext = (
+  config: TxBuilder.TxBuilderConfig,
+): EvaluationContext => ({
+  network: config.lucidConfig.network,
+  slotConfig: SLOT_CONFIG_NETWORK[config.lucidConfig.network],
+  protocolParameters: config.lucidConfig.protocolParameters,
+  costModels: config.lucidConfig.costModels,
+});
+
+const evaluatorCauseMessage = (error: unknown): string => {
+  if (isError(error)) return error.message;
+  const serialized = JSON.stringify(error);
+  return typeof serialized === "string"
+    ? serialized.replace(/\\n\s*/g, " ").trim()
+    : String(error);
+};
+
+const wrapEvaluatorCause = (
+  error: unknown,
+  evaluator: string,
+): EvaluatorError =>
+  error instanceof EvaluatorError
+    ? error
+    : evaluatorError(
+        evaluatorCauseMessage(error) || "Evaluator failed",
+        evaluator,
+        error,
+      );
+
+const evaluateTransaction = (
   config: TxBuilder.TxBuilderConfig,
   txRedeemerBuilder: CML.TxRedeemerBuilder,
   walletInputs: UTxO[],
-): Effect.Effect<Uint8Array[], TxBuilderError> =>
+  localUPLCEval: boolean,
+  evaluator: EvaluatorAdapter | undefined,
+): Effect.Effect<void, TxBuilderError | EvaluatorError> =>
   Effect.gen(function* () {
-    const txEvaluation = setRedeemerstoZero(txRedeemerBuilder.draft_tx())!;
+    const adapter = resolveEvaluatorAdapter(config, localUPLCEval, evaluator);
+    const name = evaluatorName(adapter);
+    const txEvaluation = setRedeemerstoZero(
+      yield* withTreasuryDonationFields(txRedeemerBuilder.draft_tx(), config),
+    )!;
+    const redeemers = txEvaluation.witness_set().redeemers();
+    if (!redeemers) return;
+    const expectedKeys = expectedRedeemerKeySet(redeemers);
     const txUtxos = yield* resolveEvaluationUTxOs(
       txEvaluation,
       walletInputs,
       config,
     );
-    const ins = txUtxos.map((utxo) => utxoToTransactionInput(utxo));
-    const outs = txUtxos.map((utxo) => utxoToTransactionOutput(utxo));
-    const slotConfig = SLOT_CONFIG_NETWORK[config.lucidConfig.network];
-    const uplc_eval: Uint8Array[] = yield* Effect.try({
+    const evalRedeemers = yield* Effect.tryPromise({
       try: () =>
-        UPLC.eval_phase_two_raw(
-          txEvaluation.to_cbor_bytes(),
-          ins.map((value) => value.to_cbor_bytes()),
-          outs.map((value) => value.to_cbor_bytes()),
-          config.lucidConfig.costModels.to_cbor_bytes(),
-          config.lucidConfig.protocolParameters.maxTxExSteps,
-          config.lucidConfig.protocolParameters.maxTxExMem,
-          BigInt(slotConfig.zeroTime),
-          BigInt(slotConfig.zeroSlot),
-          slotConfig.slotLength,
-        ),
-      catch: (error) =>
-        completeTxError(
-          `${
-            isError(error)
-              ? error
-              : JSON.stringify(error)
-                  .replace(/\\n\s*/g, " ")
-                  .trim()
-          }`,
-        ),
+        adapter.evaluate({
+          tx: txEvaluation.to_cbor_hex(),
+          additionalUTxOs: txUtxos,
+          context: makeEvaluationContext(config),
+        }),
+      catch: (error) => wrapEvaluatorCause(error, name),
     });
-    return uplc_eval;
+
+    yield* Effect.try({
+      try: () =>
+        applyEvaluationResult(
+          evalRedeemers,
+          config.txBuilder,
+          expectedKeys,
+          name,
+        ),
+      catch: (error) => wrapEvaluatorCause(error, name),
+    });
   });
 
 const calculateMinLovelace = (
@@ -932,18 +1259,7 @@ const calculateMinRefScriptFee = (
 ): Effect.Effect<bigint, TxBuilderError, never> =>
   Effect.gen(function* () {
     let fee = 0n;
-    let totalScriptSize = 0;
-
-    for (const utxo of config.readInputs) {
-      if (utxo.scriptRef) {
-        totalScriptSize = totalScriptSize + utxo.scriptRef.script.length / 2;
-      }
-    }
-    for (const utxo of config.collectedInputs) {
-      if (utxo.scriptRef) {
-        totalScriptSize = totalScriptSize + utxo.scriptRef.script.length / 2;
-      }
-    }
+    let totalScriptSize = calculateTotalRefScriptSize(config);
     if (totalScriptSize === 0) return fee;
 
     const fees = [15.0, 18.0, 21.6, 25.92, 31.1, 37.32, 44.79, 53.75];
@@ -964,6 +1280,23 @@ const calculateMinRefScriptFee = (
     }
     return fee;
   });
+
+const calculateTotalRefScriptSize = (
+  config: TxBuilder.TxBuilderConfig,
+): number => {
+  let totalScriptSize = 0;
+  for (const utxo of config.readInputs) {
+    if (utxo.scriptRef) {
+      totalScriptSize = totalScriptSize + utxo.scriptRef.script.length / 2;
+    }
+  }
+  for (const utxo of config.collectedInputs) {
+    if (utxo.scriptRef) {
+      totalScriptSize = totalScriptSize + utxo.scriptRef.script.length / 2;
+    }
+  }
+  return totalScriptSize;
+};
 
 const deriveInputsFromTransaction = (tx: CML.Transaction): UTxO[] => {
   const outputs = tx.body().outputs();

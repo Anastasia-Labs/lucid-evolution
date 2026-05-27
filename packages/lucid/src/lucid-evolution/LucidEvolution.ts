@@ -1,6 +1,7 @@
 import {
   Credential,
   Delegation,
+  EvaluatorAdapter,
   Network,
   OutRef,
   PrivateKey,
@@ -81,14 +82,20 @@ export type LucidConfig = {
   txbuilderconfig: CML.TransactionBuilderConfig;
   costModels: CML.CostModels;
   protocolParameters: ProtocolParameters;
+  evaluator?: EvaluatorAdapter;
 };
 
-type LucidOptions = {
+export type LucidOptions = {
   /**
    * Predefined protocol parameters to use instead of retrieving them from the provider.
    * If not specified, it will fetch the latest protocol parameters from the provider.
    */
   presetProtocolParameters?: ProtocolParameters;
+  /**
+   * Local phase-two evaluator to use when local UPLC evaluation is enabled.
+   * Defaults to the built-in Aiken/WASM-backed evaluator.
+   */
+  evaluator?: EvaluatorAdapter;
 };
 
 //TODO: turn this to Effect
@@ -114,6 +121,7 @@ export const Lucid = async (
         ? TxConfig.makeTxConfig(protocolParameters, costModels)
         : undefined,
     protocolParameters,
+    evaluator: options.evaluator,
   };
   if (config.provider && "slot" in config.provider) {
     const emulator: Emulator = config.provider as Emulator;
@@ -170,6 +178,7 @@ export const Lucid = async (
           costModels,
           txbuilderconfig,
           protocolParameters,
+          evaluator: config.evaluator,
         });
       }).pipe(Effect.runSync),
     fromTx: (tx: Transaction) =>

@@ -361,6 +361,9 @@ importers:
       '@effect/vitest':
         specifier: ^0.17.3
         version: 0.17.8(effect@3.21.1)(vitest@2.1.9(@types/node@20.17.58)(lightningcss@1.32.0)(tsx@4.19.4)(yaml@2.8.3))
+      '@lucid-evolution/scalus-uplc':
+        specifier: workspace:*
+        version: link:../scalus-uplc
       '@types/node':
         specifier: ^20.17.16
         version: 20.17.58
@@ -443,6 +446,40 @@ importers:
       effect:
         specifier: '>=3.20.0'
         version: 3.21.1
+    devDependencies:
+      '@types/node':
+        specifier: ^20.12.8
+        version: 20.17.58
+      tsup:
+        specifier: ^8.0.2
+        version: 8.5.0(@microsoft/api-extractor@7.52.8(@types/node@20.17.58))(postcss@8.5.10)(tsx@4.19.4)(typescript@5.8.3)(yaml@2.8.3)
+      typescript:
+        specifier: ^5.4.5
+        version: 5.8.3
+      vitest:
+        specifier: ^2.0.4
+        version: 2.1.9(@types/node@20.17.58)(lightningcss@1.32.0)(tsx@4.19.4)(yaml@2.8.3)
+
+  packages/scalus-uplc:
+    dependencies:
+      '@anastasia-labs/cardano-multiplatform-lib-browser':
+        specifier: 6.0.2-3
+        version: 6.0.2-3
+      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
+        specifier: 6.0.2-3
+        version: 6.0.2-3
+      '@lucid-evolution/core-types':
+        specifier: workspace:*
+        version: link:../core-types
+      '@lucid-evolution/core-utils':
+        specifier: workspace:*
+        version: link:../core-utils
+      cbor-x:
+        specifier: ^1.6.0
+        version: 1.6.0
+      scalus:
+        specifier: ^0.17.0
+        version: 0.17.0
     devDependencies:
       '@types/node':
         specifier: ^20.12.8
@@ -5616,6 +5653,9 @@ packages:
 
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
+
+  scalus@0.17.0:
+    resolution: {integrity: sha512-74mD4wL1vw4GVh2ECemQhoB3q5Smwj5S8W7OG1j7OWuLkwJ0Mvz4LFhZPA9rZjpNvanZoKiDqc3S/qGD65uRYg==}
 
   scheduler@0.23.2:
     resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
@@ -12879,6 +12919,8 @@ snapshots:
       is-regex: 1.2.1
 
   safer-buffer@2.1.2: {}
+
+  scalus@0.17.0: {}
 
   scheduler@0.23.2:
     dependencies:
