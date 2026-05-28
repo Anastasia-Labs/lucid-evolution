@@ -109,6 +109,32 @@ export class Kupmios implements Provider {
     return toProtocolParameters(result);
   }
 
+  async getTreasury(): Promise<bigint> {
+    const data = {
+      jsonrpc: "2.0",
+      method: "queryLedgerState/treasuryAndReserves",
+      params: {},
+      id: null,
+    };
+    const schema = Ogmios.JSONRPCResponseSchema(
+      Ogmios.TreasuryAndReservesSchema,
+    );
+    const response = await pipe(
+      HttpUtils.makePostAsJson(
+        this.ogmiosUrl,
+        data,
+        schema,
+        this.headers?.ogmiosHeader,
+      ),
+      Effect.timeout(10_000),
+      Effect.catchAll((cause) => new KupmiosError({ cause })),
+      Effect.provide(FetchHttpClient.layer),
+      Effect.runPromise,
+    );
+    const result = Ogmios.getJSONRPCResult(response);
+    return Ogmios.lovelaceAmountToBigInt(result.treasury.ada.lovelace);
+  }
+
   async getUtxos(addressOrCredential: Address | Credential): Promise<UTxO[]> {
     const isAddress = typeof addressOrCredential === "string";
     const queryPredicate = isAddress

@@ -1,4 +1,9 @@
 // CIP-0030
+export type TransactionSignatureRequest = {
+  cbor: string;
+  partialSign: boolean;
+};
+
 export type WalletApi = {
   getNetworkId(): Promise<number>;
   getUtxos(): Promise<string[] | undefined>;
@@ -12,9 +17,15 @@ export type WalletApi = {
     address: string,
     payload: string,
   ): Promise<{ signature: string; key: string }>;
+  cip103?: {
+    signTxs?(txs: TransactionSignatureRequest[]): Promise<string[]>;
+    submitTxs?(txs: string[]): Promise<string[]>;
+  };
+  signTxs?(txs: TransactionSignatureRequest[]): Promise<string[]>;
   submitTx(tx: string): Promise<string>;
   getCollateral(): Promise<string[]>;
   experimental: {
+    signTxs?(txs: TransactionSignatureRequest[]): Promise<string[]>;
     getCollateral(): Promise<string[]>;
     on(eventName: string, callback: (...args: unknown[]) => void): void;
     off(eventName: string, callback: (...args: unknown[]) => void): void;

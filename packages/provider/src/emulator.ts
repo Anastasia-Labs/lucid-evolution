@@ -91,10 +91,12 @@ export class Emulator implements Provider {
   time: UnixTime;
   protocolParameters: ProtocolParameters;
   datumTable: Record<DatumHash, Datum> = {};
+  treasury: Lovelace;
 
   constructor(
     accounts: EmulatorAccount[],
     protocolParameters: ProtocolParameters = PROTOCOL_PARAMETERS_DEFAULT,
+    treasury: Lovelace = 0n,
   ) {
     const GENESIS_HASH = "00".repeat(32);
     this.blockHeight = 0;
@@ -130,6 +132,7 @@ export class Emulator implements Provider {
       };
     });
     this.protocolParameters = protocolParameters;
+    this.treasury = treasury;
   }
 
   now(): UnixTime {
@@ -186,6 +189,10 @@ export class Emulator implements Provider {
 
   getProtocolParameters(): Promise<ProtocolParameters> {
     return Promise.resolve(this.protocolParameters);
+  }
+
+  getTreasury(): Promise<bigint> {
+    return Promise.resolve(this.treasury);
   }
 
   getDatum(datumHash: DatumHash): Promise<Datum> {
@@ -314,6 +321,27 @@ export class Emulator implements Provider {
       throw new Error(
         `Upper bound (${upperBound}) not in slot range (${this.slot}).`,
       );
+    }
+
+    const currentTreasuryValue = body.current_treasury_value();
+    const treasuryDonation = body.donation();
+    if (
+      (currentTreasuryValue === undefined && treasuryDonation !== undefined) ||
+      (currentTreasuryValue !== undefined && treasuryDonation === undefined)
+    ) {
+      throw new Error(
+        "Treasury donation transactions must include both current treasury value and donation.",
+      );
+    }
+    if (treasuryDonation !== undefined) {
+      if (treasuryDonation <= 0n) {
+        throw new Error("Treasury donation must be greater than 0 lovelace.");
+      }
+      if (currentTreasuryValue !== this.treasury) {
+        throw new Error(
+          `Current treasury value (${currentTreasuryValue}) does not match emulator treasury (${this.treasury}).`,
+        );
+      }
     }
 
     // Datums in witness set
@@ -705,15 +733,33 @@ export class Emulator implements Provider {
       poolId?: PoolId;
     }[] = [];
 
+    const credentialToCore = (credential: CML.Credential): Credential =>
+      credential.kind() === 0
+        ? { type: "Key", hash: credential.as_pub_key()!.to_hex() }
+        : { type: "Script", hash: credential.as_script()!.to_hex() };
+
+    const checkCertCredential = (
+      credential: CML.Credential | undefined,
+      index: number,
+    ) => {
+      if (!credential) return;
+      checkAndConsumeHash(credentialToCore(credential), "Cert", index);
+    };
+
+    const rewardAddressFromCredential = (credential: CML.Credential) =>
+      CML.RewardAddress.new(CML.NetworkInfo.testnet().network_id(), credential)
+        .to_address()
+        .to_bech32(undefined);
+
     for (let index = 0; index < (body.certs()?.len() || 0); index++) {
       /*
-        Checking only:
+        Checking state transitions for:
         1. Witnessless stake registration
         2. Stake deregistration
         3. Stake delegation
         4. Witnessed stake registration
 
-        All other certificate types are not checked and considered valid.
+        Other certificate types consume their witnesses and are considered valid.
       */
       const cert = body.certs()!.get(index);
       switch (cert.kind()) {
@@ -799,6 +845,176 @@ export class Emulator implements Provider {
           certRequests.push({ type: "Delegation", rewardAddress, poolId });
           break;
         }
+        case CML.CertificateKind.PoolRegistration: {
+          const poolParams = cert.as_pool_registration()?.pool_params();
+          if (!poolParams) break;
+          checkAndConsumeHash(
+            { type: "Key", hash: poolParams.operator().to_hex() },
+            "Cert",
+            index,
+          );
+          const owners = poolParams.pool_owners();
+          for (let ownerIndex = 0; ownerIndex < owners.len(); ownerIndex++) {
+            checkAndConsumeHash(
+              { type: "Key", hash: owners.get(ownerIndex).to_hex() },
+              "Cert",
+              index,
+            );
+          }
+          break;
+        }
+        case CML.CertificateKind.PoolRetirement: {
+          const pool = cert.as_pool_retirement()?.pool();
+          if (pool) {
+            checkAndConsumeHash(
+              { type: "Key", hash: pool.to_hex() },
+              "Cert",
+              index,
+            );
+          }
+          break;
+        }
+        case CML.CertificateKind.UnregCert: {
+          const deregistration = cert.as_unreg_cert()?.stake_credential();
+          checkCertCredential(deregistration, index);
+          if (deregistration) {
+            const rewardAddress = rewardAddressFromCredential(deregistration);
+            if (!this.chain[rewardAddress]?.registeredStake) {
+              throw new Error(
+                `Stake key is already deregistered. Reward address: ${rewardAddress}`,
+              );
+            }
+            certRequests.push({ type: "Deregistration", rewardAddress });
+          }
+          break;
+        }
+        case CML.CertificateKind.VoteDelegCert: {
+          const credential = cert.as_vote_deleg_cert()?.stake_credential();
+          checkCertCredential(credential, index);
+          if (credential) {
+            const rewardAddress = rewardAddressFromCredential(credential);
+            if (
+              !this.chain[rewardAddress]?.registeredStake &&
+              !certRequests.find(
+                (request) =>
+                  request.type === "Registration" &&
+                  request.rewardAddress === rewardAddress,
+              )
+            ) {
+              throw new Error(
+                `Stake key is not registered. Reward address: ${rewardAddress}`,
+              );
+            }
+          }
+          break;
+        }
+        case CML.CertificateKind.StakeVoteDelegCert: {
+          const delegation = cert.as_stake_vote_deleg_cert();
+          const credential = delegation?.stake_credential();
+          checkCertCredential(credential, index);
+          if (delegation && credential) {
+            const rewardAddress = rewardAddressFromCredential(credential);
+            const poolId = delegation.pool().to_bech32("pool");
+            if (
+              !this.chain[rewardAddress]?.registeredStake &&
+              !certRequests.find(
+                (request) =>
+                  request.type === "Registration" &&
+                  request.rewardAddress === rewardAddress,
+              )
+            ) {
+              throw new Error(
+                `Stake key is not registered. Reward address: ${rewardAddress}`,
+              );
+            }
+            certRequests.push({ type: "Delegation", rewardAddress, poolId });
+          }
+          break;
+        }
+        case CML.CertificateKind.StakeRegDelegCert: {
+          const registration = cert.as_stake_reg_deleg_cert();
+          const credential = registration?.stake_credential();
+          checkCertCredential(credential, index);
+          if (registration && credential) {
+            const rewardAddress = rewardAddressFromCredential(credential);
+            const poolId = registration.pool().to_bech32("pool");
+            if (this.chain[rewardAddress]?.registeredStake) {
+              throw new Error(
+                `Stake key is already registered. Reward address: ${rewardAddress}`,
+              );
+            }
+            certRequests.push({ type: "Registration", rewardAddress });
+            certRequests.push({ type: "Delegation", rewardAddress, poolId });
+          }
+          break;
+        }
+        case CML.CertificateKind.VoteRegDelegCert: {
+          const registration = cert.as_vote_reg_deleg_cert();
+          const credential = registration?.stake_credential();
+          checkCertCredential(credential, index);
+          if (credential) {
+            const rewardAddress = rewardAddressFromCredential(credential);
+            if (this.chain[rewardAddress]?.registeredStake) {
+              throw new Error(
+                `Stake key is already registered. Reward address: ${rewardAddress}`,
+              );
+            }
+            certRequests.push({ type: "Registration", rewardAddress });
+          }
+          break;
+        }
+        case CML.CertificateKind.StakeVoteRegDelegCert: {
+          const registration = cert.as_stake_vote_reg_deleg_cert();
+          const credential = registration?.stake_credential();
+          checkCertCredential(credential, index);
+          if (registration && credential) {
+            const rewardAddress = rewardAddressFromCredential(credential);
+            const poolId = registration.pool().to_bech32("pool");
+            if (this.chain[rewardAddress]?.registeredStake) {
+              throw new Error(
+                `Stake key is already registered. Reward address: ${rewardAddress}`,
+              );
+            }
+            certRequests.push({ type: "Registration", rewardAddress });
+            certRequests.push({ type: "Delegation", rewardAddress, poolId });
+          }
+          break;
+        }
+        case CML.CertificateKind.AuthCommitteeHotCert: {
+          checkCertCredential(
+            cert.as_auth_committee_hot_cert()?.committee_cold_credential(),
+            index,
+          );
+          break;
+        }
+        case CML.CertificateKind.ResignCommitteeColdCert: {
+          checkCertCredential(
+            cert.as_resign_committee_cold_cert()?.committee_cold_credential(),
+            index,
+          );
+          break;
+        }
+        case CML.CertificateKind.RegDrepCert: {
+          checkCertCredential(
+            cert.as_reg_drep_cert()?.drep_credential(),
+            index,
+          );
+          break;
+        }
+        case CML.CertificateKind.UnregDrepCert: {
+          checkCertCredential(
+            cert.as_unreg_drep_cert()?.drep_credential(),
+            index,
+          );
+          break;
+        }
+        case CML.CertificateKind.UpdateDrepCert: {
+          checkCertCredential(
+            cert.as_update_drep_cert()?.drep_credential(),
+            index,
+          );
+          break;
+        }
       }
     }
 
@@ -881,6 +1097,10 @@ export class Emulator implements Provider {
     withdrawalRequests.forEach(({ rewardAddress, withdrawal }) => {
       this.chain[rewardAddress].delegation.rewards -= withdrawal;
     });
+
+    if (treasuryDonation !== undefined) {
+      this.treasury += treasuryDonation;
+    }
 
     certRequests.forEach(({ type, rewardAddress, poolId }) => {
       switch (type) {

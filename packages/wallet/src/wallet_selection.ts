@@ -10,6 +10,7 @@ import {
   SignedMessage,
   Transaction,
   TxHash,
+  TransactionSignatureRequest,
   UTxO,
   Wallet,
   WalletApi,
@@ -27,6 +28,61 @@ import { discoverOwnUsedTxKeyHashes, walletFromSeed } from "./wallet.js";
 
 type Config = {
   overriddenUTxOs: UTxO[];
+};
+
+const signTxsSequentially = async (
+  txs: CML.Transaction[],
+  signTx: (tx: CML.Transaction) => Promise<CML.TransactionWitnessSet>,
+): Promise<CML.TransactionWitnessSet[]> => {
+  const witnessSets: CML.TransactionWitnessSet[] = [];
+  for (const tx of txs) {
+    witnessSets.push(await signTx(tx));
+  }
+  return witnessSets;
+};
+
+const submitTxsSequentially = async (
+  txs: Transaction[],
+  submitTx: (tx: Transaction) => Promise<TxHash>,
+): Promise<TxHash[]> => {
+  const results: Array<TxHash | unknown> = [];
+  let hasFailure = false;
+  for (const tx of txs) {
+    try {
+      results.push(await submitTx(tx));
+    } catch (error) {
+      results.push(error);
+      hasFailure = true;
+    }
+  }
+  if (hasFailure) {
+    throw results;
+  }
+  return results as TxHash[];
+};
+
+const decodeWitnessSets = (
+  witnessSets: string[],
+  expectedLength: number,
+): CML.TransactionWitnessSet[] => {
+  if (witnessSets.length !== expectedLength) {
+    throw new Error("Wallet returned an unexpected number of witness sets.");
+  }
+  return witnessSets.map((witnessSet) =>
+    CML.TransactionWitnessSet.from_cbor_hex(witnessSet),
+  );
+};
+
+const validateTxHashes = (
+  txHashes: TxHash[],
+  expectedLength: number,
+): TxHash[] => {
+  if (txHashes.length !== expectedLength) {
+    throw new Error(
+      "Wallet returned an unexpected number of transaction hashes.",
+    );
+  }
+  return txHashes;
 };
 
 export const makeWalletFromSeed = (
@@ -64,6 +120,30 @@ export const makeWalletFromSeed = (
     [paymentKeyHash]: paymentKey,
     [stakeKeyHash]: stakeKey,
   };
+  const signTx = async (
+    tx: CML.Transaction,
+  ): Promise<CML.TransactionWitnessSet> => {
+    const utxos =
+      config.overriddenUTxOs.length > 0
+        ? config.overriddenUTxOs
+        : await provider.getUtxos(address);
+
+    const ownKeyHashes: Array<KeyHash> = [paymentKeyHash, stakeKeyHash];
+
+    const usedKeyHashes = discoverOwnUsedTxKeyHashes(tx, ownKeyHashes, utxos);
+
+    const txWitnessSetBuilder = CML.TransactionWitnessSetBuilder.new();
+    for (const keyHash of usedKeyHashes) {
+      const priv = CML.PrivateKey.from_bech32(privKeyHashMap[keyHash]!);
+      const witness = CML.make_vkey_witness(
+        CML.hash_transaction(tx.body()),
+        priv,
+      );
+      txWitnessSetBuilder.add_vkey(witness);
+    }
+
+    return txWitnessSetBuilder.build();
+  };
   return {
     overrideUTxOs: (utxos: UTxO[]) => (config.overriddenUTxOs = utxos),
     address: async (): Promise<Address> => address,
@@ -89,28 +169,11 @@ export const makeWalletFromSeed = (
         ? await provider.getDelegation(rewardAddress)
         : { poolId: null, rewards: 0n };
     },
-    signTx: async (tx: CML.Transaction): Promise<CML.TransactionWitnessSet> => {
-      const utxos =
-        config.overriddenUTxOs.length > 0
-          ? config.overriddenUTxOs
-          : await provider.getUtxos(address);
-
-      const ownKeyHashes: Array<KeyHash> = [paymentKeyHash, stakeKeyHash];
-
-      const usedKeyHashes = discoverOwnUsedTxKeyHashes(tx, ownKeyHashes, utxos);
-
-      const txWitnessSetBuilder = CML.TransactionWitnessSetBuilder.new();
-      for (const keyHash of usedKeyHashes) {
-        const priv = CML.PrivateKey.from_bech32(privKeyHashMap[keyHash]!);
-        const witness = CML.make_vkey_witness(
-          CML.hash_transaction(tx.body()),
-          priv,
-        );
-        txWitnessSetBuilder.add_vkey(witness);
-      }
-
-      return txWitnessSetBuilder.build();
-    },
+    signTx,
+    signTxs: async (
+      txs: CML.Transaction[],
+    ): Promise<CML.TransactionWitnessSet[]> =>
+      signTxsSequentially(txs, signTx),
     signMessage: async (
       address: Address | RewardAddress,
       payload: Payload,
@@ -132,6 +195,8 @@ export const makeWalletFromSeed = (
       return signData(hexAddress, payload, privateKey);
     },
     submitTx: async (tx: Transaction): Promise<TxHash> => provider.submitTx(tx),
+    submitTxs: async (txs: Transaction[]): Promise<TxHash[]> =>
+      submitTxsSequentially(txs, (tx) => provider.submitTx(tx)),
   };
 };
 
@@ -154,6 +219,17 @@ export const makeWalletFromPrivateKey = (
     .to_bech32(undefined);
   const config: Config = {
     overriddenUTxOs: [],
+  };
+  const signTx = async (
+    tx: CML.Transaction,
+  ): Promise<CML.TransactionWitnessSet> => {
+    const witness = CML.make_vkey_witness(
+      CML.hash_transaction(tx.body()),
+      priv,
+    );
+    const txWitnessSetBuilder = CML.TransactionWitnessSetBuilder.new();
+    txWitnessSetBuilder.add_vkey(witness);
+    return txWitnessSetBuilder.build();
   };
 
   return {
@@ -178,15 +254,11 @@ export const makeWalletFromPrivateKey = (
     getDelegation: async (): Promise<Delegation> => {
       return { poolId: null, rewards: 0n };
     },
-    signTx: async (tx: CML.Transaction): Promise<CML.TransactionWitnessSet> => {
-      const witness = CML.make_vkey_witness(
-        CML.hash_transaction(tx.body()),
-        priv,
-      );
-      const txWitnessSetBuilder = CML.TransactionWitnessSetBuilder.new();
-      txWitnessSetBuilder.add_vkey(witness);
-      return txWitnessSetBuilder.build();
-    },
+    signTx,
+    signTxs: async (
+      txs: CML.Transaction[],
+    ): Promise<CML.TransactionWitnessSet[]> =>
+      signTxsSequentially(txs, signTx),
     signMessage: async (
       address: Address | RewardAddress,
       payload: Payload,
@@ -208,6 +280,8 @@ export const makeWalletFromPrivateKey = (
     submitTx: async (tx: Transaction): Promise<TxHash> => {
       return await provider.submitTx(tx);
     },
+    submitTxs: async (txs: Transaction[]): Promise<TxHash[]> =>
+      submitTxsSequentially(txs, (tx) => provider.submitTx(tx)),
   };
 };
 
@@ -272,6 +346,26 @@ export const makeWalletFromAPI = (
       const witnessSet = await api.signTx(toHex(tx.to_cbor_bytes()), true);
       return CML.TransactionWitnessSet.from_cbor_hex(witnessSet);
     },
+    signTxs: async (
+      txs: CML.Transaction[],
+    ): Promise<CML.TransactionWitnessSet[]> => {
+      const cbors = txs.map((tx) => toHex(tx.to_cbor_bytes()));
+      const requests: TransactionSignatureRequest[] = cbors.map((cbor) => ({
+        cbor,
+        partialSign: true,
+      }));
+      const signTxs =
+        api.cip103?.signTxs?.bind(api.cip103) ??
+        api.experimental?.signTxs?.bind(api.experimental) ??
+        api.signTxs?.bind(api);
+      const witnessSets = signTxs ? await signTxs(requests) : [];
+      if (!signTxs) {
+        for (const cbor of cbors) {
+          witnessSets.push(await api.signTx(cbor, true));
+        }
+      }
+      return decodeWitnessSets(witnessSets, txs.length);
+    },
     signMessage: async (
       address: Address | RewardAddress,
       payload: Payload,
@@ -280,6 +374,13 @@ export const makeWalletFromAPI = (
       return await api.signData(hexAddress, payload);
     },
     submitTx: async (tx: Transaction): Promise<TxHash> => api.submitTx(tx),
+    submitTxs: async (txs: Transaction[]): Promise<TxHash[]> => {
+      const submitTxs = api.cip103?.submitTxs?.bind(api.cip103);
+      const txHashes = submitTxs
+        ? await submitTxs(txs)
+        : await submitTxsSequentially(txs, (tx) => api.submitTx(tx));
+      return validateTxHashes(txHashes, txs.length);
+    },
   };
 };
 
@@ -324,6 +425,11 @@ export const makeWalletFromAddress = (
     ): Promise<CML.TransactionWitnessSet> => {
       throw new Error("Not implemented");
     },
+    signTxs: async (
+      _txs: CML.Transaction[],
+    ): Promise<CML.TransactionWitnessSet[]> => {
+      throw new Error("Not implemented");
+    },
     signMessage: async (
       _address: Address | RewardAddress,
       _payload: Payload,
@@ -331,5 +437,7 @@ export const makeWalletFromAddress = (
       throw new Error("Not implemented");
     },
     submitTx: async (tx: Transaction): Promise<TxHash> => provider.submitTx(tx),
+    submitTxs: async (txs: Transaction[]): Promise<TxHash[]> =>
+      submitTxsSequentially(txs, (tx) => provider.submitTx(tx)),
   };
 };

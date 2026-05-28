@@ -15,7 +15,7 @@ import {
   toV3,
   validateAddressDetails,
 } from "./TxUtils.js";
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { LucidConfig } from "../../lucid-evolution/LucidEvolution.js";
 import { fromText } from "@lucid-evolution/core-utils";
 import { TxConfig } from "./Service.js";
@@ -139,6 +139,19 @@ export const registerPool = (poolParams: PoolParams) =>
     );
     const certBuilder = CML.SingleCertificateBuilder.new(
       CML.Certificate.new_pool_registration(poolRegistration.pool_params()),
+    );
+
+    config.txBuilder.add_cert(certBuilder.skip_witness());
+  });
+
+export const retirePool = (poolId: PoolId, epoch: bigint) =>
+  Effect.gen(function* () {
+    const { config } = yield* TxConfig;
+    const certBuilder = CML.SingleCertificateBuilder.new(
+      CML.Certificate.new_pool_retirement(
+        CML.Ed25519KeyHash.from_bech32(poolId),
+        epoch,
+      ),
     );
 
     config.txBuilder.add_cert(certBuilder.skip_witness());

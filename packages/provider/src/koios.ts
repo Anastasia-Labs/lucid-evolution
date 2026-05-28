@@ -107,6 +107,28 @@ export class Koios implements Provider {
     };
   }
 
+  async getTreasury(): Promise<bigint> {
+    const url = `${this.baseUrl}/totals?order=epoch_no.desc&limit=1`;
+    const schema = S.Array(_Koios.TotalsSchema);
+    const bearerToken = this.token
+      ? { Authorization: `Bearer ${this.token}` }
+      : undefined;
+    const [result] = await pipe(
+      HttpUtils.makeGet(url, schema, bearerToken),
+      Effect.provide(FetchHttpClient.layer),
+      Effect.flatMap((result) =>
+        result.length === 0
+          ? Effect.fail("No totals found")
+          : Effect.succeed(result),
+      ),
+      Effect.timeout(10_000),
+      Effect.catchAllCause((cause) => new KoiosError({ cause })),
+      Effect.runPromise,
+    );
+
+    return BigInt(result.treasury);
+  }
+
   async getUtxos(addressOrCredential: Address | Credential): Promise<UTxO[]> {
     const bearerToken = this.token
       ? { Authorization: `Bearer ${this.token}` }

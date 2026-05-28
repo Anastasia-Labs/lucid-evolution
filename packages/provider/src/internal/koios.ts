@@ -68,6 +68,12 @@ export const ProtocolParametersSchema = S.Struct({
 export interface ProtocolParameters
   extends S.Schema.Type<typeof ProtocolParametersSchema> {}
 
+export const TotalsSchema = S.Struct({
+  treasury: S.String,
+});
+
+export interface Totals extends S.Schema.Type<typeof TotalsSchema> {}
+
 export const AssetSchema = S.Struct({
   policy_id: S.String,
   asset_name: S.NullOr(S.String),

@@ -87,6 +87,12 @@ export class Maestro implements Provider {
     };
   }
 
+  async getTreasury(): Promise<bigint> {
+    throw new Error(
+      "Maestro does not expose a current treasury query. Pass currentTreasuryValue explicitly to donateToTreasury.",
+    );
+  }
+
   private async getUtxosInternal(
     addressOrCredential: Address | Credential,
     unit?: Unit,

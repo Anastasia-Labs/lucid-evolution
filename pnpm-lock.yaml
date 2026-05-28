@@ -141,12 +141,12 @@ importers:
 
   packages/core-types:
     dependencies:
-      '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: 6.0.2-3
-        version: 6.0.2-3
-      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: 6.0.2-3
-        version: 6.0.2-3
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: 6.2.0
+        version: 6.2.0
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: 6.2.0
+        version: 6.2.0
     devDependencies:
       '@types/node':
         specifier: ^20.12.8
@@ -160,12 +160,12 @@ importers:
 
   packages/core-utils:
     dependencies:
-      '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: 6.0.2-3
-        version: 6.0.2-3
-      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: 6.0.2-3
-        version: 6.0.2-3
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: 6.2.0
+        version: 6.2.0
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: 6.2.0
+        version: 6.2.0
     devDependencies:
       '@types/node':
         specifier: ^20.12.8
@@ -318,12 +318,12 @@ importers:
 
   packages/lucid:
     dependencies:
-      '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: 6.0.2-3
-        version: 6.0.2-3
-      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: 6.0.2-3
-        version: 6.0.2-3
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: 6.2.0
+        version: 6.2.0
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: 6.2.0
+        version: 6.2.0
       '@effect/schema':
         specifier: ^0.66.16
         version: 0.66.16(effect@3.21.1)(fast-check@3.23.2)
@@ -345,6 +345,9 @@ importers:
       '@lucid-evolution/sign_data':
         specifier: workspace:*
         version: link:../sign_data
+      '@lucid-evolution/tx-graph':
+        specifier: workspace:*
+        version: link:../tx-graph
       '@lucid-evolution/uplc':
         specifier: workspace:*
         version: link:../uplc
@@ -361,6 +364,9 @@ importers:
       '@effect/vitest':
         specifier: ^0.17.3
         version: 0.17.8(effect@3.21.1)(vitest@2.1.9(@types/node@20.17.58)(lightningcss@1.32.0)(tsx@4.19.4)(yaml@2.8.3))
+      '@lucid-evolution/scalus-uplc':
+        specifier: workspace:*
+        version: link:../scalus-uplc
       '@types/node':
         specifier: ^20.17.16
         version: 20.17.58
@@ -385,12 +391,12 @@ importers:
 
   packages/plutus:
     dependencies:
-      '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: 6.0.2-3
-        version: 6.0.2-3
-      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: 6.0.2-3
-        version: 6.0.2-3
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: 6.2.0
+        version: 6.2.0
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: 6.2.0
+        version: 6.2.0
       '@lucid-evolution/core-types':
         specifier: workspace:*
         version: link:../core-types
@@ -416,12 +422,12 @@ importers:
 
   packages/provider:
     dependencies:
-      '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: 6.0.2-3
-        version: 6.0.2-3
-      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: 6.0.2-3
-        version: 6.0.2-3
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: 6.2.0
+        version: 6.2.0
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: 6.2.0
+        version: 6.2.0
       '@effect/platform':
         specifier: ^0.71.3
         version: 0.71.7(effect@3.21.1)
@@ -457,14 +463,48 @@ importers:
         specifier: ^2.0.4
         version: 2.1.9(@types/node@20.17.58)(lightningcss@1.32.0)(tsx@4.19.4)(yaml@2.8.3)
 
+  packages/scalus-uplc:
+    dependencies:
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: 6.2.0
+        version: 6.2.0
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: 6.2.0
+        version: 6.2.0
+      '@lucid-evolution/core-types':
+        specifier: workspace:*
+        version: link:../core-types
+      '@lucid-evolution/core-utils':
+        specifier: workspace:*
+        version: link:../core-utils
+      cbor-x:
+        specifier: ^1.6.0
+        version: 1.6.0
+      scalus:
+        specifier: ^0.17.0
+        version: 0.17.0
+    devDependencies:
+      '@types/node':
+        specifier: ^20.12.8
+        version: 20.17.58
+      tsup:
+        specifier: ^8.0.2
+        version: 8.5.0(@microsoft/api-extractor@7.52.8(@types/node@20.17.58))(postcss@8.5.10)(tsx@4.19.4)(typescript@5.8.3)(yaml@2.8.3)
+      typescript:
+        specifier: ^5.4.5
+        version: 5.8.3
+      vitest:
+        specifier: ^2.0.4
+        version: 2.1.9(@types/node@20.17.58)(lightningcss@1.32.0)(tsx@4.19.4)(yaml@2.8.3)
+
   packages/sign_data:
     dependencies:
-      '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: 6.0.2-3
-        version: 6.0.2-3
-      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: 6.0.2-3
-        version: 6.0.2-3
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: 6.2.0
+        version: 6.2.0
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: 6.2.0
+        version: 6.2.0
       '@emurgo/cardano-message-signing-browser':
         specifier: ^1.0.1
         version: 1.1.0
@@ -488,21 +528,55 @@ importers:
         specifier: ^5.4.5
         version: 5.8.3
 
+  packages/tx-graph:
+    dependencies:
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: 6.2.0
+        version: 6.2.0
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: 6.2.0
+        version: 6.2.0
+      '@lucid-evolution/core-types':
+        specifier: workspace:*
+        version: link:../core-types
+      '@lucid-evolution/core-utils':
+        specifier: workspace:*
+        version: link:../core-utils
+      '@lucid-evolution/utils':
+        specifier: workspace:*
+        version: link:../utils
+    devDependencies:
+      '@lucid-evolution/provider':
+        specifier: workspace:*
+        version: link:../provider
+      '@types/node':
+        specifier: ^20.12.8
+        version: 20.17.58
+      tsup:
+        specifier: ^8.0.2
+        version: 8.5.0(@microsoft/api-extractor@7.52.8(@types/node@20.17.58))(postcss@8.5.10)(tsx@4.19.4)(typescript@5.8.3)(yaml@2.8.3)
+      typescript:
+        specifier: ^5.4.5
+        version: 5.8.3
+      vitest:
+        specifier: ^2.0.4
+        version: 2.1.9(@types/node@20.17.58)(lightningcss@1.32.0)(tsx@4.19.4)(yaml@2.8.3)
+
   packages/typescript-config: {}
 
   packages/uplc: {}
 
   packages/utils:
     dependencies:
-      '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: 6.0.2-3
-        version: 6.0.2-3
-      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: 6.0.2-3
-        version: 6.0.2-3
       '@cardano-sdk/core':
         specifier: ^0.46.10
-        version: 0.46.10
+        version: 0.46.10(@dcspark/cardano-multiplatform-lib-browser@6.2.0)(@dcspark/cardano-multiplatform-lib-nodejs@6.2.0)
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: 6.2.0
+        version: 6.2.0
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: 6.2.0
+        version: 6.2.0
       '@effect/schema':
         specifier: ^0.68.16
         version: 0.68.27(effect@3.21.1)
@@ -552,12 +626,12 @@ importers:
 
   packages/wallet:
     dependencies:
-      '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: 6.0.2-3
-        version: 6.0.2-3
-      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: 6.0.2-3
-        version: 6.0.2-3
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: 6.2.0
+        version: 6.2.0
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: 6.2.0
+        version: 6.2.0
       '@lucid-evolution/core-types':
         specifier: workspace:*
         version: link:../core-types
@@ -1254,6 +1328,12 @@ packages:
 
   '@chevrotain/utils@12.0.0':
     resolution: {integrity: sha512-lB59uJoaGIfOOL9knQqQRfhl9g7x8/wqFkp13zTdkRu1huG9kg6IJs1O8hqj9rs6h7orGxHJUKb+mX3rPbWGhA==}
+
+  '@dcspark/cardano-multiplatform-lib-browser@6.2.0':
+    resolution: {integrity: sha512-qNBV0M7qcWD2l/wy0fhwo9u0aekPCFhQ1Lvu093mKuMrqGGrCfKCyGFnU7g1d/Wx55WmRXRJ8yvDH+J+5y6nsA==}
+
+  '@dcspark/cardano-multiplatform-lib-nodejs@6.2.0':
+    resolution: {integrity: sha512-D4swEw9rkMySB3uCZlZgTKBZwfc/lkvPNLJI9ZYfUzXCstA8Vk2e77I4WbSw4Vkyt1qgEUDTs9+DT6hMGBlMhw==}
 
   '@effect/cluster@0.38.8':
     resolution: {integrity: sha512-Wn7tK7jMqHqnBqWcf1ARV2WbzfIjHBzFVOeLeDi/9e58+Asc8XQulD2z2rq3x0tn37foyauAYFOIsgVYOLO4nQ==}
@@ -5617,6 +5697,9 @@ packages:
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
 
+  scalus@0.17.0:
+    resolution: {integrity: sha512-74mD4wL1vw4GVh2ECemQhoB3q5Smwj5S8W7OG1j7OWuLkwJ0Mvz4LFhZPA9rZjpNvanZoKiDqc3S/qGD65uRYg==}
+
   scheduler@0.23.2:
     resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
 
@@ -6286,6 +6369,7 @@ packages:
 
   uuid@10.0.0:
     resolution: {integrity: sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==}
+    deprecated: uuid@10 and below is no longer supported.  For ESM codebases, update to uuid@latest.  For CommonJS codebases, use uuid@11 (but be aware this version will likely be deprecated in 2028).
     hasBin: true
 
   uuid@11.1.0:
@@ -7297,12 +7381,12 @@ snapshots:
 
   '@cardano-ogmios/schema@6.9.0': {}
 
-  '@cardano-sdk/core@0.46.10':
+  '@cardano-sdk/core@0.46.10(@dcspark/cardano-multiplatform-lib-browser@6.2.0)(@dcspark/cardano-multiplatform-lib-nodejs@6.2.0)':
     dependencies:
       '@biglup/is-cid': 1.0.3
       '@cardano-ogmios/client': 6.9.0
       '@cardano-ogmios/schema': 6.9.0
-      '@cardano-sdk/crypto': 0.4.4
+      '@cardano-sdk/crypto': 0.4.4(@dcspark/cardano-multiplatform-lib-browser@6.2.0)(@dcspark/cardano-multiplatform-lib-nodejs@6.2.0)
       '@cardano-sdk/util': 0.17.1
       '@foxglove/crc': 0.0.3
       '@scure/base': 1.2.6
@@ -7320,7 +7404,7 @@ snapshots:
       - encoding
       - utf-8-validate
 
-  '@cardano-sdk/crypto@0.4.4':
+  '@cardano-sdk/crypto@0.4.4(@dcspark/cardano-multiplatform-lib-browser@6.2.0)(@dcspark/cardano-multiplatform-lib-nodejs@6.2.0)':
     dependencies:
       '@cardano-sdk/util': 0.17.1
       blake2b: 2.1.4
@@ -7330,6 +7414,9 @@ snapshots:
       pbkdf2: 3.1.3
       ts-custom-error: 3.3.1
       ts-log: 2.2.7
+    optionalDependencies:
+      '@dcspark/cardano-multiplatform-lib-browser': 6.2.0
+      '@dcspark/cardano-multiplatform-lib-nodejs': 6.2.0
 
   '@cardano-sdk/util@0.17.1':
     dependencies:
@@ -7538,6 +7625,10 @@ snapshots:
   '@chevrotain/types@12.0.0': {}
 
   '@chevrotain/utils@12.0.0': {}
+
+  '@dcspark/cardano-multiplatform-lib-browser@6.2.0': {}
+
+  '@dcspark/cardano-multiplatform-lib-nodejs@6.2.0': {}
 
   '@effect/cluster@0.38.8(@effect/platform@0.84.8(effect@3.21.1))(@effect/rpc@0.61.8(@effect/platform@0.84.8(effect@3.21.1))(effect@3.21.1))(@effect/sql@0.37.9(@effect/experimental@0.48.9(@effect/platform@0.84.8(effect@3.21.1))(effect@3.21.1))(@effect/platform@0.84.8(effect@3.21.1))(effect@3.21.1))(@effect/workflow@0.1.6(@effect/platform@0.84.8(effect@3.21.1))(@effect/rpc@0.61.8(@effect/platform@0.84.8(effect@3.21.1))(effect@3.21.1))(effect@3.21.1))(effect@3.21.1)':
     dependencies:
@@ -12879,6 +12970,8 @@ snapshots:
       is-regex: 1.2.1
 
   safer-buffer@2.1.2: {}
+
+  scalus@0.17.0: {}
 
   scheduler@0.23.2:
     dependencies:

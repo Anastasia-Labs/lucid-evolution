@@ -51,11 +51,11 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "browser": {
-    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "@anastasia-labs/cardano-multiplatform-lib-browser"
+    "@dcspark/cardano-multiplatform-lib-nodejs": "@dcspark/cardano-multiplatform-lib-browser"
   },
   "dependencies": {
-    "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-3",
-    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-3",
+    "@dcspark/cardano-multiplatform-lib-browser": "6.2.0",
+    "@dcspark/cardano-multiplatform-lib-nodejs": "6.2.0",
     "@effect/schema": "^0.66.16",
     "@emurgo/cardano-message-signing-nodejs": "^1.1.0",
     "@lucid-evolution/core-types": "workspace:*",
@@ -63,6 +63,7 @@
     "@lucid-evolution/plutus": "workspace:*",
     "@lucid-evolution/provider": "workspace:*",
     "@lucid-evolution/sign_data": "workspace:*",
+    "@lucid-evolution/tx-graph": "workspace:*",
     "@lucid-evolution/uplc": "workspace:*",
     "@lucid-evolution/utils": "workspace:*",
     "@lucid-evolution/wallet": "workspace:*",
@@ -70,6 +71,7 @@
   },
   "devDependencies": {
     "@effect/vitest": "^0.17.3",
+    "@lucid-evolution/scalus-uplc": "workspace:*",
     "@types/node": "^20.17.16",
     "esbuild-plugin-wasm": "^1.1.0",
     "tsup": "^8.3.6",

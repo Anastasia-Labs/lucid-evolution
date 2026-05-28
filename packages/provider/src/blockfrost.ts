@@ -24,6 +24,18 @@ import {
 import packageJson from "../package.json" with { type: "json" };
 import * as _Blockfrost from "./internal/blockfrost.js";
 
+const toBlockfrostQueryPredicate = (
+  addressOrCredential: Address | Credential,
+): string => {
+  if (typeof addressOrCredential === "string") return addressOrCredential;
+  if (addressOrCredential.type === "Key") {
+    return CML.Ed25519KeyHash.from_hex(addressOrCredential.hash).to_bech32(
+      "addr_vkh",
+    );
+  }
+  return CML.ScriptHash.from_hex(addressOrCredential.hash).to_bech32("script");
+};
+
 export class Blockfrost implements Provider {
   url: string;
   projectId: string;
@@ -60,19 +72,18 @@ export class Blockfrost implements Provider {
     };
   }
 
+  async getTreasury(): Promise<bigint> {
+    const result = await fetch(`${this.url}/network`, {
+      headers: { project_id: this.projectId, lucid },
+    }).then((res) => res.json());
+    if (!result || result.error || result.supply?.treasury === undefined) {
+      throw new Error("Could not fetch treasury amount from Blockfrost.");
+    }
+    return BigInt(result.supply.treasury);
+  }
+
   async getUtxos(addressOrCredential: Address | Credential): Promise<UTxO[]> {
-    const queryPredicate = (() => {
-      if (typeof addressOrCredential === "string") return addressOrCredential;
-      const credentialBech32 =
-        addressOrCredential.type === "Key"
-          ? CML.Ed25519KeyHash.from_hex(addressOrCredential.hash).to_bech32(
-              "addr_vkh",
-            )
-          : CML.ScriptHash.from_hex(addressOrCredential.hash).to_bech32(
-              "addr_vkh",
-            ); // should be 'script' (CIP-0005)
-      return credentialBech32;
-    })();
+    const queryPredicate = toBlockfrostQueryPredicate(addressOrCredential);
     let result: BlockfrostUtxoResult = [];
     let page = 1;
     while (true) {
@@ -100,18 +111,7 @@ export class Blockfrost implements Provider {
     addressOrCredential: Address | Credential,
     unit: Unit,
   ): Promise<UTxO[]> {
-    const queryPredicate = (() => {
-      if (typeof addressOrCredential === "string") return addressOrCredential;
-      const credentialBech32 =
-        addressOrCredential.type === "Key"
-          ? CML.Ed25519KeyHash.from_hex(addressOrCredential.hash).to_bech32(
-              "addr_vkh",
-            )
-          : CML.ScriptHash.from_hex(addressOrCredential.hash).to_bech32(
-              "addr_vkh",
-            ); // should be 'script' (CIP-0005)
-      return credentialBech32;
-    })();
+    const queryPredicate = toBlockfrostQueryPredicate(addressOrCredential);
     let result: BlockfrostUtxoResult = [];
     let page = 1;
     while (true) {

@@ -59,6 +59,37 @@ const LovelaceAsset = S.Struct({
   lovelace: S.Number,
 });
 
+const LovelaceAmount = S.Union(S.Number, S.String, S.BigInt);
+
+export const TreasuryAndReservesSchema = S.Struct({
+  treasury: S.Struct({
+    ada: S.Struct({
+      lovelace: LovelaceAmount,
+    }),
+  }),
+  reserves: S.Struct({
+    ada: S.Struct({
+      lovelace: LovelaceAmount,
+    }),
+  }),
+});
+
+export interface TreasuryAndReserves
+  extends S.Schema.Type<typeof TreasuryAndReservesSchema> {}
+
+export const lovelaceAmountToBigInt = (
+  lovelace: string | number | bigint,
+): bigint => {
+  if (typeof lovelace === "bigint") return lovelace;
+  if (typeof lovelace === "string") return BigInt(lovelace);
+  if (!Number.isSafeInteger(lovelace)) {
+    throw new Error(
+      `Cannot decode Ogmios lovelace amount ${lovelace}; number is outside the safe integer range.`,
+    );
+  }
+  return BigInt(lovelace);
+};
+
 const TupleNumberFromString = S.compose(
   S.split("/"),
   S.Array(S.NumberFromString),
