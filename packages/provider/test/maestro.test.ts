@@ -4,12 +4,19 @@ import { Config, Effect } from "effect";
 import { Maestro } from "../src/index.js";
 import * as PreprodConstants from "./preprod-constants.js";
 
-export const maestro = await Effect.gen(function* () {
-  const MAESTRO_KEY = yield* Config.string("VITE_MAESTRO_KEY_PREPROD");
-  return new Maestro({ network: "Preprod", apiKey: MAESTRO_KEY });
-}).pipe(Effect.runPromise);
+const hasMaestroKey = Boolean(process.env.VITE_MAESTRO_KEY_PREPROD?.trim());
 
-describe("maestro", async () => {
+export let maestro: Maestro;
+if (hasMaestroKey) {
+  maestro = await Effect.gen(function* () {
+    const MAESTRO_KEY = yield* Config.string("VITE_MAESTRO_KEY_PREPROD");
+    return new Maestro({ network: "Preprod", apiKey: MAESTRO_KEY });
+  }).pipe(Effect.runPromise);
+}
+
+const describeMaestro = hasMaestroKey ? describe : describe.skip;
+
+describeMaestro("maestro", async () => {
   test("getProtocolParameters", async () => {
     const pp: ProtocolParameters = await maestro.getProtocolParameters();
     assert(pp);

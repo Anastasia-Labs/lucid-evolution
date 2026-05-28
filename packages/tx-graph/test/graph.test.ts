@@ -198,7 +198,7 @@ describe("createTxGraph", () => {
     expect(graph.toMermaid()).toContain("genesis UTxO");
     expect(graph.toMermaid()).toContain("classDef genesis");
     expect(graph.toMermaid()).not.toContain("unresolved:");
-    expect(graph.toDot()).toContain('fillcolor="#fef3c7"');
+    expect(graph.toDot()).toContain('BGCOLOR="#fef3c7"');
   });
 
   test("keeps preloaded all-zero hash inputs as genesis with known assets", async () => {
@@ -299,7 +299,7 @@ describe("createTxGraph", () => {
     ).toEqual([]);
   });
 
-  test("exposes DOT and Mermaid renderers from the graph API", async () => {
+  test("exposes DOT, Mermaid, SVG, and HTML renderers from the graph API", async () => {
     const seedRef = ref("62", 0);
     const tx = makeTx([seedRef], [2_000_000n]);
     const graph = createTxGraph({
@@ -314,6 +314,10 @@ describe("createTxGraph", () => {
     expect(graph.toDot()).toContain("ADA");
     expect(graph.toMermaid()).toContain("render-me");
     expect(graph.toMermaid()).toContain("ADA");
+    expect(graph.toSvg()).toContain("render-me");
+    expect(graph.toSvg()).toContain("ADA");
+    expect(graph.toHtml()).toContain("render-me");
+    expect(graph.toHtml()).toContain("txg-search");
   });
 
   test("supports user resolvers, recordCbor, and failed status metadata", async () => {

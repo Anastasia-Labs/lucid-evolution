@@ -24,10 +24,17 @@ import {
   type TxGraphUtxoResolver,
 } from "./resolve.js";
 import { traceToDot, type TraceToDotOptions } from "./render/dot.js";
+import { traceToHtml, type TraceToHtmlOptions } from "./render/html.js";
 import {
   traceToMermaid,
   type TraceToMermaidOptions,
 } from "./render/mermaid.js";
+import { traceToSvg, type TraceToSvgOptions } from "./render/svg.js";
+import {
+  buildSemanticRenderGraph,
+  type SemanticRenderGraph,
+  type SemanticRenderOptions,
+} from "./render/semantic.js";
 import {
   wrapProvider as wrapTxGraphProvider,
   type TxGraphProviderWrapperOptions,
@@ -66,8 +73,11 @@ export type TxGraph = {
     options?: TxGraphProviderWrapperOptions,
   ) => Provider;
   toJSON: () => TxGraphTrace;
+  toSemantic: (options?: SemanticRenderOptions) => SemanticRenderGraph;
   toDot: (options?: TraceToDotOptions) => string;
+  toHtml: (options?: TraceToHtmlOptions) => string;
   toMermaid: (options?: TraceToMermaidOptions) => string;
+  toSvg: (options?: TraceToSvgOptions) => string;
 };
 
 export const createTxGraph = (options: CreateTxGraphOptions = {}): TxGraph => {
@@ -144,9 +154,13 @@ export const createTxGraph = (options: CreateTxGraphOptions = {}): TxGraph => {
       };
       return jsonClone(trace);
     },
+    toSemantic: (renderOptions = {}) =>
+      buildSemanticRenderGraph(graph.toJSON(), renderOptions),
     toDot: (renderOptions = {}) => traceToDot(graph.toJSON(), renderOptions),
+    toHtml: (renderOptions = {}) => traceToHtml(graph.toJSON(), renderOptions),
     toMermaid: (renderOptions = {}) =>
       traceToMermaid(graph.toJSON(), renderOptions),
+    toSvg: (renderOptions = {}) => traceToSvg(graph.toJSON(), renderOptions),
   };
 
   const rebuildTrace = async (): Promise<void> => {
