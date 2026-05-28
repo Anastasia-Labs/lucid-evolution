@@ -172,8 +172,7 @@ export const makeWalletFromSeed = (
     signTx,
     signTxs: async (
       txs: CML.Transaction[],
-    ): Promise<CML.TransactionWitnessSet[]> =>
-      signTxsSequentially(txs, signTx),
+    ): Promise<CML.TransactionWitnessSet[]> => signTxsSequentially(txs, signTx),
     signMessage: async (
       address: Address | RewardAddress,
       payload: Payload,
@@ -257,8 +256,7 @@ export const makeWalletFromPrivateKey = (
     signTx,
     signTxs: async (
       txs: CML.Transaction[],
-    ): Promise<CML.TransactionWitnessSet[]> =>
-      signTxsSequentially(txs, signTx),
+    ): Promise<CML.TransactionWitnessSet[]> => signTxsSequentially(txs, signTx),
     signMessage: async (
       address: Address | RewardAddress,
       payload: Payload,

@@ -1,9 +1,5 @@
 import type { TxGraphTrace } from "../model.js";
-import {
-  buildRenderGraph,
-  edgeStyle,
-  type RenderNode,
-} from "./common.js";
+import { buildRenderGraph, edgeStyle, type RenderNode } from "./common.js";
 
 export type TraceToDotOptions = {
   readonly graphName?: string;

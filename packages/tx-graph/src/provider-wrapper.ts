@@ -101,7 +101,9 @@ const recordSubmitted = async (
   try {
     await graph.record(tx, { label, status: "submitted" });
   } catch (error) {
-    graph.addWarning(traceRecordWarning("trace-submit-record-error", txHash, error));
+    graph.addWarning(
+      traceRecordWarning("trace-submit-record-error", txHash, error),
+    );
   }
 };
 
@@ -118,7 +120,9 @@ const recordEvaluation = async (
       evaluation: evaluation.map(traceEvaluationRedeemer),
     });
   } catch (error) {
-    graph.addWarning(traceRecordWarning("trace-evaluate-record-error", undefined, error));
+    graph.addWarning(
+      traceRecordWarning("trace-evaluate-record-error", undefined, error),
+    );
   }
 };
 

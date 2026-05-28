@@ -1,16 +1,10 @@
 import { describe, expect, test } from "vitest";
-import {
-  Emulator,
-  generateEmulatorAccount,
-} from "@lucid-evolution/provider";
+import { Emulator, generateEmulatorAccount } from "@lucid-evolution/provider";
 import { CML } from "../src/core.js";
 import { createTxGraph } from "../src/graph.js";
 import { outRefKey } from "../src/resolve.js";
 
-const makeInput = (
-  txHash: string,
-  outputIndex: number,
-): CML.TransactionInput =>
+const makeInput = (txHash: string, outputIndex: number): CML.TransactionInput =>
   CML.TransactionInput.new(
     CML.TransactionHash.from_hex(txHash),
     BigInt(outputIndex),

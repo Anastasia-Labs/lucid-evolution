@@ -110,7 +110,9 @@ export const utxoNodeId = (outRef: TraceOutRef): string =>
   `utxo:${outRefKey(outRef)}`;
 
 export const shortHash = (value: string, size = 8): string =>
-  value.length <= size * 2 ? value : `${value.slice(0, size)}...${value.slice(-size)}`;
+  value.length <= size * 2
+    ? value
+    : `${value.slice(0, size)}...${value.slice(-size)}`;
 
 export const assetName = (unit: string, trace: TxGraphTrace): string => {
   const alias = trace.aliases.assets[unit];
@@ -130,7 +132,9 @@ export const formatAssets = (
   const units = Object.keys(assets).sort(assetUnitSort);
   const maxAssets = options.maxAssets ?? 4;
   const visible = units.slice(0, maxAssets);
-  const rendered = visible.map((unit) => `${assets[unit]} ${assetName(unit, trace)}`);
+  const rendered = visible.map(
+    (unit) => `${assets[unit]} ${assetName(unit, trace)}`,
+  );
   if (units.length > visible.length) {
     rendered.push(`+${units.length - visible.length} more`);
   }

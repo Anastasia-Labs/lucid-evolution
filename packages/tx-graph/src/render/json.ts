@@ -23,5 +23,4 @@ const sortRecord = (record: Record<string, string>): Record<string, string> =>
     Object.entries(record).sort(([left], [right]) => left.localeCompare(right)),
   );
 
-const jsonClone = <T>(value: T): T =>
-  JSON.parse(JSON.stringify(value)) as T;
+const jsonClone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;

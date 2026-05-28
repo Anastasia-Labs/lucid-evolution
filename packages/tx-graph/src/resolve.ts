@@ -23,9 +23,7 @@ export type TxGraphResolutionProvider = Pick<Provider, "getUtxosByOutRef">;
 
 export type TxGraphUtxoResolver = (
   outRefs: TraceOutRef[],
-) =>
-  | Promise<ReadonlyArray<UTxO | TraceUtxo>>
-  | ReadonlyArray<UTxO | TraceUtxo>;
+) => Promise<ReadonlyArray<UTxO | TraceUtxo>> | ReadonlyArray<UTxO | TraceUtxo>;
 
 export type TxGraphResolutionSource =
   | "scenario-cache"
@@ -70,9 +68,7 @@ export const createResolutionCache = (): TxGraphResolutionCache => {
     }
   };
 
-  const addResolvedUtxos = (
-    utxos: ReadonlyArray<UTxO | TraceUtxo>,
-  ): void => {
+  const addResolvedUtxos = (utxos: ReadonlyArray<UTxO | TraceUtxo>): void => {
     for (const utxo of utxos) {
       const traceUtxo = normalizeResolvedUtxo(utxo);
       knownUtxos.set(outRefKey(traceUtxo), traceUtxo);
@@ -113,8 +109,7 @@ export const parseOutRefKey = (key: string): TraceOutRef => {
 
 export const producedUtxosFromTransaction = (
   transaction: Pick<TraceTransaction, "outputs">,
-): TraceUtxo[] =>
-  transaction.outputs.map((utxo) => normalizeTraceUtxo(utxo));
+): TraceUtxo[] => transaction.outputs.map((utxo) => normalizeTraceUtxo(utxo));
 
 export const toTraceUtxo = (
   utxo: UTxO,
@@ -141,9 +136,7 @@ export const toTraceTxOutput = (output: TxOutput): TraceTxOutput => {
     assets: traceAssets(output.assets),
     datumHash: output.datumHash ?? undefined,
     datum: output.datum ?? undefined,
-    scriptRef: output.scriptRef
-      ? traceScriptRef(output.scriptRef)
-      : undefined,
+    scriptRef: output.scriptRef ? traceScriptRef(output.scriptRef) : undefined,
   };
 };
 
@@ -280,9 +273,7 @@ const resolveOutRefs = async (
   return { utxos, sources, warnings };
 };
 
-const uniqueOutRefs = (
-  outRefs: ReadonlyArray<TraceOutRef>,
-): TraceOutRef[] => {
+const uniqueOutRefs = (outRefs: ReadonlyArray<TraceOutRef>): TraceOutRef[] => {
   const seen = new Set<string>();
   const result: TraceOutRef[] = [];
   for (const outRef of outRefs) {
@@ -312,7 +303,9 @@ const normalizeResolvedUtxo = (utxo: UTxO | TraceUtxo): TraceUtxo => {
   const traceUtxo = isTraceUtxo(utxo)
     ? normalizeTraceUtxo({ ...utxo, resolution: "resolved" })
     : toTraceUtxo(utxo);
-  return isGenesisOutRef(traceUtxo) ? normalizeGenesisUtxo(traceUtxo) : traceUtxo;
+  return isGenesisOutRef(traceUtxo)
+    ? normalizeGenesisUtxo(traceUtxo)
+    : traceUtxo;
 };
 
 const normalizeGenesisUtxo = (utxo: UTxO | TraceUtxo): TraceUtxo => {

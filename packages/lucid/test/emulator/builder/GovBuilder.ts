@@ -1,9 +1,5 @@
 import { Effect } from "effect";
-import {
-  CML,
-  PoolParams,
-  paymentCredentialOf,
-} from "../../../src/index.js";
+import { CML, PoolParams, paymentCredentialOf } from "../../../src/index.js";
 import { User } from "../service/EmulatorUser.js";
 
 const poolParams = Effect.gen(function* () {

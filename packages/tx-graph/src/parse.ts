@@ -331,16 +331,18 @@ const parseRedeemers = (
   redeemers: CML.Redeemers | undefined,
 ): TraceRedeemer[] => {
   if (!redeemers) return [];
-  return canonicalRedeemerEntries(redeemers).map((entry, redeemerListIndex) => ({
-    tag: fromCMLRedeemerTag(entry.tag),
-    index: entry.index.toString(),
-    redeemerListIndex,
-    data: entry.data.to_cbor_hex(),
-    exUnits: {
-      mem: entry.exUnits.mem().toString(),
-      steps: entry.exUnits.steps().toString(),
-    },
-  }));
+  return canonicalRedeemerEntries(redeemers).map(
+    (entry, redeemerListIndex) => ({
+      tag: fromCMLRedeemerTag(entry.tag),
+      index: entry.index.toString(),
+      redeemerListIndex,
+      data: entry.data.to_cbor_hex(),
+      exUnits: {
+        mem: entry.exUnits.mem().toString(),
+        steps: entry.exUnits.steps().toString(),
+      },
+    }),
+  );
 };
 
 type CanonicalRedeemerEntry = {
@@ -395,10 +397,8 @@ const canonicalRedeemerEntries = (
   );
 };
 
-const redeemerKeyBytes = (
-  tag: CML.RedeemerTag,
-  index: bigint,
-): Uint8Array => CML.RedeemerKey.new(tag, index).to_canonical_cbor_bytes();
+const redeemerKeyBytes = (tag: CML.RedeemerTag, index: bigint): Uint8Array =>
+  CML.RedeemerKey.new(tag, index).to_canonical_cbor_bytes();
 
 const compareBytes = (left: Uint8Array, right: Uint8Array): number => {
   if (left.length !== right.length) return left.length - right.length;
