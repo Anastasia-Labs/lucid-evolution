@@ -102,9 +102,7 @@ describe("parseTransaction", () => {
       tags: [],
     });
     expect(parsed.outputs[0]?.paymentCredential?.type).toBe("Key");
-    expect(parsed.withdrawals).toEqual([
-      { rewardAddress, amount: "123456" },
-    ]);
+    expect(parsed.withdrawals).toEqual([{ rewardAddress, amount: "123456" }]);
     expect(parsed.requiredSigners).toEqual(["44".repeat(28)]);
   });
 
@@ -117,9 +115,9 @@ describe("parseTransaction", () => {
     expect(parseTransaction({ toTransaction: () => tx }).hash).toBe(
       CML.hash_transaction(tx.body()).to_hex(),
     );
-    expect(
-      parseTransaction({ toCBOR: () => tx.to_cbor_hex() }).hash,
-    ).toBe(CML.hash_transaction(tx.body()).to_hex());
+    expect(parseTransaction({ toCBOR: () => tx.to_cbor_hex() }).hash).toBe(
+      CML.hash_transaction(tx.body()).to_hex(),
+    );
   });
 
   test("splits minted and burned assets and parses redeemers", () => {
@@ -151,7 +149,9 @@ describe("parseTransaction", () => {
       CML.Redeemers.new_map_redeemer_key_to_redeemer_val(redeemerMap),
     );
 
-    const parsed = parseTransaction(CML.Transaction.new(body, witnessSet, true));
+    const parsed = parseTransaction(
+      CML.Transaction.new(body, witnessSet, true),
+    );
     const mintedUnit = "55".repeat(28) + "aa";
     const burnedUnit = "55".repeat(28) + "bb";
 

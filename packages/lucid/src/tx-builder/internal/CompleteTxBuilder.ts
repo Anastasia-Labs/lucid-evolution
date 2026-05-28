@@ -842,15 +842,16 @@ const scriptHashForPurpose = (
       return certificate ? scriptHashFromCertificate(certificate) : undefined;
     }
     case "vote": {
-      const voter = info.txBody.voting_procedures()?.keys().get(
-        Number(purpose.index),
-      );
+      const voter = info.txBody
+        .voting_procedures()
+        ?.keys()
+        .get(Number(purpose.index));
       return voter?.script_hash()?.to_hex();
     }
     case "propose": {
-      const proposal = info.txBody.proposal_procedures()?.get(
-        Number(purpose.index),
-      );
+      const proposal = info.txBody
+        .proposal_procedures()
+        ?.get(Number(purpose.index));
       return proposal?.gov_action().script_hash()?.to_hex();
     }
   }
@@ -916,7 +917,7 @@ const refreshScriptDataHash = (
           datums,
           config.lucidConfig.costModels,
           usedLangs,
-      ),
+        ),
       catch: (error) => completeTxError(error),
     });
     const resolvedScriptDataHash = yield* pipe(

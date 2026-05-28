@@ -1,9 +1,5 @@
 import type { TxGraphTrace } from "../model.js";
-import {
-  buildRenderGraph,
-  edgeStyle,
-  type RenderNode,
-} from "./common.js";
+import { buildRenderGraph, edgeStyle, type RenderNode } from "./common.js";
 
 export type TraceToMermaidOptions = {
   readonly direction?: "LR" | "TD";
@@ -30,7 +26,11 @@ export const traceToMermaid = (
     lines.push(`  ${nodeIds.get(node.id)}${nodeShape(node)}`);
     lines.push(
       `  class ${nodeIds.get(node.id)} ${
-        node.unresolved ? "unresolved" : node.genesis ? "genesis" : nodeClass(node)
+        node.unresolved
+          ? "unresolved"
+          : node.genesis
+            ? "genesis"
+            : nodeClass(node)
       };`,
     );
   }
@@ -67,7 +67,11 @@ const nodeShape = (node: RenderNode): string => {
 };
 
 const nodeClass = (node: RenderNode): string =>
-  node.kind === "transaction" ? "tx" : node.kind === "utxo" ? "utxo" : "external";
+  node.kind === "transaction"
+    ? "tx"
+    : node.kind === "utxo"
+      ? "utxo"
+      : "external";
 
 const mermaidText = (value: string): string =>
   value

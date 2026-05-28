@@ -96,11 +96,12 @@ describe("createTxGraph", () => {
 
     const trace = graph.toJSON();
     expect(providerCalls).toEqual([[seedRef]]);
-    expect(trace.transactions.map(({ label, status }) => ({ label, status })))
-      .toEqual([
-        { label: "first", status: "signed" },
-        { label: "second", status: "submitted" },
-      ]);
+    expect(
+      trace.transactions.map(({ label, status }) => ({ label, status })),
+    ).toEqual([
+      { label: "first", status: "signed" },
+      { label: "second", status: "submitted" },
+    ]);
     expect(Object.keys(trace.utxos)).toEqual(
       [outRefKey(seedRef), outRefKey(tx1OutputRef), `${txHash(tx2)}#0`].sort(),
     );
@@ -250,7 +251,10 @@ describe("createTxGraph", () => {
     const unit = "aa".repeat(28) + "01";
     const tx = makeTx([seedRef], [2_000_000n]);
     const graph = createTxGraph({
-      labels: [tagByAddress("wallet", address), tagByUnit("tracked-asset", unit)],
+      labels: [
+        tagByAddress("wallet", address),
+        tagByUnit("tracked-asset", unit),
+      ],
     });
     graph.addResolvedUtxos([
       {
@@ -287,10 +291,12 @@ describe("createTxGraph", () => {
       label: "lifecycle",
       status: "submitted",
     });
-    expect(trace.edges.filter((edge) => edge.from === txNode || edge.to === txNode))
-      .toHaveLength(2);
-    expect(trace.warnings.filter(({ code }) => code === "duplicate-spend"))
-      .toEqual([]);
+    expect(
+      trace.edges.filter((edge) => edge.from === txNode || edge.to === txNode),
+    ).toHaveLength(2);
+    expect(
+      trace.warnings.filter(({ code }) => code === "duplicate-spend"),
+    ).toEqual([]);
   });
 
   test("exposes DOT and Mermaid renderers from the graph API", async () => {

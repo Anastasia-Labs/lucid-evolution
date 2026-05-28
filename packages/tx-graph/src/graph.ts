@@ -70,9 +70,7 @@ export type TxGraph = {
   toMermaid: (options?: TraceToMermaidOptions) => string;
 };
 
-export const createTxGraph = (
-  options: CreateTxGraphOptions = {},
-): TxGraph => {
+export const createTxGraph = (options: CreateTxGraphOptions = {}): TxGraph => {
   const transactions: TraceTransaction[] = [];
   const preloadedUtxos: Array<UTxO | TraceUtxo> = [];
   let utxos = new Map<string, TraceUtxo>();
@@ -206,7 +204,12 @@ export const createTxGraph = (
     const resolvedByKey = new Map(
       resolution.utxos.map((utxo) => [outRefKey(utxo), utxo] as const),
     );
-    warnUnresolvedInputs(transaction, "spend", transaction.inputs, resolvedByKey);
+    warnUnresolvedInputs(
+      transaction,
+      "spend",
+      transaction.inputs,
+      resolvedByKey,
+    );
     warnUnresolvedInputs(
       transaction,
       "reference",
@@ -229,7 +232,9 @@ export const createTxGraph = (
       const resolverUtxos = await resolver(missing);
       resolved.push(...resolverUtxos);
       const resolvedKeys = new Set(resolverUtxos.map(outRefKey));
-      missing = missing.filter((outRef) => !resolvedKeys.has(outRefKey(outRef)));
+      missing = missing.filter(
+        (outRef) => !resolvedKeys.has(outRefKey(outRef)),
+      );
     }
     return resolved;
   };
@@ -274,7 +279,10 @@ export const createTxGraph = (
   const setInputUtxo = (utxo: TraceUtxo): void => {
     const key = outRefKey(utxo);
     const existing = utxos.get(key);
-    if (existing?.resolution === "resolved" && utxo.resolution === "unresolved") {
+    if (
+      existing?.resolution === "resolved" &&
+      utxo.resolution === "unresolved"
+    ) {
       return;
     }
     utxos.set(key, jsonClone(utxo));
@@ -432,14 +440,11 @@ export const createTxGraph = (
 const withFailureMessage = (
   transaction: TraceTransaction,
   options: TxGraphRecordOptions,
-): TraceTransaction =>
-  ({
-    ...transaction,
-    ...(options.failureMessage
-      ? { failureMessage: options.failureMessage }
-      : {}),
-    ...(options.evaluation ? { evaluation: [...options.evaluation] } : {}),
-  });
+): TraceTransaction => ({
+  ...transaction,
+  ...(options.failureMessage ? { failureMessage: options.failureMessage } : {}),
+  ...(options.evaluation ? { evaluation: [...options.evaluation] } : {}),
+});
 
 const mergeRecordedTransaction = (
   existing: TraceTransaction,
@@ -447,10 +452,11 @@ const mergeRecordedTransaction = (
 ): TraceTransaction => {
   const failureMessage =
     next.status === "failed"
-      ? next.failureMessage ?? existing.failureMessage
+      ? (next.failureMessage ?? existing.failureMessage)
       : undefined;
   const evaluation =
-    next.evaluation ?? (next.status === "failed" ? undefined : existing.evaluation);
+    next.evaluation ??
+    (next.status === "failed" ? undefined : existing.evaluation);
   return {
     ...next,
     label: next.label ?? existing.label,
@@ -493,13 +499,10 @@ const normalizeTags = (
 ): string[] => {
   if (!tags) return [];
   const values = Array.isArray(tags) ? tags : [tags];
-  return values
-    .map((tag) => tag.trim())
-    .filter((tag) => tag.length > 0);
+  return values.map((tag) => tag.trim()).filter((tag) => tag.length > 0);
 };
 
-const jsonClone = <T>(value: T): T =>
-  JSON.parse(JSON.stringify(value)) as T;
+const jsonClone = <T>(value: T): T => JSON.parse(JSON.stringify(value)) as T;
 
 const txNodeId = (txHash: string): string => `tx:${txHash}`;
 const utxoNodeId = (outRef: TraceOutRef): string => `utxo:${outRefKey(outRef)}`;

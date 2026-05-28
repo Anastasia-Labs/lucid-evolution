@@ -1,10 +1,6 @@
 import { describe, expect, test } from "vitest";
 import type { UTxO } from "@lucid-evolution/core-types";
-import type {
-  TraceOutRef,
-  TraceTransaction,
-  TraceUtxo,
-} from "../src/model.js";
+import type { TraceOutRef, TraceTransaction, TraceUtxo } from "../src/model.js";
 import {
   createResolutionCache,
   outRefKey,

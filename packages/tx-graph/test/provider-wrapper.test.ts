@@ -52,7 +52,9 @@ const makeProvider = (
   utxos: ReadonlyArray<UTxO>,
   overrides: Partial<Provider> = {},
 ): Provider => {
-  const byKey = new Map(utxos.map((resolved) => [outRefKey(resolved), resolved]));
+  const byKey = new Map(
+    utxos.map((resolved) => [outRefKey(resolved), resolved]),
+  );
   return {
     getProtocolParameters: vi.fn(async () => ({}) as never),
     getUtxos: vi.fn(async () => []),

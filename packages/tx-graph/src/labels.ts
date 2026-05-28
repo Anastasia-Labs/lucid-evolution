@@ -5,11 +5,7 @@ import type {
   Unit,
   UTxO,
 } from "@lucid-evolution/core-types";
-import type {
-  TraceTransaction,
-  TraceUtxo,
-  TxGraphTrace,
-} from "./model.js";
+import type { TraceTransaction, TraceUtxo, TxGraphTrace } from "./model.js";
 import { outRefKey } from "./resolve.js";
 
 export type TxGraphTaggerContext = {
@@ -71,10 +67,7 @@ export type TagByScriptRefOptions = {
 };
 
 export const tagByScriptRef =
-  (
-    label: string,
-    options: TagByScriptRefOptions = {},
-  ): TxGraphTagger =>
+  (label: string, options: TagByScriptRefOptions = {}): TxGraphTagger =>
   ({ utxo }) => {
     if (!utxo.scriptRef) return undefined;
     if (options.type && utxo.scriptRef.type !== options.type) {
