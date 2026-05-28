@@ -9,5 +9,6 @@ export * from "@lucid-evolution/core-utils";
 export * from "@lucid-evolution/plutus";
 export * from "@lucid-evolution/provider";
 export * from "@lucid-evolution/sign_data";
+export * from "@lucid-evolution/tx-graph";
 export * from "@lucid-evolution/utils";
 export * from "@lucid-evolution/wallet";

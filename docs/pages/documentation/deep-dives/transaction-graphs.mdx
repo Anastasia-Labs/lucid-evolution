@@ -1,0 +1,148 @@
+# Transaction Graphs
+
+Transaction graphs record offchain transaction scenarios as UTxO-level traces. They are useful when a flow builds several transactions, uses reference inputs, consumes script state, mints assets, or runs in an emulator before moving to preview, preprod, or mainnet.
+
+The trace is JSON-first and can also render as GraphViz DOT or Mermaid.
+
+## Manual Recording
+
+```typescript
+import {
+  createTxGraph,
+  tagByAddress,
+  tagByPolicyId,
+} from "@lucid-evolution/lucid";
+
+const graph = createTxGraph({
+  provider,
+  labels: [
+    tagByAddress("operator", operatorAddress),
+    tagByPolicyId("USDCX policy", usdcxPolicyId),
+  ],
+  assets: {
+    [usdcxUnit]: "USDCX",
+  },
+  addresses: {
+    [treasuryAddress]: "treasury",
+  },
+});
+
+const tx = await lucid
+  .newTx()
+  .pay.ToAddress(treasuryAddress, { lovelace: 5_000_000n })
+  .complete();
+
+await graph.record(tx, {
+  label: "fund treasury",
+  status: "built",
+});
+
+const signed = await tx.sign.withWallet().complete();
+
+await graph.record(signed, {
+  label: "fund treasury",
+  status: "signed",
+});
+
+const trace = graph.toJSON();
+const mermaid = graph.toMermaid();
+const dot = graph.toDot();
+```
+
+`record()` accepts CBOR hex strings, CML transactions, Lucid objects with `toCBOR()`, and objects with `toTransaction()`.
+
+## Wrapped Providers
+
+Use `wrapProvider()` when you want submit and evaluation calls recorded automatically.
+
+```typescript
+import { createTxGraph, Lucid } from "@lucid-evolution/lucid";
+
+const graph = createTxGraph({
+  assets: {
+    [usdcxUnit]: "USDCX",
+  },
+});
+
+const tracedProvider = graph.wrapProvider(provider, {
+  submitLabel: "submit",
+  evaluateLabel: "evaluate",
+});
+
+const lucid = await Lucid(tracedProvider, "Preprod");
+
+// Direct provider calls are traced too.
+const txHash = await tracedProvider.submitTx(signedTx.toCBOR());
+
+console.log(graph.toMermaid());
+```
+
+The wrapper:
+
+- records `submitTx` as `signed` before submission and `submitted` on success
+- records failed submissions as `failed` with the failure message
+- warns if a provider returns a different transaction hash than the body hash
+- records `evaluateTx` results and resolves any additional UTxOs passed to evaluation
+- preserves all other provider methods transparently
+
+## Offline And Chained Flows
+
+You can seed known UTxOs without a provider. This is useful for offline tests or fixtures.
+
+```typescript
+const graph = createTxGraph();
+
+graph.addResolvedUtxos(seedUtxos);
+
+graph.resolveWith(async (outRefs) => {
+  return lookupFixtureUtxos(outRefs);
+});
+
+await graph.record(firstTx, {
+  label: "deposit",
+  status: "submitted",
+});
+
+await graph.record(secondTx, {
+  label: "collect",
+  status: "built",
+});
+```
+
+Outputs produced by previously recorded successful transactions are cached and can resolve later inputs before the provider sees them. Missing inputs remain visible as unresolved UTxO nodes instead of disappearing from the trace.
+
+## What The Trace Shows
+
+The JSON trace includes:
+
+- transactions, outputs, inputs, reference inputs, collateral inputs, and collateral returns
+- minted and burned assets
+- withdrawals, certificates, redeemers, required signers, and evaluation results
+- resolved and unresolved UTxO nodes
+- warnings for unresolved inputs, failed submissions, duplicate spends, and provider hash mismatches
+- address and asset aliases
+- tags from built-in or custom taggers
+
+## Renderers
+
+Mermaid output is useful in docs and pull requests:
+
+```typescript
+const mermaid = graph.toMermaid();
+```
+
+DOT output is useful when GraphViz is available:
+
+```typescript
+const dot = graph.toDot();
+```
+
+JSON is the canonical output for tests and CI snapshots:
+
+```typescript
+expect(graph.toJSON()).toMatchSnapshot();
+```
+
+## Privacy
+
+Mainnet traces can reveal addresses, asset units, datums, redeemers, and transaction structure. Prefer aliases for shared artifacts and avoid publishing traces with sensitive inline datum or redeemer values unless the data is already public.

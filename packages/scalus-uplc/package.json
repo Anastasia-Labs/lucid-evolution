@@ -19,7 +19,7 @@
     "access": "public"
   },
   "browser": {
-    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "@anastasia-labs/cardano-multiplatform-lib-browser"
+    "@dcspark/cardano-multiplatform-lib-nodejs": "@dcspark/cardano-multiplatform-lib-browser"
   },
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts --clean",
@@ -37,8 +37,8 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-3",
-    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-3",
+    "@dcspark/cardano-multiplatform-lib-browser": "6.2.0",
+    "@dcspark/cardano-multiplatform-lib-nodejs": "6.2.0",
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
     "cbor-x": "^1.6.0",
