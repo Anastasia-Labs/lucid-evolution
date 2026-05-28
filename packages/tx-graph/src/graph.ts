@@ -29,6 +29,11 @@ import {
   type TraceToMermaidOptions,
 } from "./render/mermaid.js";
 import {
+  buildSemanticRenderGraph,
+  type SemanticRenderGraph,
+  type SemanticRenderOptions,
+} from "./render/semantic.js";
+import {
   wrapProvider as wrapTxGraphProvider,
   type TxGraphProviderWrapperOptions,
 } from "./provider-wrapper.js";
@@ -66,6 +71,7 @@ export type TxGraph = {
     options?: TxGraphProviderWrapperOptions,
   ) => Provider;
   toJSON: () => TxGraphTrace;
+  toSemantic: (options?: SemanticRenderOptions) => SemanticRenderGraph;
   toDot: (options?: TraceToDotOptions) => string;
   toMermaid: (options?: TraceToMermaidOptions) => string;
 };
@@ -144,6 +150,8 @@ export const createTxGraph = (options: CreateTxGraphOptions = {}): TxGraph => {
       };
       return jsonClone(trace);
     },
+    toSemantic: (renderOptions = {}) =>
+      buildSemanticRenderGraph(graph.toJSON(), renderOptions),
     toDot: (renderOptions = {}) => traceToDot(graph.toJSON(), renderOptions),
     toMermaid: (renderOptions = {}) =>
       traceToMermaid(graph.toJSON(), renderOptions),

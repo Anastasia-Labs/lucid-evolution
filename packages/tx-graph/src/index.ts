@@ -7,3 +7,4 @@ export * from "./resolve.js";
 export * from "./render/dot.js";
 export * from "./render/json.js";
 export * from "./render/mermaid.js";
+export * from "./render/semantic.js";
