@@ -323,6 +323,7 @@ export const depositBuildTxWithComplexSetup = Effect.gen(function* () {
   const stress = stressValidator();
   const stressAddress = validatorToAddress("Custom", stress);
   const stressPolicyId = mintingPolicyToId(stress);
+  const rewardAddress = stressRewardAddress();
   const nativePolicy = nativePolicyFor(owner);
   const nativePolicyId = mintingPolicyToId(nativePolicy);
   const units = walletUnitsFor(stressPolicyId, nativePolicyId);
@@ -334,6 +335,7 @@ export const depositBuildTxWithComplexSetup = Effect.gen(function* () {
       [units.markerB]: 1n,
       [units.markerC]: 1n,
     })
+    .registerStake(rewardAddress)
     .pay.ToAddressWithData(
       stressAddress,
       { kind: "inline", value: Data.void() },

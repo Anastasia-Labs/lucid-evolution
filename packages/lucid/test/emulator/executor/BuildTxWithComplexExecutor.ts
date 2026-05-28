@@ -16,12 +16,13 @@ export const buildTxWithComplex = Effect.gen(function* () {
   );
   emulator.awaitBlock(1);
 
-  emulator.chain[trace.rewardAddress] = {
-    registeredStake: true,
-    delegation: {
-      poolId: CONSTANTS.EMULATOR_POOL_ID,
-      rewards: BuildTxWithComplex.BUILD_TX_WITH_COMPLEX_REWARD,
-    },
+  const rewardState = emulator.chain[trace.rewardAddress];
+  if (!rewardState?.registeredStake) {
+    throw new Error("BuildTxWithComplex setup did not register reward account");
+  }
+  rewardState.delegation = {
+    poolId: CONSTANTS.EMULATOR_POOL_ID,
+    rewards: BuildTxWithComplex.BUILD_TX_WITH_COMPLEX_REWARD,
   };
 
   yield* pipe(
