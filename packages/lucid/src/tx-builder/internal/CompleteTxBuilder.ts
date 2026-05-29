@@ -862,13 +862,19 @@ const usedPlutusLanguages = (
   config: TxBuilder.TxBuilderConfig,
 ): Effect.Effect<CML.LanguageList, TxBuilderError> =>
   Effect.gen(function* () {
+    const witnessLanguages = tx.witness_set().languages();
+    const languages = new Set<CML.Language>();
+
+    for (let i = 0; i < witnessLanguages.len(); i++) {
+      languages.add(witnessLanguages.get(i));
+    }
+
     const resolvedInputs = [
       ...config.walletInputs,
       ...config.collectedInputs,
       ...config.readInputs,
     ];
     const redeemerInfo = yield* buildCanonicalRedeemerInfo(tx, resolvedInputs);
-    const languages = new Set<CML.Language>();
 
     for (const purpose of redeemerInfo.redeemers) {
       const scriptHash = scriptHashForPurpose(purpose, redeemerInfo);
@@ -901,15 +907,11 @@ const refreshScriptDataHash = (
   config: TxBuilder.TxBuilderConfig,
 ): Effect.Effect<CML.Transaction, TxBuilderError> =>
   Effect.gen(function* () {
-    const txForHash = CML.Transaction.from_cbor_bytes(
-      tx.to_canonical_cbor_bytes(),
-    );
-    const redeemers = txForHash.witness_set().redeemers();
+    const redeemers = tx.witness_set().redeemers();
     if (!redeemers) return tx;
 
-    const datums =
-      txForHash.witness_set().plutus_datums() ?? CML.PlutusDataList.new();
-    const usedLangs = yield* usedPlutusLanguages(txForHash, config);
+    const datums = tx.witness_set().plutus_datums() ?? CML.PlutusDataList.new();
+    const usedLangs = yield* usedPlutusLanguages(tx, config);
     const scriptDataHash = yield* Effect.try({
       try: () =>
         CML.calc_script_data_hash(
@@ -926,7 +928,6 @@ const refreshScriptDataHash = (
         completeTxError("Unable to calculate script data hash"),
       ),
     );
-
     const body = tx.body();
     body.set_script_data_hash(resolvedScriptDataHash);
     return CML.Transaction.new(

@@ -6,11 +6,11 @@ export const makeTxConfig = (
   costModels: CML.CostModels,
 ): CML.TransactionBuilderConfig => {
   const exUnitsPrices = CML.ExUnitPrices.new(
-    CML.Rational.new(
+    CML.SubCoin.new(
       BigInt(protocolParameters.priceMem * 100_000_000),
       100_000_000n,
     ),
-    CML.Rational.new(
+    CML.SubCoin.new(
       BigInt(protocolParameters.priceStep * 100_000_000),
       100_000_000n,
     ),

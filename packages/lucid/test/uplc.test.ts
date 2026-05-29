@@ -1,6 +1,6 @@
 import { assert, test } from "vitest";
 import * as UPLC from "@lucid-evolution/uplc";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import {
   createCostModels,
   fromCMLRedeemerTag,
