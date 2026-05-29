@@ -1,7 +1,7 @@
 import { assert, test } from "vitest";
 import { buildBaseOutput } from "../src/tx-builder/internal/Pay";
 import { assetsToValue } from "@lucid-evolution/utils";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { Script } from "@lucid-evolution/core-types";
 
 test("buildBaseOutput - only address", async () => {

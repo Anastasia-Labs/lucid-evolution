@@ -10,7 +10,7 @@ import * as TypeBox from "@sinclair/typebox";
 // } from "@sinclair/typebox";
 import { Datum, Exact, Json, Redeemer } from "@lucid-evolution/core-types";
 import { fromHex, fromText, toHex } from "@lucid-evolution/core-utils";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 export * from "@sinclair/typebox";
 
 export class Constr<T> {

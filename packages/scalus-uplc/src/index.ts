@@ -8,7 +8,7 @@ import {
   UTxO,
 } from "@lucid-evolution/core-types";
 import { fromHex, toHex } from "@lucid-evolution/core-utils";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { decode, encode } from "cbor-x";
 import ScalusLib from "scalus";
 

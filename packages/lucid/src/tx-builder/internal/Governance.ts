@@ -8,7 +8,7 @@ import {
   AlwaysAbstain,
   AlwaysNoConfidence,
 } from "@lucid-evolution/core-types";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { TxBuilderError } from "../../Errors.js";
 import { Effect } from "effect";
 import {

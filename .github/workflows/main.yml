@@ -13,8 +13,6 @@ jobs:
     env:
       TURBO_SCM_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
       VITE_BLOCKFROST_KEY: ${{ secrets.VITE_BLOCKFROST_KEY }}
-      VITE_MAESTRO_KEY: ${{ secrets.VITE_MAESTRO_KEY }}
-      VITE_MAESTRO_KEY_PREPROD: ${{ secrets.VITE_MAESTRO_KEY_PREPROD }}
       VITE_SEED: ${{ secrets.VITE_SEED }}
       VITE_API_URL: ${{ secrets.VITE_API_URL }}
       VITE_KUPO_KEY: ${{secrets.VITE_KUPO_KEY}}
@@ -23,6 +21,8 @@ jobs:
       VITE_BLOCKFROST_API_URL_PREVIEW: ${{secrets.VITE_BLOCKFROST_API_URL_PREVIEW}}
       VITE_BLOCKFROST_KEY_PREPROD: ${{secrets.VITE_BLOCKFROST_KEY_PREPROD}}
       VITE_BLOCKFROST_KEY_PREVIEW: ${{secrets.VITE_BLOCKFROST_KEY_PREVIEW}}
+      VITE_MAESTRO_KEY: ${{ secrets.VITE_MAESTRO_KEY }}
+      VITE_MAESTRO_KEY_PREPROD: ${{ secrets.VITE_MAESTRO_KEY_PREPROD }}
       VITE_WALLET_SEED: ${{secrets.VITE_WALLET_SEED}}
       VITE_WALLET_SEED_2: ${{secrets.VITE_WALLET_SEED_2}}
     steps:
