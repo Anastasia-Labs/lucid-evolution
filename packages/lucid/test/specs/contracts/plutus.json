@@ -267,6 +267,22 @@
       },
       "compiledCode": "5909d0010100323232323232322533300232323232323232323232323232323232323232323232323232323232323232325333022301201b1323232330040201330090220203029302a002302800130243754038264a66604660300382646600603e2a666048660046eb0c03cc098dd500f919b8f375c601c604e6ea80040084cc02008407c5281bae30283025375403a2a66604660100382646600603e2a666048660046eb0c068c098dd500f919baf300e3027375400200426601004203e2940c0a0c094dd500e8b1119198008008019129998148008a5013253330273004302c00214a2266006006002605800244a666046603060486ea80084c8c8c8c8c8c8c8c94ccc0b8c0c40084cc02c01c894ccc0c00084cc03401c894ccc0c80084cc03c01c894ccc0d00084cc04401c894ccc0d8008540444c94ccc0d0c0a4c0d4dd50008991919191919299981e982000109980e0018980418200048b1bad303e001303e002303c001303c002375a6074002606c6ea800458c0e00084c94ccc0c8c09cc0ccdd50008991919191919299981d981f00109980c00091299981e80109805182000589980d981f8010980098200010b1bac303c001303c002375c607400260740046eb4c0e0004c0d0dd50008b181b0010992999818181298189baa0011323232325333037303a002132325333036302b001132323232533303d304000213301d0031500616375c607c002607c004607800260706ea800c54ccc0d8c0980044c8c94ccc0ecc0f80085401058dd7181e000981c1baa00315333036301b00113232533303b303e00213301a0011500416303c001303837540062c606c6ea80084c018c0e801c58c0e0004c0e0008dd6981b00098191baa001163034002132533302e3023302f375400226464646464646464a666072607800426464a666070605a00226464a66607a608000426603a0022a0082c607c00260746ea801c54ccc0e0c0a000454ccc0ecc0e8dd50038a8010b0b181c1baa006132325333038302d00113232533303d304000213301c0011500416303e001303a375400a2a66607060500022a66607660746ea8014540085858c0e0dd500209980b80089805181e0058b181d000981d001181c000981c001181b000981b0011bad3034001303037540022c60640042c6eb0c0bc004c0bc008dd6181680098168011bac302b001302b00237586052002604a6ea80085888c8cc00400400c88cc00c004c008008894ccc084c058c088dd50010991919191919299981518168010a8038b1bad302b001302b002375c605200260520046eb8c09c004c08cdd50010b11192999810980b00089919299981318148010a8020b1bae3027001302337540062a666042602200226464a66604c60520042a0082c6eb8c09c004c08cdd50018b18109baa00222533301f301430203754004264646464a66604c60520042a00a2c6eb4c09c004c09c008dd7181280098109baa0021622533301e330043758601060406ea80048c94ccc080c054c084dd500089919192999811992999812180a18129baa00114a2266ebcc038c098dd5002181498131baa001300c3025375400a2a666046004266e24dd6980718129baa30193025375400a00229405281998089bab300b30243754601660486ea8008dd7180618121baa3018302437540086eb8c02cc090dd5180c18121baa00432533302230123023375400229444cdd7980618121baa300c30243754601660486ea8008c09cc090dd5000980618119baa0033025302237540022c660206eb0c024c084dd50019bad3009302137540022a66603c660086eb0c024c080dd50009192999810180a98109baa00113253330213371e6eb8c098c08cdd50011bae300a3023375400620022940cc018dd6180598111baa0022337126eb4c030c08cdd50009998081bab300d3023375400a6eb8c02cc08cdd50009bae300a302337540022c66018602c6eacc02cc084dd50019bad3009302137540022a66603c660086eb0c050c080dd50009192999810180a98109baa0011323253330223375e6046004601660486ea80104cdc38009bad300d302437540082940dd698118009919bb03026001302630270013758604a60446ea800458cc018dd5981218129812981298129812981298109baa003375a601260426ea80044cc010dd6180398101baa00123253330203015302137540022646464a66604660300022646464a66604c602c604e6ea80184c8c94ccc0a0c074c0a4dd50008992999814980c98151baa001132533302a3375e00800c266e3c0040145281bae302e302b37540022c602460546ea8c048c0a8dd5180898151baa302d302a37540022c64660020026eb0c048c0a8dd50061129998160008a6103d87a800013232533302b3375e602a605a6ea80080144c07ccc0bc0092f5c02660080080026060004605c002605660506ea801858dd718151815801181480098129baa0021533302330130011325333024301930253754008266e3cdd7181498131baa00400116375c6050604a6ea80084c94ccc090c024c094dd5002099baf3029302637540080022c6050604a6ea8008c08cdd5000980518119baa00330213233760604c002604c604e0026eb0c094c088dd50008b198031bab3024302530253025302530253025302530253025302137540066eb4c024c084dd50008a5014a02940dc3a400844646600200200644a66604200229444c94ccc07cc010c0900084cc00c00c00452818120009800800911299980f0010a60103d87a800013232533301d30120031301133021374e66042603c00466042603e00497ae04bd7009998028028009808001981100198100011180e980f0009180e0009180d980e180e0009180d180d980d980d980d8009800800911299980c0010a60103d87a8000132325333017300c0031300b3301b375200497ae01333005005001300a003301c003375c603400444464a66602a600a602c6ea8004520001375a6034602e6ea8004c94ccc054c014c058dd50008a6103d87a8000132330010013756603660306ea8008894ccc068004530103d87a8000132323232533301b337220100042a66603666e3c0200084c03ccc07cdd4000a5eb80530103d87a8000133006006003375a60380066eb8c068008c078008c070004c8cc004004010894ccc0640045300103d87a8000132323232533301a337220100042a66603466e3c0200084c038cc078dd3000a5eb80530103d87a8000133006006003375660360066eb8c064008c074008c06c004dc3a40046002002444a666028004298103d87a8000132325333013300800313007330170024bd7009998028028009803001980c001980b0011b8048004dd2a40006e1d200023010301130113011001300100122533300d00114bd700998071805980780099801001180800098041baa001300b300c002300a001300a00230080013004375400229309b2b2b9a5573aaae7955cfaba05742ae881",
       "hash": "c347d494a6e9dec630c247a7faf1bd0123ace6f45a5e58579598f56b"
+    },
+    {
+      "title": "script_context_schema.script_context_schema.else",
+      "redeemer": {
+        "schema": {}
+      },
+      "parameters": [
+        {
+          "title": "expected",
+          "schema": {
+            "$ref": "#/definitions/script_context_schema~1ScriptContext"
+          }
+        }
+      ],
+      "compiledCode": "590c02010100229800aba2aba1aba0aab9faab9eaab9dab9a48888889660033001370e902a4dc3a4005370e90002444b3001980091919800800801112cc004006297ae08991991199119801001000912cc004006200713233011374e660226ea4014cc044c038004cc044c03c0052f5c066006006602600460220028078dd598060019bae300900133003003300e002300c0014029232330010010022259800800c52f5bded8c11323233223322330020020012259800800c4cc044cdd81ba9003374c00897adef6c608994c004dd71807800cdd59808000cc0500092225980099b9000700389980a99bb0375200e6e980200162b30013371e00e00713259800980798099baa00189980b19bb03752010602e60286ea800400a20048091a26602a66ec0dd48019ba6002330060060014044808860240028080cc018018c044014c8c800cc8cc00400400c8966002003149a264b30010018acc004c010dd69807980900145268b201a899912cc004cdc81bae3010002375c602000315980098031bad301100289980280299809800980a801c5900f45900f18090011809000a0203012001403c530013007001a50a5140286eb8c028008dd598050009806000a0149b8f48811c11111111111111111111111111111111111111111111111111111111009b8f48811c66666666666666666666666666666666666666666666666666666666009b8f48811c222222222222222222222222222222222222222222222222222222220098031baa00c4888888cc88cc89660026016601e6ea8006264646464646464646464646464646644b300130240018992cc004c094006264b300130260018992cc004c09c0062646644b3001302a0018992cc004cdc3a4010604c6ea800626464b3001302530283754003132598009817000c4c8c966002605060566ea8006264b300130310018992cc004c0c800626464b3001302b302f375400313259800981a800c4cc8966002606e00313232598009818981a1baa0018992cc004c0c4c0d4dd5000c4c966002607600313259800981a181b9baa3038001899912cc004c0f8006264b30013036303a3754003159800981b981d1baa303e303f01d8acc004c0e0dd6981f017456600260646eb8c0f8c0ecdd501645660033001303e01ca44120333333333333333333333333333333333333333333333333333333333333333300a4000816a2b30019800981f00dd22120444444444444444444444444444444444444444444444444444444444444444400a4004816a2b3001302f303e01a8acc004cdc39bad303e028482024bd0062b30013032375c607c03115980099b8f375c607c02e91010b536368656d61546f6b656e008acc004cdc39bad303e303f0174801a2b30013031375c607c60766ea804e2b30013370e6eb4c0f8c0fc0512080a4e8038acc004c0c4dd7181f181d9baa0108acc004cdc39bad303b011482034728222b30013232332259800981d981f1baa0028acc004cdc3a4008607c6ea8c1080062b30013370e6eb4c108c0fcdd50012414827159800981d981f1baa304230430038981d981f1baa304230430018a5040f514a081ea2c81ea2c81e8c100004c0f4dd518201820801181e1baa303f001303b3754607c04915980098199bae303e00f8acc004c0c8dd7181f181d9baa00c8acc004c0e0dd6981d806c56600266e3cdd7181d0052441205555555555555555555555555555555555555555555555555555555555555555008acc004cdc39bad303b00a4831806264b30013001375c607e043159800981a1bae303f303c375400f15980098009bae303f0048acc004cdc39bad303f30400044803a2b300132323259800981d181f1baa0018992cc004c0f0c0fcdd5000c4c8c966002607a60826ea800626644b30013370e6eb4c11c0212080ade2048acc004c0f0dd7182398221baa0068acc004c024dd71823801456600266e1cdd6982398240012401d15980099b87375a608e002900a44c100dd698239824000c52820848a50410914a0821229410424528208430423754608a60846ea8004c108dd518229823001459040182200098201baa0018b207c304230430028b207a30410013041001303c3754607e00713370e6eb4c0fcc0f0dd500124101d9701714a081d2294103a452820748a5040e914a081d0dc7a441203333333333333333333333333333333333333333333333333333333333333333008a5040e514a081ca2941039452820728a5040e514a081ca2941039452820728a5040e514a081ca2941039452820728a5040e514a081ca2941039452820728a5040e514a081ca2941039459039459039181e80e45903b181c1baa3037001375860760371640d860740031640e06eacc0d800e2c81a0c0e0c0d4dd5000c590331819800981b000c59034181a0009bab30340158b20643756606602d1640b8605c00260620031640bc6eacc0c00522c8170dd6181780a45902a18150009816800c5902b1bab302c0138b204e302b00130273754003164094605200316409c60500026eb0c09c03cdd61813000c59024180e180d9bab302500e8b20463758604801f1640886eb0c08c03e2c8108c088004dd6181080718108009810000980f800980f000980e800980e000980d800980d000980c800980c000980b800980b000980a80098081baa30130058b201c22232325980099b8f375c602c00200915980099b87375a602c602e00200713007301630170028a50404514a08088c048dd5180a80098089baa003301130120012323322332259800980718089baa0018992cc004c038c048dd5000c4c966002601e60266ea8006264b300130103014375400313259800980d000c4c8cc896600266e1d20043018375400313259800980a980c9baa0018acc004c040dd7180e980d1baa0098acc004c048dd7180e980d1baa0068acc004c044dd7180e802456600266e3cdd7180e801a450b536368656d61546f6b656e008acc004cdc39bad301d301e0034801a2b30013370e6eb4c074c068dd5001241600313010375c603a60346ea80062941018452820308a50406114a080c22941018452820308b2030301c301d0098b202e301b001301a0073758603200316405c601e601c6eacc06001e2c8098c05cc050dd5000c59012180b18099baa0018b2022301530160038b2020301400230130013012001300e37546022002601a6ea8004c040005133229800912cc0040062900044c010cc008008c03800500b489660020031480022600866004004601c002805a44b30010018a40011300433002002300e001402d300c0014888a60026008009300300398079808000a444b3001300a300e375400313232323232323232323232329800980f800cdd7180f180d9baa00d9bab301e00448896600260440031323259800980d980f9baa0018acc004c074dd6981180ac56600266e3cdd7181198101baa0010048acc004c074dd6981000144c9660026002602a6eb0c09004a2b3001301c3015375860480231598009800980a9bac30240108acc004c004dd69812007c566002603a64b3001301e3021375400314800226eb4c094c088dd5000a0403259800980f18109baa0018a6103d87a8000899198008009bab30263023375400444b30010018a6103d87a8000899192cc004cdc8a450d536372697074436f6e74657874000018acc004cdc7a4410d536372697074436f6e7465787400001899ba548000cc0a0c0980092f5c114c0103d87a80004091133004004302a00340906eb8c090004c09c005025204032330010013756604a01e44b30010018a6103d87a8000899192cc004cdc8804800c56600266e3c024006266e9520003302730250024bd7045300103d87a8000408d1330040043029003408c6eb8c08c004c09800502445660026038602a6eb0c0900362b3001301c301437566048019159800980e1980b80b9bac302400b8acc005660026eacc090026294629410224566002603860286eacc0900222b3001301c30153758604800f15980099baf30240064c0103d87a8000899baf302430250064c103d87a80008a50407d14a080fa294101f4528203e8a50407d14a080fa294101f4528203e8a50407d14a080fa294101f4528203e371090004528203c8a50407914a080f22c80f0c078004c0840062c80f8603c002603a603a002603800260360026034603400260320026030002602e002602c002602a0026028002601e6ea8c0480222c80683700900118031baa00b8a5040108a4d1365640041",
+      "hash": "ba1fdbc8661409322d06f938c753a63faf5bebc2e8f6c41a0ca71ae3"
     }
   ],
   "definitions": {
@@ -730,6 +746,1115 @@
             {
               "title": "expected_amount",
               "$ref": "#/definitions/Int"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/Address": {
+      "title": "Address",
+      "anyOf": [
+        {
+          "title": "Address",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "address_credential",
+              "$ref": "#/definitions/script_context_schema~1Credential"
+            },
+            {
+              "title": "address_staking_credential",
+              "$ref": "#/definitions/Option<script_context_schema~1StakingCredential>"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/ChangedParameters": {
+      "title": "ChangedParameters",
+      "description": "Any Plutus data."
+    },
+    "script_context_schema/ColdCommitteeCredential": {
+      "title": "ColdCommitteeCredential",
+      "anyOf": [
+        {
+          "title": "PubKeyCredential",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1PubKeyHash"
+            }
+          ]
+        },
+        {
+          "title": "ScriptCredential",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1ScriptHash"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/Constitution": {
+      "title": "Constitution",
+      "anyOf": [
+        {
+          "title": "Constitution",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "constitution_script",
+              "$ref": "#/definitions/Option<script_context_schema~1ScriptHash>"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/Credential": {
+      "title": "Credential",
+      "anyOf": [
+        {
+          "title": "PubKeyCredential",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1PubKeyHash"
+            }
+          ]
+        },
+        {
+          "title": "ScriptCredential",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1ScriptHash"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/CurrencySymbol": {
+      "title": "CurrencySymbol",
+      "dataType": "bytes"
+    },
+    "script_context_schema/DRep": {
+      "title": "DRep",
+      "anyOf": [
+        {
+          "title": "DRep",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1DRepCredential"
+            }
+          ]
+        },
+        {
+          "title": "DRepAlwaysAbstain",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": []
+        },
+        {
+          "title": "DRepAlwaysNoConfidence",
+          "dataType": "constructor",
+          "index": 2,
+          "fields": []
+        }
+      ]
+    },
+    "script_context_schema/DRepCredential": {
+      "title": "DRepCredential",
+      "anyOf": [
+        {
+          "title": "PubKeyCredential",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1PubKeyHash"
+            }
+          ]
+        },
+        {
+          "title": "ScriptCredential",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1ScriptHash"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/Datum": {
+      "title": "Datum",
+      "description": "Any Plutus data."
+    },
+    "script_context_schema/DatumHash": {
+      "title": "DatumHash",
+      "dataType": "bytes"
+    },
+    "script_context_schema/Delegatee": {
+      "title": "Delegatee",
+      "anyOf": [
+        {
+          "title": "DelegStake",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1PubKeyHash"
+            }
+          ]
+        },
+        {
+          "title": "DelegVote",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1DRep"
+            }
+          ]
+        },
+        {
+          "title": "DelegStakeVote",
+          "dataType": "constructor",
+          "index": 2,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1PubKeyHash"
+            },
+            {
+              "$ref": "#/definitions/script_context_schema~1DRep"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/ExtendedPOSIXTime": {
+      "title": "ExtendedPOSIXTime",
+      "anyOf": [
+        {
+          "title": "NegInf",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": []
+        },
+        {
+          "title": "Finite",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1POSIXTime"
+            }
+          ]
+        },
+        {
+          "title": "PosInf",
+          "dataType": "constructor",
+          "index": 2,
+          "fields": []
+        }
+      ]
+    },
+    "script_context_schema/GovernanceAction": {
+      "title": "GovernanceAction",
+      "anyOf": [
+        {
+          "title": "ParameterChange",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "$ref": "#/definitions/Option<script_context_schema~1GovernanceActionId>"
+            },
+            {
+              "$ref": "#/definitions/script_context_schema~1ChangedParameters"
+            },
+            {
+              "$ref": "#/definitions/Option<script_context_schema~1ScriptHash>"
+            }
+          ]
+        },
+        {
+          "title": "HardForkInitiation",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": [
+            {
+              "$ref": "#/definitions/Option<script_context_schema~1GovernanceActionId>"
+            },
+            {
+              "$ref": "#/definitions/script_context_schema~1ProtocolVersion"
+            }
+          ]
+        },
+        {
+          "title": "TreasuryWithdrawals",
+          "dataType": "constructor",
+          "index": 2,
+          "fields": [
+            {
+              "$ref": "#/definitions/Pairs<script_context_schema~1Credential,script_context_schema~1Lovelace>"
+            },
+            {
+              "$ref": "#/definitions/Option<script_context_schema~1ScriptHash>"
+            }
+          ]
+        },
+        {
+          "title": "NoConfidence",
+          "dataType": "constructor",
+          "index": 3,
+          "fields": [
+            {
+              "$ref": "#/definitions/Option<script_context_schema~1GovernanceActionId>"
+            }
+          ]
+        },
+        {
+          "title": "UpdateCommittee",
+          "dataType": "constructor",
+          "index": 4,
+          "fields": [
+            {
+              "$ref": "#/definitions/Option<script_context_schema~1GovernanceActionId>"
+            },
+            {
+              "$ref": "#/definitions/List<script_context_schema~1ColdCommitteeCredential>"
+            },
+            {
+              "$ref": "#/definitions/Pairs<script_context_schema~1ColdCommitteeCredential,Int>"
+            },
+            {
+              "$ref": "#/definitions/script_context_schema~1Rational"
+            }
+          ]
+        },
+        {
+          "title": "NewConstitution",
+          "dataType": "constructor",
+          "index": 5,
+          "fields": [
+            {
+              "$ref": "#/definitions/Option<script_context_schema~1GovernanceActionId>"
+            },
+            {
+              "$ref": "#/definitions/script_context_schema~1Constitution"
+            }
+          ]
+        },
+        {
+          "title": "InfoAction",
+          "dataType": "constructor",
+          "index": 6,
+          "fields": []
+        }
+      ]
+    },
+    "script_context_schema/GovernanceActionId": {
+      "title": "GovernanceActionId",
+      "anyOf": [
+        {
+          "title": "GovernanceActionId",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "gaid_tx_id",
+              "$ref": "#/definitions/script_context_schema~1TxId"
+            },
+            {
+              "title": "gaid_gov_action_ix",
+              "$ref": "#/definitions/Int"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/HotCommitteeCredential": {
+      "title": "HotCommitteeCredential",
+      "anyOf": [
+        {
+          "title": "PubKeyCredential",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1PubKeyHash"
+            }
+          ]
+        },
+        {
+          "title": "ScriptCredential",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1ScriptHash"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/Lovelace": {
+      "title": "Lovelace",
+      "dataType": "integer"
+    },
+    "script_context_schema/LowerBoundPOSIXTime": {
+      "title": "LowerBoundPOSIXTime",
+      "anyOf": [
+        {
+          "title": "LowerBoundPOSIXTime",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "lower_bound_limit",
+              "$ref": "#/definitions/script_context_schema~1ExtendedPOSIXTime"
+            },
+            {
+              "title": "lower_bound_closed",
+              "$ref": "#/definitions/Bool"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/MintValue": {
+      "title": "MintValue",
+      "dataType": "map",
+      "keys": {
+        "$ref": "#/definitions/script_context_schema~1CurrencySymbol"
+      },
+      "values": {
+        "$ref": "#/definitions/Pairs<script_context_schema~1TokenName,Int>"
+      }
+    },
+    "script_context_schema/OutputDatum": {
+      "title": "OutputDatum",
+      "anyOf": [
+        {
+          "title": "NoOutputDatum",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": []
+        },
+        {
+          "title": "OutputDatumHash",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1DatumHash"
+            }
+          ]
+        },
+        {
+          "title": "OutputDatum",
+          "dataType": "constructor",
+          "index": 2,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1Datum"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/POSIXTime": {
+      "title": "POSIXTime",
+      "dataType": "integer"
+    },
+    "script_context_schema/POSIXTimeRange": {
+      "title": "POSIXTimeRange",
+      "anyOf": [
+        {
+          "title": "POSIXTimeRange",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "iv_from",
+              "$ref": "#/definitions/script_context_schema~1LowerBoundPOSIXTime"
+            },
+            {
+              "title": "iv_to",
+              "$ref": "#/definitions/script_context_schema~1UpperBoundPOSIXTime"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/ProposalProcedure": {
+      "title": "ProposalProcedure",
+      "anyOf": [
+        {
+          "title": "ProposalProcedure",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "pp_deposit",
+              "$ref": "#/definitions/script_context_schema~1Lovelace"
+            },
+            {
+              "title": "pp_return_addr",
+              "$ref": "#/definitions/script_context_schema~1Credential"
+            },
+            {
+              "title": "pp_governance_action",
+              "$ref": "#/definitions/script_context_schema~1GovernanceAction"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/ProtocolVersion": {
+      "title": "ProtocolVersion",
+      "anyOf": [
+        {
+          "title": "ProtocolVersion",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "pv_major",
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "title": "pv_minor",
+              "$ref": "#/definitions/Int"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/PubKeyHash": {
+      "title": "PubKeyHash",
+      "dataType": "bytes"
+    },
+    "script_context_schema/Rational": {
+      "title": "Rational",
+      "anyOf": [
+        {
+          "title": "Rational",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "numerator",
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "title": "denominator",
+              "$ref": "#/definitions/Int"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/Redeemer": {
+      "title": "Redeemer",
+      "description": "Any Plutus data."
+    },
+    "script_context_schema/ScriptContext": {
+      "title": "ScriptContext",
+      "anyOf": [
+        {
+          "title": "ScriptContext",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "script_context_tx_info",
+              "$ref": "#/definitions/script_context_schema~1TxInfo"
+            },
+            {
+              "title": "script_context_redeemer",
+              "$ref": "#/definitions/script_context_schema~1Redeemer"
+            },
+            {
+              "title": "script_context_script_info",
+              "$ref": "#/definitions/script_context_schema~1ScriptInfo"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/ScriptHash": {
+      "title": "ScriptHash",
+      "dataType": "bytes"
+    },
+    "script_context_schema/ScriptInfo": {
+      "title": "ScriptInfo",
+      "anyOf": [
+        {
+          "title": "MintingScript",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1CurrencySymbol"
+            }
+          ]
+        },
+        {
+          "title": "SpendingScript",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1TxOutRef"
+            },
+            {
+              "$ref": "#/definitions/Option<script_context_schema~1Datum>"
+            }
+          ]
+        },
+        {
+          "title": "RewardingScript",
+          "dataType": "constructor",
+          "index": 2,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1Credential"
+            }
+          ]
+        },
+        {
+          "title": "CertifyingScript",
+          "dataType": "constructor",
+          "index": 3,
+          "fields": [
+            {
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "$ref": "#/definitions/script_context_schema~1TxCert"
+            }
+          ]
+        },
+        {
+          "title": "VotingScript",
+          "dataType": "constructor",
+          "index": 4,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1Voter"
+            }
+          ]
+        },
+        {
+          "title": "ProposingScript",
+          "dataType": "constructor",
+          "index": 5,
+          "fields": [
+            {
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "$ref": "#/definitions/script_context_schema~1ProposalProcedure"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/ScriptPurpose": {
+      "title": "ScriptPurpose",
+      "anyOf": [
+        {
+          "title": "Minting",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1CurrencySymbol"
+            }
+          ]
+        },
+        {
+          "title": "Spending",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1TxOutRef"
+            }
+          ]
+        },
+        {
+          "title": "Rewarding",
+          "dataType": "constructor",
+          "index": 2,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1Credential"
+            }
+          ]
+        },
+        {
+          "title": "Certifying",
+          "dataType": "constructor",
+          "index": 3,
+          "fields": [
+            {
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "$ref": "#/definitions/script_context_schema~1TxCert"
+            }
+          ]
+        },
+        {
+          "title": "Voting",
+          "dataType": "constructor",
+          "index": 4,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1Voter"
+            }
+          ]
+        },
+        {
+          "title": "Proposing",
+          "dataType": "constructor",
+          "index": 5,
+          "fields": [
+            {
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "$ref": "#/definitions/script_context_schema~1ProposalProcedure"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/StakingCredential": {
+      "title": "StakingCredential",
+      "anyOf": [
+        {
+          "title": "StakingHash",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1Credential"
+            }
+          ]
+        },
+        {
+          "title": "StakingPtr",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": [
+            {
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "$ref": "#/definitions/Int"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/TokenName": {
+      "title": "TokenName",
+      "dataType": "bytes"
+    },
+    "script_context_schema/TxCert": {
+      "title": "TxCert",
+      "anyOf": [
+        {
+          "title": "TxCertRegStaking",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1Credential"
+            },
+            {
+              "$ref": "#/definitions/Option<script_context_schema~1Lovelace>"
+            }
+          ]
+        },
+        {
+          "title": "TxCertUnRegStaking",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1Credential"
+            },
+            {
+              "$ref": "#/definitions/Option<script_context_schema~1Lovelace>"
+            }
+          ]
+        },
+        {
+          "title": "TxCertDelegStaking",
+          "dataType": "constructor",
+          "index": 2,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1Credential"
+            },
+            {
+              "$ref": "#/definitions/script_context_schema~1Delegatee"
+            }
+          ]
+        },
+        {
+          "title": "TxCertRegDeleg",
+          "dataType": "constructor",
+          "index": 3,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1Credential"
+            },
+            {
+              "$ref": "#/definitions/script_context_schema~1Delegatee"
+            },
+            {
+              "$ref": "#/definitions/script_context_schema~1Lovelace"
+            }
+          ]
+        },
+        {
+          "title": "TxCertRegDRep",
+          "dataType": "constructor",
+          "index": 4,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1DRepCredential"
+            },
+            {
+              "$ref": "#/definitions/script_context_schema~1Lovelace"
+            }
+          ]
+        },
+        {
+          "title": "TxCertUpdateDRep",
+          "dataType": "constructor",
+          "index": 5,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1DRepCredential"
+            }
+          ]
+        },
+        {
+          "title": "TxCertUnRegDRep",
+          "dataType": "constructor",
+          "index": 6,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1DRepCredential"
+            },
+            {
+              "$ref": "#/definitions/script_context_schema~1Lovelace"
+            }
+          ]
+        },
+        {
+          "title": "TxCertPoolRegister",
+          "dataType": "constructor",
+          "index": 7,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1PubKeyHash"
+            },
+            {
+              "$ref": "#/definitions/script_context_schema~1PubKeyHash"
+            }
+          ]
+        },
+        {
+          "title": "TxCertPoolRetire",
+          "dataType": "constructor",
+          "index": 8,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1PubKeyHash"
+            },
+            {
+              "$ref": "#/definitions/Int"
+            }
+          ]
+        },
+        {
+          "title": "TxCertAuthHotCommittee",
+          "dataType": "constructor",
+          "index": 9,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1ColdCommitteeCredential"
+            },
+            {
+              "$ref": "#/definitions/script_context_schema~1HotCommitteeCredential"
+            }
+          ]
+        },
+        {
+          "title": "TxCertResignColdCommittee",
+          "dataType": "constructor",
+          "index": 10,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1ColdCommitteeCredential"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/TxId": {
+      "title": "TxId",
+      "dataType": "bytes"
+    },
+    "script_context_schema/TxInInfo": {
+      "title": "TxInInfo",
+      "anyOf": [
+        {
+          "title": "TxInInfo",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "tx_in_info_out_ref",
+              "$ref": "#/definitions/script_context_schema~1TxOutRef"
+            },
+            {
+              "title": "tx_in_info_resolved",
+              "$ref": "#/definitions/script_context_schema~1TxOut"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/TxInfo": {
+      "title": "TxInfo",
+      "anyOf": [
+        {
+          "title": "TxInfo",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "tx_info_inputs",
+              "$ref": "#/definitions/List<script_context_schema~1TxInInfo>"
+            },
+            {
+              "title": "tx_info_reference_inputs",
+              "$ref": "#/definitions/List<script_context_schema~1TxInInfo>"
+            },
+            {
+              "title": "tx_info_outputs",
+              "$ref": "#/definitions/List<script_context_schema~1TxOut>"
+            },
+            {
+              "title": "tx_info_fee",
+              "$ref": "#/definitions/script_context_schema~1Lovelace"
+            },
+            {
+              "title": "tx_info_mint",
+              "$ref": "#/definitions/script_context_schema~1MintValue"
+            },
+            {
+              "title": "tx_info_tx_certs",
+              "$ref": "#/definitions/List<script_context_schema~1TxCert>"
+            },
+            {
+              "title": "tx_info_wdrl",
+              "$ref": "#/definitions/Pairs<script_context_schema~1Credential,script_context_schema~1Lovelace>"
+            },
+            {
+              "title": "tx_info_valid_range",
+              "$ref": "#/definitions/script_context_schema~1POSIXTimeRange"
+            },
+            {
+              "title": "tx_info_signatories",
+              "$ref": "#/definitions/List<script_context_schema~1PubKeyHash>"
+            },
+            {
+              "title": "tx_info_redeemers",
+              "$ref": "#/definitions/Pairs<script_context_schema~1ScriptPurpose,script_context_schema~1Redeemer>"
+            },
+            {
+              "title": "tx_info_data",
+              "$ref": "#/definitions/Pairs<script_context_schema~1DatumHash,script_context_schema~1Datum>"
+            },
+            {
+              "title": "tx_info_id",
+              "$ref": "#/definitions/script_context_schema~1TxId"
+            },
+            {
+              "title": "tx_info_votes",
+              "$ref": "#/definitions/Pairs<script_context_schema~1Voter,Pairs<script_context_schema~1GovernanceActionId,script_context_schema~1Vote>>"
+            },
+            {
+              "title": "tx_info_proposal_procedures",
+              "$ref": "#/definitions/List<script_context_schema~1ProposalProcedure>"
+            },
+            {
+              "title": "tx_info_current_treasury_amount",
+              "$ref": "#/definitions/Option<script_context_schema~1Lovelace>"
+            },
+            {
+              "title": "tx_info_treasury_donation",
+              "$ref": "#/definitions/Option<script_context_schema~1Lovelace>"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/TxOut": {
+      "title": "TxOut",
+      "anyOf": [
+        {
+          "title": "TxOut",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "tx_out_address",
+              "$ref": "#/definitions/script_context_schema~1Address"
+            },
+            {
+              "title": "tx_out_value",
+              "$ref": "#/definitions/script_context_schema~1Value"
+            },
+            {
+              "title": "tx_out_datum",
+              "$ref": "#/definitions/script_context_schema~1OutputDatum"
+            },
+            {
+              "title": "tx_out_reference_script",
+              "$ref": "#/definitions/Option<script_context_schema~1ScriptHash>"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/TxOutRef": {
+      "title": "TxOutRef",
+      "anyOf": [
+        {
+          "title": "TxOutRef",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "tx_out_ref_id",
+              "$ref": "#/definitions/script_context_schema~1TxId"
+            },
+            {
+              "title": "tx_out_ref_idx",
+              "$ref": "#/definitions/Int"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/UpperBoundPOSIXTime": {
+      "title": "UpperBoundPOSIXTime",
+      "anyOf": [
+        {
+          "title": "UpperBoundPOSIXTime",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "upper_bound_limit",
+              "$ref": "#/definitions/script_context_schema~1ExtendedPOSIXTime"
+            },
+            {
+              "title": "upper_bound_closed",
+              "$ref": "#/definitions/Bool"
+            }
+          ]
+        }
+      ]
+    },
+    "script_context_schema/Value": {
+      "title": "Value",
+      "dataType": "map",
+      "keys": {
+        "$ref": "#/definitions/script_context_schema~1CurrencySymbol"
+      },
+      "values": {
+        "$ref": "#/definitions/Pairs<script_context_schema~1TokenName,Int>"
+      }
+    },
+    "script_context_schema/Vote": {
+      "title": "Vote",
+      "anyOf": [
+        {
+          "title": "VoteNo",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": []
+        },
+        {
+          "title": "VoteYes",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": []
+        },
+        {
+          "title": "Abstain",
+          "dataType": "constructor",
+          "index": 2,
+          "fields": []
+        }
+      ]
+    },
+    "script_context_schema/Voter": {
+      "title": "Voter",
+      "anyOf": [
+        {
+          "title": "CommitteeVoter",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1HotCommitteeCredential"
+            }
+          ]
+        },
+        {
+          "title": "DRepVoter",
+          "dataType": "constructor",
+          "index": 1,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1DRepCredential"
+            }
+          ]
+        },
+        {
+          "title": "StakePoolVoter",
+          "dataType": "constructor",
+          "index": 2,
+          "fields": [
+            {
+              "$ref": "#/definitions/script_context_schema~1PubKeyHash"
             }
           ]
         }
