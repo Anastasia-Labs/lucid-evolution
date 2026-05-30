@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.5.1
+
+### Patch Changes
+
+- [#700](https://github.com/Anastasia-Labs/lucid-evolution/pull/700) [`f038a37`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f038a37092e94bdba8e51415b9ffd80ca44fcb38) Thanks [@colll78](https://github.com/colll78)! - Add Plutus V3 ScriptContext data schemas and emulator coverage that checks their structure against Aiken's ledger ScriptContext encoding.
+
 ## 0.5.0
 
 ### Minor Changes
