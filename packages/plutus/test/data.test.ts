@@ -139,6 +139,7 @@ describe.sequential("Roundtrip data", () => {
     const newDatum = Data.from(Data.to(datum, MyDatum), MyDatum);
     assert.deepEqual(datum, newDatum);
   });
+
   /*
     - TypeScript:
 

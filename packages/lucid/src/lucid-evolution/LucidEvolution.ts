@@ -185,6 +185,11 @@ export const Lucid = async (
       TxSignBuilder.makeTxSignBuilder(
         config.wallet,
         CML.Transaction.from_cbor_hex(tx),
+        {
+          slotConfig: config.network
+            ? SLOT_CONFIG_NETWORK[config.network]
+            : undefined,
+        },
       ),
     selectWallet: {
       fromSeed: (

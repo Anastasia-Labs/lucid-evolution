@@ -302,6 +302,15 @@ const completeCurrentConfig = (
               transaction.to_canonical_cbor_bytes(),
             )
           : transaction,
+        {
+          resolvedInputs: [
+            ...config.walletInputs,
+            ...config.consumedInputs,
+            ...config.collectedInputs,
+            ...config.readInputs,
+          ],
+          slotConfig: SLOT_CONFIG_NETWORK[config.lucidConfig.network],
+        },
       ),
     );
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
