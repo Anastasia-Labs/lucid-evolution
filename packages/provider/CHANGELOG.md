@@ -1,5 +1,33 @@
 # @lucid-evolution/provider
 
+## 0.1.95
+
+### Patch Changes
+
+- [#695](https://github.com/Anastasia-Labs/lucid-evolution/pull/695) [`2b1557f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2b1557f3e1df1172da1f4472b92a73249071bd38) Thanks [@colll78](https://github.com/colll78)! - Add treasury donation transaction building through `donateToTreasury`, including provider-backed current treasury queries for Blockfrost, Koios, Kupmios/Ogmios, and the emulator.
+
+- Updated dependencies [[`2b1557f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2b1557f3e1df1172da1f4472b92a73249071bd38), [`2b1557f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2b1557f3e1df1172da1f4472b92a73249071bd38)]:
+  - @lucid-evolution/core-types@0.2.0
+  - @lucid-evolution/utils@0.1.69
+  - @lucid-evolution/wallet@0.1.75
+
+## 0.1.94
+
+### Patch Changes
+
+- [#693](https://github.com/Anastasia-Labs/lucid-evolution/pull/693) [`92bcf1e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/92bcf1eb91bca2470584f288b60eb171446e17ab) Thanks [@colll78](https://github.com/colll78)! - Add optional certificate redeemer support to `registerStake` and `register.Stake`, using witnessed registration certificates when a redeemer is supplied while preserving the existing witnessless registration path otherwise.
+
+  The emulator now recognizes witnessed stake registration certificates when validating certificate witnesses.
+
+## 0.1.93
+
+### Patch Changes
+
+- Updated dependencies [[`775c4e9`](https://github.com/Anastasia-Labs/lucid-evolution/commit/775c4e94b1306f440b4170eee07cf63c48c0119f)]:
+  - @lucid-evolution/core-types@0.1.24
+  - @lucid-evolution/utils@0.1.68
+  - @lucid-evolution/wallet@0.1.74
+
 ## 0.1.92
 
 ### Patch Changes

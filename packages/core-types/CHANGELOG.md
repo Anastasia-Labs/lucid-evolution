@@ -1,5 +1,21 @@
 # @lucid-evolution/core-types
 
+## 0.2.0
+
+### Minor Changes
+
+- [#695](https://github.com/Anastasia-Labs/lucid-evolution/pull/695) [`2b1557f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2b1557f3e1df1172da1f4472b92a73249071bd38) Thanks [@colll78](https://github.com/colll78)! - Add pluggable local evaluator adapters for transaction evaluation, keep the built-in Aiken/WASM evaluator as the default local evaluator, and introduce a Scalus-backed evaluator package.
+
+### Patch Changes
+
+- [#695](https://github.com/Anastasia-Labs/lucid-evolution/pull/695) [`2b1557f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2b1557f3e1df1172da1f4472b92a73249071bd38) Thanks [@colll78](https://github.com/colll78)! - Add treasury donation transaction building through `donateToTreasury`, including provider-backed current treasury queries for Blockfrost, Koios, Kupmios/Ogmios, and the emulator.
+
+## 0.1.24
+
+### Patch Changes
+
+- [#689](https://github.com/Anastasia-Labs/lucid-evolution/pull/689) [`775c4e9`](https://github.com/Anastasia-Labs/lucid-evolution/commit/775c4e94b1306f440b4170eee07cf63c48c0119f) Thanks [@colll78](https://github.com/colll78)! - Add BuildTxWithRedeemer and RedeemerContext support for constructing redeemers from the finalized transaction context across script interactions.
+
 ## 0.1.23
 
 ### Patch Changes

@@ -1,5 +1,61 @@
 # @lucid-evolution/lucid
 
+## 0.5.1
+
+### Patch Changes
+
+- [#700](https://github.com/Anastasia-Labs/lucid-evolution/pull/700) [`f038a37`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f038a37092e94bdba8e51415b9ffd80ca44fcb38) Thanks [@colll78](https://github.com/colll78)! - Add Plutus V3 ScriptContext data schemas and emulator coverage that checks their structure against Aiken's ledger ScriptContext encoding.
+
+## 0.5.0
+
+### Minor Changes
+
+- [#695](https://github.com/Anastasia-Labs/lucid-evolution/pull/695) [`2b1557f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2b1557f3e1df1172da1f4472b92a73249071bd38) Thanks [@colll78](https://github.com/colll78)! - Add pluggable local evaluator adapters for transaction evaluation, keep the built-in Aiken/WASM evaluator as the default local evaluator, and introduce a Scalus-backed evaluator package.
+
+### Patch Changes
+
+- [#695](https://github.com/Anastasia-Labs/lucid-evolution/pull/695) [`2b1557f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2b1557f3e1df1172da1f4472b92a73249071bd38) Thanks [@colll78](https://github.com/colll78)! - Add treasury donation transaction building through `donateToTreasury`, including provider-backed current treasury queries for Blockfrost, Koios, Kupmios/Ogmios, and the emulator.
+
+- Updated dependencies [[`2b1557f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2b1557f3e1df1172da1f4472b92a73249071bd38), [`2b1557f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2b1557f3e1df1172da1f4472b92a73249071bd38)]:
+  - @lucid-evolution/core-types@0.2.0
+  - @lucid-evolution/provider@0.1.95
+  - @lucid-evolution/plutus@0.1.32
+  - @lucid-evolution/sign_data@0.1.28
+  - @lucid-evolution/tx-graph@0.0.1
+  - @lucid-evolution/utils@0.1.69
+  - @lucid-evolution/wallet@0.1.75
+
+## 0.4.34
+
+### Patch Changes
+
+- [#693](https://github.com/Anastasia-Labs/lucid-evolution/pull/693) [`92bcf1e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/92bcf1eb91bca2470584f288b60eb171446e17ab) Thanks [@colll78](https://github.com/colll78)! - Add optional certificate redeemer support to `registerStake` and `register.Stake`, using witnessed registration certificates when a redeemer is supplied while preserving the existing witnessless registration path otherwise.
+
+  The emulator now recognizes witnessed stake registration certificates when validating certificate witnesses.
+
+- Updated dependencies [[`92bcf1e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/92bcf1eb91bca2470584f288b60eb171446e17ab)]:
+  - @lucid-evolution/provider@0.1.94
+
+## 0.4.33
+
+### Patch Changes
+
+- [#691](https://github.com/Anastasia-Labs/lucid-evolution/pull/691) [`2c267e9`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2c267e99d31dd04073fd222a919b614103dfb16c) Thanks [@colll78](https://github.com/colll78)! - Support `BuildTxWithRedeemer` for certificate transactions, including stake, DRep, delegation, and committee certificate redeemers.
+
+## 0.4.32
+
+### Patch Changes
+
+- [#689](https://github.com/Anastasia-Labs/lucid-evolution/pull/689) [`775c4e9`](https://github.com/Anastasia-Labs/lucid-evolution/commit/775c4e94b1306f440b4170eee07cf63c48c0119f) Thanks [@colll78](https://github.com/colll78)! - Add BuildTxWithRedeemer and RedeemerContext support for constructing redeemers from the finalized transaction context across script interactions.
+
+- Updated dependencies [[`775c4e9`](https://github.com/Anastasia-Labs/lucid-evolution/commit/775c4e94b1306f440b4170eee07cf63c48c0119f)]:
+  - @lucid-evolution/core-types@0.1.24
+  - @lucid-evolution/plutus@0.1.31
+  - @lucid-evolution/provider@0.1.93
+  - @lucid-evolution/sign_data@0.1.27
+  - @lucid-evolution/utils@0.1.68
+  - @lucid-evolution/wallet@0.1.74
+
 ## 0.4.31
 
 ### Patch Changes
