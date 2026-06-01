@@ -5,7 +5,9 @@ import * as S from "@effect/schema/Schema";
 //TODO: move to commont utils
 import {
   PrivateKey,
+  SlotConfig,
   TransactionWitnesses,
+  UTxO,
   Wallet,
 } from "@lucid-evolution/core-types";
 import { TransactionSignError } from "../Errors.js";
@@ -14,6 +16,13 @@ import * as CompleteTxSigner from "./internal/CompleteTxSigner.js";
 import { Either } from "effect/Either";
 import * as Sign from "./internal/Sign.js";
 import { CBORHex, Hash } from "../tx-builder/types.js";
+import {
+  makeScriptContext,
+  makeScriptContexts,
+  ScriptContextData,
+  ScriptContextOptions,
+  ScriptPurposeData,
+} from "../script-context/index.js";
 
 export interface TxSignBuilderConfig {
   txComplete: CML.Transaction;
@@ -22,6 +31,8 @@ export interface TxSignBuilderConfig {
   wallet: Wallet | undefined;
   fee: number;
   exUnits: { cpu: number; mem: number } | null;
+  resolvedInputs: ReadonlyArray<UTxO>;
+  slotConfig: SlotConfig | undefined;
 }
 
 export interface TxSignBuilder {
@@ -74,6 +85,13 @@ export interface TxSignBuilder {
    */
   toCBOR: (options?: { canonical: boolean }) => CBORHex;
   toTransaction: () => CML.Transaction;
+  /** Builds the Plutus V3 ScriptContext for one script purpose in this transaction. */
+  toScriptContext: (
+    purpose: ScriptPurposeData,
+    options?: ScriptContextOptions,
+  ) => ScriptContextData;
+  /** Builds Plutus V3 ScriptContexts for every redeemer-bearing script purpose. */
+  toScriptContexts: (options?: ScriptContextOptions) => ScriptContextData[];
   /** Converts the transaction body to JSON format. */
   toJSON: () => object;
   /** Computes the hash of the transaction body. */
@@ -88,6 +106,10 @@ export interface TxSignBuilder {
 export const makeTxSignBuilder = (
   wallet: Wallet | undefined,
   tx: CML.Transaction,
+  options: {
+    resolvedInputs?: ReadonlyArray<UTxO>;
+    slotConfig?: SlotConfig;
+  } = {},
 ): TxSignBuilder => {
   const redeemers = tx.witness_set().redeemers();
   const exUnits = { cpu: 0, mem: 0 };
@@ -119,7 +141,16 @@ export const makeTxSignBuilder = (
     wallet: wallet,
     fee: parseInt(tx.body().fee().toString()),
     exUnits: exUnits,
+    resolvedInputs: options.resolvedInputs ?? [],
+    slotConfig: options.slotConfig,
   };
+
+  const scriptContextOptions = (
+    overrides: ScriptContextOptions = {},
+  ): ScriptContextOptions => ({
+    resolvedInputs: overrides.resolvedInputs ?? config.resolvedInputs,
+    slotConfig: overrides.slotConfig ?? config.slotConfig,
+  });
 
   const txSignBuilder: TxSignBuilder = {
     sign: {
@@ -156,6 +187,14 @@ export const makeTxSignBuilder = (
         ? config.txComplete.to_canonical_cbor_hex()
         : config.txComplete.to_cbor_hex(),
     toTransaction: () => config.txComplete,
+    toScriptContext: (purpose, options) =>
+      makeScriptContext(
+        config.txComplete,
+        purpose,
+        scriptContextOptions(options),
+      ),
+    toScriptContexts: (options) =>
+      makeScriptContexts(config.txComplete, scriptContextOptions(options)),
     toJSON: () =>
       S.decodeUnknownSync(S.parseJson(S.Object))(config.txComplete.to_json()),
     toHash: () => CML.hash_transaction(config.txComplete.body()).to_hex(),
