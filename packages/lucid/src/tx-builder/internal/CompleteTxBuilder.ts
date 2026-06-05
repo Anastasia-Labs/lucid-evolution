@@ -278,7 +278,16 @@ const completeCurrentConfig = (
           .build_unchecked(),
       catch: (error) => completeTxError(error),
     });
-    const transaction = yield* refreshScriptDataHash(builtTransaction, config);
+    const shouldCanonicalize = canonical || internalOptions.forceCanonical;
+    const transactionBeforeScriptDataHash = shouldCanonicalize
+      ? CML.Transaction.from_cbor_bytes(
+          builtTransaction.to_canonical_cbor_bytes(),
+        )
+      : builtTransaction;
+    const transaction = yield* refreshScriptDataHash(
+      transactionBeforeScriptDataHash,
+      config,
+    );
 
     const derivedInputs = deriveInputsFromTransaction(transaction);
 
@@ -295,23 +304,15 @@ const completeCurrentConfig = (
     return Tuple.make(
       updatedWalletInputs,
       derivedInputs,
-      TxSignBuilder.makeTxSignBuilder(
-        config.lucidConfig.wallet,
-        canonical || internalOptions.forceCanonical
-          ? CML.Transaction.from_cbor_bytes(
-              transaction.to_canonical_cbor_bytes(),
-            )
-          : transaction,
-        {
-          resolvedInputs: [
-            ...config.walletInputs,
-            ...config.consumedInputs,
-            ...config.collectedInputs,
-            ...config.readInputs,
-          ],
-          slotConfig: SLOT_CONFIG_NETWORK[config.lucidConfig.network],
-        },
-      ),
+      TxSignBuilder.makeTxSignBuilder(config.lucidConfig.wallet, transaction, {
+        resolvedInputs: [
+          ...config.walletInputs,
+          ...config.consumedInputs,
+          ...config.collectedInputs,
+          ...config.readInputs,
+        ],
+        slotConfig: SLOT_CONFIG_NETWORK[config.lucidConfig.network],
+      }),
     );
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
