@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.5.3
+
+### Patch Changes
+
+- [#705](https://github.com/Anastasia-Labs/lucid-evolution/pull/705) [`6574978`](https://github.com/Anastasia-Labs/lucid-evolution/commit/6574978cfc3c3bb30505ffe8ddd723386e3f9a45) Thanks [@colll78](https://github.com/colll78)! - Refresh the script integrity hash after canonicalizing completed transactions so delayed redeemer completions return transactions with matching canonical witness data.
+
 ## 0.5.2
 
 ### Patch Changes
