@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.5.4
+
+### Patch Changes
+
+- [#708](https://github.com/Anastasia-Labs/lucid-evolution/pull/708) [`19758f3`](https://github.com/Anastasia-Labs/lucid-evolution/commit/19758f37445c8b3e16a131dca0ae9aedd4cb9474) Thanks [@colll78](https://github.com/colll78)! - Respect custom minimum fees during phase-two evaluation and re-evaluate script transactions when execution units change the script-visible fee or change outputs.
+
 ## 0.5.3
 
 ### Patch Changes
