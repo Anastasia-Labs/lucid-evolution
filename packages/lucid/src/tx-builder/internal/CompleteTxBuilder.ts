@@ -67,6 +67,8 @@ import {
   transactionFixedPointFingerprint,
 } from "./RedeemerContext.js";
 
+const MAX_EVALUATION_ATTEMPTS = 8;
+
 export type CompleteOptions = {
   /**
    * Enable coin selection algorithm
@@ -219,7 +221,7 @@ const completeCurrentConfig = (
 
     // First round of coin selection and UPLC evaluation. The fee estimation is lacking
     // the script execution costs as they aren't available yet.
-    yield* selectionAndEvaluation(
+    let evaluatedScriptBody = yield* selectionAndEvaluation(
       walletInputs,
       changeAddress,
       coinSelection,
@@ -252,18 +254,19 @@ const completeCurrentConfig = (
         walletInputs,
       );
       yield* applyCollateral(totalCollateral, collateralInput, changeAddress);
-      yield* selectionAndEvaluation(
-        walletInputs,
-        changeAddress,
-        coinSelection,
-        localUPLCEval,
-        evaluator,
-        includeLeftoverLovelaceAsFee,
-        true,
-        internalOptions.bootstrapExUnits === true,
-      );
+      evaluatedScriptBody =
+        (yield* selectionAndEvaluation(
+          walletInputs,
+          changeAddress,
+          coinSelection,
+          localUPLCEval,
+          evaluator,
+          includeLeftoverLovelaceAsFee,
+          true,
+          internalOptions.bootstrapExUnits === true,
+        )) || evaluatedScriptBody;
     }
-    yield* applyCustomMinFee(config, true);
+    yield* applyEffectiveFee(config, true, evaluatedScriptBody);
     config.txBuilder.add_change_if_needed(
       CML.Address.from_bech32(changeAddress),
       true,
@@ -445,12 +448,8 @@ export const selectionAndEvaluation = (
           )
         : { selected: [], burnable: { lovelace: 0n } };
 
-    // Skip UPLC evaluation for the second time if no new inputs are added
-    let estimatedFee = 0n;
+    let estimatedFee = yield* estimateFee(config, script_calculation);
     if (_Array.isEmptyArray(inputsToAdd)) {
-      if (script_calculation) {
-        return;
-      }
       estimatedFee += burnable.lovelace;
     }
     if (_Array.isNonEmptyArray(inputsToAdd)) {
@@ -480,36 +479,15 @@ export const selectionAndEvaluation = (
       } else yield* completePartialPrograms();
     }
 
-    // Build transaction to begin with UPLC evaluation
-    const txRedeemerBuilder = yield* Effect.try({
-      try: () =>
-        config.txBuilder.build_for_evaluation(
-          0,
-          CML.Address.from_bech32(changeAddress),
-        ),
-      catch: (error) => completeTxError(error),
-    });
-
-    if (txRedeemerBuilder.draft_tx().witness_set().redeemers()) {
-      if (bootstrapExUnits) {
-        // Unresolved delayed redeemers prevent phase-two evaluation of the
-        // draft, but fee and collateral selection still need script costs.
-        applyBootstrapRedeemerExUnits(
-          txRedeemerBuilder.draft_tx().witness_set().redeemers()!,
-          config.txBuilder,
-          config.lucidConfig.protocolParameters.maxTxExMem,
-          config.lucidConfig.protocolParameters.maxTxExSteps,
-        );
-        return;
-      }
-      yield* evaluateTransaction(
-        config,
-        txRedeemerBuilder,
-        walletInputs,
-        localUPLCEval,
-        evaluator,
-      );
-    }
+    return yield* evaluateUntilStable(
+      config,
+      walletInputs,
+      changeAddress,
+      script_calculation,
+      localUPLCEval,
+      evaluator,
+      bootstrapExUnits,
+    );
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
 //TODO: This should
@@ -1130,15 +1108,106 @@ const estimateFee = (
       : minFee;
   });
 
-const applyCustomMinFee = (
+const applyEffectiveFee = (
   config: TxBuilder.TxBuilderConfig,
   script_calculation: boolean,
-): Effect.Effect<void, TxBuilderError, never> =>
+  forceExplicitFee: boolean = false,
+): Effect.Effect<bigint, TxBuilderError, never> =>
   Effect.gen(function* () {
-    const minFee = config.txBuilder.min_fee(script_calculation);
-    const customMinFee = config.minFee;
-    if (customMinFee !== undefined && customMinFee > minFee)
-      config.txBuilder.set_fee(customMinFee);
+    const effectiveFee = yield* estimateFee(config, script_calculation);
+    // Keep ordinary transactions on CML's computed-fee path. When setMinFee is
+    // active or scripts were evaluated, overwrite the explicit fee every pass
+    // so the fee floor never gets stale.
+    if (forceExplicitFee || config.minFee !== undefined)
+      config.txBuilder.set_fee(effectiveFee);
+    return effectiveFee;
+  });
+
+const buildEvaluationDraft = (
+  config: TxBuilder.TxBuilderConfig,
+  changeAddress: string,
+): Effect.Effect<CML.Transaction, TxBuilderError> =>
+  Effect.try({
+    try: () =>
+      config.txBuilder
+        .build_for_evaluation(0, CML.Address.from_bech32(changeAddress))
+        .draft_tx(),
+    catch: (error) => completeTxError(error),
+  });
+
+const buildEvaluationCandidate = (
+  config: TxBuilder.TxBuilderConfig,
+  changeAddress: string,
+  script_calculation: boolean,
+  forceExplicitFee: boolean,
+): Effect.Effect<CML.Transaction, TxBuilderError> =>
+  Effect.gen(function* () {
+    yield* applyEffectiveFee(config, script_calculation, forceExplicitFee);
+    const candidate = yield* buildEvaluationDraft(config, changeAddress);
+    if (forceExplicitFee || !candidate.witness_set().redeemers()) {
+      return candidate;
+    }
+    yield* applyEffectiveFee(config, script_calculation, true);
+    return yield* buildEvaluationDraft(config, changeAddress);
+  });
+
+const evaluationFixedPointFingerprint = (tx: CML.Transaction): string =>
+  transactionFixedPointFingerprint(setRedeemerstoZero(tx));
+
+const evaluateUntilStable = (
+  config: TxBuilder.TxBuilderConfig,
+  walletInputs: UTxO[],
+  changeAddress: string,
+  script_calculation: boolean,
+  localUPLCEval: boolean,
+  evaluator: EvaluatorAdapter | undefined,
+  bootstrapExUnits: boolean,
+): Effect.Effect<boolean, TxBuilderError | EvaluatorError> =>
+  Effect.gen(function* () {
+    let previousFingerprint: string | undefined;
+    let forceExplicitFee = config.minFee !== undefined;
+
+    for (let attempt = 0; attempt < MAX_EVALUATION_ATTEMPTS; attempt++) {
+      const candidate = yield* buildEvaluationCandidate(
+        config,
+        changeAddress,
+        script_calculation,
+        forceExplicitFee,
+      );
+      const redeemers = candidate.witness_set().redeemers();
+      if (!redeemers) return false;
+      forceExplicitFee = true;
+
+      if (bootstrapExUnits) {
+        // Unresolved delayed redeemers prevent phase-two evaluation of the
+        // draft, but fee and collateral selection still need script costs.
+        applyBootstrapRedeemerExUnits(
+          redeemers,
+          config.txBuilder,
+          config.lucidConfig.protocolParameters.maxTxExMem,
+          config.lucidConfig.protocolParameters.maxTxExSteps,
+        );
+        return true;
+      }
+
+      // Re-evaluate only when the zero-exunit candidate changes in a way that
+      // scripts can observe, such as fee or change-output drift after ex-units.
+      const fingerprint = evaluationFixedPointFingerprint(candidate);
+      if (fingerprint === previousFingerprint) return true;
+      previousFingerprint = fingerprint;
+
+      yield* evaluateTransaction(
+        config,
+        candidate,
+        walletInputs,
+        localUPLCEval,
+        evaluator,
+      );
+    }
+
+    return yield* completeTxError(
+      `Phase-two evaluation did not converge after ${MAX_EVALUATION_ATTEMPTS} attempts. Check for scripts that depend on transaction fees, change outputs, or execution-unit-driven transaction shape.`,
+    );
   });
 
 const resolveEvaluationUTxOs = (
@@ -1228,7 +1297,7 @@ const wrapEvaluatorCause = (
 
 const evaluateTransaction = (
   config: TxBuilder.TxBuilderConfig,
-  txRedeemerBuilder: CML.TxRedeemerBuilder,
+  tx: CML.Transaction,
   walletInputs: UTxO[],
   localUPLCEval: boolean,
   evaluator: EvaluatorAdapter | undefined,
@@ -1236,7 +1305,7 @@ const evaluateTransaction = (
   Effect.gen(function* () {
     const adapter = resolveEvaluatorAdapter(config, localUPLCEval, evaluator);
     const name = evaluatorName(adapter);
-    const txEvaluation = setRedeemerstoZero(txRedeemerBuilder.draft_tx())!;
+    const txEvaluation = setRedeemerstoZero(tx)!;
     const redeemers = txEvaluation.witness_set().redeemers();
     if (!redeemers) return;
     const expectedKeys = expectedRedeemerKeySet(redeemers);
