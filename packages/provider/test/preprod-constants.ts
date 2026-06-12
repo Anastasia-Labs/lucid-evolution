@@ -311,7 +311,7 @@ export const evalSample4: {
     {
       redeemer_tag: "publish",
       redeemer_index: 0,
-      ex_units: { mem: 272836, steps: 82986442 },
+      ex_units: { mem: 272781, steps: 79688807 },
     },
   ],
   transaction:
