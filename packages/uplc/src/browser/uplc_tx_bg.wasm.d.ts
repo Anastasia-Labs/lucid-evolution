@@ -1,6 +1,12 @@
 /* tslint:disable */
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
+export const apply_params_to_script: (
+  a: number,
+  b: number,
+  c: number,
+  d: number,
+) => [number, number, number, number];
 export const eval_phase_two_raw: (
   a: number,
   b: number,
@@ -15,12 +21,6 @@ export const eval_phase_two_raw: (
   k: bigint,
   l: bigint,
   m: number,
-) => [number, number, number, number];
-export const apply_params_to_script: (
-  a: number,
-  b: number,
-  c: number,
-  d: number,
 ) => [number, number, number, number];
 export const __wbindgen_export_0: WebAssembly.Table;
 export const __wbindgen_malloc: (a: number, b: number) => number;

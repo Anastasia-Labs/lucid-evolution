@@ -30,10 +30,9 @@ type Script = PlutusV1 | PlutusV2 | PlutusV3;
  * - "b5ae663aaea8e500157bdf4baafd6f5ba0ce5759f7cd4101fc132f54.706174617465"
  */
 export type Value = {
-  coins: number;
-  assets?: Asset;
-};
-export type Asset = Record<string, number>;
+  ada: { lovelace: number };
+} & Asset;
+export type Asset = Record<string, Record<string, number>>;
 
 export interface TxIn {
   txId: string;
@@ -64,8 +63,8 @@ export const toAditionalUTXOs = (
     {
       address: utxo.address,
       value: {
-        coins: Number(utxo.assets["lovelace"]),
-        assets: fromAssets(utxo.assets),
+        ada: { lovelace: Number(utxo.assets["lovelace"]) },
+        ...fromAssets(utxo.assets),
       },
       datumHash: utxo.datumHash,
       datum: utxo.datum,
@@ -91,16 +90,16 @@ export const toTxOutScript = (
 };
 
 export const fromAssets = (assets: CoreType.Assets) =>
-  pipe(
-    Record.remove(assets, "lovelace"),
-    Record.mapEntries((amount, unit) => [
-      unit.length === 56
-        ? unit.slice(0, 56)
-        : unit.slice(0, 56) + "." + unit.slice(56),
-      Number(amount),
-    ]),
-    (r) => (Record.isEmptyRecord(r) ? undefined : r),
-  );
+  pipe(Record.remove(assets, "lovelace"), (nativeAssets) => {
+    const result: Asset = {};
+    for (const [unit, amount] of Object.entries(nativeAssets)) {
+      const policyId = unit.slice(0, 56);
+      const assetName = unit.slice(56);
+      result[policyId] ??= {};
+      result[policyId][assetName] = Number(amount);
+    }
+    return result;
+  });
 
 export type LegacyRedeemerTag = "spend" | "mint" | "certificate" | "withdrawal";
 

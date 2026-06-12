@@ -481,8 +481,8 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0
       scalus:
-        specifier: ^0.17.0
-        version: 0.17.0
+        specifier: ^0.18.0
+        version: 0.18.0
     devDependencies:
       '@types/node':
         specifier: ^20.12.8
@@ -5691,8 +5691,8 @@ packages:
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
 
-  scalus@0.17.0:
-    resolution: {integrity: sha512-74mD4wL1vw4GVh2ECemQhoB3q5Smwj5S8W7OG1j7OWuLkwJ0Mvz4LFhZPA9rZjpNvanZoKiDqc3S/qGD65uRYg==}
+  scalus@0.18.0:
+    resolution: {integrity: sha512-mW6wVAjcy2OZAH7lGvbMfOZtZqv8TPwIVPWoP6bUGnjZS6cyw9k4rL6yYiXKHxQWGHyPT/GTL0wcpPt8CwNj3g==}
 
   scheduler@0.23.2:
     resolution: {integrity: sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==}
@@ -12958,7 +12958,7 @@ snapshots:
 
   safer-buffer@2.1.2: {}
 
-  scalus@0.17.0: {}
+  scalus@0.18.0: {}
 
   scheduler@0.23.2:
     dependencies:

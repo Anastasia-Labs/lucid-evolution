@@ -3,6 +3,8 @@ import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 export type CostModels = Record<PlutusVersion, number[]>;
 
 export type ProtocolParameters = {
+  protocolMajorVersion?: number;
+  protocolMinorVersion?: number;
   minFeeA: number;
   minFeeB: number;
   maxTxSize: number;

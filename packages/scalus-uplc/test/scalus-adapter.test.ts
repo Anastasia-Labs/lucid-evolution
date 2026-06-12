@@ -6,7 +6,7 @@ import {
 import { createScalusEvaluator, decodeCostModels } from "../src/index.js";
 
 const mocks = vi.hoisted(() => ({
-  evalPlutusScripts: vi.fn<() => unknown[]>(() => []),
+  evalPlutusScripts: vi.fn((..._args: unknown[]): unknown[] => []),
 }));
 
 vi.mock("scalus", () => ({
@@ -99,6 +99,62 @@ describe("Scalus evaluator adapter", () => {
         ex_units: { mem: 2, steps: 3 },
       },
     ]);
+  });
+
+  test("passes the configured protocol major version when Scalus exposes it", async () => {
+    mocks.evalPlutusScripts.mockImplementationOnce(
+      (
+        _tx,
+        _utxos,
+        _slotConfig,
+        _costModels,
+        _protocolMajorVersion,
+      ): unknown[] => [],
+    );
+    const evaluator = createScalusEvaluator({ protocolMajorVersion: 11 });
+
+    await expect(evaluator.evaluate(makeEvaluationInput())).resolves.toEqual(
+      [],
+    );
+
+    expect(mocks.evalPlutusScripts).toHaveBeenCalledWith(
+      expect.any(Uint8Array),
+      expect.any(Uint8Array),
+      expect.any(Object),
+      [[1], [2], [3]],
+      11,
+    );
+  });
+
+  test("infers PV11 from the PlutusV3 cost model length when no version is provided", async () => {
+    mocks.evalPlutusScripts.mockImplementationOnce(
+      (
+        _tx,
+        _utxos,
+        _slotConfig,
+        _costModels,
+        _protocolMajorVersion,
+      ): unknown[] => [],
+    );
+    const input = makeEvaluationInput();
+    input.context.protocolParameters = {
+      ...input.context.protocolParameters,
+      costModels: {
+        ...input.context.protocolParameters.costModels,
+        PlutusV3: Array(350).fill(0),
+      },
+    };
+    const evaluator = createScalusEvaluator();
+
+    await expect(evaluator.evaluate(input)).resolves.toEqual([]);
+
+    expect(mocks.evalPlutusScripts).toHaveBeenCalledWith(
+      expect.any(Uint8Array),
+      expect.any(Uint8Array),
+      expect.any(Object),
+      expect.any(Array),
+      11,
+    );
   });
 
   test.each([
