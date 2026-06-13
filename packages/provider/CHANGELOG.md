@@ -1,5 +1,16 @@
 # @lucid-evolution/provider
 
+## 0.1.96
+
+### Patch Changes
+
+- [#710](https://github.com/Anastasia-Labs/lucid-evolution/pull/710) [`cf9ffe0`](https://github.com/Anastasia-Labs/lucid-evolution/commit/cf9ffe046a39fdd6fd331b2ffd1f83b48a0934e6) Thanks [@colll78](https://github.com/colll78)! - Update the bundled Aiken UPLC evaluator to uplc 1.1.22, expose protocol version metadata from Blockfrost protocol parameters, and pass protocol major version through the Scalus evaluator adapter when available.
+
+- Updated dependencies [[`cf9ffe0`](https://github.com/Anastasia-Labs/lucid-evolution/commit/cf9ffe046a39fdd6fd331b2ffd1f83b48a0934e6)]:
+  - @lucid-evolution/core-types@0.2.1
+  - @lucid-evolution/utils@0.1.70
+  - @lucid-evolution/wallet@0.1.76
+
 ## 0.1.95
 
 ### Patch Changes
