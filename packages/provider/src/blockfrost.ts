@@ -50,6 +50,8 @@ export class Blockfrost implements Provider {
       headers: { project_id: this.projectId, lucid },
     }).then((res) => res.json());
     return {
+      protocolMajorVersion: parseInt(result.protocol_major_ver),
+      protocolMinorVersion: parseInt(result.protocol_minor_ver),
       minFeeA: parseInt(result.min_fee_a),
       minFeeB: parseInt(result.min_fee_b),
       maxTxSize: parseInt(result.max_tx_size),
@@ -326,33 +328,43 @@ export class Blockfrost implements Provider {
     tx: Transaction,
     additionalUTxOs?: UTxO[], // for tx chaining
   ): Promise<EvalRedeemer[]> {
-    const payload = {
-      cbor: tx,
-      additionalUtxoSet: _Blockfrost.toAditionalUTXOs(additionalUTxOs),
+    const evaluate = async (utxos?: UTxO[]) => {
+      const payload = {
+        cbor: tx,
+        ...(utxos?.length
+          ? { additionalUtxoSet: _Blockfrost.toAditionalUTXOs(utxos) }
+          : {}),
+      };
+
+      const res = await fetch(`${this.url}/utils/txs/evaluate/utxos`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          project_id: this.projectId,
+          lucid,
+        },
+        body: JSON.stringify(payload),
+      }).then((res) => res.json());
+      if (!res || res.fault) {
+        const message =
+          res?.status_code === 400
+            ? res.message
+            : `Could not evaluate the transaction: ${JSON.stringify(res)}. Transaction: ${tx}`;
+        throw new Error(message);
+      }
+      const blockfrostRedeemer = res as BlockfrostRedeemer;
+      if (!("EvaluationResult" in blockfrostRedeemer.result)) {
+        throw new Error(
+          `EvaluateTransaction fails: ${JSON.stringify(blockfrostRedeemer.result)}`,
+        );
+      }
+      return blockfrostRedeemer as BlockfrostEvaluationSuccess;
     };
 
-    const res = await fetch(`${this.url}/utils/txs/evaluate/utxos`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        project_id: this.projectId,
-        lucid,
-      },
-      body: JSON.stringify(payload),
-    }).then((res) => res.json());
-    if (!res || res.fault) {
-      const message =
-        res?.status_code === 400
-          ? res.message
-          : `Could not evaluate the transaction: ${JSON.stringify(res)}. Transaction: ${tx}`;
-      throw new Error(message);
-    }
-    const blockfrostRedeemer = res as BlockfrostRedeemer;
-    if (!("EvaluationResult" in blockfrostRedeemer.result)) {
-      throw new Error(
-        `EvaluateTransaction fails: ${JSON.stringify(blockfrostRedeemer.result)}`,
-      );
-    }
+    const blockfrostRedeemer = additionalUTxOs?.length
+      ? await evaluate().catch(() => evaluate(additionalUTxOs))
+      : await evaluate();
+
     const evalRedeemers: EvalRedeemer[] = [];
     Object.entries(blockfrostRedeemer.result.EvaluationResult).forEach(
       ([redeemerPointer, data]) => {
@@ -395,19 +407,23 @@ type BlockfrostUtxoError = {
   error: unknown;
 };
 
-type BlockfrostRedeemer = {
-  result:
-    | {
-        EvaluationResult: {
-          [key: string]: {
-            memory: number;
-            steps: number;
-          };
-        };
-      }
-    | {
+type BlockfrostEvaluationSuccess = {
+  result: {
+    EvaluationResult: {
+      [key: string]: {
+        memory: number;
+        steps: number;
+      };
+    };
+  };
+};
+
+type BlockfrostRedeemer =
+  | BlockfrostEvaluationSuccess
+  | {
+      result: {
         CannotCreateEvaluationContext: any;
       };
-};
+    };
 
 const lucid = packageJson.version; // Lucid version

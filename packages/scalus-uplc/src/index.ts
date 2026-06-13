@@ -14,6 +14,7 @@ import ScalusLib from "scalus";
 
 export type ScalusEvaluatorOptions = {
   name?: string;
+  protocolMajorVersion?: number;
 };
 
 type ScalusRedeemer = {
@@ -24,6 +25,14 @@ type ScalusRedeemer = {
     steps: number | bigint;
   };
 };
+
+type ScalusEvalPlutusScripts = (
+  txCborBytes: Uint8Array,
+  utxoCborBytes: Uint8Array,
+  slotConfig: InstanceType<typeof ScalusLib.SlotConfig>,
+  costModels: number[][],
+  protocolMajorVersion?: number,
+) => unknown[];
 
 const SCALUS_TAGS: Record<string, RedeemerTag> = {
   Spend: "spend",
@@ -199,6 +208,21 @@ const assertSafeInteger = (value: number | bigint, label: string): number => {
   return asNumber;
 };
 
+const inferProtocolMajorVersion = (
+  context: EvaluationInput["context"],
+): number | undefined => {
+  if (context.protocolParameters.protocolMajorVersion !== undefined) {
+    return assertSafeInteger(
+      context.protocolParameters.protocolMajorVersion,
+      "protocol major version",
+    );
+  }
+  if (context.protocolParameters.costModels.PlutusV3.length >= 350) {
+    return 11;
+  }
+  return undefined;
+};
+
 export const mapScalusTag = (tag: string): RedeemerTag => {
   const mapped = SCALUS_TAGS[tag];
   if (!mapped) throw new Error(`Unknown Scalus redeemer tag "${tag}"`);
@@ -234,12 +258,26 @@ export const createScalusEvaluator = (
       assertSafeInteger(zeroSlot, "slot zeroSlot"),
       assertSafeInteger(slotLength, "slot length"),
     );
-    const redeemers = ScalusLib.Scalus.evalPlutusScripts(
+    const evalPlutusScripts = ScalusLib.Scalus
+      .evalPlutusScripts as ScalusEvalPlutusScripts;
+    const evalArgs = [
       fromHex(tx),
       buildUtxoMapCbor(additionalUTxOs),
       slotConfig,
       decodeCostModels(context.protocolParameters.costModels),
-    ) as ScalusRedeemer[];
-    return redeemers.map(toEvalRedeemer);
+    ] as const;
+    const protocolMajorVersion =
+      options.protocolMajorVersion !== undefined
+        ? assertSafeInteger(
+            options.protocolMajorVersion,
+            "protocol major version",
+          )
+        : inferProtocolMajorVersion(context);
+    const redeemers =
+      protocolMajorVersion !== undefined
+        ? evalPlutusScripts(...evalArgs, protocolMajorVersion)
+        : evalPlutusScripts(...evalArgs);
+    const scalusRedeemers = redeemers as ScalusRedeemer[];
+    return scalusRedeemers.map(toEvalRedeemer);
   },
 });

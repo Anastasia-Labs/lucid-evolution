@@ -2,6 +2,8 @@ import { Console, Effect, Logger, LogLevel, pipe, Schedule } from "effect";
 import { TxSignBuilder } from "../../src/index.js";
 import { User } from "./services.js";
 
+const retryInitialDelay = 10_000;
+
 export const handleSignSubmit = (signBuilder: TxSignBuilder) =>
   pipe(handleSignSubmitWithHash(signBuilder), Effect.asVoid);
 
@@ -40,7 +42,10 @@ export const withLogRetry = <A, E, R>(effect: Effect.Effect<A, E, R>) =>
     Effect.tapError((_) => Effect.log("💥️ Recovering from error")),
     Logger.withMinimumLogLevel(LogLevel.Debug),
     Effect.retry(
-      Schedule.compose(Schedule.exponential(5_000), Schedule.recurs(5)),
+      Schedule.compose(
+        Schedule.exponential(retryInitialDelay),
+        Schedule.recurs(5),
+      ),
     ),
   );
 
