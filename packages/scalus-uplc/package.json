@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/scalus-uplc",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Scalus-backed local UPLC evaluator adapter for Lucid Evolution",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

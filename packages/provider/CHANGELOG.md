@@ -1,5 +1,16 @@
 # @lucid-evolution/provider
 
+## 0.1.97
+
+### Patch Changes
+
+- [#712](https://github.com/Anastasia-Labs/lucid-evolution/pull/712) [`0365cc5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0365cc5ef6e683863aa80306fc5ee5fa2407b00f) Thanks [@colll78](https://github.com/colll78)! - Maintain Ogmios v6 compatibility while accepting the `maxReferenceScriptsSizePerTransaction` protocol parameter returned by Ogmios >=7.0.0.
+
+- Updated dependencies [[`0365cc5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0365cc5ef6e683863aa80306fc5ee5fa2407b00f)]:
+  - @lucid-evolution/core-types@0.2.2
+  - @lucid-evolution/utils@0.1.71
+  - @lucid-evolution/wallet@0.1.77
+
 ## 0.1.96
 
 ### Patch Changes
