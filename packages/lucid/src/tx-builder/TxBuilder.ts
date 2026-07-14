@@ -7,6 +7,10 @@ import {
   Assets,
   BuildTxWithRedeemer,
   DRep,
+  GovernanceActionId,
+  GovernanceProposal,
+  GovernanceVote,
+  GovernanceVoter,
   Label,
   Lovelace,
   PaymentKeyHash,
@@ -33,6 +37,7 @@ import * as Signer from "./internal/Signer.js";
 import * as Stake from "./internal/Stake.js";
 import * as Pool from "./internal/Pool.js";
 import * as Governance from "./internal/Governance.js";
+import * as GovernanceAction from "./internal/GovernanceAction.js";
 import * as Metadata from "./internal/Metadata.js";
 import * as Treasury from "./internal/Treasury.js";
 import * as CompleteTxBuilder from "./internal/CompleteTxBuilder.js";
@@ -72,6 +77,7 @@ export type TxAction = {
 };
 
 type CertificateRedeemer = Redeemer | BuildTxWithRedeemer;
+type GovernanceRedeemer = Redeemer | BuildTxWithRedeemer;
 
 export type TxBuilderConfig = {
   readonly lucidConfig: LucidConfig;
@@ -93,6 +99,9 @@ export type TxBuilderConfig = {
   nextActionId: number;
   pendingRedeemers: PendingRedeemer[];
   witnessRegistry: Set<string>;
+  governanceVoteWitnessKeys: string[];
+  governanceProposalWitnessIndices: bigint[];
+  governanceProposalCount: bigint;
   certificateIndex: bigint;
   treasuryDonation: Treasury.TreasuryDonation | undefined;
   minFee: bigint | undefined;
@@ -169,6 +178,9 @@ export const makeTxBuilderConfig = (
   nextActionId: source?.nextActionId ?? 0,
   pendingRedeemers: [],
   witnessRegistry: new Set(),
+  governanceVoteWitnessKeys: [],
+  governanceProposalWitnessIndices: [],
+  governanceProposalCount: 0n,
   certificateIndex: 0n,
   treasuryDonation: undefined,
   minFee: source?.minFee,
@@ -483,6 +495,184 @@ const recordCertificateAction = (
   }
 };
 
+const replayVoteWithDelayedRedeemer = (
+  actionId: number,
+  pendingIds: readonly number[],
+  voter: GovernanceVoter,
+  redeemer: BuildTxWithRedeemer,
+  makeProgram: (
+    redeemer?: Redeemer,
+  ) => Effect.Effect<void, TransactionError, TxConfig>,
+  currentRedeemers: ReadonlyMap<number, Redeemer>,
+) =>
+  Effect.gen(function* () {
+    const { config } = yield* TxConfig;
+    if (voter.type === "StakePool" || voter.credential.type !== "Script") {
+      yield* txActionError(
+        "Delayed vote redeemer requires a Plutus vote witness",
+      );
+      return;
+    }
+
+    const script = config.scripts.get(voter.credential.hash);
+    const pendingId = pendingIds[0];
+    const delayedRedeemer = redeemerFor(currentRedeemers, pendingId);
+    if (!script) {
+      yield* makeProgram(delayedRedeemer);
+      return;
+    }
+    if (script.type === "Native") {
+      yield* makeProgram(undefined);
+      return;
+    }
+    yield* registerPendingRedeemer(config, {
+      id: pendingId,
+      actionId,
+      source: redeemer,
+      purposeKey: {
+        tag: "vote",
+        voterKey: GovernanceAction.governanceVoterKey(voter),
+      },
+    });
+    yield* makeProgram(delayedRedeemer);
+  });
+
+const recordVoteAction = (
+  config: TxBuilderConfig,
+  voter: GovernanceVoter,
+  actionId: GovernanceActionId,
+  voteChoice: GovernanceVote,
+  anchor?: Anchor,
+  redeemer?: GovernanceRedeemer,
+) => {
+  const voterSnapshot = GovernanceAction.cloneGovernanceVoter(voter);
+  const actionIdSnapshot = {
+    txHash: actionId.txHash,
+    index: actionId.index,
+  };
+  const anchorSnapshot = anchor ? { ...anchor } : undefined;
+  const redeemerSnapshot = cloneRedeemerInput(redeemer);
+  const isDelayed = isBuildTxWithRedeemer(redeemerSnapshot);
+  const makeProgram = (resolvedRedeemer?: Redeemer) =>
+    GovernanceAction.vote(
+      voterSnapshot,
+      actionIdSnapshot,
+      voteChoice,
+      anchorSnapshot,
+      resolvedRedeemer,
+    );
+
+  recordAction(config, isDelayed ? 1 : 0, (id, pendingIds) =>
+    makeAction(
+      id,
+      "vote",
+      pendingIds,
+      isDelayed,
+      (replayActionId, actionPendingIds) => (currentRedeemers) =>
+        isDelayed
+          ? replayVoteWithDelayedRedeemer(
+              replayActionId,
+              actionPendingIds,
+              voterSnapshot,
+              redeemerSnapshot,
+              makeProgram,
+              currentRedeemers,
+            )
+          : makeProgram(redeemerSnapshot as Redeemer | undefined),
+    ),
+  );
+
+  if (!isDelayed) {
+    config.programs.push(makeProgram(redeemerSnapshot as Redeemer | undefined));
+  }
+};
+
+const replayProposalWithDelayedRedeemer = (
+  actionId: number,
+  pendingIds: readonly number[],
+  proposal: GovernanceProposal,
+  redeemer: BuildTxWithRedeemer,
+  makeProgram: (
+    redeemer?: Redeemer,
+  ) => Effect.Effect<void, TransactionError, TxConfig>,
+  currentRedeemers: ReadonlyMap<number, Redeemer>,
+) =>
+  Effect.gen(function* () {
+    const { config } = yield* TxConfig;
+    const govAction = yield* GovernanceAction.toCMLGovernanceAction(
+      proposal.action,
+      config,
+    );
+    const scriptHash = govAction.script_hash()?.to_hex();
+    if (!scriptHash) {
+      yield* txActionError(
+        "Delayed proposal redeemer requires a Plutus proposal witness",
+      );
+      return;
+    }
+
+    const script = config.scripts.get(scriptHash);
+    const pendingId = pendingIds[0];
+    const delayedRedeemer = redeemerFor(currentRedeemers, pendingId);
+    if (!script) {
+      yield* makeProgram(delayedRedeemer);
+      return;
+    }
+    if (script.type === "Native") {
+      yield* makeProgram(undefined);
+      return;
+    }
+    yield* registerPendingRedeemer(config, {
+      id: pendingId,
+      actionId,
+      source: redeemer,
+      purposeKey: {
+        tag: "propose",
+        proposalKey: yield* GovernanceAction.governanceProposalKey(
+          proposal,
+          config,
+        ),
+      },
+    });
+    yield* makeProgram(delayedRedeemer);
+  });
+
+const recordProposalAction = (
+  config: TxBuilderConfig,
+  proposal: GovernanceProposal,
+  redeemer?: GovernanceRedeemer,
+) => {
+  const proposalSnapshot = GovernanceAction.cloneGovernanceProposal(proposal);
+  const redeemerSnapshot = cloneRedeemerInput(redeemer);
+  const isDelayed = isBuildTxWithRedeemer(redeemerSnapshot);
+  const makeProgram = (resolvedRedeemer?: Redeemer) =>
+    GovernanceAction.propose(proposalSnapshot, resolvedRedeemer);
+
+  recordAction(config, isDelayed ? 1 : 0, (id, pendingIds) =>
+    makeAction(
+      id,
+      "propose",
+      pendingIds,
+      isDelayed,
+      (replayActionId, actionPendingIds) => (currentRedeemers) =>
+        isDelayed
+          ? replayProposalWithDelayedRedeemer(
+              replayActionId,
+              actionPendingIds,
+              proposalSnapshot,
+              redeemerSnapshot,
+              makeProgram,
+              currentRedeemers,
+            )
+          : makeProgram(redeemerSnapshot as Redeemer | undefined),
+    ),
+  );
+
+  if (!isDelayed) {
+    config.programs.push(makeProgram(redeemerSnapshot as Redeemer | undefined));
+  }
+};
+
 export type TxBuilder = {
   readFrom: (utxos: UTxO[]) => TxBuilder;
   collectFrom: (
@@ -660,6 +850,17 @@ export type TxBuilder = {
     rewardAddress: RewardAddress,
     anchor?: Anchor,
     redeemer?: CertificateRedeemer,
+  ) => TxBuilder;
+  vote: (
+    voter: GovernanceVoter,
+    actionId: GovernanceActionId,
+    vote: GovernanceVote,
+    anchor?: Anchor,
+    redeemer?: GovernanceRedeemer,
+  ) => TxBuilder;
+  propose: (
+    proposal: GovernanceProposal,
+    redeemer?: GovernanceRedeemer,
   ) => TxBuilder;
   authCommitteeHot: (
     coldAddress: RewardAddress,
@@ -1299,6 +1500,20 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         redeemer,
         rewardAddress,
       );
+      return txBuilder;
+    },
+    vote: (
+      voter: GovernanceVoter,
+      actionId: GovernanceActionId,
+      vote: GovernanceVote,
+      anchor?: Anchor,
+      redeemer?: GovernanceRedeemer,
+    ) => {
+      recordVoteAction(config, voter, actionId, vote, anchor, redeemer);
+      return txBuilder;
+    },
+    propose: (proposal: GovernanceProposal, redeemer?: GovernanceRedeemer) => {
+      recordProposalAction(config, proposal, redeemer);
       return txBuilder;
     },
     authCommitteeHot: (

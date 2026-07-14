@@ -15,8 +15,10 @@ import { CML } from "../core.js";
 import {
   buildCanonicalRedeemerInfo,
   canonicalRedeemerEntries,
+  proposalProcedureForRedeemerIndex,
   type CanonicalRedeemerEntry,
   type CanonicalRedeemerInfo,
+  voterForRedeemerIndex,
 } from "../tx-builder/internal/RedeemerContext.js";
 import { ScriptPurposeData } from "./Schema.js";
 import type {
@@ -937,8 +939,9 @@ const scriptPurposeKey = (purpose: ScriptPurposeData): string =>
 const purposeFromRedeemerEntry = (
   entry: CanonicalRedeemerEntry,
   info: CanonicalRedeemerInfo,
-  body: CML.TransactionBody,
+  tx: CML.Transaction,
 ): ScriptPurposeData => {
+  const body = tx.body();
   switch (entry.tag) {
     case "spend": {
       const input = info.inputs[Number(entry.index)];
@@ -982,16 +985,14 @@ const purposeFromRedeemerEntry = (
       };
     }
     case "vote": {
-      const voter = toArray(body.voting_procedures()?.keys())[
-        Number(entry.index)
-      ];
+      const voter = voterForRedeemerIndex(tx, entry.index);
       if (!voter) {
         throw new Error(`Vote redeemer index ${entry.index} has no voter.`);
       }
       return { Voting: [voterFromCml(voter)] };
     }
     case "propose": {
-      const proposal = body.proposal_procedures()?.get(Number(entry.index));
+      const proposal = proposalProcedureForRedeemerIndex(tx, entry.index);
       if (!proposal) {
         throw new Error(
           `Propose redeemer index ${entry.index} has no proposal.`,
@@ -1021,7 +1022,7 @@ const redeemersFromWitnessSet = (
     };
   }
   const entries = canonicalRedeemerEntries(redeemers).map((entry) => {
-    const purpose = purposeFromRedeemerEntry(entry, info, tx.body());
+    const purpose = purposeFromRedeemerEntry(entry, info, tx);
     return [purpose, datumFromPlutusData(entry.data)] as const;
   });
   const sortedEntries = [...entries].sort(([left], [right]) =>

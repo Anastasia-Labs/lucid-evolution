@@ -60,11 +60,14 @@ import {
   CanonicalRedeemerInfo,
   cloneUTxOs,
   normalizeEvalUTxO,
+  normalizeGovernanceRedeemerIndices,
+  proposalProcedureForRedeemerIndex,
   RedeemerBuilderCache,
   redeemerMapsEqual,
   resolveCanonicalInputs,
   resolveCanonicalReferenceInputs,
   transactionFixedPointFingerprint,
+  voterForRedeemerIndex,
 } from "./RedeemerContext.js";
 
 const MAX_EVALUATION_ATTEMPTS = 8;
@@ -287,8 +290,17 @@ const completeCurrentConfig = (
           builtTransaction.to_canonical_cbor_bytes(),
         )
       : builtTransaction;
+    const normalizedTransaction = yield* Effect.try({
+      try: () =>
+        normalizeGovernanceRedeemerIndices(
+          transactionBeforeScriptDataHash,
+          config.governanceVoteWitnessKeys,
+          config.governanceProposalWitnessIndices,
+        ).transaction,
+      catch: (error) => completeTxError(error),
+    });
     const transaction = yield* refreshScriptDataHash(
-      transactionBeforeScriptDataHash,
+      normalizedTransaction,
       config,
     );
 
@@ -644,6 +656,10 @@ export const applyEvaluationResult = (
   txbuilder: CML.TransactionBuilder,
   expectedKeys: Set<string>,
   evaluator?: string,
+  builderKeyByLedgerKey: ReadonlyMap<
+    string,
+    CML.RedeemerWitnessKey
+  > = new Map(),
 ): void => {
   if (expectedKeys.size > 0 && evalRedeemerList.length === 0) {
     throw evaluatorError(
@@ -679,10 +695,12 @@ export const applyEvaluationResult = (
       BigInt(evalRedeemer.ex_units.steps),
     );
     updates.push({
-      key: CML.RedeemerWitnessKey.new(
-        toCMLRedeemerTag(evalRedeemer.redeemer_tag),
-        BigInt(evalRedeemer.redeemer_index),
-      ),
+      key:
+        builderKeyByLedgerKey.get(key) ??
+        CML.RedeemerWitnessKey.new(
+          toCMLRedeemerTag(evalRedeemer.redeemer_tag),
+          BigInt(evalRedeemer.redeemer_index),
+        ),
       exUnits,
     });
   }
@@ -780,6 +798,34 @@ const scriptHashFromCertificate = (
       certificate.as_update_drep_cert()?.drep_credential(),
   );
 
+const voterByKey = (
+  body: CML.TransactionBody,
+  voterKey: string | undefined,
+): CML.Voter | undefined => {
+  if (!voterKey) return undefined;
+  const voters = body.voting_procedures()?.keys();
+  if (!voters) return undefined;
+  for (let i = 0; i < voters.len(); i++) {
+    const voter = voters.get(i);
+    if (voter.to_canonical_cbor_hex() === voterKey) return voter;
+  }
+  return undefined;
+};
+
+const proposalByKey = (
+  body: CML.TransactionBody,
+  proposalKey: string | undefined,
+): CML.ProposalProcedure | undefined => {
+  if (!proposalKey) return undefined;
+  const proposals = body.proposal_procedures();
+  if (!proposals) return undefined;
+  for (let i = 0; i < proposals.len(); i++) {
+    const proposal = proposals.get(i);
+    if (proposal.to_canonical_cbor_hex() === proposalKey) return proposal;
+  }
+  return undefined;
+};
+
 const scriptTypeToLanguage = (
   scriptType: ScriptType,
 ): CML.Language | undefined => {
@@ -808,6 +854,7 @@ const languageSortOrder = (language: CML.Language): number => {
 
 const scriptHashForPurpose = (
   purpose: RedeemerPurpose,
+  tx: CML.Transaction,
   info: CanonicalRedeemerInfo,
 ): string | undefined => {
   switch (purpose.tag) {
@@ -830,16 +877,15 @@ const scriptHashForPurpose = (
       return certificate ? scriptHashFromCertificate(certificate) : undefined;
     }
     case "vote": {
-      const voter = info.txBody
-        .voting_procedures()
-        ?.keys()
-        .get(Number(purpose.index));
+      const voter =
+        voterByKey(info.txBody, purpose.voterKey) ??
+        voterForRedeemerIndex(tx, purpose.index);
       return voter?.script_hash()?.to_hex();
     }
     case "propose": {
-      const proposal = info.txBody
-        .proposal_procedures()
-        ?.get(Number(purpose.index));
+      const proposal =
+        proposalByKey(info.txBody, purpose.proposalKey) ??
+        proposalProcedureForRedeemerIndex(tx, purpose.index);
       return proposal?.gov_action().script_hash()?.to_hex();
     }
   }
@@ -865,10 +911,10 @@ const usedPlutusLanguages = (
     const redeemerInfo = yield* buildCanonicalRedeemerInfo(tx, resolvedInputs);
 
     for (const purpose of redeemerInfo.redeemers) {
-      const scriptHash = scriptHashForPurpose(purpose, redeemerInfo);
+      const scriptHash = scriptHashForPurpose(purpose, tx, redeemerInfo);
       if (!scriptHash) {
         yield* completeTxError(
-          `Unable to resolve script hash for ${purpose.tag} redeemer`,
+          `Unable to resolve script hash for ${purpose.tag}:${purpose.index} redeemer`,
         );
         continue;
       }
@@ -1305,7 +1351,19 @@ const evaluateTransaction = (
   Effect.gen(function* () {
     const adapter = resolveEvaluatorAdapter(config, localUPLCEval, evaluator);
     const name = evaluatorName(adapter);
-    const txEvaluation = setRedeemerstoZero(tx)!;
+    const normalization = yield* Effect.try({
+      try: () =>
+        normalizeGovernanceRedeemerIndices(
+          tx,
+          config.governanceVoteWitnessKeys,
+          config.governanceProposalWitnessIndices,
+        ),
+      catch: (error) => wrapEvaluatorCause(error, name),
+    });
+    const txEvaluation = yield* refreshScriptDataHash(
+      setRedeemerstoZero(normalization.transaction),
+      config,
+    );
     const redeemers = txEvaluation.witness_set().redeemers();
     if (!redeemers) return;
     const expectedKeys = expectedRedeemerKeySet(redeemers);
@@ -1331,6 +1389,7 @@ const evaluateTransaction = (
           config.txBuilder,
           expectedKeys,
           name,
+          normalization.builderKeyByLedgerKey,
         ),
       catch: (error) => wrapEvaluatorCause(error, name),
     });

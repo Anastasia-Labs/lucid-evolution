@@ -194,8 +194,20 @@ export type RedeemerPurpose =
       readonly redeemerListIndex: bigint | undefined;
     }
   | {
-      readonly tag: "publish" | "vote" | "propose";
+      readonly tag: "publish";
       readonly index: bigint;
+      readonly redeemerListIndex: bigint | undefined;
+    }
+  | {
+      readonly tag: "propose";
+      readonly index: bigint;
+      readonly proposalKey?: string;
+      readonly redeemerListIndex: bigint | undefined;
+    }
+  | {
+      readonly tag: "vote";
+      readonly index: bigint;
+      readonly voterKey?: string;
       readonly redeemerListIndex: bigint | undefined;
     };
 
@@ -388,6 +400,104 @@ export type DatumJson = {
 export type Anchor = {
   url: string;
   dataHash: string;
+};
+
+export type GovernanceActionId = {
+  txHash: TxHash;
+  index: number | bigint;
+};
+
+export type GovernanceVote = "No" | "Yes" | "Abstain";
+
+export type GovernanceVoter =
+  | {
+      type: "DRep";
+      credential: Credential;
+    }
+  | {
+      type: "ConstitutionalCommittee";
+      credential: Credential;
+    }
+  | {
+      type: "StakePool";
+      hash: KeyHash;
+    }
+  | {
+      type: "StakePool";
+      poolId: PoolId;
+    };
+
+export type GovernanceProtocolVersion = {
+  major: number | bigint;
+  minor: number | bigint;
+};
+
+export type GovernanceRational = {
+  numerator: number | bigint;
+  denominator: number | bigint;
+};
+
+export type GovernanceConstitution = {
+  anchor: Anchor;
+  scriptHash?: ScriptHash | null;
+};
+
+export type GovernanceAction =
+  | {
+      type: "ParameterChange";
+      actionId?: GovernanceActionId | null;
+      protocolParamUpdate: CML.ProtocolParamUpdate | string;
+      policyHash?: ScriptHash | null;
+    }
+  | {
+      type: "HardForkInitiation";
+      actionId?: GovernanceActionId | null;
+      protocolVersion: GovernanceProtocolVersion;
+    }
+  | {
+      type: "TreasuryWithdrawals";
+      withdrawals: Array<{
+        rewardAddress: RewardAddress;
+        amount: Lovelace;
+      }>;
+      policyHash?: ScriptHash | null;
+    }
+  | {
+      type: "NoConfidence";
+      actionId?: GovernanceActionId | null;
+    }
+  | {
+      type: "UpdateCommittee";
+      actionId?: GovernanceActionId | null;
+      remove: Credential[];
+      add: Array<{
+        credential: Credential;
+        epoch: number | bigint;
+      }>;
+      threshold: GovernanceRational;
+    }
+  | {
+      type: "NewConstitution";
+      actionId?: GovernanceActionId | null;
+      constitution: GovernanceConstitution;
+    }
+  | {
+      type: "InfoAction";
+    }
+  | {
+      type: "Cbor";
+      cbor: string;
+    }
+  | {
+      type: "CML";
+      action: CML.GovAction;
+    };
+
+export type GovernanceProposal = {
+  action: GovernanceAction;
+  returnAddress: RewardAddress;
+  anchor: Anchor;
+  deposit?: Lovelace;
 };
 
 export type AlwaysAbstain = {

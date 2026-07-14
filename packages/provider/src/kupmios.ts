@@ -91,7 +91,7 @@ export class Kupmios implements Provider {
       id: null,
     };
     const schema = Ogmios.JSONRPCResponseSchema(
-      Ogmios.ProtocolParametersSchema,
+      S.Record({ key: S.String, value: S.Unknown }),
     );
     const response = await pipe(
       HttpUtils.makePostAsJson(
@@ -106,7 +106,10 @@ export class Kupmios implements Provider {
       Effect.runPromise,
     );
     const result = Ogmios.getJSONRPCResult(response);
-    return toProtocolParameters(result);
+    const protocolParameters = S.decodeUnknownSync(
+      Ogmios.ProtocolParametersSchema,
+    )(Ogmios.normalizeProtocolParameters(result));
+    return toProtocolParameters(protocolParameters);
   }
 
   async getTreasury(): Promise<bigint> {
