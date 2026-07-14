@@ -42,7 +42,7 @@
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
     "cbor-x": "^1.6.0",
-    "scalus": "^0.18.0"
+    "scalus": "^0.18.1"
   },
   "devDependencies": {
     "@types/node": "^20.12.8",

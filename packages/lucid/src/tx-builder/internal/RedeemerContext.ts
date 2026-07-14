@@ -31,7 +31,11 @@ export type WitnessPurposeKey =
   | { readonly tag: "spend"; readonly input: OutRef }
   | { readonly tag: "mint"; readonly policyId: PolicyId }
   | { readonly tag: "withdraw"; readonly rewardAddress: RewardAddress }
-  | { readonly tag: "publish" | "vote" | "propose"; readonly index: bigint };
+  | { readonly tag: "publish"; readonly index: bigint }
+  | { readonly tag: "propose"; readonly index: bigint }
+  | { readonly tag: "propose"; readonly proposalKey: string }
+  | { readonly tag: "vote"; readonly index: bigint }
+  | { readonly tag: "vote"; readonly voterKey: string };
 
 export type PendingRedeemer = Readonly<{
   id: number;
@@ -136,9 +140,15 @@ export const witnessPurposeKey = (purposeKey: WitnessPurposeKey): string => {
     case "withdraw":
       return `withdraw:${purposeKey.rewardAddress}`;
     case "publish":
-    case "vote":
-    case "propose":
       return `${purposeKey.tag}:${purposeKey.index}`;
+    case "propose":
+      return "proposalKey" in purposeKey
+        ? `propose:proposal:${purposeKey.proposalKey}`
+        : `propose:${purposeKey.index}`;
+    case "vote":
+      return "voterKey" in purposeKey
+        ? `vote:voter:${purposeKey.voterKey}`
+        : `vote:${purposeKey.index}`;
   }
 };
 
@@ -153,9 +163,15 @@ export const purposeToWitnessKey = (
     case "withdraw":
       return { tag: "withdraw", rewardAddress: purpose.rewardAddress };
     case "publish":
-    case "vote":
-    case "propose":
       return { tag: purpose.tag, index: purpose.index };
+    case "propose":
+      return purpose.proposalKey
+        ? { tag: "propose", proposalKey: purpose.proposalKey }
+        : { tag: "propose", index: purpose.index };
+    case "vote":
+      return purpose.voterKey
+        ? { tag: "vote", voterKey: purpose.voterKey }
+        : { tag: "vote", index: purpose.index };
   }
 };
 
@@ -297,6 +313,189 @@ const deriveWithdrawals = (
 const redeemerKeyBytes = (tag: CML.RedeemerTag, index: bigint): Uint8Array =>
   CML.RedeemerKey.new(tag, index).to_canonical_cbor_bytes();
 
+const cmlVoterKey = (voter: CML.Voter): string => voter.to_canonical_cbor_hex();
+
+const cmlProposalKey = (proposal: CML.ProposalProcedure): string =>
+  proposal.to_canonical_cbor_hex();
+
+const indexToSafeNumber = (index: bigint): number | undefined => {
+  if (index < 0n || index > BigInt(Number.MAX_SAFE_INTEGER)) return undefined;
+  return Number(index);
+};
+
+export const proposalProcedureForRedeemerIndex = (
+  tx: CML.Transaction,
+  index: bigint,
+): CML.ProposalProcedure | undefined => {
+  const proposals = tx.body().proposal_procedures();
+  if (!proposals) return undefined;
+  const target = indexToSafeNumber(index);
+  if (target === undefined) return undefined;
+
+  return target < proposals.len() ? proposals.get(target) : undefined;
+};
+
+export const voterForRedeemerIndex = (
+  tx: CML.Transaction,
+  index: bigint,
+): CML.Voter | undefined => {
+  const voters = tx.body().voting_procedures()?.keys();
+  if (!voters) return undefined;
+  const target = indexToSafeNumber(index);
+  if (target === undefined) return undefined;
+
+  return target < voters.len() ? voters.get(target) : undefined;
+};
+
+export type GovernanceRedeemerNormalization = Readonly<{
+  transaction: CML.Transaction;
+  builderKeyByLedgerKey: ReadonlyMap<string, CML.RedeemerWitnessKey>;
+}>;
+
+const voterIndexByKey = (
+  tx: CML.Transaction,
+  voterKey: string,
+): bigint | undefined => {
+  const voters = tx.body().voting_procedures()?.keys();
+  if (!voters) return undefined;
+  for (let i = 0; i < voters.len(); i++) {
+    if (cmlVoterKey(voters.get(i)) === voterKey) return BigInt(i);
+  }
+  return undefined;
+};
+
+const governanceIndex = (
+  tx: CML.Transaction,
+  tag: RedeemerTag,
+  rawIndex: bigint,
+  voteWitnessKeys: readonly string[],
+  proposalWitnessIndices: readonly bigint[],
+): bigint => {
+  if (tag !== "vote" && tag !== "propose") return rawIndex;
+  const witnessIndex = indexToSafeNumber(rawIndex);
+  if (witnessIndex === undefined) {
+    throw redeemerContextError(
+      `Governance redeemer index ${rawIndex} is outside the safe integer range`,
+    );
+  }
+  if (tag === "propose") {
+    if (proposalWitnessIndices.length === 0) return rawIndex;
+    const ledgerIndex = proposalWitnessIndices[witnessIndex];
+    const proposals = tx.body().proposal_procedures();
+    if (
+      ledgerIndex === undefined ||
+      !proposals ||
+      ledgerIndex < 0n ||
+      ledgerIndex >= BigInt(proposals.len())
+    ) {
+      throw redeemerContextError(
+        `Unable to map proposing redeemer index ${rawIndex} to a proposal procedure`,
+      );
+    }
+    return ledgerIndex;
+  }
+  if (voteWitnessKeys.length === 0) return rawIndex;
+  const voterKey = voteWitnessKeys[witnessIndex];
+  const ledgerIndex = voterKey ? voterIndexByKey(tx, voterKey) : undefined;
+  if (ledgerIndex === undefined) {
+    throw redeemerContextError(
+      `Unable to map voting redeemer index ${rawIndex} to a voter`,
+    );
+  }
+  return ledgerIndex;
+};
+
+export const normalizeGovernanceRedeemerIndices = (
+  tx: CML.Transaction,
+  voteWitnessKeys: readonly string[],
+  proposalWitnessIndices: readonly bigint[],
+): GovernanceRedeemerNormalization => {
+  const transaction = CML.Transaction.from_cbor_bytes(tx.to_cbor_bytes());
+  const ledgerIndexTransaction = CML.Transaction.from_cbor_bytes(
+    tx.to_canonical_cbor_bytes(),
+  );
+  const witnessSet = transaction.witness_set();
+  const redeemers = witnessSet.redeemers();
+  const builderKeyByLedgerKey = new Map<string, CML.RedeemerWitnessKey>();
+  if (!redeemers) return { transaction, builderKeyByLedgerKey };
+
+  const seen = new Set<string>();
+  const normalizeKey = (tag: CML.RedeemerTag, index: bigint): bigint => {
+    const lucidTag = fromCMLRedeemerTag(tag);
+    const normalizedIndex = governanceIndex(
+      ledgerIndexTransaction,
+      lucidTag,
+      index,
+      voteWitnessKeys,
+      proposalWitnessIndices,
+    );
+    const ledgerKey = `${lucidTag}:${normalizedIndex}`;
+    if (seen.has(ledgerKey)) {
+      throw redeemerContextError(
+        `Multiple builder redeemers map to ledger purpose ${ledgerKey}`,
+      );
+    }
+    seen.add(ledgerKey);
+    builderKeyByLedgerKey.set(
+      ledgerKey,
+      CML.RedeemerWitnessKey.new(tag, index),
+    );
+    return normalizedIndex;
+  };
+
+  const legacy = redeemers.as_arr_legacy_redeemer();
+  if (legacy) {
+    const normalized = CML.LegacyRedeemerList.new();
+    for (let i = 0; i < legacy.len(); i++) {
+      const redeemer = legacy.get(i);
+      normalized.add(
+        CML.LegacyRedeemer.new(
+          redeemer.tag(),
+          normalizeKey(redeemer.tag(), redeemer.index()),
+          redeemer.data(),
+          redeemer.ex_units(),
+        ),
+      );
+    }
+    witnessSet.set_redeemers(CML.Redeemers.new_arr_legacy_redeemer(normalized));
+    return {
+      transaction: CML.Transaction.new(
+        transaction.body(),
+        witnessSet,
+        transaction.is_valid(),
+        transaction.auxiliary_data(),
+      ),
+      builderKeyByLedgerKey,
+    };
+  }
+
+  const map = redeemers.as_map_redeemer_key_to_redeemer_val();
+  if (map) {
+    const normalized = CML.MapRedeemerKeyToRedeemerVal.new();
+    const keys = map.keys();
+    for (let i = 0; i < keys.len(); i++) {
+      const key = keys.get(i);
+      normalized.insert(
+        CML.RedeemerKey.new(key.tag(), normalizeKey(key.tag(), key.index())),
+        map.get(key)!,
+      );
+    }
+    witnessSet.set_redeemers(
+      CML.Redeemers.new_map_redeemer_key_to_redeemer_val(normalized),
+    );
+    return {
+      transaction: CML.Transaction.new(
+        transaction.body(),
+        witnessSet,
+        transaction.is_valid(),
+        transaction.auxiliary_data(),
+      ),
+      builderKeyByLedgerKey,
+    };
+  }
+  return { transaction, builderKeyByLedgerKey };
+};
+
 const compareBytes = (a: Uint8Array, b: Uint8Array): number => {
   if (a.length !== b.length) return a.length - b.length;
   for (let i = 0; i < a.length; i++) {
@@ -418,10 +617,28 @@ const deriveRedeemerPurposes = (
           break;
         }
         case "publish":
-        case "vote":
-        case "propose":
           purposes.push({ tag, index, redeemerListIndex });
           break;
+        case "propose": {
+          const proposal = proposalProcedureForRedeemerIndex(tx, index);
+          purposes.push({
+            tag,
+            index,
+            proposalKey: proposal ? cmlProposalKey(proposal) : undefined,
+            redeemerListIndex,
+          });
+          break;
+        }
+        case "vote": {
+          const voter = voterForRedeemerIndex(tx, index);
+          purposes.push({
+            tag,
+            index,
+            voterKey: voter ? cmlVoterKey(voter) : undefined,
+            redeemerListIndex,
+          });
+          break;
+        }
       }
     }
     return purposes;
@@ -472,8 +689,26 @@ export const buildCanonicalRedeemerInfo = (
     redeemers.forEach((purpose) => {
       const key = witnessPurposeKey(purposeToWitnessKey(purpose));
       purposeByKey.set(key, purpose);
+      if (purpose.tag === "vote" && purpose.voterKey) {
+        purposeByKey.set(`vote:${purpose.index}`, purpose);
+      }
+      if (purpose.tag === "propose" && purpose.proposalKey) {
+        purposeByKey.set(`propose:${purpose.index}`, purpose);
+      }
       if (purpose.redeemerListIndex !== undefined) {
         redeemerIndices.set(key, purpose.redeemerListIndex);
+        if (purpose.tag === "vote" && purpose.voterKey) {
+          redeemerIndices.set(
+            `vote:${purpose.index}`,
+            purpose.redeemerListIndex,
+          );
+        }
+        if (purpose.tag === "propose" && purpose.proposalKey) {
+          redeemerIndices.set(
+            `propose:${purpose.index}`,
+            purpose.redeemerListIndex,
+          );
+        }
       }
     });
 

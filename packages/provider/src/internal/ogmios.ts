@@ -95,6 +95,43 @@ const TupleNumberFromString = S.compose(
   S.Array(S.NumberFromString),
 );
 
+const MaxReferenceScriptsSizeSchema = S.Struct({
+  bytes: S.Number,
+});
+
+export function normalizeProtocolParameters(
+  value: Record<string, unknown>,
+): Record<string, unknown> {
+  const legacy = value.maxReferenceScriptsSize;
+  const current = value.maxReferenceScriptsSizePerTransaction;
+
+  if (legacy === undefined && current === undefined) {
+    // Preserve the existing schema failure for a genuinely missing parameter.
+    return value;
+  }
+
+  const decode = S.decodeUnknownSync(MaxReferenceScriptsSizeSchema);
+  const legacyValue = legacy === undefined ? undefined : decode(legacy);
+  const currentValue = current === undefined ? undefined : decode(current);
+
+  if (
+    legacyValue !== undefined &&
+    currentValue !== undefined &&
+    legacyValue.bytes !== currentValue.bytes
+  ) {
+    throw new Error(
+      "Conflicting Ogmios protocol parameters: " +
+        "maxReferenceScriptsSize and " +
+        "maxReferenceScriptsSizePerTransaction differ",
+    );
+  }
+
+  return {
+    ...value,
+    maxReferenceScriptsSize: legacyValue ?? currentValue,
+  };
+}
+
 export const ProtocolParametersSchema = S.Struct({
   minFeeCoefficient: S.Number,
   minFeeReferenceScripts: S.Struct({
@@ -102,9 +139,7 @@ export const ProtocolParametersSchema = S.Struct({
     range: S.Number,
     multiplier: S.Number,
   }),
-  maxReferenceScriptsSize: S.Struct({
-    bytes: S.Number,
-  }),
+  maxReferenceScriptsSize: MaxReferenceScriptsSizeSchema,
   stakePoolVotingThresholds: S.Struct({
     noConfidence: TupleNumberFromString,
     constitutionalCommittee: S.Struct({
