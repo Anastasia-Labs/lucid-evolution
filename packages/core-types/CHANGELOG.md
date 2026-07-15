@@ -1,5 +1,11 @@
 # @lucid-evolution/core-types
 
+## 0.2.2
+
+### Patch Changes
+
+- [#712](https://github.com/Anastasia-Labs/lucid-evolution/pull/712) [`0365cc5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0365cc5ef6e683863aa80306fc5ee5fa2407b00f) Thanks [@colll78](https://github.com/colll78)! - Add first-class governance proposal and vote builders with key, native script, PlutusV3, and delayed redeemer support, using Conway ledger indexes for voting and proposing redeemers.
+
 ## 0.2.1
 
 ### Patch Changes

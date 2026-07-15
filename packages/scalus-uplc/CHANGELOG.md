@@ -1,5 +1,14 @@
 # @lucid-evolution/scalus-uplc
 
+## 0.1.2
+
+### Patch Changes
+
+- [#712](https://github.com/Anastasia-Labs/lucid-evolution/pull/712) [`0365cc5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0365cc5ef6e683863aa80306fc5ee5fa2407b00f) Thanks [@colll78](https://github.com/colll78)! - Update Scalus to 0.18.1 for PV11-aware evaluator behavior.
+
+- Updated dependencies [[`0365cc5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0365cc5ef6e683863aa80306fc5ee5fa2407b00f)]:
+  - @lucid-evolution/core-types@0.2.2
+
 ## 0.1.1
 
 ### Patch Changes
