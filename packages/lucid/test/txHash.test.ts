@@ -8,7 +8,15 @@ import {
 } from "../src/index.js";
 import { NETWORK } from "./specs/services.js";
 
-test("test txHash with defined provider", async () => {
+const hasBlockfrostCredentials = Boolean(
+  process.env.VITE_BLOCKFROST_API_URL_PREPROD?.trim() &&
+    process.env.VITE_BLOCKFROST_KEY_PREPROD?.trim() &&
+    process.env.VITE_WALLET_SEED?.trim(),
+);
+
+const testWithBlockfrost = hasBlockfrostCredentials ? test : test.skip;
+
+testWithBlockfrost("test txHash with defined provider", async () => {
   const projectId = process.env.VITE_BLOCKFROST_KEY_PREPROD;
   const lucid = await Lucid(
     new Blockfrost(process.env.VITE_BLOCKFROST_API_URL_PREPROD!, projectId),
