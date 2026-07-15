@@ -4,15 +4,25 @@ import { Config, Effect } from "effect";
 import { Blockfrost } from "../src/blockfrost.js";
 import * as PreprodConstants from "./preprod-constants.js";
 
-export const blockfrost = await Effect.gen(function* () {
-  const BLOCKFROST_API_URL = yield* Config.string(
-    "VITE_BLOCKFROST_API_URL_PREPROD",
-  );
-  const BLOCKFROST_KEY = yield* Config.string("VITE_BLOCKFROST_KEY_PREPROD");
-  return new Blockfrost(BLOCKFROST_API_URL, BLOCKFROST_KEY);
-}).pipe(Effect.runPromise);
+const hasBlockfrostCredentials = Boolean(
+  process.env.VITE_BLOCKFROST_API_URL_PREPROD?.trim() &&
+    process.env.VITE_BLOCKFROST_KEY_PREPROD?.trim(),
+);
 
-describe("Blockfrost", async () => {
+export let blockfrost: Blockfrost;
+if (hasBlockfrostCredentials) {
+  blockfrost = await Effect.gen(function* () {
+    const BLOCKFROST_API_URL = yield* Config.string(
+      "VITE_BLOCKFROST_API_URL_PREPROD",
+    );
+    const BLOCKFROST_KEY = yield* Config.string("VITE_BLOCKFROST_KEY_PREPROD");
+    return new Blockfrost(BLOCKFROST_API_URL, BLOCKFROST_KEY);
+  }).pipe(Effect.runPromise);
+}
+
+const describeBlockfrost = hasBlockfrostCredentials ? describe : describe.skip;
+
+describeBlockfrost("Blockfrost", async () => {
   test("getProtocolParameters", async () => {
     const pp: ProtocolParameters = await blockfrost.getProtocolParameters();
     assert(pp);
