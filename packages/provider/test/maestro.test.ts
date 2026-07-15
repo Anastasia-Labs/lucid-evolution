@@ -1,8 +1,9 @@
-import { assert, describe, expect, test } from "vitest";
+import { afterAll, assert, beforeAll, describe, expect, test } from "vitest";
 import { ProtocolParameters, UTxO } from "@lucid-evolution/core-types";
 import { Config, Effect } from "effect";
 import { Maestro } from "../src/index.js";
 import * as PreprodConstants from "./preprod-constants.js";
+import { with429Retry } from "./retrying-fetch.js";
 
 const hasMaestroKey = Boolean(process.env.VITE_MAESTRO_KEY_PREPROD?.trim());
 
@@ -17,6 +18,16 @@ if (hasMaestroKey) {
 const describeMaestro = hasMaestroKey ? describe : describe.skip;
 
 describeMaestro("maestro", async () => {
+  const fetchWithoutRetry = globalThis.fetch;
+
+  beforeAll(() => {
+    globalThis.fetch = with429Retry(fetchWithoutRetry);
+  });
+
+  afterAll(() => {
+    globalThis.fetch = fetchWithoutRetry;
+  });
+
   test("getProtocolParameters", async () => {
     const pp: ProtocolParameters = await maestro.getProtocolParameters();
     assert(pp);
