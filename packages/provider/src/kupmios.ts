@@ -340,7 +340,7 @@ export class Kupmios implements Provider {
       method: "evaluateTransaction",
       params: {
         transaction: { cbor: tx },
-        additionalUtxo: Ogmios.toOgmiosUTxOs(additionalUTxOs),
+        // additionalUtxo: Ogmios.toOgmiosUTxOs(additionalUTxOs),
       },
       id: null,
     };
