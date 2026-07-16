@@ -22,11 +22,12 @@ import {
   RewardAddress,
   Script,
   ScriptType,
+  SlotConfig,
   StakeKeyHash,
   TxOutput,
   UTxO,
 } from "@lucid-evolution/core-types";
-import { Data } from "@lucid-evolution/plutus";
+import { Data, SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
 import * as Collect from "./internal/Collect.js";
 import * as Read from "./internal/Read.js";
 import * as Attach from "./internal/Attach.js";
@@ -80,7 +81,7 @@ type CertificateRedeemer = Redeemer | BuildTxWithRedeemer;
 type GovernanceRedeemer = Redeemer | BuildTxWithRedeemer;
 
 export type TxBuilderConfig = {
-  readonly lucidConfig: LucidConfig;
+  readonly lucidConfig: LucidConfig & { readonly slotConfig: SlotConfig };
   readonly txBuilder: CML.TransactionBuilder;
   walletInputs: UTxO[];
   collectedInputs: UTxO[];
@@ -162,7 +163,14 @@ export const makeTxBuilderConfig = (
   lucidConfig: LucidConfig,
   source?: TxBuilderConfig,
 ): TxBuilderConfig => ({
-  lucidConfig,
+  lucidConfig: {
+    ...lucidConfig,
+    // Snapshot the legacy table only at this low-level compatibility boundary.
+    // Lucid instances always pass their own already-validated mapping.
+    slotConfig: Object.freeze({
+      ...(lucidConfig.slotConfig ?? SLOT_CONFIG_NETWORK[lucidConfig.network]),
+    }),
+  },
   txBuilder: CML.TransactionBuilder.new(lucidConfig.txbuilderconfig),
   walletInputs: [],
   collectedInputs: [],

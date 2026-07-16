@@ -7,30 +7,60 @@ import {
   Delegation,
   EvalRedeemer,
   OutRef,
+  PolicyId,
   ProtocolParameters,
   Provider,
   RewardAddress,
+  RewardAccountState,
   Script,
   Transaction,
+  TransactionStatus,
+  TransactionStatusOptions,
   TxHash,
   Unit,
   UTxO,
 } from "@lucid-evolution/core-types";
 import { applyDoubleCborEncoding, fromUnit } from "@lucid-evolution/utils";
 import { Schema as S } from "effect";
-import { Effect, pipe, Array as _Array, Schedule, Data } from "effect";
+import { Cause, Effect, Exit, pipe, Array as _Array, Schedule } from "effect";
 import * as Ogmios from "./internal/ogmios.js";
 import * as Kupo from "./internal/kupo.js";
 import * as HttpUtils from "./internal/HttpUtils.js";
 import { FetchHttpClient } from "@effect/platform";
+import { KupmiosError, toKupmiosError } from "./errors.js";
 
-export class KupmiosError extends Data.TaggedError("KupmiosError")<{
-  cause?: unknown;
-}> {
-  get message() {
-    return `${this.cause}`;
+export { KupmiosError } from "./errors.js";
+
+const catchProviderError =
+  (protocol: "kupo" | "ogmios", operation: string) =>
+  <A, E, R>(
+    effect: Effect.Effect<A, E, R>,
+  ): Effect.Effect<A, KupmiosError, R> =>
+    Effect.catchAll(effect, (cause) =>
+      Effect.fail(toKupmiosError(cause, protocol, operation)),
+    );
+
+const runProviderEffect = async <A>(
+  effect: Effect.Effect<A, unknown, never>,
+  protocol: "kupo" | "ogmios",
+  operation: string,
+  signal?: AbortSignal,
+): Promise<A> => {
+  const exit = await Effect.runPromiseExit(effect, { signal });
+  if (Exit.isSuccess(exit)) return exit.value;
+
+  if (signal?.aborted) {
+    throw new KupmiosError({
+      protocol,
+      operation,
+      kind: "aborted",
+      retryable: false,
+      cause: signal.reason ?? Cause.squash(exit.cause),
+    });
   }
-}
+
+  throw toKupmiosError(Cause.squash(exit.cause), protocol, operation);
+};
 
 /**
  * Provides support for interacting with both Kupo and Ogmios APIs.
@@ -93,19 +123,26 @@ export class Kupmios implements Provider {
     const schema = Ogmios.JSONRPCResponseSchema(
       S.Record({ key: S.String, value: S.Unknown }),
     );
-    const response = await pipe(
-      HttpUtils.makePostAsJson(
-        this.ogmiosUrl,
-        data,
-        schema,
-        this.headers?.ogmiosHeader,
+    const response = await runProviderEffect(
+      pipe(
+        HttpUtils.makePostAsJsonResponse(
+          this.ogmiosUrl,
+          data,
+          schema,
+          this.headers?.ogmiosHeader,
+        ),
+        Effect.timeout(10_000),
+        catchProviderError("ogmios", "queryLedgerState/protocolParameters"),
+        Effect.provide(FetchHttpClient.layer),
       ),
-      Effect.timeout(10_000),
-      Effect.catchAll((cause) => new KupmiosError({ cause })),
-      Effect.provide(FetchHttpClient.layer),
-      Effect.runPromise,
+      "ogmios",
+      "queryLedgerState/protocolParameters",
     );
-    const result = Ogmios.getJSONRPCResult(response);
+    const result = Ogmios.getJSONRPCResult(
+      response.body,
+      data.method,
+      response,
+    );
     const protocolParameters = S.decodeUnknownSync(
       Ogmios.ProtocolParametersSchema,
     )(Ogmios.normalizeProtocolParameters(result));
@@ -122,19 +159,26 @@ export class Kupmios implements Provider {
     const schema = Ogmios.JSONRPCResponseSchema(
       Ogmios.TreasuryAndReservesSchema,
     );
-    const response = await pipe(
-      HttpUtils.makePostAsJson(
-        this.ogmiosUrl,
-        data,
-        schema,
-        this.headers?.ogmiosHeader,
+    const response = await runProviderEffect(
+      pipe(
+        HttpUtils.makePostAsJsonResponse(
+          this.ogmiosUrl,
+          data,
+          schema,
+          this.headers?.ogmiosHeader,
+        ),
+        Effect.timeout(10_000),
+        catchProviderError("ogmios", "queryLedgerState/treasuryAndReserves"),
+        Effect.provide(FetchHttpClient.layer),
       ),
-      Effect.timeout(10_000),
-      Effect.catchAll((cause) => new KupmiosError({ cause })),
-      Effect.provide(FetchHttpClient.layer),
-      Effect.runPromise,
+      "ogmios",
+      "queryLedgerState/treasuryAndReserves",
     );
-    const result = Ogmios.getJSONRPCResult(response);
+    const result = Ogmios.getJSONRPCResult(
+      response.body,
+      data.method,
+      response,
+    );
     return Ogmios.lovelaceAmountToBigInt(result.treasury.ada.lovelace);
   }
 
@@ -145,15 +189,18 @@ export class Kupmios implements Provider {
       : addressOrCredential.hash;
     const pattern = `${this.kupoUrl}/matches/${queryPredicate}${isAddress ? "" : "/*"}?unspent`;
     const schema = S.Array(Kupo.UTxOSchema);
-    const utxos = await pipe(
-      HttpUtils.makeGet(pattern, schema, this.headers?.kupoHeader),
-      Effect.flatMap((u) =>
-        kupmiosUtxosToUtxos(this.kupoUrl, u, this.headers?.kupoHeader),
+    const utxos = await runProviderEffect(
+      pipe(
+        HttpUtils.makeGet(pattern, schema, this.headers?.kupoHeader),
+        Effect.flatMap((u) =>
+          kupmiosUtxosToUtxos(this.kupoUrl, u, this.headers?.kupoHeader),
+        ),
+        Effect.timeout(10_000),
+        catchProviderError("kupo", "getUtxos"),
+        Effect.provide(FetchHttpClient.layer),
       ),
-      Effect.timeout(10_000),
-      Effect.catchAll((cause) => new KupmiosError({ cause })),
-      Effect.provide(FetchHttpClient.layer),
-      Effect.runPromise,
+      "kupo",
+      "getUtxos",
     );
     return utxos;
   }
@@ -169,32 +216,72 @@ export class Kupmios implements Provider {
     const { policyId, assetName } = fromUnit(unit);
     const pattern = `${this.kupoUrl}/matches/${queryPredicate}${isAddress ? "" : "/*"}?unspent&policy_id=${policyId}${assetName ? `&asset_name=${assetName}` : ""}`;
     const schema = S.Array(Kupo.UTxOSchema);
-    const utxos = await pipe(
-      HttpUtils.makeGet(pattern, schema, this.headers?.kupoHeader),
-      Effect.flatMap((u) =>
-        kupmiosUtxosToUtxos(this.kupoUrl, u, this.headers?.kupoHeader),
+    const utxos = await runProviderEffect(
+      pipe(
+        HttpUtils.makeGet(pattern, schema, this.headers?.kupoHeader),
+        Effect.flatMap((u) =>
+          kupmiosUtxosToUtxos(this.kupoUrl, u, this.headers?.kupoHeader),
+        ),
+        Effect.timeout(10_000),
+        catchProviderError("kupo", "getUtxosWithUnit"),
+        Effect.provide(FetchHttpClient.layer),
       ),
-      Effect.timeout(10_000),
-      Effect.catchAll((cause) => new KupmiosError({ cause })),
-      Effect.provide(FetchHttpClient.layer),
-      Effect.runPromise,
+      "kupo",
+      "getUtxosWithUnit",
     );
-    return utxos;
+    // Kupo's asset_name query parameter cannot represent an empty asset name.
+    // Keep the Provider method's exact-unit contract when the policy filter is
+    // necessarily broader than the requested unit.
+    return utxos.filter((utxo) => (utxo.assets[unit] ?? 0n) > 0n);
+  }
+
+  async getUtxosWithPolicy(
+    addressOrCredential: Address | Credential,
+    policyId: PolicyId,
+  ): Promise<UTxO[]> {
+    if (!/^[0-9a-f]{56}$/i.test(policyId)) {
+      throw new TypeError(
+        "policyId must be a 56-character hexadecimal string.",
+      );
+    }
+    const normalizedPolicyId = policyId.toLowerCase();
+    const isAddress = typeof addressOrCredential === "string";
+    const queryPredicate = isAddress
+      ? addressOrCredential
+      : addressOrCredential.hash;
+    const pattern = `${this.kupoUrl}/matches/${queryPredicate}${isAddress ? "" : "/*"}?unspent&policy_id=${normalizedPolicyId}`;
+    const schema = S.Array(Kupo.UTxOSchema);
+    return runProviderEffect(
+      pipe(
+        HttpUtils.makeGet(pattern, schema, this.headers?.kupoHeader),
+        Effect.flatMap((utxos) =>
+          kupmiosUtxosToUtxos(this.kupoUrl, utxos, this.headers?.kupoHeader),
+        ),
+        Effect.timeout(10_000),
+        catchProviderError("kupo", "getUtxosWithPolicy"),
+        Effect.provide(FetchHttpClient.layer),
+      ),
+      "kupo",
+      "getUtxosWithPolicy",
+    );
   }
 
   async getUtxoByUnit(unit: Unit): Promise<UTxO> {
     const { policyId, assetName } = fromUnit(unit);
-    const pattern = `${this.kupoUrl}/matches/${policyId}.${assetName ? `${assetName}` : "*"}?unspent`;
+    const pattern = `${this.kupoUrl}/matches/${policyId}.${assetName ?? ""}?unspent`;
     const schema = S.Array(Kupo.UTxOSchema);
-    const utxos = await pipe(
-      HttpUtils.makeGet(pattern, schema, this.headers?.kupoHeader),
-      Effect.flatMap((u) =>
-        kupmiosUtxosToUtxos(this.kupoUrl, u, this.headers?.kupoHeader),
+    const utxos = await runProviderEffect(
+      pipe(
+        HttpUtils.makeGet(pattern, schema, this.headers?.kupoHeader),
+        Effect.flatMap((u) =>
+          kupmiosUtxosToUtxos(this.kupoUrl, u, this.headers?.kupoHeader),
+        ),
+        Effect.timeout(10_000),
+        catchProviderError("kupo", "getUtxoByUnit"),
+        Effect.provide(FetchHttpClient.layer),
       ),
-      Effect.timeout(10_000),
-      Effect.catchAll((cause) => new KupmiosError({ cause })),
-      Effect.provide(FetchHttpClient.layer),
-      Effect.runPromise,
+      "kupo",
+      "getUtxoByUnit",
     );
     if (utxos.length === 0) {
       throw new Error("Unit not found.");
@@ -220,11 +307,13 @@ export class Kupmios implements Provider {
           kupmiosUtxosToUtxos(this.kupoUrl, u, this.headers?.kupoHeader),
         ),
         Effect.timeout(10_000),
-        Effect.catchAll((cause) => new KupmiosError({ cause })),
+        catchProviderError("kupo", "getUtxosByOutRef"),
       ),
     );
-    const utxos: UTxO[][] = await Effect.runPromise(
+    const utxos: UTxO[][] = await runProviderEffect(
       pipe(program, Effect.provide(FetchHttpClient.layer)),
+      "kupo",
+      "getUtxosByOutRef",
     );
 
     return _Array
@@ -238,7 +327,9 @@ export class Kupmios implements Provider {
       );
   }
 
-  async getDelegation(rewardAddress: RewardAddress): Promise<Delegation> {
+  async getRewardAccount(
+    rewardAddress: RewardAddress,
+  ): Promise<RewardAccountState> {
     const data = {
       jsonrpc: "2.0",
       method: "queryLedgerState/rewardAccountSummaries",
@@ -246,54 +337,106 @@ export class Kupmios implements Provider {
       id: null,
     };
     const schema = Ogmios.JSONRPCResponseSchema(Ogmios.Delegation);
-    const response = await pipe(
-      HttpUtils.makePostAsJson(
-        this.ogmiosUrl,
-        data,
-        schema,
-        this.headers?.ogmiosHeader,
+    const response = await runProviderEffect(
+      pipe(
+        HttpUtils.makePostAsJsonResponse(
+          this.ogmiosUrl,
+          data,
+          schema,
+          this.headers?.ogmiosHeader,
+        ),
+        Effect.provide(FetchHttpClient.layer),
+        Effect.timeout(10_000),
+        catchProviderError("ogmios", "queryLedgerState/rewardAccountSummaries"),
       ),
-      Effect.provide(FetchHttpClient.layer),
-      Effect.timeout(10_000),
-      Effect.catchAll((cause) => new KupmiosError({ cause })),
-      Effect.runPromise,
+      "ogmios",
+      "queryLedgerState/rewardAccountSummaries",
     );
-    const result = Ogmios.getJSONRPCResult(response);
+    const result = Ogmios.getJSONRPCResult(
+      response.body,
+      data.method,
+      response,
+    );
 
-    return toDelegation(result);
+    return toRewardAccountState(result);
+  }
+
+  async getDelegation(rewardAddress: RewardAddress): Promise<Delegation> {
+    const { poolId, rewards } = await this.getRewardAccount(rewardAddress);
+    return { poolId, rewards };
   }
 
   async getDatum(datumHash: DatumHash): Promise<Datum> {
     const pattern = `${this.kupoUrl}/datums/${datumHash}`;
     const schema = Kupo.DatumSchema;
-    const result = await pipe(
-      HttpUtils.makeGet(pattern, schema, this.headers?.kupoHeader),
-      Effect.provide(FetchHttpClient.layer),
-      Effect.timeout(10_000),
-      Effect.flatMap(Effect.fromNullable),
-      Effect.catchAll((cause) => new KupmiosError({ cause })),
-      Effect.runPromise,
+    const result = await runProviderEffect(
+      pipe(
+        HttpUtils.makeGet(pattern, schema, this.headers?.kupoHeader),
+        Effect.provide(FetchHttpClient.layer),
+        Effect.timeout(10_000),
+        Effect.flatMap(Effect.fromNullable),
+        catchProviderError("kupo", "getDatum"),
+      ),
+      "kupo",
+      "getDatum",
     );
     return result.datum;
   }
 
+  async getTransactionStatus(
+    txHash: TxHash,
+    options: TransactionStatusOptions = {},
+  ): Promise<TransactionStatus> {
+    const pattern = `${this.kupoUrl}/matches/*@${txHash}`;
+    const schema = S.Array(Kupo.UTxOSchema).annotations({
+      identifier: "Array<KupmiosSchema.KupoUTxO>",
+    });
+    const matches = await runProviderEffect(
+      pipe(
+        HttpUtils.makeGet(pattern, schema, this.headers?.kupoHeader),
+        Effect.timeout(10_000),
+        catchProviderError("kupo", "getTransactionStatus"),
+        Effect.provide(FetchHttpClient.layer),
+      ),
+      "kupo",
+      "getTransactionStatus",
+      options.signal,
+    );
+
+    if (matches.length === 0) return { status: "not_found", txHash };
+
+    const createdAt = matches[0].created_at;
+    return {
+      status: "confirmed",
+      txHash,
+      confirmation: {
+        txHash,
+        blockHash: createdAt.header_hash,
+        slot: createdAt.slot_no,
+      },
+    };
+  }
+
   async awaitTx(txHash: TxHash, checkInterval = 20000): Promise<boolean> {
-    const pattern = `${this.kupoUrl}/matches/*@${txHash}?unspent`;
+    const pattern = `${this.kupoUrl}/matches/*@${txHash}`;
     const schema = S.Array(Kupo.UTxOSchema).annotations({
       identifier: "Array<KupmiosSchema.KupoUTxO>",
     });
 
-    const result = await pipe(
-      HttpUtils.makeGet(pattern, schema, this.headers?.kupoHeader),
-      Effect.provide(FetchHttpClient.layer),
-      Effect.repeat({
-        schedule: Schedule.exponential(checkInterval),
-        until: (result) => result.length > 0,
-      }),
-      Effect.timeout(160_000),
-      Effect.catchAll((cause) => new KupmiosError({ cause })),
-      Effect.as(true),
-      Effect.runPromise,
+    const result = await runProviderEffect(
+      pipe(
+        HttpUtils.makeGet(pattern, schema, this.headers?.kupoHeader),
+        Effect.provide(FetchHttpClient.layer),
+        Effect.repeat({
+          schedule: Schedule.exponential(checkInterval),
+          until: (result) => result.length > 0,
+        }),
+        Effect.timeout(160_000),
+        catchProviderError("kupo", "awaitTx"),
+        Effect.as(true),
+      ),
+      "kupo",
+      "awaitTx",
     );
     return result;
   }
@@ -314,19 +457,26 @@ export class Kupmios implements Provider {
         }),
       }),
     );
-    const response = await pipe(
-      HttpUtils.makePostAsJson(
-        this.ogmiosUrl,
-        data,
-        schema,
-        this.headers?.ogmiosHeader,
+    const response = await runProviderEffect(
+      pipe(
+        HttpUtils.makePostAsJsonResponse(
+          this.ogmiosUrl,
+          data,
+          schema,
+          this.headers?.ogmiosHeader,
+        ),
+        Effect.provide(FetchHttpClient.layer),
+        Effect.timeout(10_000),
+        catchProviderError("ogmios", "submitTransaction"),
       ),
-      Effect.provide(FetchHttpClient.layer),
-      Effect.timeout(10_000),
-      Effect.catchAll((cause) => new KupmiosError({ cause })),
-      Effect.runPromise,
+      "ogmios",
+      "submitTransaction",
     );
-    const result = Ogmios.getJSONRPCResult(response);
+    const result = Ogmios.getJSONRPCResult(
+      response.body,
+      data.method,
+      response,
+    );
     return result.transaction.id;
   }
 
@@ -349,19 +499,26 @@ export class Kupmios implements Provider {
     const schema = Ogmios.JSONRPCResponseSchema(S.Array(Ogmios.RedeemerSchema));
 
     // Perform the request and handle the response
-    const response = await pipe(
-      HttpUtils.makePostAsJson(
-        this.ogmiosUrl,
-        data,
-        schema,
-        this.headers?.ogmiosHeader,
+    const response = await runProviderEffect(
+      pipe(
+        HttpUtils.makePostAsJsonResponse(
+          this.ogmiosUrl,
+          data,
+          schema,
+          this.headers?.ogmiosHeader,
+        ),
+        Effect.provide(FetchHttpClient.layer),
+        Effect.timeout(10_000),
+        catchProviderError("ogmios", "evaluateTransaction"),
       ),
-      Effect.provide(FetchHttpClient.layer),
-      Effect.timeout(10_000),
-      Effect.catchAll((cause) => new KupmiosError({ cause })),
-      Effect.runPromise,
+      "ogmios",
+      "evaluateTransaction",
     );
-    const result = Ogmios.getJSONRPCResult(response);
+    const result = Ogmios.getJSONRPCResult(
+      response.body,
+      data.method,
+      response,
+    );
 
     const evalRedeemers: EvalRedeemer[] = result.map((item) => ({
       ex_units: {
@@ -486,19 +643,20 @@ const toProtocolParameters = (
   };
 };
 
-const toDelegation = (result: Ogmios.Delegation): Delegation => {
-  if (!result) {
-    return { poolId: null, rewards: 0n };
-  }
-
-  const delegation = Array.isArray(result)
-    ? result[0]
-    : Object.values(result)[0];
+const toRewardAccountState = (
+  result: Ogmios.Delegation,
+): RewardAccountState => {
+  const delegation = result
+    ? Array.isArray(result)
+      ? result[0]
+      : Object.values(result)[0]
+    : undefined;
   if (!delegation) {
-    return { poolId: null, rewards: 0n };
+    return { registered: false, poolId: null, rewards: 0n };
   }
 
   return {
+    registered: true,
     poolId:
       "stakePool" in delegation
         ? delegation.stakePool?.id || null

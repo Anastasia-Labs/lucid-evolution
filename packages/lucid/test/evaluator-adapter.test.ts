@@ -75,6 +75,7 @@ const lucidConfig = (provider: Provider, wallet: Wallet) => ({
   txbuilderconfig: makeTxConfig(protocolParameters, costModels),
   costModels,
   protocolParameters,
+  slotConfig: { zeroTime: 0, zeroSlot: 0, slotLength: 1_000 },
 });
 
 const makeUtxo = (
@@ -150,5 +151,32 @@ describe("evaluator adapter selection", () => {
       expect.arrayContaining([outRefKey(scriptUtxo), outRefKey(referenceUtxo)]),
     );
     expect(adapterEvaluate).not.toHaveBeenCalled();
+  });
+
+  test("passes the per-builder slot mapping to evaluator adapters", async () => {
+    const walletInput = makeUtxo("66");
+    const scriptUtxo = makeScriptUtxo("77");
+    const slotConfig = {
+      zeroTime: 1_700_000_000_000,
+      zeroSlot: 123_456,
+      slotLength: 250,
+    };
+    const adapterEvaluate = vi.fn<EvaluatorAdapter["evaluate"]>(async () => [
+      evalRedeemer(),
+    ]);
+
+    await makeTxBuilder({
+      ...lucidConfig(makeProvider(), makeWallet([walletInput])),
+      slotConfig,
+      evaluator: { name: "slot-aware", evaluate: adapterEvaluate },
+    })
+      .attach.SpendingValidator(alwaysSucceedScript)
+      .collectFrom([scriptUtxo], Data.void())
+      .complete({ presetWalletInputs: [walletInput] });
+
+    expect(adapterEvaluate).toHaveBeenCalled();
+    expect(adapterEvaluate.mock.calls.at(-1)?.[0].context.slotConfig).toEqual(
+      slotConfig,
+    );
   });
 });

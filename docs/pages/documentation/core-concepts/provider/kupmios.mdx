@@ -10,22 +10,22 @@ import { Lucid, Kupmios } from "@lucid-evolution/lucid";
 const lucid = await Lucid(
   new Kupmios(
     "http://localhost:1442", // Kupo endpoint
-    "http://localhost:1337" // Ogmios endpoint
+    "http://localhost:1337", // Ogmios endpoint
   ),
-  "Preview"
+  "Preview",
 );
 ```
 
 <Callout type="info">
   **If you have API keys**
 
-  ```typescript
-  const lucid = await Lucid(
+```typescript
+const lucid = await Lucid(
   new Kupmios("http://localhost:1442", "http://localhost:1337", {
     kupoHeader: { "priv-api-key": "<kupo-api-key>" }, // for example: "dmtr-api-key": "<kupo-api-key>"
     ogmiosHeader: { "priv-api-key": "<ogmios-api-key>" },
   }),
-  "Preview"
+  "Preview",
 );
 ```
 
@@ -35,3 +35,12 @@ const lucid = await Lucid(
   Kupmios is a mix of [Ogmios](https://ogmios.dev/) and
   [Kupo](https://cardanosolutions.github.io/kupo/).
 </Callout>
+
+Kupmios exposes structured `KupmiosError` and `OgmiosJsonRpcError` instances.
+Callers can inspect the operation, protocol, HTTP status, retryability,
+`retryAfterMs`, JSON-RPC code and data, and the original cause without parsing
+formatted error strings.
+
+Transaction confirmation queries intentionally do not use Kupo's `unspent`
+filter. A confirmed transaction remains confirmed when one of its outputs is
+spent shortly after inclusion.

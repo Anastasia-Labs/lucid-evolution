@@ -45,6 +45,7 @@ const lucidConfig = {
   txbuilderconfig: makeTxConfig(protocolParameters, costModels),
   costModels,
   protocolParameters,
+  slotConfig: { zeroTime: 0, zeroSlot: 0, slotLength: 1_000 },
 };
 
 const alwaysSucceedScript: Script = {

@@ -12,7 +12,10 @@ import {
   ProtocolParameters,
   Provider,
   RewardAddress,
+  RewardAccountState,
   Transaction,
+  TransactionStatus,
+  TransactionStatusOptions,
   TxHash,
   Unit,
   UTxO,
@@ -199,20 +202,32 @@ export class Maestro implements Provider {
     return utxos.map(this.maestroUtxoToUtxo);
   }
 
-  async getDelegation(rewardAddress: RewardAddress): Promise<Delegation> {
-    const timestampedResultResponse = await fetch(
-      `${this.url}/accounts/${rewardAddress}`,
-      { headers: this.commonHeaders() },
-    );
-    if (!timestampedResultResponse.ok) {
-      return { poolId: null, rewards: 0n };
+  async getRewardAccount(
+    rewardAddress: RewardAddress,
+  ): Promise<RewardAccountState> {
+    const response = await fetch(`${this.url}/accounts/${rewardAddress}`, {
+      headers: this.requireAmountsAsStrings(this.commonHeaders()),
+    });
+    if (response.status === 404) {
+      return { registered: false, poolId: null, rewards: 0n };
     }
-    const timestampedResult = await timestampedResultResponse.json();
+    if (!response.ok) {
+      throw new Error(
+        `Could not fetch reward account from Maestro. Received status code: ${response.status}`,
+      );
+    }
+    const timestampedResult = await response.json();
     const result = timestampedResult.data;
     return {
+      registered: result.registered,
       poolId: result.delegated_pool || null,
       rewards: BigInt(result.rewards_available),
     };
+  }
+
+  async getDelegation(rewardAddress: RewardAddress): Promise<Delegation> {
+    const { poolId, rewards } = await this.getRewardAccount(rewardAddress);
+    return { poolId, rewards };
   }
 
   async getDatum(datumHash: DatumHash): Promise<Datum> {
@@ -253,6 +268,47 @@ export class Maestro implements Provider {
         }
       }, checkInterval);
     });
+  }
+
+  async getTransactionStatus(
+    txHash: TxHash,
+    options: TransactionStatusOptions = {},
+  ): Promise<TransactionStatus> {
+    const response = await fetch(`${this.url}/txmanager/${txHash}/state`, {
+      headers: this.commonHeaders(),
+      signal: options.signal,
+    });
+    if (response.status === 404) return { status: "not_found", txHash };
+    if (!response.ok) {
+      throw new Error(
+        `Could not fetch transaction status from Maestro. Received status code: ${response.status}`,
+      );
+    }
+
+    const result = await response.json();
+    switch (result.status) {
+      case "pending":
+        return { status: "pending", txHash };
+      case "confirmed":
+        return {
+          status: "confirmed",
+          txHash,
+          confirmation: {
+            txHash,
+            confirmations: result.confirmations,
+          },
+        };
+      case "failed":
+        return {
+          status: "failed",
+          txHash,
+          reason: result.reason ?? result.error,
+        };
+      default:
+        throw new Error(
+          `Maestro returned an unknown transaction status: ${String(result.status)}`,
+        );
+    }
   }
 
   async submitTx(tx: Transaction): Promise<TxHash> {

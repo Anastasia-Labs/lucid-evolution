@@ -9,7 +9,10 @@ import {
   ProtocolParameters,
   Provider,
   RewardAddress,
+  RewardAccountState,
   Transaction,
+  TransactionStatus,
+  TransactionStatusOptions,
   TxHash,
   Unit,
   UTxO,
@@ -260,7 +263,9 @@ export class Koios implements Provider {
     }
   }
 
-  async getDelegation(rewardAddress: RewardAddress): Promise<Delegation> {
+  async getRewardAccount(
+    rewardAddress: RewardAddress,
+  ): Promise<RewardAccountState> {
     const body = {
       _stake_addresses: [rewardAddress],
     };
@@ -277,20 +282,26 @@ export class Koios implements Provider {
       ),
       // Allows for dependency injection and easier testing
       Effect.provide(FetchHttpClient.layer),
-      Effect.flatMap((result) =>
-        result.length === 0
-          ? Effect.fail("No Delegation Found by Reward Address")
-          : Effect.succeed(result[0]),
-      ),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
       Effect.runPromise,
     );
 
+    const account = result[0];
+    if (!account) {
+      return { registered: false, poolId: null, rewards: 0n };
+    }
+
     return {
-      poolId: result.delegated_pool || null,
-      rewards: BigInt(result.rewards_available),
+      registered: account.status === "registered",
+      poolId: account.delegated_pool || null,
+      rewards: BigInt(account.rewards_available),
     };
+  }
+
+  async getDelegation(rewardAddress: RewardAddress): Promise<Delegation> {
+    const { poolId, rewards } = await this.getRewardAccount(rewardAddress);
+    return { poolId, rewards };
   }
 
   async getDatum(datumHash: DatumHash): Promise<Datum> {
@@ -346,6 +357,45 @@ export class Koios implements Provider {
     );
 
     return result;
+  }
+
+  async getTransactionStatus(
+    txHash: TxHash,
+    options: TransactionStatusOptions = {},
+  ): Promise<TransactionStatus> {
+    const url = `${this.baseUrl}/tx_status`;
+    const body = { _tx_hashes: [txHash] };
+    const bearerToken = this.token
+      ? { Authorization: `Bearer ${this.token}` }
+      : undefined;
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...bearerToken },
+      body: JSON.stringify(body),
+      signal: options.signal,
+    });
+    if (response.status === 404) return { status: "not_found", txHash };
+    if (!response.ok) {
+      throw new Error(
+        `Could not fetch transaction status from Koios. Received status code: ${response.status}`,
+      );
+    }
+    const result = S.decodeUnknownSync(S.Array(_Koios.TxStatusSchema))(
+      await response.json(),
+    );
+
+    const status = result[0];
+    if (!status || status.num_confirmations === null) {
+      return { status: "not_found", txHash };
+    }
+    return {
+      status: "confirmed",
+      txHash,
+      confirmation: {
+        txHash,
+        confirmations: status.num_confirmations,
+      },
+    };
   }
 
   async submitTx(tx: Transaction): Promise<TxHash> {

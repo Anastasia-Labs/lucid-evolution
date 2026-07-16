@@ -25,6 +25,28 @@ describe.sequential("Emulator", () => {
     assert.equal(await localEmulator.getTreasury(), treasury);
   });
 
+  test("Get Reward Account distinguishes registration state", async () => {
+    const localEmulator = new Emulator([EMULATOR_ACCOUNT]);
+    const rewardAddress =
+      "stake_test17zt3vxfjx9pjnpnapa65lx375p2utwxmpc8afj053h0l3vgc8a3g3";
+
+    assert.deepEqual(await localEmulator.getRewardAccount(rewardAddress), {
+      registered: false,
+      poolId: null,
+      rewards: 0n,
+    });
+
+    localEmulator.chain[rewardAddress] = {
+      registeredStake: true,
+      delegation: { poolId: null, rewards: 0n },
+    };
+    assert.deepEqual(await localEmulator.getRewardAccount(rewardAddress), {
+      registered: true,
+      poolId: null,
+      rewards: 0n,
+    });
+  });
+
   test("Correct Start Balance", async () => {
     const utxos = await emulator.getUtxos(EMULATOR_ACCOUNT.address);
     const lovelace = utxos.reduce(
@@ -82,6 +104,67 @@ describe.sequential("Emulator", () => {
     assert.equal(
       txHash,
       "edfc1d75074d741f5b7c97e8ddb81de956a43b6fca8664dff5722bb1d136ff3f",
+    );
+
+    const spentEntry = Object.values(emulator.ledger).find(
+      ({ spent }) => spent,
+    );
+    assert.isDefined(spentEntry);
+
+    const spentUnit = `${"f".repeat(56)}01`;
+    spentEntry.utxo.assets[spentUnit] = 1n;
+    const spentOutRef = {
+      txHash: spentEntry.utxo.txHash,
+      outputIndex: spentEntry.utxo.outputIndex,
+    };
+    const includesSpentOutRef = (utxos: (typeof spentEntry.utxo)[]) =>
+      utxos.some(
+        ({ txHash, outputIndex }) =>
+          txHash === spentOutRef.txHash &&
+          outputIndex === spentOutRef.outputIndex,
+      );
+
+    assert.isFalse(
+      includesSpentOutRef(await emulator.getUtxos(spentEntry.utxo.address)),
+    );
+    assert.isFalse(
+      includesSpentOutRef(
+        await emulator.getUtxosWithUnit(spentEntry.utxo.address, spentUnit),
+      ),
+    );
+    assert.isFalse(
+      includesSpentOutRef(await emulator.getUtxosByOutRef([spentOutRef])),
+    );
+    assert.isUndefined(await emulator.getUtxoByUnit(spentUnit));
+
+    assert.deepEqual(await emulator.getTransactionStatus(txHash), {
+      status: "pending",
+      txHash,
+    });
+    emulator.awaitBlock();
+    assert.deepEqual(await emulator.getTransactionStatus(txHash), {
+      status: "confirmed",
+      txHash,
+      confirmation: {
+        txHash,
+        blockHeight: 1,
+        slot: 20,
+        confirmations: 1,
+      },
+    });
+    const confirmedOutput = Object.entries(emulator.ledger).find(
+      ([, { utxo }]) => utxo.txHash === txHash,
+    );
+    assert.isDefined(confirmedOutput);
+    confirmedOutput[1].spent = true;
+    emulator.awaitBlock(2);
+    assert.notProperty(emulator.ledger, confirmedOutput[0]);
+    assert.equal(
+      (await emulator.getTransactionStatus(txHash)).status === "confirmed"
+        ? (await emulator.getTransactionStatus(txHash)).confirmation
+            .confirmations
+        : undefined,
+      3,
     );
   });
 });

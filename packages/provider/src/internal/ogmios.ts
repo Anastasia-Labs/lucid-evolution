@@ -2,6 +2,11 @@ import { Schema as S } from "effect";
 import { applySingleCborEncoding, fromUnit } from "@lucid-evolution/utils";
 import { Record } from "effect";
 import * as CoreType from "@lucid-evolution/core-types";
+import {
+  KupmiosError,
+  OgmiosJsonRpcError,
+  retryAfterHeaderToMs,
+} from "../errors.js";
 
 export const JSONRPCSchema = <A, I, R>(schema: S.Schema<A, I, R>) =>
   S.Struct({
@@ -42,15 +47,35 @@ export const JSONRPCResponseSchema = <A, I, R>(schema: S.Schema<A, I, R>) =>
     identifier: "JSONRPCResponseSchema",
   });
 
-export const getJSONRPCResult = <A>(response: JSONRPCResponse<A>): A => {
+export const getJSONRPCResult = <A>(
+  response: JSONRPCResponse<A>,
+  operation?: string,
+  transport?: {
+    status: number;
+    headers: Readonly<Record<string, string>>;
+  },
+): A => {
   if ("error" in response) {
-    const data =
-      response.error.data === undefined
-        ? ""
-        : `: ${JSON.stringify(response.error.data)}`;
-    throw new Error(
-      `Ogmios JSON-RPC error ${response.error.code}: ${response.error.message}${data}`,
-    );
+    throw new OgmiosJsonRpcError({
+      code: response.error.code,
+      message: response.error.message,
+      data: response.error.data,
+      method: response.method,
+      id: response.id,
+      operation,
+      status: transport?.status,
+      retryAfterMs: retryAfterHeaderToMs(transport?.headers["retry-after"]),
+      cause: transport,
+    });
+  }
+  if (transport && (transport.status < 200 || transport.status >= 300)) {
+    throw new KupmiosError({
+      protocol: "ogmios",
+      operation: operation ?? response.method ?? "unknown",
+      status: transport.status,
+      retryAfterMs: retryAfterHeaderToMs(transport.headers["retry-after"]),
+      cause: transport,
+    });
   }
   return response.result;
 };
@@ -225,7 +250,7 @@ const LegacyDelegationSummarySchema = S.Struct({
 });
 
 const RewardAccountSummarySchema = S.Struct({
-  from: S.optional(S.Literal("key", "script")),
+  from: S.optional(S.Literal("key", "verificationKey", "script")),
   credential: S.optional(S.String),
   stakePool: S.optional(S.NullOr(S.Struct({ id: S.String }))),
   rewards: RewardAccountAdaSchema,

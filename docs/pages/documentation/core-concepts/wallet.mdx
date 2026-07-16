@@ -9,7 +9,7 @@ You can instantiate a wallet object from seed without binding it with a Lucid ob
 
 ```typescript
 import { generateSeedPhrase } from "@lucid-evolution/lucid";
- 
+
 const seedPhrase = generateSeedPhrase(); // BIP-39
 console.log(seedPhrase);
 ```
@@ -47,3 +47,18 @@ const usedKeyHashes: Array<KeyHash> = discoverOwnUsedTxKeyHashes(
 );
 console.log(usedKeyHashes); // ["KeyHash1", "KeyHash2"]
 ```
+
+## Authoritative UTxO overrides
+
+`overrideUTxOs` treats the supplied array as the complete wallet state,
+including an empty array. This is useful while chaining transactions or while a
+provider indexer is catching up.
+
+```typescript
+lucid.overrideUTxOs([]); // The wallet is authoritatively empty.
+
+// Resume querying the selected wallet's provider or wallet API.
+lucid.clearUTxOOverride();
+```
+
+Overrides remain active until replaced or explicitly cleared.

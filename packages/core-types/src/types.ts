@@ -39,10 +39,25 @@ export interface Provider {
   getUtxoByUnit(unit: Unit): Promise<UTxO>;
   /** Query UTxOs by the output reference (tx hash and index). */
   getUtxosByOutRef(outRefs: Array<OutRef>): Promise<UTxO[]>;
+  /**
+   * Query UTxOs containing any asset under a policy. Providers may omit this
+   * optional fast-path capability.
+   */
+  getUtxosWithPolicy?(
+    addressOrCredential: Address | Credential,
+    policyId: PolicyId,
+  ): Promise<UTxO[]>;
   /** Query the current treasury amount in lovelace, when supported by the provider. */
   getTreasury?(): Promise<bigint>;
   getDelegation(rewardAddress: RewardAddress): Promise<Delegation>;
+  /** Query registration, rewards, and pool delegation when supported. */
+  getRewardAccount?(rewardAddress: RewardAddress): Promise<RewardAccountState>;
   getDatum(datumHash: DatumHash): Promise<Datum>;
+  /** Query the provider's current observation of a transaction. */
+  getTransactionStatus?(
+    txHash: TxHash,
+    options?: TransactionStatusOptions,
+  ): Promise<TransactionStatus>;
   awaitTx(txHash: TxHash, checkInterval?: number): Promise<boolean>;
   submitTx(tx: Transaction): Promise<TxHash>;
   evaluateTx(
@@ -285,6 +300,47 @@ export type Delegation = {
   rewards: Lovelace;
 };
 
+/** Provider-neutral reward-account state. */
+export type RewardAccountState = {
+  registered: boolean;
+  poolId: PoolId | null;
+  rewards: Lovelace;
+};
+
+/** Inclusion metadata known by a provider for a confirmed transaction. */
+export type TransactionConfirmation = {
+  txHash: TxHash;
+  blockHash?: string;
+  blockHeight?: number;
+  slot?: Slot;
+  /** Actual block confirmations. Providers must not substitute slot distance. */
+  confirmations?: number;
+};
+
+/** A provider's current observation of a transaction. */
+export type TransactionStatus =
+  | { status: "not_found"; txHash: TxHash }
+  | { status: "pending"; txHash: TxHash }
+  | { status: "failed"; txHash: TxHash; reason?: unknown }
+  | {
+      status: "confirmed";
+      txHash: TxHash;
+      confirmation: TransactionConfirmation;
+    };
+
+export type TransactionStatusOptions = {
+  signal?: AbortSignal;
+};
+
+export type AwaitTransactionOptions = TransactionStatusOptions & {
+  /** Polling interval in milliseconds. */
+  checkInterval?: number;
+  /** Maximum wait in milliseconds. */
+  timeout?: number;
+  /** Required actual block confirmations. */
+  minimumConfirmations?: number;
+};
+
 /**
  * A wallet that can be constructed from external data e.g utxos and an address.
  * It doesn't allow you to sign transactions/messages. This needs to be handled separately.
@@ -299,6 +355,8 @@ export type SignedMessage = { signature: string; key: string };
 
 export interface Wallet {
   overrideUTxOs(utxos: UTxO[]): void;
+  /** Clear a previously authoritative UTxO override. */
+  clearUTxOOverride?(): void;
   address(): Promise<Address>;
   rewardAddress(): Promise<RewardAddress | null>;
   getUtxos(): Promise<UTxO[]>;

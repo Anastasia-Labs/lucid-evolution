@@ -84,6 +84,12 @@ const params = await emulator.getProtocolParameters();
 
 // Get datum by hash
 const datum = await emulator.getDatum(datumHash);
+
+// Distinguish unregistered and registered-but-undelegated accounts
+const rewardAccount = await emulator.getRewardAccount(rewardAddress);
+
+// Observe pending or confirmed transactions even after outputs are spent
+const status = await emulator.getTransactionStatus(txHash);
 ```
 
 </Steps>

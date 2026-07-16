@@ -187,6 +187,55 @@ describe("Kupmios Ogmios JSON-RPC handling", () => {
   });
 
   test("getDelegation accepts Ogmios reward account summaries", async () => {
+    vi.spyOn(globalThis, "fetch").mockImplementation(
+      async () =>
+        new Response(
+          JSON.stringify({
+            jsonrpc: "2.0",
+            method: "queryLedgerState/rewardAccountSummaries",
+            result: [
+              {
+                from: "script",
+                credential:
+                  "97161932314329867d0f754f9a3ea055c5b8db0e0fd4c9f48ddff8b1",
+                stakePool: {
+                  id: "pool1e0arfuamnymdkmjztvkryasxv9d8u8key27ajgc4mquz2nr8mk9",
+                },
+                rewards: { ada: { lovelace: 1505083629601 } },
+                deposit: { ada: { lovelace: 2000000 } },
+              },
+            ],
+            id: null,
+          }),
+          {
+            status: 200,
+            headers: { "content-type": "application/json" },
+          },
+        ),
+    );
+    const kupmios = new Kupmios("http://kupo.test", "http://ogmios.test");
+
+    await expect(
+      kupmios.getRewardAccount(
+        "stake_test17zt3vxfjx9pjnpnapa65lx375p2utwxmpc8afj053h0l3vgc8a3g3",
+      ),
+    ).resolves.toStrictEqual({
+      registered: true,
+      poolId: "pool1e0arfuamnymdkmjztvkryasxv9d8u8key27ajgc4mquz2nr8mk9",
+      rewards: 1505083629601n,
+    });
+
+    await expect(
+      kupmios.getDelegation(
+        "stake_test17zt3vxfjx9pjnpnapa65lx375p2utwxmpc8afj053h0l3vgc8a3g3",
+      ),
+    ).resolves.toStrictEqual({
+      poolId: "pool1e0arfuamnymdkmjztvkryasxv9d8u8key27ajgc4mquz2nr8mk9",
+      rewards: 1505083629601n,
+    });
+  });
+
+  test("getRewardAccount accepts current verification-key summaries without delegation", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(
         JSON.stringify({
@@ -194,14 +243,11 @@ describe("Kupmios Ogmios JSON-RPC handling", () => {
           method: "queryLedgerState/rewardAccountSummaries",
           result: [
             {
-              from: "script",
+              from: "verificationKey",
               credential:
-                "97161932314329867d0f754f9a3ea055c5b8db0e0fd4c9f48ddff8b1",
-              stakePool: {
-                id: "pool1e0arfuamnymdkmjztvkryasxv9d8u8key27ajgc4mquz2nr8mk9",
-              },
-              rewards: { ada: { lovelace: 1505083629601 } },
-              deposit: { ada: { lovelace: 2000000 } },
+                "e05ebf0d29c5e5267758d35c7554541ce5e2b278eaf542e367057c8a",
+              rewards: { ada: { lovelace: 0 } },
+              deposit: { ada: { lovelace: 2_000_000 } },
             },
           ],
           id: null,
@@ -215,31 +261,43 @@ describe("Kupmios Ogmios JSON-RPC handling", () => {
     const kupmios = new Kupmios("http://kupo.test", "http://ogmios.test");
 
     await expect(
-      kupmios.getDelegation(
+      kupmios.getRewardAccount(
         "stake_test17zt3vxfjx9pjnpnapa65lx375p2utwxmpc8afj053h0l3vgc8a3g3",
       ),
     ).resolves.toStrictEqual({
-      poolId: "pool1e0arfuamnymdkmjztvkryasxv9d8u8key27ajgc4mquz2nr8mk9",
-      rewards: 1505083629601n,
+      registered: true,
+      poolId: null,
+      rewards: 0n,
     });
   });
 
   test("getDelegation returns empty delegation for empty Ogmios summaries", async () => {
-    vi.spyOn(globalThis, "fetch").mockResolvedValue(
-      new Response(
-        JSON.stringify({
-          jsonrpc: "2.0",
-          method: "queryLedgerState/rewardAccountSummaries",
-          result: [],
-          id: null,
-        }),
-        {
-          status: 200,
-          headers: { "content-type": "application/json" },
-        },
-      ),
+    vi.spyOn(globalThis, "fetch").mockImplementation(
+      async () =>
+        new Response(
+          JSON.stringify({
+            jsonrpc: "2.0",
+            method: "queryLedgerState/rewardAccountSummaries",
+            result: [],
+            id: null,
+          }),
+          {
+            status: 200,
+            headers: { "content-type": "application/json" },
+          },
+        ),
     );
     const kupmios = new Kupmios("http://kupo.test", "http://ogmios.test");
+
+    await expect(
+      kupmios.getRewardAccount(
+        "stake_test17zt3vxfjx9pjnpnapa65lx375p2utwxmpc8afj053h0l3vgc8a3g3",
+      ),
+    ).resolves.toStrictEqual({
+      registered: false,
+      poolId: null,
+      rewards: 0n,
+    });
 
     await expect(
       kupmios.getDelegation(
@@ -248,6 +306,54 @@ describe("Kupmios Ogmios JSON-RPC handling", () => {
     ).resolves.toStrictEqual({
       poolId: null,
       rewards: 0n,
+    });
+  });
+
+  test("evaluateTx sends supplemental UTxOs to Ogmios", async () => {
+    let requestBody: unknown;
+    vi.spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
+      const body = await new Request(input, init).text();
+      requestBody = JSON.parse(body);
+
+      return new Response(
+        JSON.stringify({
+          jsonrpc: "2.0",
+          method: "evaluateTransaction",
+          result: [],
+          id: null,
+        }),
+        {
+          status: 200,
+          headers: { "content-type": "application/json" },
+        },
+      );
+    });
+    const kupmios = new Kupmios("http://kupo.test", "http://ogmios.test");
+    const supplementalUtxo = {
+      txHash:
+        "0000000000000000000000000000000000000000000000000000000000000000",
+      outputIndex: 1,
+      address:
+        "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950",
+      assets: { lovelace: 1_234_567n },
+    };
+
+    await expect(
+      kupmios.evaluateTx("80", [supplementalUtxo]),
+    ).resolves.toStrictEqual([]);
+    expect(requestBody).toMatchObject({
+      method: "evaluateTransaction",
+      params: {
+        transaction: { cbor: "80" },
+        additionalUtxo: [
+          {
+            transaction: { id: supplementalUtxo.txHash },
+            index: supplementalUtxo.outputIndex,
+            address: supplementalUtxo.address,
+            value: { ada: { lovelace: 1_234_567 } },
+          },
+        ],
+      },
     });
   });
 
