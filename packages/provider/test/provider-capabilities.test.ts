@@ -52,6 +52,20 @@ describe("built-in provider reward-account capabilities", () => {
     });
   });
 
+  test("Maestro does not misclassify server errors as account state", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      jsonResponse({ message: "internal server error" }, 500),
+    );
+    const provider = new Maestro({ network: "Preprod", apiKey: "test" });
+
+    await expect(provider.getRewardAccount(rewardAddress)).rejects.toThrow(
+      "Could not fetch reward account from Maestro. Received status code: 500",
+    );
+    await expect(provider.getDelegation(rewardAddress)).rejects.toThrow(
+      "Could not fetch reward account from Maestro. Received status code: 500",
+    );
+  });
+
   test("Blockfrost exposes account registration", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
       jsonResponse({

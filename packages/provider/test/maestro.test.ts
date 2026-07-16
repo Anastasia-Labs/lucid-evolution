@@ -55,13 +55,6 @@ describeMaestro("maestro", async () => {
     expect(utxos).toStrictEqual([PreprodConstants.discoveryUTxO]);
   });
 
-  test("getDelegation", async () => {
-    const delegation = await maestro.getDelegation(
-      "stake_test17zt3vxfjx9pjnpnapa65lx375p2utwxmpc8afj053h0l3vgc8a3g3",
-    );
-    assert(delegation);
-  });
-
   test("getDatum", async () => {
     const datum = await maestro.getDatum(
       "95472c2f46b89500703ec778304baf1079c58124c254bf4bf8c96e5d73869293",
