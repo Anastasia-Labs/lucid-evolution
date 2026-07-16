@@ -1,5 +1,25 @@
 # @lucid-evolution/provider
 
+## 0.2.0
+
+### Minor Changes
+
+- [#715](https://github.com/Anastasia-Labs/lucid-evolution/pull/715) [`0354017`](https://github.com/Anastasia-Labs/lucid-evolution/commit/03540179acf391dc1bae7fb098a16ace472bc19e) Thanks [@colll78](https://github.com/colll78)! - Add provider correctness and observation capabilities while preserving existing provider and wallet contracts.
+
+  - Filter spent Emulator ledger entries from every public UTxO query and retain Emulator transaction status independently of output consumption.
+  - Treat an empty wallet UTxO override as authoritative and add `clearUTxOOverride`.
+  - Expose structured Kupmios and Ogmios errors with transport, HTTP, retry, operation, JSON-RPC, and cause metadata.
+  - Add provider-neutral reward-account registration state, transaction status and cancellable confirmation waiting, and optional policy-ID UTxO lookup with a portable fallback.
+  - Keep Kupmios unit queries exact for assets with an empty asset name instead of broadening them into policy queries.
+  - Use validated per-Lucid-instance slot configuration throughout time conversion, transaction building, evaluation, signing, and script-context construction.
+
+### Patch Changes
+
+- Updated dependencies [[`0354017`](https://github.com/Anastasia-Labs/lucid-evolution/commit/03540179acf391dc1bae7fb098a16ace472bc19e)]:
+  - @lucid-evolution/core-types@0.3.0
+  - @lucid-evolution/wallet@0.2.0
+  - @lucid-evolution/utils@0.1.72
+
 ## 0.1.97
 
 ### Patch Changes
