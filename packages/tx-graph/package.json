@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/tx-graph",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Transaction graph tracing and rendering utilities for Lucid Evolution",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
