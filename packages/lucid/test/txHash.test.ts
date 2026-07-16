@@ -8,7 +8,14 @@ import {
 } from "../src/index.js";
 import { NETWORK } from "./specs/services.js";
 
-test("test txHash with defined provider", async () => {
+const blockfrostTest =
+  process.env.VITE_BLOCKFROST_API_URL_PREPROD &&
+  process.env.VITE_BLOCKFROST_KEY_PREPROD &&
+  process.env.VITE_WALLET_SEED
+    ? test
+    : test.skip;
+
+blockfrostTest("test txHash with defined provider", async () => {
   const projectId = process.env.VITE_BLOCKFROST_KEY_PREPROD;
   const lucid = await Lucid(
     new Blockfrost(process.env.VITE_BLOCKFROST_API_URL_PREPROD!, projectId),
