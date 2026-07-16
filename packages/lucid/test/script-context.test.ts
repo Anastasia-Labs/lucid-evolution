@@ -400,7 +400,14 @@ test("ScriptContextData matches Aiken script_context structure in an emulator tr
 test("TxSignBuilder produces a ScriptContext accepted by the Aiken structure checker", async () => {
   const account = generateEmulatorAccount({ lovelace: 75_000_000_000n });
   const emulator = new Emulator([account], PROTOCOL_PARAMETERS_DEFAULT);
-  const lucid = await Lucid(emulator, "Custom");
+  const slotConfig = {
+    zeroTime: emulator.now(),
+    zeroSlot: emulator.slot,
+    slotLength: 250,
+  };
+  const validFrom = slotConfig.zeroTime + 500;
+  const validTo = slotConfig.zeroTime + 1_000;
+  const lucid = await Lucid(emulator, "Custom", { slotConfig });
   lucid.selectWallet.fromSeed(account.seedPhrase);
 
   const mint = {
@@ -419,6 +426,8 @@ test("TxSignBuilder produces a ScriptContext accepted by the Aiken structure che
       Data.to(new Constr(0, [1n])),
     )
     .attach.MintingPolicy(mint)
+    .validFrom(validFrom)
+    .validTo(validTo)
     .complete();
   const scriptContext = signBuilder.toScriptContext({ Minting: [policyId] });
 
@@ -428,6 +437,22 @@ test("TxSignBuilder produces a ScriptContext accepted by the Aiken structure che
   });
   expect([...scriptContext.scriptContextTxInfo.txInfoRedeemers.keys()]).toEqual(
     [{ Minting: [policyId] }],
+  );
+  expect(
+    scriptContext.scriptContextTxInfo.txInfoValidRange.ivFrom.lowerBoundLimit,
+  ).toEqual({ Finite: [BigInt(validFrom)] });
+  expect(
+    scriptContext.scriptContextTxInfo.txInfoValidRange.ivTo.upperBoundLimit,
+  ).toEqual({ Finite: [BigInt(validTo)] });
+
+  const reconstructedContext = lucid
+    .fromTx(signBuilder.toCBOR())
+    .toScriptContext(
+      { Minting: [policyId] },
+      { resolvedInputs: await lucid.wallet().getUtxos() },
+    );
+  expect(reconstructedContext.scriptContextTxInfo.txInfoValidRange).toEqual(
+    scriptContext.scriptContextTxInfo.txInfoValidRange,
   );
 
   const checker = scripts.validators.find(
@@ -681,7 +706,7 @@ test("TxSignBuilder ScriptContexts match serialized ledger ScriptContexts for co
       signBuilder.toTransaction(),
       uniqueUtxos([...walletUtxos, ...scriptInputs, referenceInput]),
       costModels,
-      SLOT_CONFIG_NETWORK.Custom,
+      lucid.config().slotConfig!,
     );
     const actualCbor = extractTrace(failure, ECHO_CBO_PREFIX);
 

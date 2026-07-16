@@ -74,6 +74,43 @@ export const makePostAsJson = <A, I, R>(
     Effect.scoped,
   );
 
+export const makePostAsJsonResponse = <A, I, R>(
+  url: string | URL,
+  data: unknown,
+  schema: Schema.Schema<A, I, R>,
+  headers: Record<string, string> | undefined,
+) =>
+  pipe(
+    HttpClientRequest.post(url),
+    headers ? HttpClientRequest.setHeaders(headers) : identity,
+    HttpClientRequest.bodyJson(data),
+    Effect.flatMap(HttpClient.execute),
+    Effect.flatMap((response) =>
+      pipe(
+        HttpClientResponse.schemaBodyJson(schema)(response),
+        Effect.map((body) => ({
+          body,
+          status: response.status,
+          headers: response.headers,
+        })),
+        Effect.catchAll((cause) =>
+          response.status >= 200 && response.status < 300
+            ? Effect.fail(cause)
+            : Effect.fail(
+                new HttpClientError.ResponseError({
+                  response,
+                  request: response.request,
+                  reason: "StatusCode",
+                  description:
+                    "non 2xx status code with an invalid JSON response",
+                }),
+              ),
+        ),
+      ),
+    ),
+    Effect.scoped,
+  );
+
 export const makePostAsUint8Array = <A, I, R>(
   url: string | URL,
   data: Uint8Array,

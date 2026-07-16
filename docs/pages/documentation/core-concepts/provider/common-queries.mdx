@@ -60,3 +60,54 @@ By abstracting away the provider calls, Evolution library provides different met
 
   </Tabs.Tab>
 </Tabs>
+
+## Provider capabilities
+
+New provider observations are optional on the `Provider` interface so existing
+third-party providers remain source-compatible. Lucid throws a
+`ProviderCapabilityError` when the configured provider does not implement a
+requested optional capability.
+
+### Policy queries
+
+Query all UTxOs at an address that contain any asset under a policy:
+
+```typescript
+const utxos = await lucid.utxosAtWithPolicy(address, policyId);
+```
+
+Kupmios uses Kupo's native `policy_id` filter. Other providers use a portable,
+exact policy-prefix fallback over `getUtxos`.
+
+### Reward-account registration
+
+Unlike `delegationAt`, reward-account state distinguishes an unregistered
+account from a registered, undelegated account with no rewards:
+
+```typescript
+const account = await lucid.rewardAccountAt(rewardAddress);
+// { registered: boolean, poolId: string | null, rewards: bigint }
+```
+
+`delegationAt` remains available for compatibility.
+
+### Transaction status and confirmation
+
+```typescript
+const status = await lucid.transactionStatus(txHash, { signal });
+
+const confirmation = await lucid.awaitTxConfirmation(txHash, {
+  checkInterval: 3000,
+  timeout: 120000,
+  minimumConfirmations: 2,
+  signal,
+});
+```
+
+Status can be `not_found`, `pending`, `failed`, or `confirmed`. Confirmation
+metadata contains only observations the provider can truthfully supply, such as
+block hash, height, slot, or actual block-confirmation count. The original
+boolean `awaitTx` method remains available for compatibility. A provider that
+does not expose an actual confirmation count can satisfy the default inclusion
+wait, but a `minimumConfirmations` value greater than one will continue polling
+until the caller's timeout.

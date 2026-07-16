@@ -5,7 +5,6 @@ import {
   getAddressDetails,
   mintingPolicyToId,
   scriptFromNative,
-  unixTimeToSlot,
 } from "@lucid-evolution/utils";
 import { fromText } from "@lucid-evolution/core-utils";
 import { Script } from "@lucid-evolution/core-types";
@@ -34,6 +33,7 @@ export const mintInSlotRange = (config: {
 export const makeMintingPolicy = (config: { address: string }) =>
   Effect.gen(function* () {
     const { emulator } = yield* EmulatorInstance;
+    const { user } = yield* User;
     const { paymentCredential } = getAddressDetails(config.address);
     const { hash } = yield* Effect.fromNullable(paymentCredential);
 
@@ -42,7 +42,7 @@ export const makeMintingPolicy = (config: { address: string }) =>
       scripts: [
         {
           type: "before",
-          slot: unixTimeToSlot("Custom", emulator.now() + 360000),
+          slot: user.unixTimeToSlot(emulator.now() + 360000),
         },
         { type: "sig", keyHash: hash },
       ],

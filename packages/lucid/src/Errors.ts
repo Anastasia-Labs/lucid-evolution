@@ -39,6 +39,19 @@ export class NullableError extends Data.TaggedError("NullableError")<{
   readonly message: string;
 }> {}
 
+export class ProviderCapabilityError extends Error {
+  readonly _tag = "ProviderCapabilityError";
+  readonly capability: string;
+
+  constructor(capability: string) {
+    super(
+      `The configured provider does not implement the optional ${capability} capability.`,
+    );
+    this.name = "ProviderCapabilityError";
+    this.capability = capability;
+  }
+}
+
 export class UnauthorizedNetwork extends Data.TaggedError(
   "UnauthorizedNetwork",
 )<{

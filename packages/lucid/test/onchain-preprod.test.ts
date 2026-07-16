@@ -25,7 +25,14 @@ import * as WalletEndpoint from "./specs/wallet.js";
 
 import * as DatumEndpoint from "./specs/datums.js";
 
-describe.sequential("Onchain testing", () => {
+const onchainDescribe =
+  process.env.VITE_BLOCKFROST_API_URL_PREPROD &&
+  process.env.VITE_BLOCKFROST_KEY_PREPROD &&
+  process.env.VITE_WALLET_SEED_2
+    ? describe.sequential
+    : describe.skip;
+
+onchainDescribe("Onchain testing", () => {
   test.skip("TxChain", async () => {
     const program = pipe(
       TxChain.depositFundsCollect,

@@ -14,8 +14,11 @@ import {
   ProtocolParameters,
   Provider,
   RewardAddress,
+  RewardAccountState,
   ScriptHash,
   Transaction,
+  TransactionStatus,
+  TransactionStatusOptions,
   TxHash,
   Unit,
   UnixTime,
@@ -32,6 +35,20 @@ import { walletFromSeed } from "@lucid-evolution/wallet";
 
 /** Concatentation of txHash + outputIndex */
 type FlatOutRef = string;
+
+const EMULATOR_PROVIDER_BRAND = Symbol.for(
+  "@lucid-evolution/provider/Emulator",
+);
+
+export const isEmulatorProvider = (
+  provider: Provider | undefined,
+): provider is Emulator =>
+  Boolean(
+    provider &&
+      (provider as Provider & { [EMULATOR_PROVIDER_BRAND]?: boolean })[
+        EMULATOR_PROVIDER_BRAND
+      ],
+  );
 
 export type EmulatorAccount = {
   seedPhrase: string;
@@ -76,6 +93,7 @@ export function generateEmulatorAccount(assets: Assets): EmulatorAccount {
 }
 
 export class Emulator implements Provider {
+  readonly [EMULATOR_PROVIDER_BRAND] = true;
   ledger: Record<FlatOutRef, { utxo: UTxO; spent: boolean }>;
   mempool: Record<FlatOutRef, { utxo: UTxO; spent: boolean }> = {};
   /**
@@ -92,6 +110,11 @@ export class Emulator implements Provider {
   protocolParameters: ProtocolParameters;
   datumTable: Record<DatumHash, Datum> = {};
   treasury: Lovelace;
+  transactionHistory: Record<
+    TxHash,
+    | { status: "pending" }
+    | { status: "confirmed"; blockHeight: number; slot: number }
+  > = {};
 
   constructor(
     accounts: EmulatorAccount[],
@@ -139,6 +162,18 @@ export class Emulator implements Provider {
     return this.time;
   }
 
+  private confirmPendingTransactions(blockHeight: number, slot: number) {
+    for (const [txHash, status] of Object.entries(this.transactionHistory)) {
+      if (status.status === "pending") {
+        this.transactionHistory[txHash] = {
+          status: "confirmed",
+          blockHeight,
+          slot,
+        };
+      }
+    }
+  }
+
   awaitSlot(length = 1) {
     this.slot += length;
     this.time += length * 1000;
@@ -146,6 +181,10 @@ export class Emulator implements Provider {
     this.blockHeight = Math.floor(this.slot / 20);
 
     if (this.blockHeight > currentHeight) {
+      this.confirmPendingTransactions(
+        currentHeight + 1,
+        (currentHeight + 1) * 20,
+      );
       for (const [outRef, { utxo, spent }] of Object.entries(this.mempool)) {
         this.ledger[outRef] = { utxo, spent };
       }
@@ -159,9 +198,15 @@ export class Emulator implements Provider {
   }
 
   awaitBlock(height = 1) {
+    const previousHeight = this.blockHeight;
+    const previousSlot = this.slot;
     this.blockHeight += height;
     this.slot += height * 20;
     this.time += height * 20 * 1000;
+
+    if (height > 0) {
+      this.confirmPendingTransactions(previousHeight + 1, previousSlot + 20);
+    }
 
     for (const [outRef, { utxo, spent }] of Object.entries(this.mempool)) {
       this.ledger[outRef] = { utxo, spent };
@@ -175,14 +220,19 @@ export class Emulator implements Provider {
   }
 
   getUtxos(addressOrCredential: Address | Credential): Promise<UTxO[]> {
-    const utxos: UTxO[] = Object.values(this.ledger).flatMap(({ utxo }) => {
-      if (typeof addressOrCredential === "string") {
-        return addressOrCredential === utxo.address ? utxo : [];
-      } else {
-        const { paymentCredential } = getAddressDetails(utxo.address);
-        return paymentCredential?.hash === addressOrCredential.hash ? utxo : [];
-      }
-    });
+    const utxos: UTxO[] = Object.values(this.ledger).flatMap(
+      ({ utxo, spent }) => {
+        if (spent) return [];
+        if (typeof addressOrCredential === "string") {
+          return addressOrCredential === utxo.address ? utxo : [];
+        } else {
+          const { paymentCredential } = getAddressDetails(utxo.address);
+          return paymentCredential?.hash === addressOrCredential.hash
+            ? utxo
+            : [];
+        }
+      },
+    );
 
     return Promise.resolve(utxos);
   }
@@ -203,34 +253,38 @@ export class Emulator implements Provider {
     addressOrCredential: Address | Credential,
     unit: Unit,
   ): Promise<UTxO[]> {
-    const utxos: UTxO[] = Object.values(this.ledger).flatMap(({ utxo }) => {
-      if (typeof addressOrCredential === "string") {
-        return addressOrCredential === utxo.address && utxo.assets[unit] > 0n
-          ? utxo
-          : [];
-      } else {
-        const { paymentCredential } = getAddressDetails(utxo.address);
-        return paymentCredential?.hash === addressOrCredential.hash &&
-          utxo.assets[unit] > 0n
-          ? utxo
-          : [];
-      }
-    });
+    const utxos: UTxO[] = Object.values(this.ledger).flatMap(
+      ({ utxo, spent }) => {
+        if (spent) return [];
+        if (typeof addressOrCredential === "string") {
+          return addressOrCredential === utxo.address && utxo.assets[unit] > 0n
+            ? utxo
+            : [];
+        } else {
+          const { paymentCredential } = getAddressDetails(utxo.address);
+          return paymentCredential?.hash === addressOrCredential.hash &&
+            utxo.assets[unit] > 0n
+            ? utxo
+            : [];
+        }
+      },
+    );
 
     return Promise.resolve(utxos);
   }
 
   getUtxosByOutRef(outRefs: OutRef[]): Promise<UTxO[]> {
     return Promise.resolve(
-      outRefs.flatMap(
-        (outRef) => this.ledger[outRef.txHash + outRef.outputIndex]?.utxo || [],
-      ),
+      outRefs.flatMap((outRef) => {
+        const entry = this.ledger[outRef.txHash + outRef.outputIndex];
+        return entry && !entry.spent ? entry.utxo : [];
+      }),
     );
   }
 
   getUtxoByUnit(unit: string): Promise<UTxO> {
-    const utxos: UTxO[] = Object.values(this.ledger).flatMap(({ utxo }) =>
-      utxo.assets[unit] > 0n ? utxo : [],
+    const utxos: UTxO[] = Object.values(this.ledger).flatMap(
+      ({ utxo, spent }) => (!spent && utxo.assets[unit] > 0n ? utxo : []),
     );
 
     if (utxos.length > 1) {
@@ -238,6 +292,15 @@ export class Emulator implements Provider {
     }
 
     return Promise.resolve(utxos[0]);
+  }
+
+  getRewardAccount(rewardAddress: RewardAddress): Promise<RewardAccountState> {
+    const account = this.chain[rewardAddress];
+    return Promise.resolve({
+      registered: account?.registeredStake ?? false,
+      poolId: account?.delegation.poolId ?? null,
+      rewards: account?.delegation.rewards ?? 0n,
+    });
   }
 
   getDelegation(rewardAddress: RewardAddress): Promise<Delegation> {
@@ -248,11 +311,40 @@ export class Emulator implements Provider {
   }
 
   awaitTx(txHash: string): Promise<boolean> {
-    if (this.mempool[txHash + 0]) {
+    if (this.transactionHistory[txHash]?.status === "pending") {
       this.awaitBlock();
       return Promise.resolve(true);
     }
     return Promise.resolve(true);
+  }
+
+  getTransactionStatus(
+    txHash: TxHash,
+    options: TransactionStatusOptions = {},
+  ): Promise<TransactionStatus> {
+    if (options.signal?.aborted) {
+      return Promise.reject(
+        options.signal.reason instanceof Error
+          ? options.signal.reason
+          : new DOMException("The operation was aborted.", "AbortError"),
+      );
+    }
+
+    const status = this.transactionHistory[txHash];
+    if (!status) return Promise.resolve({ status: "not_found", txHash });
+    if (status.status === "pending") {
+      return Promise.resolve({ status: "pending", txHash });
+    }
+    return Promise.resolve({
+      status: "confirmed",
+      txHash,
+      confirmation: {
+        txHash,
+        blockHeight: status.blockHeight,
+        slot: status.slot,
+        confirmations: this.blockHeight - status.blockHeight + 1,
+      },
+    });
   }
 
   /**
@@ -1136,6 +1228,8 @@ export class Emulator implements Provider {
     for (const [datumHash, datum] of Object.entries(datumTable)) {
       this.datumTable[datumHash] = datum;
     }
+
+    this.transactionHistory[txHash] = { status: "pending" };
 
     return Promise.resolve(txHash);
   }

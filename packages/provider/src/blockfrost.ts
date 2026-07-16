@@ -15,8 +15,11 @@ import {
   ProtocolParameters,
   Provider,
   RewardAddress,
+  RewardAccountState,
   Script,
   Transaction,
+  TransactionStatus,
+  TransactionStatusOptions,
   TxHash,
   Unit,
   UTxO,
@@ -197,17 +200,31 @@ export class Blockfrost implements Provider {
       );
   }
 
-  async getDelegation(rewardAddress: RewardAddress): Promise<Delegation> {
-    const result = await fetch(`${this.url}/accounts/${rewardAddress}`, {
+  async getRewardAccount(
+    rewardAddress: RewardAddress,
+  ): Promise<RewardAccountState> {
+    const response = await fetch(`${this.url}/accounts/${rewardAddress}`, {
       headers: { project_id: this.projectId, lucid },
-    }).then((res) => res.json());
-    if (!result || result.error) {
-      return { poolId: null, rewards: 0n };
+    });
+    if (response.status === 404) {
+      return { registered: false, poolId: null, rewards: 0n };
     }
+    if (!response.ok) {
+      throw new Error(
+        `Could not fetch reward account from Blockfrost. Received status code: ${response.status}`,
+      );
+    }
+    const result = await response.json();
     return {
+      registered: result.active,
       poolId: result.pool_id || null,
       rewards: BigInt(result.withdrawable_amount),
     };
+  }
+
+  async getDelegation(rewardAddress: RewardAddress): Promise<Delegation> {
+    const { poolId, rewards } = await this.getRewardAccount(rewardAddress);
+    return { poolId, rewards };
   }
 
   async getDatum(datumHash: DatumHash): Promise<Datum> {
@@ -235,6 +252,34 @@ export class Blockfrost implements Provider {
         }
       }, checkInterval);
     });
+  }
+
+  async getTransactionStatus(
+    txHash: TxHash,
+    options: TransactionStatusOptions = {},
+  ): Promise<TransactionStatus> {
+    const response = await fetch(`${this.url}/txs/${txHash}`, {
+      headers: { project_id: this.projectId, lucid },
+      signal: options.signal,
+    });
+    if (response.status === 404) return { status: "not_found", txHash };
+    if (!response.ok) {
+      throw new Error(
+        `Could not fetch transaction status from Blockfrost. Received status code: ${response.status}`,
+      );
+    }
+
+    const result = await response.json();
+    return {
+      status: "confirmed",
+      txHash,
+      confirmation: {
+        txHash,
+        blockHash: result.block,
+        blockHeight: result.block_height,
+        slot: result.slot,
+      },
+    };
   }
 
   async submitTx(tx: Transaction): Promise<TxHash> {

@@ -45,7 +45,6 @@ import {
   utxoToTransactionOutput,
   toCMLRedeemerTag,
 } from "@lucid-evolution/utils";
-import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
 import { collectFromUTxO } from "./Collect.js";
 import { TxConfig } from "./Service.js";
 import { isError } from "effect/Predicate";
@@ -326,7 +325,7 @@ const completeCurrentConfig = (
           ...config.collectedInputs,
           ...config.readInputs,
         ],
-        slotConfig: SLOT_CONFIG_NETWORK[config.lucidConfig.network],
+        slotConfig: config.lucidConfig.slotConfig,
       }),
     );
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
@@ -1316,7 +1315,7 @@ const makeEvaluationContext = (
   config: TxBuilder.TxBuilderConfig,
 ): EvaluationContext => ({
   network: config.lucidConfig.network,
-  slotConfig: SLOT_CONFIG_NETWORK[config.lucidConfig.network],
+  slotConfig: config.lucidConfig.slotConfig,
   protocolParameters: config.lucidConfig.protocolParameters,
   costModels: config.lucidConfig.costModels,
 });

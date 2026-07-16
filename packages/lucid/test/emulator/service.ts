@@ -4,7 +4,6 @@ import {
   scriptFromNative,
   stringify,
   toUnit,
-  unixTimeToSlot,
   validatorToAddress,
 } from "@lucid-evolution/utils";
 import { Effect, Context, Layer, pipe, Console } from "effect";
@@ -83,7 +82,7 @@ export const mintInSlotRange = Effect.gen(function* () {
     scripts: [
       {
         type: "before",
-        slot: unixTimeToSlot("Custom", emulator.now() + 360000),
+        slot: user.unixTimeToSlot(emulator.now() + 360000),
       },
       { type: "sig", keyHash: paymentCredential?.hash! },
     ],
@@ -287,7 +286,7 @@ export const composeMintTx = Effect.gen(function* ($) {
     scripts: [
       {
         type: "before",
-        slot: unixTimeToSlot("Custom", emulator.now() + 60000),
+        slot: user.unixTimeToSlot(emulator.now() + 60000),
       },
       { type: "sig", keyHash: paymentCredential?.hash! },
     ],
@@ -319,7 +318,7 @@ export const composeMintAndStake = Effect.gen(function* ($) {
     scripts: [
       {
         type: "before",
-        slot: unixTimeToSlot("Custom", emulator.now() + 60000),
+        slot: user.unixTimeToSlot(emulator.now() + 60000),
       },
       { type: "sig", keyHash: paymentCredential?.hash! },
     ],
@@ -368,7 +367,7 @@ export const multiSigner = Effect.gen(function* ($) {
     scripts: [
       {
         type: "before",
-        slot: unixTimeToSlot("Custom", emulator.now() + 90000000000000),
+        slot: user.unixTimeToSlot(emulator.now() + 90000000000000),
       },
       { type: "sig", keyHash: paymentCredential?.hash! },
       { type: "sig", keyHash: paymentCredential1?.hash! },

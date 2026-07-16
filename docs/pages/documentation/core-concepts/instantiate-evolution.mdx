@@ -5,3 +5,23 @@ Lucid Evolution is a transaction building framework for Cardano which provides f
 - Build and simulate transactions
 - Work with different Cardano networks (Mainnet, Preprod, Preview, or Custom networks)
 - Choose from multiple provider options for blockchain interaction
+
+## Custom network slot configuration
+
+Non-standard networks should supply their Shelley genesis slot mapping when the
+Lucid instance is created. The mapping is copied and kept per instance, so
+different Custom networks can safely coexist in one process.
+
+```typescript
+const lucid = await Lucid(provider, "Custom", {
+  slotConfig: {
+    zeroTime: 1710000000000, // Unix time in milliseconds at zeroSlot
+    zeroSlot: 0,
+    slotLength: 1000, // milliseconds
+  },
+});
+```
+
+`Emulator` instances derive this mapping automatically. Existing code that has
+initialized `SLOT_CONFIG_NETWORK.Custom` remains supported as a compatibility
+snapshot, but new Custom-network integrations should pass `slotConfig` directly.

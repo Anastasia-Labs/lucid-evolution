@@ -27,7 +27,7 @@ import { signData } from "@lucid-evolution/sign_data";
 import { discoverOwnUsedTxKeyHashes, walletFromSeed } from "./wallet.js";
 
 type Config = {
-  overriddenUTxOs: UTxO[];
+  overriddenUTxOs: UTxO[] | undefined;
 };
 
 const signTxsSequentially = async (
@@ -96,7 +96,7 @@ export const makeWalletFromSeed = (
   },
 ): Wallet => {
   const config: Config = {
-    overriddenUTxOs: [],
+    overriddenUTxOs: undefined,
   };
 
   const { address, rewardAddress, paymentKey, stakeKey } = walletFromSeed(
@@ -124,7 +124,7 @@ export const makeWalletFromSeed = (
     tx: CML.Transaction,
   ): Promise<CML.TransactionWitnessSet> => {
     const utxos =
-      config.overriddenUTxOs.length > 0
+      config.overriddenUTxOs !== undefined
         ? config.overriddenUTxOs
         : await provider.getUtxos(address);
 
@@ -146,16 +146,17 @@ export const makeWalletFromSeed = (
   };
   return {
     overrideUTxOs: (utxos: UTxO[]) => (config.overriddenUTxOs = utxos),
+    clearUTxOOverride: () => (config.overriddenUTxOs = undefined),
     address: async (): Promise<Address> => address,
     rewardAddress: async (): Promise<RewardAddress | null> =>
       rewardAddress || null,
     getUtxos: async (): Promise<UTxO[]> =>
-      config.overriddenUTxOs.length > 0
+      config.overriddenUTxOs !== undefined
         ? config.overriddenUTxOs
         : provider.getUtxos(address),
     getUtxosCore: async (): Promise<CML.TransactionUnspentOutput[]> => {
       const utxos =
-        config.overriddenUTxOs.length > 0
+        config.overriddenUTxOs !== undefined
           ? config.overriddenUTxOs
           : await provider.getUtxos(address);
       const coreUtxos: CML.TransactionUnspentOutput[] = [];
@@ -217,7 +218,7 @@ export const makeWalletFromPrivateKey = (
     .to_address()
     .to_bech32(undefined);
   const config: Config = {
-    overriddenUTxOs: [],
+    overriddenUTxOs: undefined,
   };
   const signTx = async (
     tx: CML.Transaction,
@@ -233,15 +234,16 @@ export const makeWalletFromPrivateKey = (
 
   return {
     overrideUTxOs: (utxos: UTxO[]) => (config.overriddenUTxOs = utxos),
+    clearUTxOOverride: () => (config.overriddenUTxOs = undefined),
     address: async (): Promise<Address> => address,
     rewardAddress: async (): Promise<RewardAddress | null> => null,
     getUtxos: async (): Promise<UTxO[]> =>
-      config.overriddenUTxOs.length > 0
+      config.overriddenUTxOs !== undefined
         ? config.overriddenUTxOs
         : provider.getUtxos(address),
     getUtxosCore: async (): Promise<CML.TransactionUnspentOutput[]> => {
       const utxos =
-        config.overriddenUTxOs.length > 0
+        config.overriddenUTxOs !== undefined
           ? config.overriddenUTxOs
           : await provider.getUtxos(address);
       const coreUtxos: CML.TransactionUnspentOutput[] = [];
@@ -288,7 +290,7 @@ export const makeWalletFromAPI = (
   api: WalletApi,
 ): Wallet => {
   const config: Config = {
-    overriddenUTxOs: [],
+    overriddenUTxOs: undefined,
   };
   const getAddressHex = async () => {
     const [addressHex] = await api.getUsedAddresses();
@@ -310,13 +312,14 @@ export const makeWalletFromAPI = (
 
   return {
     overrideUTxOs: (utxos: UTxO[]) => (config.overriddenUTxOs = utxos),
+    clearUTxOOverride: () => (config.overriddenUTxOs = undefined),
     address: async (): Promise<Address> =>
       CML.Address.from_hex(await getAddressHex()).to_bech32(undefined),
     rewardAddress: async (): Promise<RewardAddress | null> =>
       getRewardAddress(),
     getUtxos: async (): Promise<UTxO[]> => {
       const utxos =
-        config.overriddenUTxOs.length > 0
+        config.overriddenUTxOs !== undefined
           ? config.overriddenUTxOs
           : ((await api.getUtxos()) || []).map((utxo) =>
               coreToUtxo(
@@ -327,7 +330,7 @@ export const makeWalletFromAPI = (
     },
     getUtxosCore: async (): Promise<CML.TransactionUnspentOutput[]> => {
       const utxos =
-        config.overriddenUTxOs.length > 0
+        config.overriddenUTxOs !== undefined
           ? config.overriddenUTxOs.map(utxoToCore)
           : ((await api.getUtxos()) || []).map((utxo: string) =>
               CML.TransactionUnspentOutput.from_cbor_hex(utxo),
@@ -397,15 +400,16 @@ export const makeWalletFromAddress = (
   };
   return {
     overrideUTxOs: (utxos: UTxO[]) => (config.overriddenUTxOs = utxos),
+    clearUTxOOverride: () => (config.overriddenUTxOs = undefined),
     address: async (): Promise<Address> => address,
     rewardAddress: async (): Promise<RewardAddress | null> => rewardAddress,
     getUtxos: async (): Promise<UTxO[]> =>
-      config.overriddenUTxOs.length > 0
+      config.overriddenUTxOs !== undefined
         ? config.overriddenUTxOs
         : provider.getUtxos(address),
     getUtxosCore: async (): Promise<CML.TransactionUnspentOutput[]> => {
       const utxos =
-        config.overriddenUTxOs.length > 0
+        config.overriddenUTxOs !== undefined
           ? config.overriddenUTxOs
           : await provider.getUtxos(address);
       const coreUtxos: CML.TransactionUnspentOutput[] = [];

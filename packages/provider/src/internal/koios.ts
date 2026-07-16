@@ -257,8 +257,14 @@ export interface AssetAddress
 //NOTE: account_info schema is not complete
 // https://preprod.koios.rest/#post-/account_info
 export const AccountInfoSchema = S.Struct({
+  status: S.Literal("registered", "not registered"),
   delegated_pool: S.NullOr(S.String),
-  rewards_available: S.NumberFromString,
+  rewards_available: S.String,
+});
+
+export const TxStatusSchema = S.Struct({
+  tx_hash: S.String,
+  num_confirmations: S.NullOr(S.Number),
 });
 
 //NOTE: datum_info schema is not complete

@@ -22,8 +22,16 @@ const loadConfig = Effect.gen(function* () {
 
 const NETWORK = "Preprod";
 
+const liveProviderTest =
+  process.env.VITE_BLOCKFROST_API_URL_PREPROD &&
+  process.env.VITE_BLOCKFROST_KEY_PREPROD &&
+  process.env.VITE_WALLET_SEED_2 &&
+  process.env.VITE_MAESTRO_KEY
+    ? test
+    : test.skip;
+
 describe("Wallet", () => {
-  test("switchProvider", async () => {
+  liveProviderTest("switchProvider", async () => {
     const program = Effect.gen(function* () {
       const [VITE_API_URL, VITE_BLOCKFROST_KEY, VITE_SEED, VITE_MAESTRO_KEY] =
         yield* loadConfig;
@@ -58,7 +66,7 @@ describe("Wallet", () => {
     assert.equal(seed.split(" ").length, 24);
     assert.notEqual(generateSeedPhrase(), seed);
   });
-  test("selectWallet.fromAddress", async () => {
+  liveProviderTest("selectWallet.fromAddress", async () => {
     const program = Effect.gen(function* () {
       const [VITE_API_URL, VITE_BLOCKFROST_KEY, VITE_SEED, VITE_MAESTRO_KEY] =
         yield* loadConfig;
@@ -83,7 +91,7 @@ describe("Wallet", () => {
     await Effect.runPromise(program);
   });
 
-  test("selectWallet.fromPrivateKey", async () => {
+  liveProviderTest("selectWallet.fromPrivateKey", async () => {
     const program = Effect.gen(function* () {
       const privateKey = CML.PrivateKey.generate_ed25519().to_bech32();
       const [VITE_API_URL, VITE_BLOCKFROST_KEY] = yield* loadConfig;
