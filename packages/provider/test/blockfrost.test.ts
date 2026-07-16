@@ -1,18 +1,19 @@
 import { assert, describe, expect, test } from "vitest";
 import { ProtocolParameters, UTxO } from "@lucid-evolution/core-types";
-import { Config, Effect } from "effect";
 import { Blockfrost } from "../src/blockfrost.js";
 import * as PreprodConstants from "./preprod-constants.js";
 
-export const blockfrost = await Effect.gen(function* () {
-  const BLOCKFROST_API_URL = yield* Config.string(
-    "VITE_BLOCKFROST_API_URL_PREPROD",
-  );
-  const BLOCKFROST_KEY = yield* Config.string("VITE_BLOCKFROST_KEY_PREPROD");
-  return new Blockfrost(BLOCKFROST_API_URL, BLOCKFROST_KEY);
-}).pipe(Effect.runPromise);
+const BLOCKFROST_API_URL = process.env.VITE_BLOCKFROST_API_URL_PREPROD;
+const BLOCKFROST_KEY = process.env.VITE_BLOCKFROST_KEY_PREPROD;
+const blockfrostDescribe =
+  BLOCKFROST_API_URL && BLOCKFROST_KEY ? describe : describe.skip;
 
-describe("Blockfrost", async () => {
+export const blockfrost = new Blockfrost(
+  BLOCKFROST_API_URL ?? "",
+  BLOCKFROST_KEY ?? "",
+);
+
+blockfrostDescribe("Blockfrost", async () => {
   test("getProtocolParameters", async () => {
     const pp: ProtocolParameters = await blockfrost.getProtocolParameters();
     assert(pp);
