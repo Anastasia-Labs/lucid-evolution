@@ -359,11 +359,14 @@ export const vote = (
       toCMLVote(voteChoice),
       anchor ? toCMLAnchor(anchor) : undefined,
     );
-    let builder = CML.VoteBuilder.new();
+    let builder = config.governanceVoteBuilder ?? CML.VoteBuilder.new();
     const credential = voterCredential(voter);
 
     if (!credential || credential.type === "Key") {
-      builder = builder.with_vote(cmlVoter, cmlActionId, procedure);
+      builder = yield* Effect.try({
+        try: () => builder.with_vote(cmlVoter, cmlActionId, procedure),
+        catch: governanceActionError,
+      });
     } else {
       const script = yield* pipe(
         Effect.fromNullable(config.scripts.get(credential.hash)),
@@ -373,13 +376,17 @@ export const vote = (
       );
 
       if (script.type === "Native") {
-        builder = builder.with_native_script_vote(
-          cmlVoter,
-          cmlActionId,
-          procedure,
-          CML.NativeScript.from_cbor_hex(script.script),
-          CML.NativeScriptWitnessInfo.assume_signature_count(),
-        );
+        builder = yield* Effect.try({
+          try: () =>
+            builder.with_native_script_vote(
+              cmlVoter,
+              cmlActionId,
+              procedure,
+              CML.NativeScript.from_cbor_hex(script.script),
+              CML.NativeScriptWitnessInfo.assume_signature_count(),
+            ),
+          catch: governanceActionError,
+        });
       } else {
         if (script.type !== "PlutusV3") {
           yield* governanceActionError(
@@ -399,24 +406,42 @@ export const vote = (
           ),
         );
         const partial = toPartial(toV3(script.script), red);
-        builder = builder.with_plutus_vote(
-          cmlVoter,
-          cmlActionId,
-          procedure,
-          partial,
-          CML.Ed25519KeyHashList.new(),
-          CML.PlutusData.from_cbor_hex(red),
-        );
+        builder = yield* Effect.try({
+          try: () =>
+            builder.with_plutus_vote(
+              cmlVoter,
+              cmlActionId,
+              procedure,
+              partial,
+              CML.Ed25519KeyHashList.new(),
+              CML.PlutusData.from_cbor_hex(red),
+            ),
+          catch: governanceActionError,
+        });
       }
     }
+
+    config.governanceVoteBuilder = builder;
+    if (credential?.type === "Script") {
+      config.governanceVoteWitnessKeys.push(cmlVoter.to_canonical_cbor_hex());
+    }
+  });
+
+export const finalizeVotes = (): Effect.Effect<
+  void,
+  TransactionError,
+  TxConfig
+> =>
+  Effect.gen(function* () {
+    const { config } = yield* TxConfig;
+    const builder = config.governanceVoteBuilder;
+    if (!builder) return;
 
     yield* Effect.try({
       try: () => config.txBuilder.add_vote(builder.build()),
       catch: governanceActionError,
     });
-    if (credential?.type === "Script") {
-      config.governanceVoteWitnessKeys.push(cmlVoter.to_canonical_cbor_hex());
-    }
+    config.governanceVoteBuilder = undefined;
   });
 
 export const propose = (

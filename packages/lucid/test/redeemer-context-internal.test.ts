@@ -1347,6 +1347,161 @@ describe("context-dependent redeemers internal coverage", () => {
     ).toBeUndefined();
   });
 
+  test.each([false, true])(
+    "vote accumulates governance actions for the same key DRep with canonical=%s",
+    async (canonical) => {
+      const walletInput = makeRichUtxo(canonical ? "d4" : "d3");
+      const voter = {
+        type: "DRep" as const,
+        credential: { type: "Key" as const, hash: "d4".repeat(28) },
+      };
+      const actions = [
+        {
+          actionId: { txHash: "aa".repeat(32), index: 0n },
+          vote: "Yes" as const,
+          expected: CML.Vote.Yes,
+        },
+        {
+          actionId: { txHash: "bb".repeat(32), index: 1n },
+          vote: "No" as const,
+          expected: CML.Vote.No,
+        },
+        {
+          actionId: { txHash: "cc".repeat(32), index: 2n },
+          vote: "Abstain" as const,
+          expected: CML.Vote.Abstain,
+        },
+      ];
+
+      let builder = makeTxBuilder({
+        ...lucidConfig,
+        wallet: makeWallet([walletInput]),
+      });
+      for (const action of actions) {
+        builder = builder.vote(voter, action.actionId, action.vote);
+      }
+
+      const tx = (
+        await builder.complete({
+          canonical,
+          localUPLCEval: false,
+          presetWalletInputs: [walletInput],
+        })
+      ).toTransaction();
+      const votingProcedures = tx.body().voting_procedures();
+      expect(votingProcedures?.len()).toBe(1);
+
+      const cmlVoter = votingProcedures!.keys().get(0);
+      const actionVotes = votingProcedures!.get(cmlVoter)!;
+      expect(actionVotes.len()).toBe(actions.length);
+
+      const retained = new Map<string, CML.Vote>();
+      for (let index = 0; index < actionVotes.len(); index++) {
+        const actionId = actionVotes.keys().get(index);
+        retained.set(
+          `${actionId.transaction_id().to_hex()}#${actionId.gov_action_index()}`,
+          actionVotes.get(actionId)!.vote(),
+        );
+      }
+      expect(retained).toEqual(
+        new Map(
+          actions.map((action) => [
+            `${action.actionId.txHash}#${action.actionId.index}`,
+            action.expected,
+          ]),
+        ),
+      );
+      expect(tx.witness_set().redeemers()).toBeUndefined();
+    },
+  );
+
+  test("vote accumulates governance actions for the same native-script DRep", async () => {
+    const walletInput = makeRichUtxo("d5");
+    const nativeScript = scriptFromNative({
+      type: "sig",
+      keyHash: "75".repeat(28),
+    });
+    const voter = {
+      type: "DRep" as const,
+      credential: {
+        type: "Script" as const,
+        hash: mintingPolicyToId(nativeScript),
+      },
+    };
+
+    const tx = (
+      await makeTxBuilder({
+        ...lucidConfig,
+        wallet: makeWallet([walletInput]),
+      })
+        .attach.VoteValidator(nativeScript)
+        .vote(voter, { txHash: "76".repeat(32), index: 0n }, "Yes")
+        .vote(voter, { txHash: "77".repeat(32), index: 1n }, "No")
+        .complete({
+          localUPLCEval: false,
+          presetWalletInputs: [walletInput],
+        })
+    ).toTransaction();
+
+    const votingProcedures = tx.body().voting_procedures();
+    expect(votingProcedures?.len()).toBe(1);
+    const cmlVoter = votingProcedures!.keys().get(0);
+    expect(votingProcedures!.get(cmlVoter)?.len()).toBe(2);
+    expect(tx.witness_set().native_scripts()?.len()).toBe(1);
+    expect(tx.witness_set().redeemers()).toBeUndefined();
+  });
+
+  test("vote rejects an exact duplicate voter and governance action", async () => {
+    const walletInput = makeRichUtxo("d6");
+    const voter = {
+      type: "DRep" as const,
+      credential: { type: "Key" as const, hash: "78".repeat(28) },
+    };
+
+    await expect(
+      makeTxBuilder({
+        ...lucidConfig,
+        wallet: makeWallet([walletInput]),
+      })
+        .vote(voter, governanceActionId, "Yes")
+        .vote(voter, governanceActionId, "No")
+        .complete({
+          localUPLCEval: false,
+          presetWalletInputs: [walletInput],
+        }),
+    ).rejects.toThrow(/GovernanceAction:.*Vote already exists/);
+  });
+
+  test("config finalizes accumulated voting procedures on the replayed builder", async () => {
+    const walletInput = makeRichUtxo("d7");
+    const voter = {
+      type: "DRep" as const,
+      credential: { type: "Key" as const, hash: "79".repeat(28) },
+    };
+    const replayedConfig = await makeTxBuilder({
+      ...lucidConfig,
+      wallet: makeWallet([walletInput]),
+    })
+      .collectFrom([walletInput])
+      .vote(voter, { txHash: "7a".repeat(32), index: 0n }, "Yes")
+      .vote(voter, { txHash: "7b".repeat(32), index: 1n }, "No")
+      .config();
+
+    expect(replayedConfig.governanceVoteBuilder).toBeUndefined();
+    replayedConfig.txBuilder.add_change_if_needed(
+      CML.Address.from_bech32(address),
+      false,
+    );
+    const tx = replayedConfig.txBuilder
+      .build(CML.ChangeSelectionAlgo.Default, CML.Address.from_bech32(address))
+      .build_unchecked();
+    const votingProcedures = tx.body().voting_procedures();
+    expect(votingProcedures?.len()).toBe(1);
+    expect(votingProcedures?.get(votingProcedures.keys().get(0))?.len()).toBe(
+      2,
+    );
+  });
+
   test("vote builds committee and stake pool voter procedures without Plutus redeemers", async () => {
     const walletInput = makeRichUtxo("d1");
     const committeeVoter = {
@@ -1538,6 +1693,7 @@ describe("context-dependent redeemers internal coverage", () => {
       .attach.VoteValidator(nativeScript)
       .attach.VoteValidator(alwaysSucceedV3Script)
       .vote(nativeVoter, governanceActionId, "No")
+      .vote(nativeVoter, { ...governanceActionId, index: 1n }, "Abstain")
       .vote(plutusVoter, governanceActionId, "Yes", undefined, stableRedeemer)
       .complete({
         localUPLCEval: false,
@@ -1546,6 +1702,16 @@ describe("context-dependent redeemers internal coverage", () => {
 
     const tx = signBuilder.toTransaction();
     expect(tx.body().voting_procedures()?.len()).toBe(2);
+    const votingProcedures = tx.body().voting_procedures()!;
+    const nativeActionVotes = votingProcedures.get(
+      Array.from({ length: votingProcedures.len() }, (_, index) =>
+        votingProcedures.keys().get(index),
+      ).find(
+        (voter) =>
+          voter.script_hash()?.to_hex() === nativeVoter.credential.hash,
+      )!,
+    );
+    expect(nativeActionVotes?.len()).toBe(2);
     const [redeemer] = canonicalRedeemerEntries(tx.witness_set().redeemers()!);
     expect(redeemer.tag).toBe("vote");
     expect(redeemer.index).toBe(1n);

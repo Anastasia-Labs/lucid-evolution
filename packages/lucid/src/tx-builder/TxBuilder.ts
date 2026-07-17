@@ -100,6 +100,8 @@ export type TxBuilderConfig = {
   nextActionId: number;
   pendingRedeemers: PendingRedeemer[];
   witnessRegistry: Set<string>;
+  /** Accumulates one result because CML replaces voter maps across results. */
+  governanceVoteBuilder?: CML.VoteBuilder;
   governanceVoteWitnessKeys: string[];
   governanceProposalWitnessIndices: bigint[];
   governanceProposalCount: bigint;
@@ -154,6 +156,7 @@ export const replayTxActions = (
     for (const action of actions) {
       yield* replayAction(action, currentRedeemers);
     }
+    yield* GovernanceAction.finalizeVotes();
   });
 
 export const hasDelayedActions = (config: TxBuilderConfig): boolean =>
@@ -186,6 +189,7 @@ export const makeTxBuilderConfig = (
   nextActionId: source?.nextActionId ?? 0,
   pendingRedeemers: [],
   witnessRegistry: new Set(),
+  governanceVoteBuilder: undefined,
   governanceVoteWitnessKeys: [],
   governanceProposalWitnessIndices: [],
   governanceProposalCount: 0n,

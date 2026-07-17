@@ -47,6 +47,7 @@ import {
 } from "@lucid-evolution/utils";
 import { collectFromUTxO } from "./Collect.js";
 import { TxConfig } from "./Service.js";
+import * as GovernanceAction from "./GovernanceAction.js";
 import { isError } from "effect/Predicate";
 import {
   hasDelayedActions,
@@ -216,6 +217,7 @@ const completeCurrentConfig = (
 
     // Execute programs sequentially
     yield* Effect.all(config.programs);
+    yield* GovernanceAction.finalizeVotes();
     yield* applyTreasuryDonationToBuilder(config);
     const hasPlutusScriptExecutions: boolean = Array.from(
       config.scripts.values(),
