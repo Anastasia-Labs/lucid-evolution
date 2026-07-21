@@ -1,0 +1,31 @@
+import { Callout } from "nextra/components";
+
+## Nexus
+
+[Nexus](https://nexus.gerowallet.io) is a multi-provider Cardano data API by [Gero](https://gerowallet.io) with automatic failover across chain indexers. The [`@adlabs/nexus`](https://www.npmjs.com/package/@adlabs/nexus) package ships a lucid-evolution provider along with a typed REST client.
+
+```bash
+npm install @adlabs/nexus
+```
+
+Usage example to initialize Lucid with Nexus:
+
+```typescript
+import { Lucid } from "@lucid-evolution/lucid";
+import { NexusProvider } from "@adlabs/nexus/lucid";
+
+const lucid = await Lucid(
+  new NexusProvider({
+    apiKey: "<nexus-api-key>",
+    network: "Preprod", // "Mainnet" | "Preprod" | "Preview"
+  }),
+  "Preprod",
+);
+```
+
+<Callout type="info">
+  Self-hosted deployments can point the provider at their own instance via the
+  optional `baseUrl` option.
+</Callout>
+
+Learn more at: https://github.com/Gero-Labs/nexus-sdk
