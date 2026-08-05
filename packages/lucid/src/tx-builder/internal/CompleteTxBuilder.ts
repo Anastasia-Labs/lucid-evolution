@@ -382,7 +382,12 @@ const completeDelayedFromActions = (
 
           // Pre-add wallet UTxOs selected in the previous attempt so the
           // transaction structure (and therefore redeemer indices) stay
-          // consistent while ex-unit estimates converge.
+          // consistent while ex-unit estimates converge. 
+          // 
+          // NOTE: This is safe as far as the first `attempt` is the only one adding
+          // wallet UTxOs with consideration of highest ex units possible.
+          // Follow up attempts with converging ex-units (decreasing) will not need to 
+          // add any new wallet UTxOs, and therefore will not change the redeemer indices.
           for (const utxo of prevCoinSelectedInputs) {
             if (!replayConfig.collectedInputs.some((c) => isEqualUTxO(c, utxo))) {
               yield* Effect.try({
