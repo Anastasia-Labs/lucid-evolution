@@ -235,6 +235,7 @@ const completeCurrentConfig = (
       false,
       internalOptions.bootstrapExUnits === true,
     );
+
     // Second round of coin selection by including script execution costs in fee estimation.
     // UPLC evaluation need to be performed again if new inputs are selected during coin selection.
     // Because increasing the inputs can increase the script execution budgets.
@@ -367,12 +368,40 @@ const completeDelayedFromActions = (
     let currentRedeemers = new Map<number, string>();
     const redeemerBuilderCache: RedeemerBuilderCache = new Map();
     let previousFingerprint: string | undefined;
+    // Wallet UTxOs that were coin-selected in the previous attempt. Carried
+    // forward so that redeemer indices remain stable across attempts even when
+    // the fee estimate changes (e.g. bootstrap ex-units → real ex-units).
+    let coinSelectedWalletInputs: UTxO[] = [];
 
     for (let attempt = 0; attempt < 8; attempt++) {
       const replayConfig = makeReplayConfig(sourceConfig);
+      const prevCoinSelectedInputs = [...coinSelectedWalletInputs];
       const result = yield* pipe(
         Effect.gen(function* () {
           yield* replayTxActions(sourceConfig.actions, currentRedeemers);
+
+          // Pre-add wallet UTxOs selected in the previous attempt so the
+          // transaction structure (and therefore redeemer indices) stay
+          // consistent while ex-unit estimates converge.
+          for (const utxo of prevCoinSelectedInputs) {
+            if (!replayConfig.collectedInputs.some((c) => isEqualUTxO(c, utxo))) {
+              yield* Effect.try({
+                try: () => {
+                  const input =
+                    CML.SingleInputBuilder.from_transaction_unspent_output(
+                      utxoToCore(utxo),
+                    ).payment_key();
+                  replayConfig.txBuilder.add_input(input);
+                },
+                catch: (error) => completeTxError(error),
+              });
+              replayConfig.collectedInputs = [
+                ...replayConfig.collectedInputs,
+                utxo,
+              ];
+            }
+          }
+
           const missingRedeemers = replayConfig.pendingRedeemers.some(
             (pending) => !currentRedeemers.has(pending.id),
           );
@@ -386,6 +415,12 @@ const completeDelayedFromActions = (
           );
         }),
         Effect.provide(Layer.succeed(TxConfig, { config: replayConfig })),
+      );
+
+      // Capture wallet UTxOs selected via coin selection so they can be
+      // pre-added in the next attempt to keep the transaction structure stable.
+      coinSelectedWalletInputs = replayConfig.collectedInputs.filter((utxo) =>
+        fixedWalletInputs.some((w) => isEqualUTxO(w, utxo)),
       );
 
       const tx = result[2].toTransaction();
@@ -460,7 +495,7 @@ export const selectionAndEvaluation = (
             includeLeftoverLovelaceAsFee,
           )
         : { selected: [], burnable: { lovelace: 0n } };
-
+    
     let estimatedFee = yield* estimateFee(config, script_calculation);
     if (_Array.isEmptyArray(inputsToAdd)) {
       estimatedFee += burnable.lovelace;
