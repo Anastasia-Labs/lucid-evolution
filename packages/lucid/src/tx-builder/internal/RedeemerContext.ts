@@ -18,6 +18,7 @@ import {
   coreToOutRef,
   coreToTxOutput,
   fromCMLRedeemerTag,
+  sortUTxOs,
 } from "@lucid-evolution/utils";
 import { CML } from "../../core.js";
 import { TxBuilderError } from "../../Errors.js";
@@ -227,7 +228,11 @@ export const resolveCanonicalInputs = (
       }
       inputs.push(cloneUTxO(resolved));
     }
-    return inputs;
+    // Sort by the Cardano ledger's Haskell Ord TxIn ordering (TxId bytes
+    // lexicographic, then TxIx numeric). deriveRedeemerPurposes accesses
+    // inputs[redeemer.index] directly, so this array must match the order
+    // the ledger uses when constructing the script context.
+    return sortUTxOs(inputs, "Canonical");
   });
 
 export const resolveCanonicalReferenceInputs = (

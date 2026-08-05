@@ -369,30 +369,44 @@ const completeDelayedFromActions = (
     let previousFingerprint: string | undefined;
 
     for (let attempt = 0; attempt < 8; attempt++) {
-      const replayConfig = makeReplayConfig(sourceConfig);
+      // Build the transaction. When real script evaluation fails — which can
+      // happen when the redeemer was computed from a bootstrap attempt whose
+      // coin selection differed from the real-eval coin selection — fall back to
+      // a fresh bootstrap build so we can still read the correct canonical
+      // ordering and compute an updated redeemer for the next iteration.
+      let activeReplayConfig = makeReplayConfig(sourceConfig);
+      const buildAttempt = (useBootstrap: boolean) => {
+        const cfg = makeReplayConfig(sourceConfig);
+        return pipe(
+          Effect.gen(function* () {
+            yield* replayTxActions(sourceConfig.actions, currentRedeemers);
+            const missingRedeemers = cfg.pendingRedeemers.some(
+              (pending) => !currentRedeemers.has(pending.id),
+            );
+            activeReplayConfig = cfg;
+            return yield* completeCurrentConfig(
+              { ...options, canonical: true },
+              {
+                forceCanonical: true,
+                bootstrapExUnits: missingRedeemers || useBootstrap,
+                walletInputs: fixedWalletInputs,
+              },
+            );
+          }),
+          Effect.provide(Layer.succeed(TxConfig, { config: cfg })),
+        );
+      };
+
       const result = yield* pipe(
-        Effect.gen(function* () {
-          yield* replayTxActions(sourceConfig.actions, currentRedeemers);
-          const missingRedeemers = replayConfig.pendingRedeemers.some(
-            (pending) => !currentRedeemers.has(pending.id),
-          );
-          return yield* completeCurrentConfig(
-            { ...options, canonical: true },
-            {
-              forceCanonical: true,
-              bootstrapExUnits: missingRedeemers,
-              walletInputs: fixedWalletInputs,
-            },
-          );
-        }),
-        Effect.provide(Layer.succeed(TxConfig, { config: replayConfig })),
+        buildAttempt(false),
+        Effect.catchTag('EvaluatorError', () => buildAttempt(true)),
       );
 
       const tx = result[2].toTransaction();
       const allResolvedInputs = [
-        ...replayConfig.walletInputs,
-        ...replayConfig.collectedInputs,
-        ...replayConfig.readInputs,
+        ...activeReplayConfig.walletInputs,
+        ...activeReplayConfig.collectedInputs,
+        ...activeReplayConfig.readInputs,
       ];
       const redeemerInfo = yield* buildCanonicalRedeemerInfo(
         tx,
@@ -400,7 +414,7 @@ const completeDelayedFromActions = (
       );
       const nextRedeemers = yield* buildRedeemersFromCanonicalContext(
         redeemerInfo,
-        replayConfig.pendingRedeemers,
+        activeReplayConfig.pendingRedeemers,
         redeemerBuilderCache,
       );
 
