@@ -7,6 +7,7 @@ import {
   Tuple,
   Option,
   Layer,
+  Either,
 } from "effect";
 import {
   Address,
@@ -57,10 +58,12 @@ import {
 import {
   buildCanonicalRedeemerInfo,
   buildRedeemersFromCanonicalContext,
+  canonicalRedeemerEntries,
   CanonicalRedeemerInfo,
   cloneUTxOs,
   normalizeEvalUTxO,
   normalizeGovernanceRedeemerIndices,
+  purposeToWitnessKey,
   proposalProcedureForRedeemerIndex,
   RedeemerBuilderCache,
   redeemerMapsEqual,
@@ -68,6 +71,7 @@ import {
   resolveCanonicalReferenceInputs,
   transactionFixedPointFingerprint,
   voterForRedeemerIndex,
+  witnessPurposeKey,
 } from "./RedeemerContext.js";
 
 const MAX_EVALUATION_ATTEMPTS = 8;
@@ -139,7 +143,23 @@ type InternalCompleteOptions = {
   bootstrapExUnits?: boolean;
   forceCanonical?: boolean;
   walletInputs?: UTxO[];
+  knownRedeemerExUnits?: KnownRedeemerExUnits;
+  redeemerInputFingerprint?: string;
 };
+
+type KnownRedeemerExUnits = Map<
+  string,
+  Readonly<{ mem: number; steps: number }>
+>;
+
+class RedeemerInputRefreshRequired extends TxBuilderError {
+  constructor(readonly candidate: CML.Transaction) {
+    super({
+      cause:
+        "Coin selection changed canonical inputs after the delayed redeemers were built",
+    });
+  }
+}
 
 type ExUnitSetter = Pick<CML.TransactionBuilder, "set_exunits">;
 
@@ -234,6 +254,8 @@ const completeCurrentConfig = (
       includeLeftoverLovelaceAsFee,
       false,
       internalOptions.bootstrapExUnits === true,
+      internalOptions.knownRedeemerExUnits,
+      internalOptions.redeemerInputFingerprint,
     );
     // Second round of coin selection by including script execution costs in fee estimation.
     // UPLC evaluation need to be performed again if new inputs are selected during coin selection.
@@ -268,6 +290,8 @@ const completeCurrentConfig = (
           includeLeftoverLovelaceAsFee,
           true,
           internalOptions.bootstrapExUnits === true,
+          internalOptions.knownRedeemerExUnits,
+          internalOptions.redeemerInputFingerprint,
         )) || evaluatedScriptBody;
     }
     yield* applyEffectiveFee(config, true, evaluatedScriptBody);
@@ -367,42 +391,89 @@ const completeDelayedFromActions = (
     let currentRedeemers = new Map<number, string>();
     const redeemerBuilderCache: RedeemerBuilderCache = new Map();
     let previousFingerprint: string | undefined;
+    let redeemerInputFingerprint: string | undefined;
+    let knownRedeemerExUnits: KnownRedeemerExUnits | undefined;
 
-    for (let attempt = 0; attempt < 8; attempt++) {
+    // A delayed redeemer is derived from one candidate's canonical inputs, but
+    // the following replay may choose a different wallet-input set when real
+    // ex-units replace the maximum bootstrap budget. Evaluating that replay
+    // with the previous candidate's redeemer can fail before the outer fixed
+    // point gets a chance to rebuild it. Preserve the bootstrap shape for one
+    // real evaluation, carry those real ex-units into subsequent replays, and
+    // interrupt evaluation whenever coin selection changes canonical inputs so
+    // the redeemer can first be rebuilt from that unevaluated candidate.
+
+    // Bootstrap inputs are pinned for exactly one replay so the first real
+    // evaluation uses the same input indices as the bootstrap-built redeemers.
+    // Once real ex-units are known, later replays select from scratch again.
+    let bootstrapWalletInputs: UTxO[] = [];
+
+    for (let attempt = 0; attempt < MAX_EVALUATION_ATTEMPTS; attempt++) {
       const replayConfig = makeReplayConfig(sourceConfig);
-      const result = yield* pipe(
+      let usedBootstrapExUnits = false;
+      const completion = yield* pipe(
         Effect.gen(function* () {
           yield* replayTxActions(sourceConfig.actions, currentRedeemers);
+          yield* addWalletInputs(replayConfig, bootstrapWalletInputs);
           const missingRedeemers = replayConfig.pendingRedeemers.some(
             (pending) => !currentRedeemers.has(pending.id),
           );
+          usedBootstrapExUnits = missingRedeemers;
           return yield* completeCurrentConfig(
             { ...options, canonical: true },
             {
               forceCanonical: true,
               bootstrapExUnits: missingRedeemers,
               walletInputs: fixedWalletInputs,
+              knownRedeemerExUnits,
+              redeemerInputFingerprint,
             },
           );
         }),
         Effect.provide(Layer.succeed(TxConfig, { config: replayConfig })),
+        Effect.either,
       );
 
+      if (Either.isLeft(completion)) {
+        if (!(completion.left instanceof RedeemerInputRefreshRequired)) {
+          return yield* Effect.fail(completion.left);
+        }
+
+        const tx = completion.left.candidate;
+        const nextRedeemers = yield* buildDelayedRedeemers(
+          tx,
+          replayConfig,
+          redeemerBuilderCache,
+        );
+        currentRedeemers = nextRedeemers;
+        redeemerInputFingerprint = canonicalInputFingerprint(tx);
+        previousFingerprint = undefined;
+        bootstrapWalletInputs = [];
+        continue;
+      }
+
+      const result = completion.right;
       const tx = result[2].toTransaction();
-      const allResolvedInputs = [
-        ...replayConfig.walletInputs,
-        ...replayConfig.collectedInputs,
-        ...replayConfig.readInputs,
-      ];
-      const redeemerInfo = yield* buildCanonicalRedeemerInfo(
+      if (usedBootstrapExUnits) {
+        bootstrapWalletInputs = replayConfig.collectedInputs.filter((utxo) =>
+          fixedWalletInputs.some((walletInput) =>
+            isEqualUTxO(walletInput, utxo),
+          ),
+        );
+      } else {
+        bootstrapWalletInputs = [];
+        knownRedeemerExUnits = yield* collectKnownRedeemerExUnits(
+          tx,
+          replayConfig,
+        );
+      }
+
+      const nextRedeemers = yield* buildDelayedRedeemers(
         tx,
-        allResolvedInputs,
-      );
-      const nextRedeemers = yield* buildRedeemersFromCanonicalContext(
-        redeemerInfo,
-        replayConfig.pendingRedeemers,
+        replayConfig,
         redeemerBuilderCache,
       );
+      redeemerInputFingerprint = canonicalInputFingerprint(tx);
 
       if (!redeemerMapsEqual(currentRedeemers, nextRedeemers)) {
         currentRedeemers = nextRedeemers;
@@ -416,8 +487,88 @@ const completeDelayedFromActions = (
     }
 
     return yield* completeTxError(
-      "Context-dependent redeemers did not converge after 8 attempts. Check for circular redeemer dependencies on the final transaction body, fees, or ex-units.",
+      `Context-dependent redeemers did not converge after ${MAX_EVALUATION_ATTEMPTS} attempts. Check for circular redeemer dependencies on the final transaction body, fees, or ex-units.`,
     );
+  });
+
+const buildDelayedRedeemers = (
+  tx: CML.Transaction,
+  replayConfig: TxBuilder.TxBuilderConfig,
+  redeemerBuilderCache: RedeemerBuilderCache,
+) =>
+  Effect.gen(function* () {
+    const allResolvedInputs = [
+      ...replayConfig.walletInputs,
+      ...replayConfig.collectedInputs,
+      ...replayConfig.readInputs,
+    ];
+    const redeemerInfo = yield* buildCanonicalRedeemerInfo(
+      tx,
+      allResolvedInputs,
+    );
+    const nextRedeemers = yield* buildRedeemersFromCanonicalContext(
+      redeemerInfo,
+      replayConfig.pendingRedeemers,
+      redeemerBuilderCache,
+    );
+    return nextRedeemers;
+  });
+
+const canonicalInputFingerprint = (tx: CML.Transaction): string => {
+  const canonical = CML.Transaction.from_cbor_bytes(
+    tx.to_canonical_cbor_bytes(),
+  );
+  const inputs = canonical.body().inputs();
+  return Array.from({ length: inputs.len() }, (_, index) =>
+    inputs.get(index).to_canonical_cbor_hex(),
+  ).join(",");
+};
+
+const addWalletInputs = (
+  config: TxBuilder.TxBuilderConfig,
+  inputs: ReadonlyArray<UTxO>,
+): Effect.Effect<void, TxBuilderError> =>
+  Effect.try({
+    try: () => {
+      for (const utxo of inputs) {
+        if (config.collectedInputs.some((input) => isEqualUTxO(input, utxo))) {
+          continue;
+        }
+        const input = CML.SingleInputBuilder.from_transaction_unspent_output(
+          utxoToCore(utxo),
+        ).payment_key();
+        config.txBuilder.add_input(input);
+        config.collectedInputs = [...config.collectedInputs, utxo];
+      }
+    },
+    catch: (error) => completeTxError(error),
+  });
+
+const collectKnownRedeemerExUnits = (
+  tx: CML.Transaction,
+  config: TxBuilder.TxBuilderConfig,
+): Effect.Effect<KnownRedeemerExUnits, TxBuilderError> =>
+  Effect.gen(function* () {
+    const allResolvedInputs = [
+      ...config.walletInputs,
+      ...config.collectedInputs,
+      ...config.readInputs,
+    ];
+    const info = yield* buildCanonicalRedeemerInfo(tx, allResolvedInputs);
+    const entries = tx.witness_set().redeemers()
+      ? canonicalRedeemerEntries(tx.witness_set().redeemers()!)
+      : [];
+    const known: KnownRedeemerExUnits = new Map();
+    for (let index = 0; index < info.redeemers.length; index++) {
+      const purpose = info.redeemers[index];
+      const entry = entries[index];
+      if (!entry) continue;
+      known.set(witnessPurposeKey(purposeToWitnessKey(purpose)), {
+        mem: Number(entry.exUnits.mem()),
+        steps: Number(entry.exUnits.steps()),
+      });
+    }
+    return known;
   });
 
 export const complete = (options: CompleteOptions = {}) =>
@@ -440,6 +591,8 @@ export const selectionAndEvaluation = (
   includeLeftoverLovelaceAsFee: boolean,
   script_calculation: boolean,
   bootstrapExUnits: boolean = false,
+  knownRedeemerExUnits?: KnownRedeemerExUnits,
+  redeemerInputFingerprint?: string,
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
@@ -466,14 +619,34 @@ export const selectionAndEvaluation = (
       estimatedFee += burnable.lovelace;
     }
     if (_Array.isNonEmptyArray(inputsToAdd)) {
-      for (const utxo of inputsToAdd) {
-        const input = CML.SingleInputBuilder.from_transaction_unspent_output(
-          utxoToCore(utxo),
-        ).payment_key();
-        config.txBuilder.add_input(input);
-      }
-      config.collectedInputs = [...config.collectedInputs, ...inputsToAdd];
+      yield* addWalletInputs(config, inputsToAdd);
       estimatedFee = yield* estimateFee(config, script_calculation);
+    }
+
+    const appliedKnownExUnits =
+      knownRedeemerExUnits !== undefined && knownRedeemerExUnits.size > 0
+        ? yield* applyKnownRedeemerExUnits(
+            config,
+            changeAddress,
+            knownRedeemerExUnits,
+          )
+        : false;
+
+    if (appliedKnownExUnits && script_calculation && coinSelection !== false) {
+      const remainingInputs = _Array.differenceWith(isEqualUTxO)(walletInputs, [
+        ...config.collectedInputs,
+        ...refScriptInputs,
+      ]);
+      const { selected: additionalInputs } = yield* doCoinSelection(
+        config,
+        remainingInputs,
+        true,
+        includeLeftoverLovelaceAsFee,
+      );
+      if (_Array.isNonEmptyArray(additionalInputs)) {
+        yield* addWalletInputs(config, additionalInputs);
+        estimatedFee = yield* estimateFee(config, true);
+      }
     }
 
     //NOTE: We need to keep track of all consumed inputs
@@ -492,6 +665,11 @@ export const selectionAndEvaluation = (
       } else yield* completePartialPrograms();
     }
 
+    // The first pass normally exists to discover ex-units. When ex-units were
+    // carried from the preceding delayed-redeemer attempt, preserve them and
+    // let the script-aware second selection pass form the evaluation shape.
+    if (appliedKnownExUnits && !script_calculation) return true;
+
     return yield* evaluateUntilStable(
       config,
       walletInputs,
@@ -500,6 +678,7 @@ export const selectionAndEvaluation = (
       localUPLCEval,
       evaluator,
       bootstrapExUnits,
+      redeemerInputFingerprint,
     );
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
@@ -1198,6 +1377,86 @@ const buildEvaluationCandidate = (
     return yield* buildEvaluationDraft(config, changeAddress);
   });
 
+const prepareRedeemerContextCandidate = (
+  candidate: CML.Transaction,
+  config: TxBuilder.TxBuilderConfig,
+): Effect.Effect<CML.Transaction, TxBuilderError> =>
+  Effect.gen(function* () {
+    const canonical = CML.Transaction.from_cbor_bytes(
+      candidate.to_canonical_cbor_bytes(),
+    );
+    const normalized = yield* Effect.try({
+      try: () =>
+        normalizeGovernanceRedeemerIndices(
+          canonical,
+          config.governanceVoteWitnessKeys,
+          config.governanceProposalWitnessIndices,
+        ).transaction,
+      catch: (error) => completeTxError(error),
+    });
+    return yield* refreshScriptDataHash(normalized, config);
+  });
+
+const applyKnownRedeemerExUnits = (
+  config: TxBuilder.TxBuilderConfig,
+  changeAddress: string,
+  known: KnownRedeemerExUnits,
+): Effect.Effect<boolean, TxBuilderError> =>
+  Effect.gen(function* () {
+    const candidate = yield* buildEvaluationCandidate(
+      config,
+      changeAddress,
+      false,
+      true,
+    );
+    const normalization = yield* Effect.try({
+      try: () =>
+        normalizeGovernanceRedeemerIndices(
+          candidate,
+          config.governanceVoteWitnessKeys,
+          config.governanceProposalWitnessIndices,
+        ),
+      catch: (error) => completeTxError(error),
+    });
+    const redeemers = normalization.transaction.witness_set().redeemers();
+    if (!redeemers) return false;
+
+    const resolvedInputs = [
+      ...config.walletInputs,
+      ...config.collectedInputs,
+      ...config.readInputs,
+    ];
+    const info = yield* buildCanonicalRedeemerInfo(
+      normalization.transaction,
+      resolvedInputs,
+    );
+    const evalRedeemers: EvalRedeemer[] = [];
+    for (const purpose of info.redeemers) {
+      const exUnits = known.get(
+        witnessPurposeKey(purposeToWitnessKey(purpose)),
+      );
+      if (!exUnits) return false;
+      evalRedeemers.push({
+        redeemer_tag: purpose.tag,
+        redeemer_index: Number(purpose.index),
+        ex_units: exUnits,
+      });
+    }
+
+    yield* Effect.try({
+      try: () =>
+        applyEvaluationResult(
+          evalRedeemers,
+          config.txBuilder,
+          expectedRedeemerKeySet(redeemers),
+          "delayed-redeemer fixed point",
+          normalization.builderKeyByLedgerKey,
+        ),
+      catch: (error) => completeTxError(error),
+    });
+    return true;
+  });
+
 const evaluationFixedPointFingerprint = (tx: CML.Transaction): string =>
   transactionFixedPointFingerprint(setRedeemerstoZero(tx));
 
@@ -1209,7 +1468,11 @@ const evaluateUntilStable = (
   localUPLCEval: boolean,
   evaluator: EvaluatorAdapter | undefined,
   bootstrapExUnits: boolean,
-): Effect.Effect<boolean, TxBuilderError | EvaluatorError> =>
+  redeemerInputFingerprint?: string,
+): Effect.Effect<
+  boolean,
+  TxBuilderError | EvaluatorError | RedeemerInputRefreshRequired
+> =>
   Effect.gen(function* () {
     let previousFingerprint: string | undefined;
     let forceExplicitFee = config.minFee !== undefined;
@@ -1235,6 +1498,19 @@ const evaluateUntilStable = (
           config.lucidConfig.protocolParameters.maxTxExSteps,
         );
         return true;
+      }
+
+      if (
+        redeemerInputFingerprint !== undefined &&
+        canonicalInputFingerprint(candidate) !== redeemerInputFingerprint
+      ) {
+        const contextCandidate = yield* prepareRedeemerContextCandidate(
+          candidate,
+          config,
+        );
+        return yield* Effect.fail(
+          new RedeemerInputRefreshRequired(contextCandidate),
+        );
       }
 
       // Re-evaluate only when the zero-exunit candidate changes in a way that

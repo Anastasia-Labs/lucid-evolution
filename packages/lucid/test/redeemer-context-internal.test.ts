@@ -150,6 +150,23 @@ const makeRichUtxo = (byte: string, outputIndex = 0): UTxO => ({
   assets: { lovelace: 1_000_000_000_000n },
 });
 
+const canonicalInputIndex = (
+  tx: CML.Transaction,
+  utxo: UTxO,
+): bigint | undefined => {
+  const inputs = tx.body().inputs();
+  for (let index = 0; index < inputs.len(); index++) {
+    const input = inputs.get(index);
+    if (
+      input.transaction_id().to_hex() === utxo.txHash &&
+      input.index() === BigInt(utxo.outputIndex)
+    ) {
+      return BigInt(index);
+    }
+  }
+  return undefined;
+};
+
 const makeRewardAddress = (byte: string): CML.RewardAddress =>
   CML.RewardAddress.new(
     0,
@@ -618,6 +635,80 @@ describe("context-dependent redeemers internal coverage", () => {
     expect(evaluateTx).toHaveBeenCalled();
     expect(stableRedeemer).toHaveBeenCalled();
   });
+
+  test.each([
+    {
+      name: "RedeemerBuilder",
+      redeemerFor: (scriptInput: UTxO): RedeemerBuilder => ({
+        kind: "selected",
+        inputs: [scriptInput],
+        makeRedeemer: ([inputIndex]) => Data.to(inputIndex),
+      }),
+    },
+    {
+      name: "BuildTxWithRedeemer",
+      redeemerFor:
+        (scriptInput: UTxO): BuildTxWithRedeemer =>
+        (ctx) =>
+          Data.to(ctx.inputIndex(scriptInput)!),
+    },
+  ])(
+    "$name refreshes its redeemer when real ex-units remove a bootstrap-selected input",
+    async ({ redeemerFor }) => {
+      // The wallet input sorts before the script input. Bootstrap ex-units need
+      // it to cover the maximum script fee, shifting the script input to index
+      // 1. Real ex-units are small enough that the script input funds the whole
+      // transaction by itself and returns to canonical index 0.
+      const bootstrapWalletInput = makeRichUtxo("00");
+      const scriptInput: UTxO = {
+        txHash: "f0".repeat(32),
+        outputIndex: 0,
+        address: scriptAddress,
+        assets: { lovelace: 10_000_000n },
+        datum: Data.void(),
+      };
+      const evaluatedInputCounts: number[] = [];
+      const evaluateTx = vi.fn<Provider["evaluateTx"]>(async (txHex) => {
+        const tx = CML.Transaction.from_cbor_hex(txHex);
+        const inputIndex = canonicalInputIndex(tx, scriptInput);
+        expect(inputIndex).toBeDefined();
+        evaluatedInputCounts.push(tx.body().inputs().len());
+
+        const [redeemer] = canonicalRedeemerEntries(
+          tx.witness_set().redeemers()!,
+        );
+        expect(redeemer.data.to_canonical_cbor_hex()).toBe(
+          redeemerData(inputIndex!).to_canonical_cbor_hex(),
+        );
+        return [
+          {
+            redeemer_tag: "spend",
+            redeemer_index: Number(redeemer.index),
+            ex_units: { mem: 500_000, steps: 500_000 },
+          },
+        ];
+      });
+
+      const signBuilder = await makeTxBuilder({
+        ...lucidConfig,
+        provider: makeProvider(evaluateTx),
+        wallet: makeWallet([bootstrapWalletInput]),
+      })
+        .attach.SpendingValidator(alwaysSucceedScript)
+        .collectFrom([scriptInput], redeemerFor(scriptInput))
+        .pay.ToAddress(address, { lovelace: 8_000_000n })
+        .complete({
+          localUPLCEval: false,
+          presetWalletInputs: [bootstrapWalletInput],
+        });
+
+      const tx = signBuilder.toTransaction();
+      expect(canonicalInputIndex(tx, scriptInput)).toBe(0n);
+      expect(tx.body().inputs().len()).toBe(1);
+      expect(evaluatedInputCounts).toContain(2);
+      expect(evaluatedInputCounts.at(-1)).toBe(1);
+    },
+  );
 
   test("registerStake with redeemer emits witnessed RegCert and publish redeemer", async () => {
     const walletInput = makeUtxo("b0");
