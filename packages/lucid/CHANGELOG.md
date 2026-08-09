@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.6.1
+
+### Patch Changes
+
+- [#718](https://github.com/Anastasia-Labs/lucid-evolution/pull/718) [`5079ff4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/5079ff47bbc9ae181d699af85246c6d372c50abe) Thanks [@colll78](https://github.com/colll78)! - Accumulate governance actions when `TxBuilder.vote()` is called repeatedly for the same voter instead of retaining only the final action.
+
 ## 0.6.0
 
 ### Minor Changes
