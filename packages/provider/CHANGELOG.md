@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.2.1
+
+### Patch Changes
+
+- [#726](https://github.com/Anastasia-Labs/lucid-evolution/pull/726) [`a327257`](https://github.com/Anastasia-Labs/lucid-evolution/commit/a3272573814059d86ffaa7b007dfdbd12a455f52) Thanks [@colll78](https://github.com/colll78)! - Resolve Kupo datum and script hashes in UTxO match queries and make Kupmios request and confirmation timeouts configurable. Kupmios now requires Kupo v2.10.0 or later.
+
 ## 0.2.0
 
 ### Minor Changes
