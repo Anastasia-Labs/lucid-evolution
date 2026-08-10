@@ -84,6 +84,8 @@ const runProviderEffect = async <A>(
 /**
  * Provides support for interacting with both Kupo and Ogmios APIs.
  *
+ * Requires Kupo v2.10.0 or later.
+ *
  * @example Using Local URLs (No Authentication):
  * ```typescript
  * const kupmios = new Kupmios(
