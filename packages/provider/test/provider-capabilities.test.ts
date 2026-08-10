@@ -246,7 +246,9 @@ describe("Kupmios policy fast path", () => {
       address: "addr_test1query",
       value: { coins: "2000000", assets: { [`${policyId}.`]: "1" } },
       datum_hash: null,
+      datum: null,
       script_hash: null,
+      script: null,
       created_at: { slot_no: 123, header_hash: "b".repeat(64) },
       spent_at: null,
     };
@@ -269,7 +271,7 @@ describe("Kupmios policy fast path", () => {
       { txHash: emptyNameMatch.transaction_id, outputIndex: 0 },
     ]);
     expect(String(fetch.mock.calls[0]?.[0])).toBe(
-      `http://kupo.test/matches/addr_test1query?unspent&policy_id=${policyId}`,
+      `http://kupo.test/matches/addr_test1query?unspent&resolve_hashes&policy_id=${policyId}`,
     );
 
     fetch.mockClear();
@@ -279,7 +281,7 @@ describe("Kupmios policy fast path", () => {
       outputIndex: 0,
     });
     expect(String(fetch.mock.calls[0]?.[0])).toBe(
-      `http://kupo.test/matches/${policyId}.?unspent`,
+      `http://kupo.test/matches/${policyId}.?unspent&resolve_hashes`,
     );
   });
 
@@ -294,7 +296,7 @@ describe("Kupmios policy fast path", () => {
       provider.getUtxosWithPolicy("addr_test1query", policyId),
     ).resolves.toEqual([]);
     expect(String(fetch.mock.calls[0]?.[0])).toBe(
-      `http://kupo.test/matches/addr_test1query?unspent&policy_id=${policyId.toLowerCase()}`,
+      `http://kupo.test/matches/addr_test1query?unspent&resolve_hashes&policy_id=${policyId.toLowerCase()}`,
     );
   });
 
