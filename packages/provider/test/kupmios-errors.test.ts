@@ -146,17 +146,19 @@ describe("Kupmios structured errors", () => {
     });
   });
 
-  test("classifies provider operation deadlines as retryable timeouts", async () => {
+  test("honors configured request deadlines", async () => {
     vi.useFakeTimers();
     vi.spyOn(globalThis, "fetch").mockImplementation(
       async () => await new Promise<Response>(() => undefined),
     );
-    const provider = new Kupmios("http://kupo.test", "http://ogmios.test");
+    const provider = new Kupmios("http://kupo.test", "http://ogmios.test", {
+      requestTimeoutMs: 25,
+    });
 
     const result = provider
       .getTransactionStatus(txHash)
       .catch((cause) => cause);
-    await vi.advanceTimersByTimeAsync(10_000);
+    await vi.advanceTimersByTimeAsync(25);
     const error = await result;
 
     expect(error).toBeInstanceOf(KupmiosError);
@@ -167,6 +169,62 @@ describe("Kupmios structured errors", () => {
       retryable: true,
     });
     expect(error.cause).toBeDefined();
+  });
+
+  test("defaults request deadlines to 30 seconds", async () => {
+    vi.useFakeTimers();
+    vi.spyOn(globalThis, "fetch").mockImplementation(
+      async () => await new Promise<Response>(() => undefined),
+    );
+    const provider = new Kupmios("http://kupo.test", "http://ogmios.test");
+
+    const result = provider
+      .getTransactionStatus(txHash)
+      .catch((cause) => cause);
+    await vi.advanceTimersByTimeAsync(30_000);
+    const error = await result;
+
+    expect(error).toMatchObject({
+      protocol: "kupo",
+      operation: "getTransactionStatus",
+      kind: "timeout",
+    });
+  });
+
+  test("uses an independent configured deadline for awaitTx", async () => {
+    vi.useFakeTimers();
+    vi.spyOn(globalThis, "fetch").mockImplementation(
+      async () => await new Promise<Response>(() => undefined),
+    );
+    const provider = new Kupmios("http://kupo.test", "http://ogmios.test", {
+      requestTimeoutMs: 25,
+      awaitTxTimeoutMs: 40,
+    });
+
+    const result = provider.awaitTx(txHash).catch((cause) => cause);
+    await vi.advanceTimersByTimeAsync(40);
+    const error = await result;
+
+    expect(error).toBeInstanceOf(KupmiosError);
+    expect(error).toMatchObject({
+      protocol: "kupo",
+      operation: "awaitTx",
+      kind: "timeout",
+      retryable: true,
+    });
+  });
+
+  test.each([
+    ["requestTimeoutMs", 0],
+    ["requestTimeoutMs", Number.POSITIVE_INFINITY],
+    ["awaitTxTimeoutMs", -1],
+  ] as const)("rejects invalid %s values", (name, value) => {
+    expect(
+      () =>
+        new Kupmios("http://kupo.test", "http://ogmios.test", {
+          [name]: value,
+        }),
+    ).toThrow(`${name} must be a positive finite number.`);
   });
 
   test("turns AbortSignal cancellation into a normal typed Error", async () => {
