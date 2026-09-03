@@ -15,10 +15,10 @@ WebAssembly trap that reads like an on-chain validator rejection.
 Measured with `apply_params_to_script` over an 845-byte parameterized Plutus V3
 script, 2000 calls:
 
-| | growth per call | after 2000 calls | wall time |
-| --- | --- | --- | --- |
-| `wee_alloc` | 33,554 bytes | 65.13 MiB and climbing | 502 ms |
-| default (`dlmalloc`) | 0 bytes after warm-up | 1.25 MiB, flat | 277 ms |
+|                      | growth per call       | after 2000 calls       | wall time |
+| -------------------- | --------------------- | ---------------------- | --------- |
+| `wee_alloc`          | 33,554 bytes          | 65.13 MiB and climbing | 502 ms    |
+| default (`dlmalloc`) | 0 bytes after warm-up | 1.25 MiB, flat         | 277 ms    |
 
 Removing the allocator costs 1,322 bytes of wasm (+0.14%) and makes the module
 45% faster, since `wee_alloc` traded speed for a size win that no longer exists.
