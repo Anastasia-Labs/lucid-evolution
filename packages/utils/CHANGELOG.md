@@ -1,5 +1,15 @@
 # @lucid-evolution/utils
 
+## 0.1.74
+
+### Patch Changes
+
+- [#730](https://github.com/Anastasia-Labs/lucid-evolution/pull/730) [`225af02`](https://github.com/Anastasia-Labs/lucid-evolution/commit/225af02091fb92b3cab5b8885160c50c2c1b8ee0) Thanks [@colll78](https://github.com/colll78)! - Free the CML wasm objects that transaction building, signing, UTxO conversion, Plutus data serialization, seed-wallet derivation and the emulator create internally instead of leaving them to the wasm-bindgen finalizer. Long-running processes that build many transactions no longer grow the CML wasm memory by hundreds of megabytes before a major GC happens to run the finalizers. Adds `withCMLScope` and `freeCML` to `@lucid-evolution/core-utils`. The emulator's `evaluateTx` now reads the redeemer index with `key.index()` instead of `Number(key.index)`.
+
+- Updated dependencies [[`225af02`](https://github.com/Anastasia-Labs/lucid-evolution/commit/225af02091fb92b3cab5b8885160c50c2c1b8ee0)]:
+  - @lucid-evolution/core-utils@0.1.17
+  - @lucid-evolution/plutus@0.1.36
+
 ## 0.1.73
 
 ### Patch Changes
