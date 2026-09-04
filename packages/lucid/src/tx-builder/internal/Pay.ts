@@ -10,6 +10,7 @@ import { Address, Assets, Script } from "@lucid-evolution/core-types";
 import { OutputDatum } from "../types.js";
 import * as TxBuilder from "../TxBuilder.js";
 import { CML } from "../../core.js";
+import { withCMLScope } from "@lucid-evolution/core-utils";
 import { toCMLAddress } from "./TxUtils.js";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import { TxConfig } from "./Service.js";
@@ -25,37 +26,53 @@ export const payToAddress = (
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
-    const outputBuilder = CML.TransactionOutputBuilder.new()
-      .with_address(yield* toCMLAddress(address, config.lucidConfig))
-      .next();
+    const cmlAddress = yield* toCMLAddress(address, config.lucidConfig);
+    const outputBuilder = withCMLScope((own) =>
+      own(
+        own(CML.TransactionOutputBuilder.new()).with_address(own(cmlAddress)),
+      ).next(),
+    );
 
-    if (Object.keys(assets).length == 0)
+    if (Object.keys(assets).length == 0) {
+      outputBuilder.free();
       yield* payError(ERROR_MESSAGE.EMPTY_ASSETS);
+    }
 
-    const value = assetsToValue(assets);
-    let outputResult = outputBuilder
-      .with_asset_and_min_required_coin(
-        value.multi_asset(),
-        config.lucidConfig.protocolParameters.coinsPerUtxoByte,
-      )
-      .build();
+    addOutput(config, outputBuilder, assets);
+  });
+
+/** Builds the output, records it, and frees the builder. */
+const addOutput = (
+  config: TxBuilder.TxBuilderConfig,
+  outputBuilder: CML.TransactionOutputAmountBuilder,
+  assets: Assets,
+): void =>
+  withCMLScope((own) => {
+    own(outputBuilder);
+    const value = own(assetsToValue(assets));
+    let outputResult = own(
+      own(
+        outputBuilder.with_asset_and_min_required_coin(
+          own(value.multi_asset()),
+          config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+        ),
+      ).build(),
+    );
 
     const setLovelaces = assets["lovelace"];
     if (setLovelaces) {
-      const minLovelace = outputResult.output().amount().coin();
+      const minLovelace = own(own(outputResult.output()).amount()).coin();
       if (setLovelaces > minLovelace) {
-        outputResult = outputBuilder.with_value(value).build();
+        outputResult = own(own(outputBuilder.with_value(value)).build());
       }
     }
+    const output = own(outputResult.output());
     // Keep track of actual total output value
     config.totalOutputAssets = addAssets(
       config.totalOutputAssets,
-      valueToAssets(outputResult.output().amount()),
+      valueToAssets(own(output.amount())),
     );
-    config.payToOutputs = [
-      ...config.payToOutputs,
-      coreToTxOutput(outputResult.output()),
-    ];
+    config.payToOutputs = [...config.payToOutputs, coreToTxOutput(output)];
     config.txBuilder.add_output(outputResult);
   });
 
@@ -72,31 +89,7 @@ export const ToAddressWithData = (
     const outputBuilder = buildBaseOutput(address, outputDatum, scriptRef);
 
     assets ??= {};
-    const value = assetsToValue(assets);
-    let outputResult = outputBuilder
-      .with_asset_and_min_required_coin(
-        value.multi_asset(),
-        config.lucidConfig.protocolParameters.coinsPerUtxoByte,
-      )
-      .build();
-
-    const setLovelaces = assets["lovelace"];
-    if (setLovelaces) {
-      const minLovelace = outputResult.output().amount().coin();
-      if (setLovelaces > minLovelace) {
-        outputResult = outputBuilder.with_value(value).build();
-      }
-    }
-    // Keep track of actual total output value
-    config.totalOutputAssets = addAssets(
-      config.totalOutputAssets,
-      valueToAssets(outputResult.output().amount()),
-    );
-    config.payToOutputs = [
-      ...config.payToOutputs,
-      coreToTxOutput(outputResult.output()),
-    ];
-    config.txBuilder.add_output(outputResult);
+    addOutput(config, outputBuilder, assets);
   });
 
 /** Pay to a plutus script address with datum or scriptRef. */
@@ -107,48 +100,60 @@ export const ToContract = (
   scriptRef?: Script,
 ) => ToAddressWithData(address, outputDatum, assets, scriptRef);
 
+/** The returned amount builder belongs to the caller. */
 export const buildBaseOutput = (
   address: Address,
   outputDatum?: OutputDatum,
   scriptRef?: Script,
-) => {
-  let baseBuilder: CML.TransactionOutputBuilder;
-  const addressBuilder = CML.TransactionOutputBuilder.new().with_address(
-    CML.Address.from_bech32(address),
-  );
-  if (outputDatum) {
-    if (outputDatum.value.trim() === "") {
-      throw new Error(
-        "datum value is missing. Please provide a non-empty cbor hex data.",
-      );
-    }
-    switch (outputDatum.kind) {
-      case "hash": {
-        const datumOption = CML.DatumOption.new_hash(
-          CML.DatumHash.from_hex(outputDatum.value),
+): CML.TransactionOutputAmountBuilder =>
+  withCMLScope((own) => {
+    let baseBuilder: CML.TransactionOutputBuilder;
+    const addressBuilder = own(
+      own(CML.TransactionOutputBuilder.new()).with_address(
+        own(CML.Address.from_bech32(address)),
+      ),
+    );
+    if (outputDatum) {
+      if (outputDatum.value.trim() === "") {
+        throw new Error(
+          "datum value is missing. Please provide a non-empty cbor hex data.",
         );
-        baseBuilder = addressBuilder.with_data(datumOption);
-        break;
       }
-      case "asHash": {
-        const plutusData = CML.PlutusData.from_cbor_hex(outputDatum.value);
-        baseBuilder = addressBuilder.with_communication_data(plutusData);
-        break;
+      switch (outputDatum.kind) {
+        case "hash": {
+          const datumOption = own(
+            CML.DatumOption.new_hash(
+              own(CML.DatumHash.from_hex(outputDatum.value)),
+            ),
+          );
+          baseBuilder = own(addressBuilder.with_data(datumOption));
+          break;
+        }
+        case "asHash": {
+          const plutusData = own(
+            CML.PlutusData.from_cbor_hex(outputDatum.value),
+          );
+          baseBuilder = own(addressBuilder.with_communication_data(plutusData));
+          break;
+        }
+        case "inline": {
+          const plutusData = own(
+            CML.PlutusData.from_cbor_hex(outputDatum.value),
+          );
+          const datumOption = own(CML.DatumOption.new_datum(plutusData));
+          baseBuilder = own(addressBuilder.with_data(datumOption));
+          break;
+        }
+        default:
+          throw new Error(`Unknown outputDatum: ${outputDatum}`);
       }
-      case "inline": {
-        const plutusData = CML.PlutusData.from_cbor_hex(outputDatum.value);
-        const datumOption = CML.DatumOption.new_datum(plutusData);
-        baseBuilder = addressBuilder.with_data(datumOption);
-        break;
-      }
-      default:
-        throw new Error(`Unknown outputDatum: ${outputDatum}`);
+    } else {
+      baseBuilder = addressBuilder;
     }
-  } else {
-    baseBuilder = addressBuilder;
-  }
 
-  return scriptRef
-    ? baseBuilder.with_reference_script(toScriptRef(scriptRef)).next()
-    : baseBuilder.next();
-};
+    return scriptRef
+      ? own(
+          baseBuilder.with_reference_script(own(toScriptRef(scriptRef))),
+        ).next()
+      : baseBuilder.next();
+  });

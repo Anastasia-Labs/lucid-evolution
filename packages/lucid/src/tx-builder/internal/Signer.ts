@@ -10,6 +10,7 @@ import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import { validateAddressDetails } from "./TxUtils.js";
 import { TxConfig } from "./Service.js";
+import { withCMLScope } from "@lucid-evolution/core-utils";
 
 export const addSignerError = (cause: unknown) =>
   new TxBuilderError({ cause: `{ Signer: ${cause} }` });
@@ -47,5 +48,9 @@ export const addSigner = (address: Address | RewardAddress) =>
 export const addSignerKey = (keyHash: PaymentKeyHash | StakeKeyHash) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
-    config.txBuilder.add_required_signer(CML.Ed25519KeyHash.from_hex(keyHash));
+    withCMLScope((own) =>
+      config.txBuilder.add_required_signer(
+        own(CML.Ed25519KeyHash.from_hex(keyHash)),
+      ),
+    );
   });

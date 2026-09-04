@@ -1,5 +1,11 @@
 import { Assets, PolicyId, UTxO, Unit } from "@lucid-evolution/core-types";
-import { fromHex, fromText, toHex, toText } from "@lucid-evolution/core-utils";
+import {
+  fromHex,
+  fromText,
+  toHex,
+  toText,
+  withCMLScope,
+} from "@lucid-evolution/core-utils";
 import { CML } from "./core.js";
 import { fromLabel, toLabel } from "./label.js";
 import { pipe } from "effect";
@@ -8,48 +14,55 @@ export function valueToAssets(value: CML.Value): Assets {
   const assets: Assets = {};
   assets["lovelace"] = value.coin();
   if (value.has_multiassets()) {
-    const ma = value.multi_asset();
-    const multiAssets = ma.keys();
-    for (let j = 0; j < multiAssets.len(); j++) {
-      const policy = multiAssets.get(j);
-      const policyAssets = ma.get_assets(policy)!;
-      const assetNames = policyAssets.keys();
-      for (let k = 0; k < assetNames.len(); k++) {
-        const policyAsset = assetNames.get(k);
-        const quantity = policyAssets.get(policyAsset)!;
-        // Note: Using policyAsset.to_js_value() as a work around till AssetName provides to_hex() method
-        // https://github.com/dcSpark/cardano-multiplatform-lib/issues/334
-        const unit = policy.to_hex() + policyAsset.to_js_value();
-        assets[unit] = quantity;
+    withCMLScope((own) => {
+      const ma = own(value.multi_asset());
+      const multiAssets = own(ma.keys());
+      for (let j = 0; j < multiAssets.len(); j++) {
+        const policy = own(multiAssets.get(j));
+        const policyAssets = own(ma.get_assets(policy)!);
+        const assetNames = own(policyAssets.keys());
+        for (let k = 0; k < assetNames.len(); k++) {
+          const policyAsset = own(assetNames.get(k));
+          const quantity = policyAssets.get(policyAsset)!;
+          // Note: Using policyAsset.to_js_value() as a work around till AssetName provides to_hex() method
+          // https://github.com/dcSpark/cardano-multiplatform-lib/issues/334
+          const unit = policy.to_hex() + policyAsset.to_js_value();
+          assets[unit] = quantity;
+        }
       }
-    }
+    });
   }
   return assets;
 }
 
 export function assetsToValue(assets: Assets): CML.Value {
-  const multiAsset = CML.MultiAsset.new();
-  const lovelace = assets["lovelace"] ? BigInt(assets["lovelace"]) : 0n;
-  const units = Object.keys(assets);
-  const policies = Array.from(
-    new Set(
-      units
-        .filter((unit) => unit !== "lovelace")
-        .map((unit) => unit.slice(0, 56)),
-    ),
-  );
-  for (const policy of policies) {
-    const policyUnits = units.filter((unit) => unit.slice(0, 56) === policy);
-    const assetsValue = CML.MapAssetNameToCoin.new();
-    for (const unit of policyUnits) {
-      assetsValue.insert(
-        CML.AssetName.from_hex(unit.slice(56)),
-        BigInt(assets[unit]),
+  return withCMLScope((own) => {
+    const multiAsset = own(CML.MultiAsset.new());
+    const lovelace = assets["lovelace"] ? BigInt(assets["lovelace"]) : 0n;
+    const units = Object.keys(assets);
+    const policies = Array.from(
+      new Set(
+        units
+          .filter((unit) => unit !== "lovelace")
+          .map((unit) => unit.slice(0, 56)),
+      ),
+    );
+    for (const policy of policies) {
+      const policyUnits = units.filter((unit) => unit.slice(0, 56) === policy);
+      const assetsValue = own(CML.MapAssetNameToCoin.new());
+      for (const unit of policyUnits) {
+        assetsValue.insert(
+          own(CML.AssetName.from_hex(unit.slice(56))),
+          BigInt(assets[unit]),
+        );
+      }
+      multiAsset.insert_assets(
+        own(CML.ScriptHash.from_hex(policy)),
+        assetsValue,
       );
     }
-    multiAsset.insert_assets(CML.ScriptHash.from_hex(policy), assetsValue);
-  }
-  return CML.Value.new(lovelace, multiAsset);
+    return CML.Value.new(lovelace, multiAsset);
+  });
 }
 
 /**

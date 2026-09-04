@@ -6,6 +6,7 @@ import {
   CertificateValidator,
   WithdrawalValidator,
 } from "@lucid-evolution/core-types";
+import { CMLOwn, withCMLScope } from "@lucid-evolution/core-utils";
 import { CML } from "./core.js";
 import { networkToId } from "./network.js";
 import { validatorToScriptHash } from "./scripts.js";
@@ -26,18 +27,24 @@ export function credentialToRewardAddress(
   network: Network,
   stakeCredential: Credential,
 ): RewardAddress {
-  return CML.RewardAddress.new(
-    networkToId(network),
-    stakeCredential.type === "Key"
-      ? CML.Credential.new_pub_key(
-          CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
-        )
-      : CML.Credential.new_script(
-          CML.ScriptHash.from_hex(stakeCredential.hash),
-        ),
-  )
-    .to_address()
-    .to_bech32(undefined);
+  return withCMLScope((own) => {
+    const credential =
+      stakeCredential.type === "Key"
+        ? own(
+            CML.Credential.new_pub_key(
+              own(CML.Ed25519KeyHash.from_hex(stakeCredential.hash)),
+            ),
+          )
+        : own(
+            CML.Credential.new_script(
+              own(CML.ScriptHash.from_hex(stakeCredential.hash)),
+            ),
+          );
+    const rewardAddress = own(
+      CML.RewardAddress.new(networkToId(network), credential),
+    );
+    return own(rewardAddress.to_address()).to_bech32(undefined);
+  });
 }
 
 export function validatorToRewardAddress(
@@ -45,161 +52,159 @@ export function validatorToRewardAddress(
   validator: CertificateValidator | WithdrawalValidator,
 ): RewardAddress {
   const validatorHash = validatorToScriptHash(validator);
-  return CML.RewardAddress.new(
-    networkToId(network),
-    CML.Credential.new_script(CML.ScriptHash.from_hex(validatorHash)),
-  )
-    .to_address()
-    .to_bech32(undefined);
+  return withCMLScope((own) => {
+    const credential = own(
+      CML.Credential.new_script(own(CML.ScriptHash.from_hex(validatorHash))),
+    );
+    const rewardAddress = own(
+      CML.RewardAddress.new(networkToId(network), credential),
+    );
+    return own(rewardAddress.to_address()).to_bech32(undefined);
+  });
 }
+
+const credentialDetails = (
+  credential: CML.Credential,
+  own: CMLOwn,
+): Credential =>
+  credential.kind() === 0
+    ? { type: "Key", hash: own(credential.as_pub_key()!).to_hex() }
+    : { type: "Script", hash: own(credential.as_script()!).to_hex() };
+
+const addressDetails = (
+  address: CML.Address,
+): AddressDetails["address"] & { networkId: number } => ({
+  networkId: address.network_id(),
+  bech32: address.to_bech32(undefined),
+  hex: address.to_hex(),
+});
 
 /** Address can be in Bech32 or Hex. */
 export function getAddressDetails(address: string): AddressDetails {
   // Base Address
   try {
-    const parsedAddress = CML.BaseAddress.from_address(
-      addressFromHexOrBech32(address),
-    )!;
-    const paymentCredential: Credential =
-      parsedAddress.payment().kind() === 0
-        ? {
-            type: "Key",
-            hash: parsedAddress.payment().as_pub_key()!.to_hex(),
-          }
-        : {
-            type: "Script",
-            hash: parsedAddress.payment().as_script()!.to_hex(),
-          };
-    const stakeCredential: Credential =
-      parsedAddress.stake().kind() === 0
-        ? {
-            type: "Key",
-            hash: parsedAddress.stake().as_pub_key()!.to_hex(),
-          }
-        : {
-            type: "Script",
-            hash: parsedAddress.stake().as_script()!.to_hex(),
-          };
-    return {
-      type: "Base",
-      networkId: parsedAddress.to_address().network_id(),
-      address: {
-        bech32: parsedAddress.to_address().to_bech32(undefined),
-        hex: parsedAddress.to_address().to_hex(),
-      },
-      paymentCredential,
-      stakeCredential,
-    };
+    return withCMLScope((own) => {
+      const parsedAddress = own(
+        CML.BaseAddress.from_address(own(addressFromHexOrBech32(address))),
+      )!;
+      const paymentCredential = credentialDetails(
+        own(parsedAddress.payment()),
+        own,
+      );
+      const stakeCredential = credentialDetails(
+        own(parsedAddress.stake()),
+        own,
+      );
+      const { networkId, ...details } = addressDetails(
+        own(parsedAddress.to_address()),
+      );
+      return {
+        type: "Base",
+        networkId,
+        address: details,
+        paymentCredential,
+        stakeCredential,
+      };
+    });
   } catch (_e) {
     /* pass */
   }
 
   // Enterprise Address
   try {
-    const parsedAddress = CML.EnterpriseAddress.from_address(
-      addressFromHexOrBech32(address),
-    )!;
-    const paymentCredential: Credential =
-      parsedAddress.payment().kind() === 0
-        ? {
-            type: "Key",
-            hash: parsedAddress.payment().as_pub_key()!.to_hex(),
-          }
-        : {
-            type: "Script",
-            hash: parsedAddress.payment().as_script()!.to_hex(),
-          };
-    return {
-      type: "Enterprise",
-      networkId: parsedAddress.to_address().network_id(),
-      address: {
-        bech32: parsedAddress.to_address().to_bech32(undefined),
-        hex: parsedAddress.to_address().to_hex(),
-      },
-      paymentCredential,
-    };
+    return withCMLScope((own) => {
+      const parsedAddress = own(
+        CML.EnterpriseAddress.from_address(
+          own(addressFromHexOrBech32(address)),
+        ),
+      )!;
+      const paymentCredential = credentialDetails(
+        own(parsedAddress.payment()),
+        own,
+      );
+      const { networkId, ...details } = addressDetails(
+        own(parsedAddress.to_address()),
+      );
+      return {
+        type: "Enterprise",
+        networkId,
+        address: details,
+        paymentCredential,
+      };
+    });
   } catch (_e) {
     /* pass */
   }
 
   // Pointer Address
   try {
-    const parsedAddress = CML.PointerAddress.from_address(
-      addressFromHexOrBech32(address),
-    )!;
-    const paymentCredential: Credential =
-      parsedAddress?.payment().kind() === 0
-        ? {
-            type: "Key",
-            hash: parsedAddress.payment().as_pub_key()!.to_hex(),
-          }
-        : {
-            type: "Script",
-            hash: parsedAddress.payment().as_script()!.to_hex(),
-          };
-    return {
-      type: "Pointer",
-      networkId: parsedAddress.to_address().network_id(),
-      address: {
-        bech32: parsedAddress.to_address().to_bech32(undefined),
-        hex: parsedAddress.to_address().to_hex(),
-      },
-      paymentCredential,
-    };
+    return withCMLScope((own) => {
+      const parsedAddress = own(
+        CML.PointerAddress.from_address(own(addressFromHexOrBech32(address))),
+      )!;
+      const paymentCredential = credentialDetails(
+        own(parsedAddress.payment()),
+        own,
+      );
+      const { networkId, ...details } = addressDetails(
+        own(parsedAddress.to_address()),
+      );
+      return {
+        type: "Pointer",
+        networkId,
+        address: details,
+        paymentCredential,
+      };
+    });
   } catch (_e) {
     /* pass */
   }
 
   // Reward Address
   try {
-    const parsedAddress = CML.RewardAddress.from_address(
-      addressFromHexOrBech32(address),
-    )!;
-    const stakeCredential: Credential =
-      parsedAddress.payment().kind() === 0
-        ? {
-            type: "Key",
-            hash: parsedAddress.payment().as_pub_key()!.to_hex(),
-          }
-        : {
-            type: "Script",
-            hash: parsedAddress.payment().as_script()!.to_hex(),
-          };
-    return {
-      type: "Reward",
-      networkId: parsedAddress.to_address().network_id(),
-      address: {
-        bech32: parsedAddress.to_address().to_bech32(undefined),
-        hex: parsedAddress.to_address().to_hex(),
-      },
-      stakeCredential,
-    };
+    return withCMLScope((own) => {
+      const parsedAddress = own(
+        CML.RewardAddress.from_address(own(addressFromHexOrBech32(address))),
+      )!;
+      const stakeCredential = credentialDetails(
+        own(parsedAddress.payment()),
+        own,
+      );
+      const { networkId, ...details } = addressDetails(
+        own(parsedAddress.to_address()),
+      );
+      return { type: "Reward", networkId, address: details, stakeCredential };
+    });
   } catch (_e) {
     /* pass */
   }
 
   // Limited support for Byron addresses
   try {
-    const parsedAddress = ((address: string): CML.ByronAddress => {
-      try {
-        return CML.ByronAddress.from_cbor_hex(address);
-      } catch (_e) {
-        try {
-          return CML.ByronAddress.from_base58(address);
-        } catch (_e) {
-          throw new Error("Could not deserialize address.");
-        }
-      }
-    })(address);
+    return withCMLScope((own) => {
+      const parsedAddress = own(
+        ((address: string): CML.ByronAddress => {
+          try {
+            return CML.ByronAddress.from_cbor_hex(address);
+          } catch (_e) {
+            try {
+              return CML.ByronAddress.from_base58(address);
+            } catch (_e) {
+              throw new Error("Could not deserialize address.");
+            }
+          }
+        })(address),
+      );
 
-    return {
-      type: "Byron",
-      networkId: parsedAddress.content().network_id(),
-      address: {
-        bech32: "",
-        hex: parsedAddress.to_address().to_hex(),
-      },
-    };
+      return {
+        type: "Byron",
+        networkId: own(parsedAddress.content()).network_id(),
+        address: {
+          bech32: "",
+          hex: own(parsedAddress.to_address()).to_hex(),
+        },
+      };
+    });
   } catch (_e) {
     /* pass */
   }

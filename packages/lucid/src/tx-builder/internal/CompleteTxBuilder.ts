@@ -29,6 +29,7 @@ import {
   TxBuilderError,
 } from "../../Errors.js";
 import { CML } from "../../core.js";
+import { freeCML, withCMLScope } from "@lucid-evolution/core-utils";
 import * as UPLC from "@lucid-evolution/uplc";
 import * as TxBuilder from "../TxBuilder.js";
 import * as TxSignBuilder from "../../tx-sign-builder/TxSignBuilder.js";
@@ -59,6 +60,7 @@ import {
   buildCanonicalRedeemerInfo,
   buildRedeemersFromCanonicalContext,
   canonicalRedeemerEntries,
+  freeCanonicalRedeemerEntries,
   CanonicalRedeemerInfo,
   cloneUTxOs,
   normalizeEvalUTxO,
@@ -72,6 +74,7 @@ import {
   transactionFixedPointFingerprint,
   voterForRedeemerIndex,
   witnessPurposeKey,
+  type BuilderRedeemerKey,
 } from "./RedeemerContext.js";
 
 const MAX_EVALUATION_ATTEMPTS = 8;
@@ -295,18 +298,22 @@ const completeCurrentConfig = (
         )) || evaluatedScriptBody;
     }
     yield* applyEffectiveFee(config, true, evaluatedScriptBody);
-    config.txBuilder.add_change_if_needed(
-      CML.Address.from_bech32(changeAddress),
-      true,
+    withCMLScope((own) =>
+      config.txBuilder.add_change_if_needed(
+        own(CML.Address.from_bech32(changeAddress)),
+        true,
+      ),
     );
     const builtTransaction = yield* Effect.try({
       try: () =>
-        config.txBuilder
-          .build(
-            CML.ChangeSelectionAlgo.Default,
-            CML.Address.from_bech32(changeAddress),
-          )
-          .build_unchecked(),
+        withCMLScope((own) =>
+          own(
+            config.txBuilder.build(
+              CML.ChangeSelectionAlgo.Default,
+              own(CML.Address.from_bech32(changeAddress)),
+            ),
+          ).build_unchecked(),
+        ),
       catch: (error) => completeTxError(error),
     });
     const shouldCanonicalize = canonical || internalOptions.forceCanonical;
@@ -324,10 +331,12 @@ const completeCurrentConfig = (
         ).transaction,
       catch: (error) => completeTxError(error),
     });
+    freeCML(builtTransaction, transactionBeforeScriptDataHash);
     const transaction = yield* refreshScriptDataHash(
       normalizedTransaction,
       config,
     );
+    if (transaction !== normalizedTransaction) normalizedTransaction.free();
 
     const derivedInputs = deriveInputsFromTransaction(transaction);
 
@@ -367,6 +376,9 @@ const completeStaticFromActions = (
       return yield* completeCurrentConfig(options);
     }),
     Effect.provide(Layer.succeed(TxConfig, { config: replayConfig })),
+    // The completed transaction is copied out of the builder; nothing keeps
+    // the replay's builder alive.
+    Effect.ensuring(Effect.sync(() => replayConfig.txBuilder.free())),
   );
 };
 
@@ -433,9 +445,13 @@ const completeDelayedFromActions = (
         Effect.provide(Layer.succeed(TxConfig, { config: replayConfig })),
         Effect.either,
       );
+      // Each attempt builds in its own TransactionBuilder; free it once the
+      // attempt's transaction has been copied out or the attempt is discarded.
+      const discardReplay = () => replayConfig.txBuilder.free();
 
       if (Either.isLeft(completion)) {
         if (!(completion.left instanceof RedeemerInputRefreshRequired)) {
+          discardReplay();
           return yield* Effect.fail(completion.left);
         }
 
@@ -447,6 +463,8 @@ const completeDelayedFromActions = (
         );
         currentRedeemers = nextRedeemers;
         redeemerInputFingerprint = canonicalInputFingerprint(tx);
+        tx.free();
+        discardReplay();
         previousFingerprint = undefined;
         bootstrapWalletInputs = [];
         continue;
@@ -474,6 +492,7 @@ const completeDelayedFromActions = (
         redeemerBuilderCache,
       );
       redeemerInputFingerprint = canonicalInputFingerprint(tx);
+      discardReplay();
 
       if (!redeemerMapsEqual(currentRedeemers, nextRedeemers)) {
         currentRedeemers = nextRedeemers;
@@ -506,23 +525,26 @@ const buildDelayedRedeemers = (
       tx,
       allResolvedInputs,
     );
+    // The redeemer builders run to completion inside this call, so the
+    // context's transaction body is not needed once it returns.
     const nextRedeemers = yield* buildRedeemersFromCanonicalContext(
       redeemerInfo,
       replayConfig.pendingRedeemers,
       redeemerBuilderCache,
-    );
+    ).pipe(Effect.ensuring(Effect.sync(() => redeemerInfo.txBody.free())));
     return nextRedeemers;
   });
 
-const canonicalInputFingerprint = (tx: CML.Transaction): string => {
-  const canonical = CML.Transaction.from_cbor_bytes(
-    tx.to_canonical_cbor_bytes(),
-  );
-  const inputs = canonical.body().inputs();
-  return Array.from({ length: inputs.len() }, (_, index) =>
-    inputs.get(index).to_canonical_cbor_hex(),
-  ).join(",");
-};
+const canonicalInputFingerprint = (tx: CML.Transaction): string =>
+  withCMLScope((own) => {
+    const canonical = own(
+      CML.Transaction.from_cbor_bytes(tx.to_canonical_cbor_bytes()),
+    );
+    const inputs = own(own(canonical.body()).inputs());
+    return Array.from({ length: inputs.len() }, (_, index) =>
+      own(inputs.get(index)).to_canonical_cbor_hex(),
+    ).join(",");
+  });
 
 const addWalletInputs = (
   config: TxBuilder.TxBuilderConfig,
@@ -534,10 +556,13 @@ const addWalletInputs = (
         if (config.collectedInputs.some((input) => isEqualUTxO(input, utxo))) {
           continue;
         }
-        const input = CML.SingleInputBuilder.from_transaction_unspent_output(
-          utxoToCore(utxo),
-        ).payment_key();
-        config.txBuilder.add_input(input);
+        withCMLScope((own) => {
+          const core = own(utxoToCore(utxo));
+          const builder = own(
+            CML.SingleInputBuilder.from_transaction_unspent_output(core),
+          );
+          config.txBuilder.add_input(own(builder.payment_key()));
+        });
         config.collectedInputs = [...config.collectedInputs, utxo];
       }
     },
@@ -555,9 +580,10 @@ const collectKnownRedeemerExUnits = (
       ...config.readInputs,
     ];
     const info = yield* buildCanonicalRedeemerInfo(tx, allResolvedInputs);
-    const entries = tx.witness_set().redeemers()
-      ? canonicalRedeemerEntries(tx.witness_set().redeemers()!)
-      : [];
+    const entries = withCMLScope((own) => {
+      const redeemers = own(own(tx.witness_set()).redeemers());
+      return redeemers ? canonicalRedeemerEntries(redeemers) : [];
+    });
     const known: KnownRedeemerExUnits = new Map();
     for (let index = 0; index < info.redeemers.length; index++) {
       const purpose = info.redeemers[index];
@@ -568,6 +594,8 @@ const collectKnownRedeemerExUnits = (
         steps: Number(entry.exUnits.steps()),
       });
     }
+    freeCanonicalRedeemerEntries(entries);
+    info.txBody.free();
     return known;
   });
 
@@ -775,14 +803,17 @@ export const decodeLegacyRedeemers = (
 ): EvalRedeemer[] => {
   const evalRedeemers: EvalRedeemer[] = [];
   for (const bytes of uplcEval) {
-    const redeemer = CML.LegacyRedeemer.from_cbor_bytes(bytes);
-    evalRedeemers.push({
-      ex_units: {
-        mem: Number(redeemer.ex_units().mem()),
-        steps: Number(redeemer.ex_units().steps()),
-      },
-      redeemer_index: Number(redeemer.index()),
-      redeemer_tag: fromCMLRedeemerTag(redeemer.tag()),
+    withCMLScope((own) => {
+      const redeemer = own(CML.LegacyRedeemer.from_cbor_bytes(bytes));
+      const exUnits = own(redeemer.ex_units());
+      evalRedeemers.push({
+        ex_units: {
+          mem: Number(exUnits.mem()),
+          steps: Number(exUnits.steps()),
+        },
+        redeemer_index: Number(redeemer.index()),
+        redeemer_tag: fromCMLRedeemerTag(redeemer.tag()),
+      });
     });
   }
   return evalRedeemers;
@@ -791,12 +822,20 @@ export const decodeLegacyRedeemers = (
 const evalRedeemerKey = (evalRedeemer: EvalRedeemer): string =>
   `${evalRedeemer.redeemer_tag}:${evalRedeemer.redeemer_index}`;
 
-export const expectedRedeemerKeySet = (redeemers: CML.Redeemers): Set<string> =>
-  new Set(
-    redeemerWitnessKeys(redeemers).map(
-      ({ tag, index }) => `${fromCMLRedeemerTag(tag)}:${index.toString()}`,
-    ),
-  );
+export const expectedRedeemerKeySet = (
+  redeemers: CML.Redeemers,
+): Set<string> => {
+  const keys = redeemerWitnessKeys(redeemers);
+  try {
+    return new Set(
+      keys.map(
+        ({ tag, index }) => `${fromCMLRedeemerTag(tag)}:${index.toString()}`,
+      ),
+    );
+  } finally {
+    for (const { key } of keys) key.free();
+  }
+};
 
 const validateEvalRedeemer = (
   evalRedeemer: EvalRedeemer,
@@ -836,10 +875,7 @@ export const applyEvaluationResult = (
   txbuilder: CML.TransactionBuilder,
   expectedKeys: Set<string>,
   evaluator?: string,
-  builderKeyByLedgerKey: ReadonlyMap<
-    string,
-    CML.RedeemerWitnessKey
-  > = new Map(),
+  builderKeyByLedgerKey: ReadonlyMap<string, BuilderRedeemerKey> = new Map(),
 ): void => {
   if (expectedKeys.size > 0 && evalRedeemerList.length === 0) {
     throw evaluatorError(
@@ -853,11 +889,18 @@ export const applyEvaluationResult = (
     key: CML.RedeemerWitnessKey;
     exUnits: CML.ExUnits;
   }> = [];
+  const release = () => {
+    for (const { key, exUnits } of updates) {
+      exUnits.free();
+      key.free();
+    }
+  };
 
   for (const evalRedeemer of evalRedeemerList) {
     validateEvalRedeemer(evalRedeemer, evaluator);
     const key = evalRedeemerKey(evalRedeemer);
     if (seen.has(key)) {
+      release();
       throw evaluatorError(
         `Evaluator returned duplicate result for redeemer ${key}`,
         evaluator,
@@ -865,6 +908,7 @@ export const applyEvaluationResult = (
     }
     seen.add(key);
     if (!expectedKeys.has(key)) {
+      release();
       throw evaluatorError(
         `Evaluator returned result for unexpected redeemer ${key}`,
         evaluator,
@@ -874,19 +918,21 @@ export const applyEvaluationResult = (
       BigInt(evalRedeemer.ex_units.mem),
       BigInt(evalRedeemer.ex_units.steps),
     );
+    const builderKey = builderKeyByLedgerKey.get(key);
     updates.push({
-      key:
-        builderKeyByLedgerKey.get(key) ??
-        CML.RedeemerWitnessKey.new(
-          toCMLRedeemerTag(evalRedeemer.redeemer_tag),
-          BigInt(evalRedeemer.redeemer_index),
-        ),
+      key: builderKey
+        ? CML.RedeemerWitnessKey.new(builderKey.tag, builderKey.index)
+        : CML.RedeemerWitnessKey.new(
+            toCMLRedeemerTag(evalRedeemer.redeemer_tag),
+            BigInt(evalRedeemer.redeemer_index),
+          ),
       exUnits,
     });
   }
 
   for (const expectedKey of expectedKeys) {
     if (!seen.has(expectedKey)) {
+      release();
       throw evaluatorError(
         `Evaluator did not return a result for redeemer ${expectedKey}`,
         evaluator,
@@ -897,41 +943,48 @@ export const applyEvaluationResult = (
   for (const { key, exUnits } of updates) {
     txbuilder.set_exunits(key, exUnits);
   }
+  release();
 };
 
-export const redeemerWitnessKeys = (redeemers: CML.Redeemers) => {
-  const keys: Array<{
-    key: CML.RedeemerWitnessKey;
-    tag: CML.RedeemerTag;
-    index: bigint;
-  }> = [];
-  const arrLegacyRedeemer = redeemers.as_arr_legacy_redeemer();
-  if (arrLegacyRedeemer) {
-    for (let i = 0; i < arrLegacyRedeemer.len(); i++) {
-      const redeemer = arrLegacyRedeemer.get(i);
-      keys.push({
-        key: CML.RedeemerWitnessKey.from_redeemer(redeemer),
-        tag: redeemer.tag(),
-        index: redeemer.index(),
-      });
+/**
+ * The returned `key` objects belong to the caller, which frees them once the
+ * builder has consumed them.
+ */
+export const redeemerWitnessKeys = (redeemers: CML.Redeemers) =>
+  withCMLScope((own) => {
+    const keys: Array<{
+      key: CML.RedeemerWitnessKey;
+      tag: CML.RedeemerTag;
+      index: bigint;
+    }> = [];
+    const arrLegacyRedeemer = own(redeemers.as_arr_legacy_redeemer());
+    if (arrLegacyRedeemer) {
+      for (let i = 0; i < arrLegacyRedeemer.len(); i++) {
+        const redeemer = own(arrLegacyRedeemer.get(i));
+        keys.push({
+          key: CML.RedeemerWitnessKey.from_redeemer(redeemer),
+          tag: redeemer.tag(),
+          index: redeemer.index(),
+        });
+      }
     }
-  }
 
-  const mapRedeemerKeyToRedeemerVal =
-    redeemers.as_map_redeemer_key_to_redeemer_val();
-  if (mapRedeemerKeyToRedeemerVal) {
-    const mapKeys = mapRedeemerKeyToRedeemerVal.keys();
-    for (let i = 0; i < mapKeys.len(); i++) {
-      const key = mapKeys.get(i);
-      keys.push({
-        key: CML.RedeemerWitnessKey.new(key.tag(), key.index()),
-        tag: key.tag(),
-        index: key.index(),
-      });
+    const mapRedeemerKeyToRedeemerVal = own(
+      redeemers.as_map_redeemer_key_to_redeemer_val(),
+    );
+    if (mapRedeemerKeyToRedeemerVal) {
+      const mapKeys = own(mapRedeemerKeyToRedeemerVal.keys());
+      for (let i = 0; i < mapKeys.len(); i++) {
+        const key = own(mapKeys.get(i));
+        keys.push({
+          key: CML.RedeemerWitnessKey.new(key.tag(), key.index()),
+          tag: key.tag(),
+          index: key.index(),
+        });
+      }
     }
-  }
-  return keys;
-};
+    return keys;
+  });
 
 export const applyBootstrapRedeemerExUnits = (
   redeemers: CML.Redeemers,
@@ -945,9 +998,14 @@ export const applyBootstrapRedeemerExUnits = (
     maxTxExMem,
     maxTxExSteps,
   );
-  for (const [index, { key }] of keys.entries()) {
-    const exUnits = budgets[index];
-    txbuilder.set_exunits(key, CML.ExUnits.new(exUnits.mem(), exUnits.steps()));
+  try {
+    for (const [index, { key }] of keys.entries()) {
+      const exUnits = budgets[index];
+      txbuilder.set_exunits(key, exUnits);
+    }
+  } finally {
+    for (const { key } of keys) key.free();
+    freeCML(...budgets);
   }
 };
 
@@ -1052,22 +1110,29 @@ const scriptHashForPurpose = (
       return purpose.policyId;
     case "withdraw":
       return getAddressDetails(purpose.rewardAddress).stakeCredential?.hash;
-    case "publish": {
-      const certificate = info.txBody.certs()?.get(Number(purpose.index));
-      return certificate ? scriptHashFromCertificate(certificate) : undefined;
-    }
-    case "vote": {
-      const voter =
-        voterByKey(info.txBody, purpose.voterKey) ??
-        voterForRedeemerIndex(tx, purpose.index);
-      return voter?.script_hash()?.to_hex();
-    }
-    case "propose": {
-      const proposal =
-        proposalByKey(info.txBody, purpose.proposalKey) ??
-        proposalProcedureForRedeemerIndex(tx, purpose.index);
-      return proposal?.gov_action().script_hash()?.to_hex();
-    }
+    case "publish":
+      return withCMLScope((own) => {
+        const certificate = own(
+          own(info.txBody.certs())?.get(Number(purpose.index)),
+        );
+        return certificate ? scriptHashFromCertificate(certificate) : undefined;
+      });
+    case "vote":
+      return withCMLScope((own) => {
+        const voter = own(
+          voterByKey(info.txBody, purpose.voterKey) ??
+            voterForRedeemerIndex(tx, purpose.index),
+        );
+        return own(voter?.script_hash())?.to_hex();
+      });
+    case "propose":
+      return withCMLScope((own) => {
+        const proposal = own(
+          proposalByKey(info.txBody, purpose.proposalKey) ??
+            proposalProcedureForRedeemerIndex(tx, purpose.index),
+        );
+        return own(own(proposal?.gov_action())?.script_hash())?.to_hex();
+      });
   }
 };
 
@@ -1076,12 +1141,14 @@ const usedPlutusLanguages = (
   config: TxBuilder.TxBuilderConfig,
 ): Effect.Effect<CML.LanguageList, TxBuilderError> =>
   Effect.gen(function* () {
-    const witnessLanguages = tx.witness_set().languages();
-    const languages = new Set<CML.Language>();
-
-    for (let i = 0; i < witnessLanguages.len(); i++) {
-      languages.add(witnessLanguages.get(i));
-    }
+    const languages = withCMLScope((own) => {
+      const witnessLanguages = own(own(tx.witness_set()).languages());
+      const found = new Set<CML.Language>();
+      for (let i = 0; i < witnessLanguages.len(); i++) {
+        found.add(witnessLanguages.get(i));
+      }
+      return found;
+    });
 
     const resolvedInputs = [
       ...config.walletInputs,
@@ -1093,6 +1160,7 @@ const usedPlutusLanguages = (
     for (const purpose of redeemerInfo.redeemers) {
       const scriptHash = scriptHashForPurpose(purpose, tx, redeemerInfo);
       if (!scriptHash) {
+        redeemerInfo.txBody.free();
         yield* completeTxError(
           `Unable to resolve script hash for ${purpose.tag}:${purpose.index} redeemer`,
         );
@@ -1100,6 +1168,7 @@ const usedPlutusLanguages = (
       }
       const script = config.scripts.get(scriptHash);
       if (!script) {
+        redeemerInfo.txBody.free();
         yield* completeTxError(
           `Unable to resolve script for ${purpose.tag} redeemer ${scriptHash}`,
         );
@@ -1108,6 +1177,7 @@ const usedPlutusLanguages = (
       const language = scriptTypeToLanguage(script.type);
       if (language !== undefined) languages.add(language);
     }
+    redeemerInfo.txBody.free();
 
     const result = CML.LanguageList.new();
     [...languages]
@@ -1121,91 +1191,123 @@ const refreshScriptDataHash = (
   config: TxBuilder.TxBuilderConfig,
 ): Effect.Effect<CML.Transaction, TxBuilderError> =>
   Effect.gen(function* () {
-    const redeemers = tx.witness_set().redeemers();
-    if (!redeemers) return tx;
+    const witnessSet = tx.witness_set();
+    const redeemers = witnessSet.redeemers();
+    if (!redeemers) {
+      witnessSet.free();
+      return tx;
+    }
 
-    const datums = tx.witness_set().plutus_datums() ?? CML.PlutusDataList.new();
-    const usedLangs = yield* usedPlutusLanguages(tx, config);
+    const datums = witnessSet.plutus_datums() ?? CML.PlutusDataList.new();
+    const usedLangs = yield* usedPlutusLanguages(tx, config).pipe(
+      Effect.tapError(() =>
+        Effect.sync(() => freeCML(witnessSet, redeemers, datums)),
+      ),
+    );
     const scriptDataHash = yield* Effect.try({
-      try: () =>
-        CML.calc_script_data_hash(
-          redeemers,
-          datums,
-          config.lucidConfig.costModels,
-          usedLangs,
-        ),
-      catch: (error) => completeTxError(error),
+      try: () => {
+        try {
+          return CML.calc_script_data_hash(
+            redeemers,
+            datums,
+            config.lucidConfig.costModels,
+            usedLangs,
+          );
+        } finally {
+          freeCML(redeemers, datums, usedLangs);
+        }
+      },
+      catch: (error) => {
+        witnessSet.free();
+        return completeTxError(error);
+      },
     });
     const resolvedScriptDataHash = yield* pipe(
       Effect.fromNullable(scriptDataHash),
-      Effect.orElseFail(() =>
-        completeTxError("Unable to calculate script data hash"),
-      ),
+      Effect.orElseFail(() => {
+        witnessSet.free();
+        return completeTxError("Unable to calculate script data hash");
+      }),
     );
-    const body = tx.body();
-    body.set_script_data_hash(resolvedScriptDataHash);
-    return CML.Transaction.new(
-      body,
-      tx.witness_set(),
-      tx.is_valid(),
-      tx.auxiliary_data(),
-    );
+    return withCMLScope((own) => {
+      own(witnessSet);
+      const body = own(tx.body());
+      body.set_script_data_hash(own(resolvedScriptDataHash));
+      // `Transaction.new` takes ownership of the auxiliary data.
+      return CML.Transaction.new(
+        body,
+        witnessSet,
+        tx.is_valid(),
+        tx.auxiliary_data(),
+      );
+    });
   });
 
-export const setRedeemerstoZero = (tx: CML.Transaction): CML.Transaction => {
-  const redeemers = tx.witness_set().redeemers();
-  if (!redeemers) return tx;
-  const arrLegacyRedeemer = redeemers.as_arr_legacy_redeemer();
-  if (arrLegacyRedeemer) {
-    const redeemerList = CML.LegacyRedeemerList.new();
-    for (let i = 0; i < arrLegacyRedeemer.len(); i++) {
-      const redeemer = arrLegacyRedeemer.get(i);
-      const dummyRedeemer = CML.LegacyRedeemer.new(
-        redeemer.tag(),
-        redeemer.index(),
-        redeemer.data(),
-        CML.ExUnits.new(0n, 0n),
+/**
+ * Returns `tx` itself when it carries no redeemers, otherwise a new
+ * transaction the caller owns.
+ */
+export const setRedeemerstoZero = (tx: CML.Transaction): CML.Transaction =>
+  withCMLScope((own) => {
+    const witnessSet = own(tx.witness_set());
+    const redeemers = own(witnessSet.redeemers());
+    if (!redeemers) return tx;
+    const zeroExUnits = () => own(CML.ExUnits.new(0n, 0n));
+    const arrLegacyRedeemer = own(redeemers.as_arr_legacy_redeemer());
+    if (arrLegacyRedeemer) {
+      const redeemerList = own(CML.LegacyRedeemerList.new());
+      for (let i = 0; i < arrLegacyRedeemer.len(); i++) {
+        const redeemer = own(arrLegacyRedeemer.get(i));
+        const dummyRedeemer = own(
+          CML.LegacyRedeemer.new(
+            redeemer.tag(),
+            redeemer.index(),
+            own(redeemer.data()),
+            zeroExUnits(),
+          ),
+        );
+        redeemerList.add(dummyRedeemer);
+      }
+      witnessSet.set_redeemers(
+        own(CML.Redeemers.new_arr_legacy_redeemer(redeemerList)),
       );
-      redeemerList.add(dummyRedeemer);
-    }
-
-    const dummyWitnessSet = tx.witness_set();
-    dummyWitnessSet.set_redeemers(
-      CML.Redeemers.new_arr_legacy_redeemer(redeemerList),
-    );
-    return CML.Transaction.new(
-      tx.body(),
-      dummyWitnessSet,
-      true,
-      tx.auxiliary_data(),
-    );
-  }
-  const mapRedeemerKeyToRedeemerVal =
-    redeemers.as_map_redeemer_key_to_redeemer_val();
-  if (mapRedeemerKeyToRedeemerVal) {
-    const dummyRedeemerMap = CML.MapRedeemerKeyToRedeemerVal.new();
-    const keys = mapRedeemerKeyToRedeemerVal.keys();
-    for (let i = 0; i < keys.len(); i++) {
-      const key = keys.get(i);
-      const value = mapRedeemerKeyToRedeemerVal.get(key)!;
-      dummyRedeemerMap.insert(
-        key,
-        CML.RedeemerVal.new(value.data(), CML.ExUnits.new(0n, 0n)),
+      // `Transaction.new` takes ownership of the auxiliary data.
+      return CML.Transaction.new(
+        own(tx.body()),
+        witnessSet,
+        true,
+        tx.auxiliary_data(),
       );
     }
-    const dummyWitnessSet = tx.witness_set();
-    dummyWitnessSet.set_redeemers(
-      CML.Redeemers.new_map_redeemer_key_to_redeemer_val(dummyRedeemerMap),
+    const mapRedeemerKeyToRedeemerVal = own(
+      redeemers.as_map_redeemer_key_to_redeemer_val(),
     );
-    return CML.Transaction.new(
-      tx.body(),
-      dummyWitnessSet,
-      true,
-      tx.auxiliary_data(),
-    );
-  }
-  return tx;
-};
+    if (mapRedeemerKeyToRedeemerVal) {
+      const dummyRedeemerMap = own(CML.MapRedeemerKeyToRedeemerVal.new());
+      const keys = own(mapRedeemerKeyToRedeemerVal.keys());
+      for (let i = 0; i < keys.len(); i++) {
+        const key = own(keys.get(i));
+        const value = own(mapRedeemerKeyToRedeemerVal.get(key)!);
+        dummyRedeemerMap.insert(
+          key,
+          own(CML.RedeemerVal.new(own(value.data()), zeroExUnits())),
+        );
+      }
+      witnessSet.set_redeemers(
+        own(
+          CML.Redeemers.new_map_redeemer_key_to_redeemer_val(dummyRedeemerMap),
+        ),
+      );
+      // `Transaction.new` takes ownership of the auxiliary data.
+      return CML.Transaction.new(
+        own(tx.body()),
+        witnessSet,
+        true,
+        tx.auxiliary_data(),
+      );
+    }
+    return tx;
+  });
 
 const applyCollateral = (
   setCollateral: bigint,
@@ -1215,28 +1317,34 @@ const applyCollateral = (
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
     for (const utxo of collateralInputs) {
-      const collateralInput =
-        CML.SingleInputBuilder.from_transaction_unspent_output(
-          utxoToCore(utxo),
-        ).payment_key();
-      config.txBuilder.add_collateral(collateralInput);
+      withCMLScope((own) => {
+        const core = own(utxoToCore(utxo));
+        const builder = own(
+          CML.SingleInputBuilder.from_transaction_unspent_output(core),
+        );
+        config.txBuilder.add_collateral(own(builder.payment_key()));
+      });
     }
     const returnassets = pipe(
       sumAssetsFromInputs(collateralInputs),
       Record.union({ lovelace: -setCollateral }, _BigInt.sum),
     );
 
-    const collateralOutputBuilder =
-      CML.TransactionOutputBuilder.new().with_address(
-        CML.Address.from_bech32(changeAddress),
+    withCMLScope((own) => {
+      const collateralOutputBuilder = own(
+        own(CML.TransactionOutputBuilder.new()).with_address(
+          own(CML.Address.from_bech32(changeAddress)),
+        ),
       );
-    config.txBuilder.set_collateral_return(
-      collateralOutputBuilder
-        .next()
-        .with_value(assetsToValue(returnassets))
-        .build()
-        .output(),
-    );
+      const result = own(
+        own(
+          own(collateralOutputBuilder.next()).with_value(
+            own(assetsToValue(returnassets)),
+          ),
+        ).build(),
+      );
+      config.txBuilder.set_collateral_return(own(result.output()));
+    });
   });
 
 const findCollateral = (
@@ -1355,9 +1463,14 @@ const buildEvaluationDraft = (
 ): Effect.Effect<CML.Transaction, TxBuilderError> =>
   Effect.try({
     try: () =>
-      config.txBuilder
-        .build_for_evaluation(0, CML.Address.from_bech32(changeAddress))
-        .draft_tx(),
+      withCMLScope((own) =>
+        own(
+          config.txBuilder.build_for_evaluation(
+            0,
+            own(CML.Address.from_bech32(changeAddress)),
+          ),
+        ).draft_tx(),
+      ),
     catch: (error) => completeTxError(error),
   });
 
@@ -1370,9 +1483,13 @@ const buildEvaluationCandidate = (
   Effect.gen(function* () {
     yield* applyEffectiveFee(config, script_calculation, forceExplicitFee);
     const candidate = yield* buildEvaluationDraft(config, changeAddress);
-    if (forceExplicitFee || !candidate.witness_set().redeemers()) {
+    const hasRedeemers = withCMLScope(
+      (own) => own(own(candidate.witness_set()).redeemers()) !== undefined,
+    );
+    if (forceExplicitFee || !hasRedeemers) {
       return candidate;
     }
+    candidate.free();
     yield* applyEffectiveFee(config, script_calculation, true);
     return yield* buildEvaluationDraft(config, changeAddress);
   });
@@ -1394,7 +1511,10 @@ const prepareRedeemerContextCandidate = (
         ).transaction,
       catch: (error) => completeTxError(error),
     });
-    return yield* refreshScriptDataHash(normalized, config);
+    canonical.free();
+    const refreshed = yield* refreshScriptDataHash(normalized, config);
+    if (refreshed !== normalized) normalized.free();
+    return refreshed;
   });
 
 const applyKnownRedeemerExUnits = (
@@ -1418,8 +1538,16 @@ const applyKnownRedeemerExUnits = (
         ),
       catch: (error) => completeTxError(error),
     });
-    const redeemers = normalization.transaction.witness_set().redeemers();
-    if (!redeemers) return false;
+    candidate.free();
+    const transaction = normalization.transaction;
+    const expectedKeys = withCMLScope((own) => {
+      const redeemers = own(own(transaction.witness_set()).redeemers());
+      return redeemers ? expectedRedeemerKeySet(redeemers) : undefined;
+    });
+    if (!expectedKeys) {
+      transaction.free();
+      return false;
+    }
 
     const resolvedInputs = [
       ...config.walletInputs,
@@ -1427,9 +1555,10 @@ const applyKnownRedeemerExUnits = (
       ...config.readInputs,
     ];
     const info = yield* buildCanonicalRedeemerInfo(
-      normalization.transaction,
+      transaction,
       resolvedInputs,
-    );
+    ).pipe(Effect.ensuring(Effect.sync(() => transaction.free())));
+    info.txBody.free();
     const evalRedeemers: EvalRedeemer[] = [];
     for (const purpose of info.redeemers) {
       const exUnits = known.get(
@@ -1448,7 +1577,7 @@ const applyKnownRedeemerExUnits = (
         applyEvaluationResult(
           evalRedeemers,
           config.txBuilder,
-          expectedRedeemerKeySet(redeemers),
+          expectedKeys,
           "delayed-redeemer fixed point",
           normalization.builderKeyByLedgerKey,
         ),
@@ -1457,8 +1586,14 @@ const applyKnownRedeemerExUnits = (
     return true;
   });
 
-const evaluationFixedPointFingerprint = (tx: CML.Transaction): string =>
-  transactionFixedPointFingerprint(setRedeemerstoZero(tx));
+const evaluationFixedPointFingerprint = (tx: CML.Transaction): string => {
+  const zeroed = setRedeemerstoZero(tx);
+  try {
+    return transactionFixedPointFingerprint(zeroed);
+  } finally {
+    if (zeroed !== tx) zeroed.free();
+  }
+};
 
 const evaluateUntilStable = (
   config: TxBuilder.TxBuilderConfig,
@@ -1484,8 +1619,13 @@ const evaluateUntilStable = (
         script_calculation,
         forceExplicitFee,
       );
-      const redeemers = candidate.witness_set().redeemers();
-      if (!redeemers) return false;
+      const redeemers = withCMLScope((own) =>
+        own(candidate.witness_set()).redeemers(),
+      );
+      if (!redeemers) {
+        candidate.free();
+        return false;
+      }
       forceExplicitFee = true;
 
       if (bootstrapExUnits) {
@@ -1497,8 +1637,10 @@ const evaluateUntilStable = (
           config.lucidConfig.protocolParameters.maxTxExMem,
           config.lucidConfig.protocolParameters.maxTxExSteps,
         );
+        freeCML(redeemers, candidate);
         return true;
       }
+      redeemers.free();
 
       if (
         redeemerInputFingerprint !== undefined &&
@@ -1507,7 +1649,7 @@ const evaluateUntilStable = (
         const contextCandidate = yield* prepareRedeemerContextCandidate(
           candidate,
           config,
-        );
+        ).pipe(Effect.ensuring(Effect.sync(() => candidate.free())));
         return yield* Effect.fail(
           new RedeemerInputRefreshRequired(contextCandidate),
         );
@@ -1516,7 +1658,10 @@ const evaluateUntilStable = (
       // Re-evaluate only when the zero-exunit candidate changes in a way that
       // scripts can observe, such as fee or change-output drift after ex-units.
       const fingerprint = evaluationFixedPointFingerprint(candidate);
-      if (fingerprint === previousFingerprint) return true;
+      if (fingerprint === previousFingerprint) {
+        candidate.free();
+        return true;
+      }
       previousFingerprint = fingerprint;
 
       yield* evaluateTransaction(
@@ -1525,7 +1670,7 @@ const evaluateUntilStable = (
         walletInputs,
         localUPLCEval,
         evaluator,
-      );
+      ).pipe(Effect.ensuring(Effect.sync(() => candidate.free())));
     }
 
     return yield* completeTxError(
@@ -1561,12 +1706,19 @@ const makeProviderEvaluator = (provider: Provider): EvaluatorAdapter => ({
 const makeDefaultAikenEvaluator = (): EvaluatorAdapter => ({
   name: "aiken",
   evaluate: async ({ tx, additionalUTxOs, context }) => {
-    const ins = additionalUTxOs.map((utxo) => utxoToTransactionInput(utxo));
-    const outs = additionalUTxOs.map((utxo) => utxoToTransactionOutput(utxo));
+    const { txBytes, inputBytes, outputBytes } = withCMLScope((own) => ({
+      txBytes: own(CML.Transaction.from_cbor_hex(tx)).to_cbor_bytes(),
+      inputBytes: additionalUTxOs.map((utxo) =>
+        own(utxoToTransactionInput(utxo)).to_cbor_bytes(),
+      ),
+      outputBytes: additionalUTxOs.map((utxo) =>
+        own(utxoToTransactionOutput(utxo)).to_cbor_bytes(),
+      ),
+    }));
     const uplcEval = UPLC.eval_phase_two_raw(
-      CML.Transaction.from_cbor_hex(tx).to_cbor_bytes(),
-      ins.map((value) => value.to_cbor_bytes()),
-      outs.map((value) => value.to_cbor_bytes()),
+      txBytes,
+      inputBytes,
+      outputBytes,
       context.costModels.to_cbor_bytes(),
       context.protocolParameters.maxTxExSteps,
       context.protocolParameters.maxTxExMem,
@@ -1637,22 +1789,32 @@ const evaluateTransaction = (
         ),
       catch: (error) => wrapEvaluatorCause(error, name),
     });
-    const txEvaluation = yield* refreshScriptDataHash(
-      setRedeemerstoZero(normalization.transaction),
-      config,
+    const normalized = normalization.transaction;
+    const zeroed = setRedeemerstoZero(normalized);
+    const txEvaluation = yield* refreshScriptDataHash(zeroed, config).pipe(
+      Effect.tapError(() => Effect.sync(() => freeCML(normalized, zeroed))),
     );
-    const redeemers = txEvaluation.witness_set().redeemers();
-    if (!redeemers) return;
-    const expectedKeys = expectedRedeemerKeySet(redeemers);
+    // Any of the three may be the same object; freeCML frees each one once.
+    const release = () => freeCML(normalized, zeroed, txEvaluation);
+    const expectedKeys = withCMLScope((own) => {
+      const redeemers = own(own(txEvaluation.witness_set()).redeemers());
+      return redeemers ? expectedRedeemerKeySet(redeemers) : undefined;
+    });
+    if (!expectedKeys) {
+      release();
+      return;
+    }
     const txUtxos = yield* resolveEvaluationUTxOs(
       txEvaluation,
       walletInputs,
       config,
-    );
+    ).pipe(Effect.tapError(() => Effect.sync(release)));
+    const txHex = txEvaluation.to_cbor_hex();
+    release();
     const evalRedeemers = yield* Effect.tryPromise({
       try: () =>
         adapter.evaluate({
-          tx: txEvaluation.to_cbor_hex(),
+          tx: txHex,
           additionalUTxOs: txUtxos,
           context: makeEvaluationContext(config),
         }),
@@ -1679,38 +1841,45 @@ const calculateMinLovelace = (
 ): bigint => {
   const dummyAddress =
     "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950";
-  return CML.TransactionOutputBuilder.new()
-    .with_address(
+  return withCMLScope((own) => {
+    const address = own(
       CML.Address.from_bech32(changeAddress ? changeAddress : dummyAddress),
-    )
-    .next()
-    .with_asset_and_min_required_coin(
-      multiAssets
-        ? assetsToValue(multiAssets).multi_asset()
-        : CML.MultiAsset.new(),
-      coinsPerUtxoByte,
-    )
-    .build()
-    .output()
-    .amount()
-    .coin();
+    );
+    const multiAsset = multiAssets
+      ? own(own(assetsToValue(multiAssets)).multi_asset())
+      : own(CML.MultiAsset.new());
+    const amountBuilder = own(
+      own(own(CML.TransactionOutputBuilder.new()).with_address(address)).next(),
+    );
+    const result = own(
+      own(
+        amountBuilder.with_asset_and_min_required_coin(
+          multiAsset,
+          coinsPerUtxoByte,
+        ),
+      ).build(),
+    );
+    return own(own(result.output()).amount()).coin();
+  });
 };
 
-const deriveInputsFromTransaction = (tx: CML.Transaction): UTxO[] => {
-  const outputs = tx.body().outputs();
-  const txHash = CML.hash_transaction(tx.body()).to_hex();
-  const utxos: UTxO[] = [];
-  for (let index = 0; index < outputs.len(); index++) {
-    const output = outputs.get(index);
-    const utxo: UTxO = {
-      txHash: txHash,
-      outputIndex: index,
-      ...coreToTxOutput(output),
-    };
-    utxos.push(utxo);
-  }
-  return utxos;
-};
+const deriveInputsFromTransaction = (tx: CML.Transaction): UTxO[] =>
+  withCMLScope((own) => {
+    const body = own(tx.body());
+    const outputs = own(body.outputs());
+    const txHash = own(CML.hash_transaction(body)).to_hex();
+    const utxos: UTxO[] = [];
+    for (let index = 0; index < outputs.len(); index++) {
+      const output = own(outputs.get(index));
+      const utxo: UTxO = {
+        txHash: txHash,
+        outputIndex: index,
+        ...coreToTxOutput(output),
+      };
+      utxos.push(utxo);
+    }
+    return utxos;
+  });
 
 /**
  * Returns a new `Assets`

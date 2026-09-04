@@ -20,6 +20,7 @@ import {
   fromCMLRedeemerTag,
 } from "@lucid-evolution/utils";
 import { CML } from "../../core.js";
+import { withCMLScope } from "@lucid-evolution/core-utils";
 import { TxBuilderError } from "../../Errors.js";
 import type { TxBuilderConfig } from "../TxBuilder.js";
 
@@ -214,10 +215,14 @@ export const resolveCanonicalInputs = (
   candidates: ReadonlyArray<UTxO>,
 ): Effect.Effect<UTxO[], TxBuilderError> =>
   Effect.gen(function* () {
-    const bodyInputs = tx.body().inputs();
+    const outRefs = withCMLScope((own) => {
+      const bodyInputs = own(own(tx.body()).inputs());
+      return Array.from({ length: bodyInputs.len() }, (_, i) =>
+        coreToOutRef(own(bodyInputs.get(i))),
+      );
+    });
     const inputs: UTxO[] = [];
-    for (let i = 0; i < bodyInputs.len(); i++) {
-      const outRef = coreToOutRef(bodyInputs.get(i));
+    for (const outRef of outRefs) {
       const resolved = findResolvedInput(outRef, candidates);
       if (!resolved) {
         yield* redeemerContextError(
@@ -235,11 +240,15 @@ export const resolveCanonicalReferenceInputs = (
   candidates: ReadonlyArray<UTxO>,
 ): Effect.Effect<UTxO[], TxBuilderError> =>
   Effect.gen(function* () {
-    const bodyInputs = tx.body().reference_inputs();
+    const outRefs = withCMLScope((own) => {
+      const bodyInputs = own(own(tx.body()).reference_inputs());
+      if (!bodyInputs) return [];
+      return Array.from({ length: bodyInputs.len() }, (_, i) =>
+        coreToOutRef(own(bodyInputs.get(i))),
+      );
+    });
     const inputs: UTxO[] = [];
-    if (!bodyInputs) return inputs;
-    for (let i = 0; i < bodyInputs.len(); i++) {
-      const outRef = coreToOutRef(bodyInputs.get(i));
+    for (const outRef of outRefs) {
       const resolved = findResolvedInput(outRef, candidates);
       if (!resolved) {
         yield* redeemerContextError(
@@ -252,66 +261,72 @@ export const resolveCanonicalReferenceInputs = (
     return inputs;
   });
 
-const deriveOutputs = (body: CML.TransactionBody): TxOutput[] => {
-  const outputs = body.outputs();
-  const result: TxOutput[] = [];
-  for (let i = 0; i < outputs.len(); i++) {
-    result.push(coreToTxOutput(outputs.get(i)));
-  }
-  return result;
-};
+const deriveOutputs = (body: CML.TransactionBody): TxOutput[] =>
+  withCMLScope((own) => {
+    const outputs = own(body.outputs());
+    const result: TxOutput[] = [];
+    for (let i = 0; i < outputs.len(); i++) {
+      result.push(coreToTxOutput(own(outputs.get(i))));
+    }
+    return result;
+  });
 
-const deriveMint = (body: CML.TransactionBody): Assets => {
-  const mint = body.mint();
-  const assets: Assets = {};
-  if (!mint) return assets;
-  const policies = mint.keys();
-  for (let i = 0; i < policies.len(); i++) {
-    const policy = policies.get(i);
-    const policyId = policy.to_hex();
-    const policyAssets = mint.get_assets(policy)!;
-    const assetNames = policyAssets.keys();
-    for (let j = 0; j < assetNames.len(); j++) {
-      const assetName = assetNames.get(j);
-      const quantity = policyAssets.get(assetName)!;
-      if (quantity !== 0n) {
-        assets[policyId + assetName.to_js_value()] = quantity;
+const deriveMint = (body: CML.TransactionBody): Assets =>
+  withCMLScope((own) => {
+    const mint = own(body.mint());
+    const assets: Assets = {};
+    if (!mint) return assets;
+    const policies = own(mint.keys());
+    for (let i = 0; i < policies.len(); i++) {
+      const policy = own(policies.get(i));
+      const policyId = policy.to_hex();
+      const policyAssets = own(mint.get_assets(policy)!);
+      const assetNames = own(policyAssets.keys());
+      for (let j = 0; j < assetNames.len(); j++) {
+        const assetName = own(assetNames.get(j));
+        const quantity = policyAssets.get(assetName)!;
+        if (quantity !== 0n) {
+          assets[policyId + assetName.to_js_value()] = quantity;
+        }
       }
     }
-  }
-  return assets;
-};
+    return assets;
+  });
 
-const deriveMintPolicyIds = (body: CML.TransactionBody): PolicyId[] => {
-  const mint = body.mint();
-  if (!mint) return [];
-  const policies = mint.keys();
-  const result: PolicyId[] = [];
-  for (let i = 0; i < policies.len(); i++) {
-    result.push(policies.get(i).to_hex());
-  }
-  return result;
-};
+const deriveMintPolicyIds = (body: CML.TransactionBody): PolicyId[] =>
+  withCMLScope((own) => {
+    const mint = own(body.mint());
+    if (!mint) return [];
+    const policies = own(mint.keys());
+    const result: PolicyId[] = [];
+    for (let i = 0; i < policies.len(); i++) {
+      result.push(own(policies.get(i)).to_hex());
+    }
+    return result;
+  });
 
 const deriveWithdrawals = (
   body: CML.TransactionBody,
-): RedeemerContext["withdrawals"] => {
-  const withdrawals = body.withdrawals();
-  if (!withdrawals) return [];
-  const rewardAddresses = withdrawals.keys();
-  const result: WithdrawalEntry[] = [];
-  for (let i = 0; i < rewardAddresses.len(); i++) {
-    const rewardAddress = rewardAddresses.get(i);
-    result.push({
-      rewardAddress: rewardAddress.to_address().to_bech32(undefined),
-      amount: withdrawals.get(rewardAddress)!,
-    });
-  }
-  return result;
-};
+): RedeemerContext["withdrawals"] =>
+  withCMLScope((own) => {
+    const withdrawals = own(body.withdrawals());
+    if (!withdrawals) return [];
+    const rewardAddresses = own(withdrawals.keys());
+    const result: WithdrawalEntry[] = [];
+    for (let i = 0; i < rewardAddresses.len(); i++) {
+      const rewardAddress = own(rewardAddresses.get(i));
+      result.push({
+        rewardAddress: own(rewardAddress.to_address()).to_bech32(undefined),
+        amount: withdrawals.get(rewardAddress)!,
+      });
+    }
+    return result;
+  });
 
 const redeemerKeyBytes = (tag: CML.RedeemerTag, index: bigint): Uint8Array =>
-  CML.RedeemerKey.new(tag, index).to_canonical_cbor_bytes();
+  withCMLScope((own) =>
+    own(CML.RedeemerKey.new(tag, index)).to_canonical_cbor_bytes(),
+  );
 
 const cmlVoterKey = (voter: CML.Voter): string => voter.to_canonical_cbor_hex();
 
@@ -326,43 +341,55 @@ const indexToSafeNumber = (index: bigint): number | undefined => {
 export const proposalProcedureForRedeemerIndex = (
   tx: CML.Transaction,
   index: bigint,
-): CML.ProposalProcedure | undefined => {
-  const proposals = tx.body().proposal_procedures();
-  if (!proposals) return undefined;
-  const target = indexToSafeNumber(index);
-  if (target === undefined) return undefined;
+): CML.ProposalProcedure | undefined =>
+  withCMLScope((own) => {
+    const proposals = own(own(tx.body()).proposal_procedures());
+    if (!proposals) return undefined;
+    const target = indexToSafeNumber(index);
+    if (target === undefined) return undefined;
 
-  return target < proposals.len() ? proposals.get(target) : undefined;
-};
+    return target < proposals.len() ? proposals.get(target) : undefined;
+  });
 
 export const voterForRedeemerIndex = (
   tx: CML.Transaction,
   index: bigint,
-): CML.Voter | undefined => {
-  const voters = tx.body().voting_procedures()?.keys();
-  if (!voters) return undefined;
-  const target = indexToSafeNumber(index);
-  if (target === undefined) return undefined;
+): CML.Voter | undefined =>
+  withCMLScope((own) => {
+    const voters = own(own(own(tx.body()).voting_procedures())?.keys());
+    if (!voters) return undefined;
+    const target = indexToSafeNumber(index);
+    if (target === undefined) return undefined;
 
-  return target < voters.len() ? voters.get(target) : undefined;
+    return target < voters.len() ? voters.get(target) : undefined;
+  });
+
+/**
+ * The builder-side (tag, index) of a redeemer, kept as plain values so the map
+ * that carries them owns no CML memory.
+ */
+export type BuilderRedeemerKey = {
+  readonly tag: CML.RedeemerTag;
+  readonly index: bigint;
 };
 
 export type GovernanceRedeemerNormalization = Readonly<{
   transaction: CML.Transaction;
-  builderKeyByLedgerKey: ReadonlyMap<string, CML.RedeemerWitnessKey>;
+  builderKeyByLedgerKey: ReadonlyMap<string, BuilderRedeemerKey>;
 }>;
 
 const voterIndexByKey = (
   tx: CML.Transaction,
   voterKey: string,
-): bigint | undefined => {
-  const voters = tx.body().voting_procedures()?.keys();
-  if (!voters) return undefined;
-  for (let i = 0; i < voters.len(); i++) {
-    if (cmlVoterKey(voters.get(i)) === voterKey) return BigInt(i);
-  }
-  return undefined;
-};
+): bigint | undefined =>
+  withCMLScope((own) => {
+    const voters = own(own(own(tx.body()).voting_procedures())?.keys());
+    if (!voters) return undefined;
+    for (let i = 0; i < voters.len(); i++) {
+      if (cmlVoterKey(own(voters.get(i))) === voterKey) return BigInt(i);
+    }
+    return undefined;
+  });
 
 const governanceIndex = (
   tx: CML.Transaction,
@@ -381,12 +408,14 @@ const governanceIndex = (
   if (tag === "propose") {
     if (proposalWitnessIndices.length === 0) return rawIndex;
     const ledgerIndex = proposalWitnessIndices[witnessIndex];
-    const proposals = tx.body().proposal_procedures();
+    const proposalCount = withCMLScope((own) =>
+      own(own(tx.body()).proposal_procedures())?.len(),
+    );
     if (
       ledgerIndex === undefined ||
-      !proposals ||
+      proposalCount === undefined ||
       ledgerIndex < 0n ||
-      ledgerIndex >= BigInt(proposals.len())
+      ledgerIndex >= BigInt(proposalCount)
     ) {
       throw redeemerContextError(
         `Unable to map proposing redeemer index ${rawIndex} to a proposal procedure`,
@@ -409,92 +438,97 @@ export const normalizeGovernanceRedeemerIndices = (
   tx: CML.Transaction,
   voteWitnessKeys: readonly string[],
   proposalWitnessIndices: readonly bigint[],
-): GovernanceRedeemerNormalization => {
-  const transaction = CML.Transaction.from_cbor_bytes(tx.to_cbor_bytes());
-  const ledgerIndexTransaction = CML.Transaction.from_cbor_bytes(
-    tx.to_canonical_cbor_bytes(),
-  );
-  const witnessSet = transaction.witness_set();
-  const redeemers = witnessSet.redeemers();
-  const builderKeyByLedgerKey = new Map<string, CML.RedeemerWitnessKey>();
-  if (!redeemers) return { transaction, builderKeyByLedgerKey };
-
-  const seen = new Set<string>();
-  const normalizeKey = (tag: CML.RedeemerTag, index: bigint): bigint => {
-    const lucidTag = fromCMLRedeemerTag(tag);
-    const normalizedIndex = governanceIndex(
-      ledgerIndexTransaction,
-      lucidTag,
-      index,
-      voteWitnessKeys,
-      proposalWitnessIndices,
+): GovernanceRedeemerNormalization =>
+  withCMLScope((own) => {
+    // The returned transaction is always a fresh copy; the caller owns it.
+    const transaction = CML.Transaction.from_cbor_bytes(tx.to_cbor_bytes());
+    const ledgerIndexTransaction = own(
+      CML.Transaction.from_cbor_bytes(tx.to_canonical_cbor_bytes()),
     );
-    const ledgerKey = `${lucidTag}:${normalizedIndex}`;
-    if (seen.has(ledgerKey)) {
-      throw redeemerContextError(
-        `Multiple builder redeemers map to ledger purpose ${ledgerKey}`,
+    const witnessSet = own(transaction.witness_set());
+    const redeemers = own(witnessSet.redeemers());
+    const builderKeyByLedgerKey = new Map<string, BuilderRedeemerKey>();
+    if (!redeemers) return { transaction, builderKeyByLedgerKey };
+
+    const seen = new Set<string>();
+    const normalizeKey = (tag: CML.RedeemerTag, index: bigint): bigint => {
+      const lucidTag = fromCMLRedeemerTag(tag);
+      const normalizedIndex = governanceIndex(
+        ledgerIndexTransaction,
+        lucidTag,
+        index,
+        voteWitnessKeys,
+        proposalWitnessIndices,
       );
-    }
-    seen.add(ledgerKey);
-    builderKeyByLedgerKey.set(
-      ledgerKey,
-      CML.RedeemerWitnessKey.new(tag, index),
-    );
-    return normalizedIndex;
-  };
-
-  const legacy = redeemers.as_arr_legacy_redeemer();
-  if (legacy) {
-    const normalized = CML.LegacyRedeemerList.new();
-    for (let i = 0; i < legacy.len(); i++) {
-      const redeemer = legacy.get(i);
-      normalized.add(
-        CML.LegacyRedeemer.new(
-          redeemer.tag(),
-          normalizeKey(redeemer.tag(), redeemer.index()),
-          redeemer.data(),
-          redeemer.ex_units(),
+      const ledgerKey = `${lucidTag}:${normalizedIndex}`;
+      if (seen.has(ledgerKey)) {
+        throw redeemerContextError(
+          `Multiple builder redeemers map to ledger purpose ${ledgerKey}`,
+        );
+      }
+      seen.add(ledgerKey);
+      builderKeyByLedgerKey.set(ledgerKey, { tag, index });
+      return normalizedIndex;
+    };
+    const withNormalizedWitnessSet = (): GovernanceRedeemerNormalization => {
+      own(transaction);
+      return {
+        // `Transaction.new` takes ownership of the auxiliary data.
+        transaction: CML.Transaction.new(
+          own(transaction.body()),
+          witnessSet,
+          transaction.is_valid(),
+          transaction.auxiliary_data(),
         ),
-      );
-    }
-    witnessSet.set_redeemers(CML.Redeemers.new_arr_legacy_redeemer(normalized));
-    return {
-      transaction: CML.Transaction.new(
-        transaction.body(),
-        witnessSet,
-        transaction.is_valid(),
-        transaction.auxiliary_data(),
-      ),
-      builderKeyByLedgerKey,
+        builderKeyByLedgerKey,
+      };
     };
-  }
 
-  const map = redeemers.as_map_redeemer_key_to_redeemer_val();
-  if (map) {
-    const normalized = CML.MapRedeemerKeyToRedeemerVal.new();
-    const keys = map.keys();
-    for (let i = 0; i < keys.len(); i++) {
-      const key = keys.get(i);
-      normalized.insert(
-        CML.RedeemerKey.new(key.tag(), normalizeKey(key.tag(), key.index())),
-        map.get(key)!,
+    const legacy = own(redeemers.as_arr_legacy_redeemer());
+    if (legacy) {
+      const normalized = own(CML.LegacyRedeemerList.new());
+      for (let i = 0; i < legacy.len(); i++) {
+        const redeemer = own(legacy.get(i));
+        normalized.add(
+          own(
+            CML.LegacyRedeemer.new(
+              redeemer.tag(),
+              normalizeKey(redeemer.tag(), redeemer.index()),
+              own(redeemer.data()),
+              own(redeemer.ex_units()),
+            ),
+          ),
+        );
+      }
+      witnessSet.set_redeemers(
+        own(CML.Redeemers.new_arr_legacy_redeemer(normalized)),
       );
+      return withNormalizedWitnessSet();
     }
-    witnessSet.set_redeemers(
-      CML.Redeemers.new_map_redeemer_key_to_redeemer_val(normalized),
-    );
-    return {
-      transaction: CML.Transaction.new(
-        transaction.body(),
-        witnessSet,
-        transaction.is_valid(),
-        transaction.auxiliary_data(),
-      ),
-      builderKeyByLedgerKey,
-    };
-  }
-  return { transaction, builderKeyByLedgerKey };
-};
+
+    const map = own(redeemers.as_map_redeemer_key_to_redeemer_val());
+    if (map) {
+      const normalized = own(CML.MapRedeemerKeyToRedeemerVal.new());
+      const keys = own(map.keys());
+      for (let i = 0; i < keys.len(); i++) {
+        const key = own(keys.get(i));
+        normalized.insert(
+          own(
+            CML.RedeemerKey.new(
+              key.tag(),
+              normalizeKey(key.tag(), key.index()),
+            ),
+          ),
+          own(map.get(key)!),
+        );
+      }
+      witnessSet.set_redeemers(
+        own(CML.Redeemers.new_map_redeemer_key_to_redeemer_val(normalized)),
+      );
+      return withNormalizedWitnessSet();
+    }
+    return { transaction, builderKeyByLedgerKey };
+  });
 
 const compareBytes = (a: Uint8Array, b: Uint8Array): number => {
   if (a.length !== b.length) return a.length - b.length;
@@ -504,48 +538,62 @@ const compareBytes = (a: Uint8Array, b: Uint8Array): number => {
   return 0;
 };
 
+/**
+ * The `data` and `exUnits` of every entry belong to the caller; release them
+ * with `freeCanonicalRedeemerEntries` once they have been read.
+ */
 export const canonicalRedeemerEntries = (
   redeemers: CML.Redeemers,
-): CanonicalRedeemerEntry[] => {
-  const entries: CanonicalRedeemerEntry[] = [];
+): CanonicalRedeemerEntry[] =>
+  withCMLScope((own) => {
+    const entries: CanonicalRedeemerEntry[] = [];
 
-  const legacyRedeemers = redeemers.as_arr_legacy_redeemer();
-  if (legacyRedeemers) {
-    for (let i = 0; i < legacyRedeemers.len(); i++) {
-      const redeemer = legacyRedeemers.get(i);
-      const cmlTag = redeemer.tag();
-      const index = redeemer.index();
-      entries.push({
-        tag: fromCMLRedeemerTag(cmlTag),
-        index,
-        data: redeemer.data(),
-        exUnits: redeemer.ex_units(),
-        sortKey: redeemerKeyBytes(cmlTag, index),
-      });
+    const legacyRedeemers = own(redeemers.as_arr_legacy_redeemer());
+    if (legacyRedeemers) {
+      for (let i = 0; i < legacyRedeemers.len(); i++) {
+        const redeemer = own(legacyRedeemers.get(i));
+        const cmlTag = redeemer.tag();
+        const index = redeemer.index();
+        entries.push({
+          tag: fromCMLRedeemerTag(cmlTag),
+          index,
+          data: redeemer.data(),
+          exUnits: redeemer.ex_units(),
+          sortKey: redeemerKeyBytes(cmlTag, index),
+        });
+      }
     }
-  }
 
-  const mapRedeemers = redeemers.as_map_redeemer_key_to_redeemer_val();
-  if (mapRedeemers) {
-    const keys = mapRedeemers.keys();
-    for (let i = 0; i < keys.len(); i++) {
-      const key = keys.get(i);
-      const value = mapRedeemers.get(key)!;
-      const cmlTag = key.tag();
-      const index = key.index();
-      entries.push({
-        tag: fromCMLRedeemerTag(cmlTag),
-        index,
-        data: value.data(),
-        exUnits: value.ex_units(),
-        sortKey: redeemerKeyBytes(cmlTag, index),
-      });
+    const mapRedeemers = own(redeemers.as_map_redeemer_key_to_redeemer_val());
+    if (mapRedeemers) {
+      const keys = own(mapRedeemers.keys());
+      for (let i = 0; i < keys.len(); i++) {
+        const key = own(keys.get(i));
+        const value = own(mapRedeemers.get(key)!);
+        const cmlTag = key.tag();
+        const index = key.index();
+        entries.push({
+          tag: fromCMLRedeemerTag(cmlTag),
+          index,
+          data: value.data(),
+          exUnits: value.ex_units(),
+          sortKey: redeemerKeyBytes(cmlTag, index),
+        });
+      }
     }
-  }
 
-  return entries.sort((left, right) =>
-    compareBytes(left.sortKey, right.sortKey),
-  );
+    return entries.sort((left, right) =>
+      compareBytes(left.sortKey, right.sortKey),
+    );
+  });
+
+export const freeCanonicalRedeemerEntries = (
+  entries: ReadonlyArray<CanonicalRedeemerEntry>,
+): void => {
+  for (const entry of entries) {
+    entry.data.free();
+    entry.exUnits.free();
+  }
 };
 
 const deriveRedeemerPurposes = (
@@ -555,9 +603,12 @@ const deriveRedeemerPurposes = (
   withdrawals: RedeemerContext["withdrawals"],
 ): Effect.Effect<RedeemerPurpose[], TxBuilderError> =>
   Effect.gen(function* () {
-    const redeemers = tx.witness_set().redeemers();
-    if (!redeemers) return [];
-    const entries = canonicalRedeemerEntries(redeemers);
+    const entries = withCMLScope((own) => {
+      const redeemers = own(own(tx.witness_set()).redeemers());
+      return redeemers ? canonicalRedeemerEntries(redeemers) : [];
+    });
+    // Only tags and indices are read below.
+    freeCanonicalRedeemerEntries(entries);
     const purposes: RedeemerPurpose[] = [];
     const finalKeys = new Set<string>();
 
@@ -620,23 +671,19 @@ const deriveRedeemerPurposes = (
           purposes.push({ tag, index, redeemerListIndex });
           break;
         case "propose": {
-          const proposal = proposalProcedureForRedeemerIndex(tx, index);
-          purposes.push({
-            tag,
-            index,
-            proposalKey: proposal ? cmlProposalKey(proposal) : undefined,
-            redeemerListIndex,
+          const proposalKey = withCMLScope((own) => {
+            const proposal = own(proposalProcedureForRedeemerIndex(tx, index));
+            return proposal ? cmlProposalKey(proposal) : undefined;
           });
+          purposes.push({ tag, index, proposalKey, redeemerListIndex });
           break;
         }
         case "vote": {
-          const voter = voterForRedeemerIndex(tx, index);
-          purposes.push({
-            tag,
-            index,
-            voterKey: voter ? cmlVoterKey(voter) : undefined,
-            redeemerListIndex,
+          const voterKey = withCMLScope((own) => {
+            const voter = own(voterForRedeemerIndex(tx, index));
+            return voter ? cmlVoterKey(voter) : undefined;
           });
+          purposes.push({ tag, index, voterKey, redeemerListIndex });
           break;
         }
       }
@@ -668,6 +715,7 @@ export const buildCanonicalRedeemerInfo = (
       mintPolicyIds,
       withdrawals,
     );
+    canonicalTx.free();
 
     const inputIndices = new Map<string, bigint>();
     inputs.forEach((input, index) => {
@@ -879,26 +927,30 @@ export const redeemerMapsEqual = (
   return true;
 };
 
-export const transactionFixedPointFingerprint = (
-  tx: CML.Transaction,
-): string => {
-  const body = tx.body().to_canonical_cbor_hex();
-  const redeemers = tx.witness_set().redeemers();
-  const redeemerData: string[] = [];
-  const redeemerExUnits: string[] = [];
-  if (redeemers) {
-    for (const redeemer of canonicalRedeemerEntries(redeemers)) {
-      const index = redeemer.index.toString();
-      redeemerData.push(
-        `${redeemer.tag}:${index}:${redeemer.data.to_canonical_cbor_hex()}`,
-      );
-      redeemerExUnits.push(
-        `${redeemer.tag}:${index}:${redeemer.exUnits.mem()}:${redeemer.exUnits.steps()}`,
-      );
+export const transactionFixedPointFingerprint = (tx: CML.Transaction): string =>
+  withCMLScope((own) => {
+    const body = own(tx.body()).to_canonical_cbor_hex();
+    const redeemers = own(own(tx.witness_set()).redeemers());
+    const redeemerData: string[] = [];
+    const redeemerExUnits: string[] = [];
+    if (redeemers) {
+      const entries = canonicalRedeemerEntries(redeemers);
+      try {
+        for (const redeemer of entries) {
+          const index = redeemer.index.toString();
+          redeemerData.push(
+            `${redeemer.tag}:${index}:${redeemer.data.to_canonical_cbor_hex()}`,
+          );
+          redeemerExUnits.push(
+            `${redeemer.tag}:${index}:${redeemer.exUnits.mem()}:${redeemer.exUnits.steps()}`,
+          );
+        }
+      } finally {
+        freeCanonicalRedeemerEntries(entries);
+      }
     }
-  }
-  return `${body}|${redeemerData.join(",")}|${redeemerExUnits.join(",")}`;
-};
+    return `${body}|${redeemerData.join(",")}|${redeemerExUnits.join(",")}`;
+  });
 
 export const normalizeEvalUTxO = ({
   datumHash,

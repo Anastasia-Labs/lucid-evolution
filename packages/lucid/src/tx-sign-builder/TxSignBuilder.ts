@@ -1,4 +1,5 @@
 import { CML, makeReturn } from "../core.js";
+import { withCMLScope } from "@lucid-evolution/core-utils";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { Effect } from "effect";
 import * as S from "@effect/schema/Schema";
@@ -111,35 +112,41 @@ export const makeTxSignBuilder = (
     slotConfig?: SlotConfig;
   } = {},
 ): TxSignBuilder => {
-  const redeemers = tx.witness_set().redeemers();
-  const exUnits = { cpu: 0, mem: 0 };
-  if (redeemers) {
-    const arrLegacyRedeemer = redeemers?.as_arr_legacy_redeemer();
-    if (arrLegacyRedeemer) {
-      for (let i = 0; i < arrLegacyRedeemer.len(); i++) {
-        const redeemer = arrLegacyRedeemer.get(i);
-        exUnits.cpu += parseInt(redeemer.ex_units().steps().toString());
-        exUnits.mem += parseInt(redeemer.ex_units().mem().toString());
+  const exUnits = withCMLScope((own) => {
+    const totals = { cpu: 0, mem: 0 };
+    const add = (units: CML.ExUnits) => {
+      own(units);
+      totals.cpu += parseInt(units.steps().toString());
+      totals.mem += parseInt(units.mem().toString());
+    };
+    const redeemers = own(own(tx.witness_set()).redeemers());
+    if (redeemers) {
+      const arrLegacyRedeemer = own(redeemers.as_arr_legacy_redeemer());
+      if (arrLegacyRedeemer) {
+        for (let i = 0; i < arrLegacyRedeemer.len(); i++) {
+          add(own(arrLegacyRedeemer.get(i)).ex_units());
+        }
+      }
+      const mapRedeemerKeyToRedeemerVal = own(
+        redeemers.as_map_redeemer_key_to_redeemer_val(),
+      );
+      if (mapRedeemerKeyToRedeemerVal) {
+        const keys = own(mapRedeemerKeyToRedeemerVal.keys());
+        for (let i = 0; i < (keys.len() || 0); i++) {
+          const key = own(keys.get(i));
+          const value = own(mapRedeemerKeyToRedeemerVal.get(key));
+          add(value!.ex_units());
+        }
       }
     }
-    const mapRedeemerKeyToRedeemerVal =
-      redeemers?.as_map_redeemer_key_to_redeemer_val();
-    if (mapRedeemerKeyToRedeemerVal) {
-      const keys = mapRedeemerKeyToRedeemerVal.keys();
-      for (let i = 0; i < (keys.len() || 0); i++) {
-        const key = keys.get(i);
-        const value = mapRedeemerKeyToRedeemerVal.get(key);
-        exUnits.cpu += parseInt(value!.ex_units().steps().toString());
-        exUnits.mem += parseInt(value!.ex_units().mem().toString());
-      }
-    }
-  }
+    return totals;
+  });
   const config: TxSignBuilderConfig = {
     txComplete: tx,
     witnessSetBuilder: CML.TransactionWitnessSetBuilder.new(),
     programs: [],
     wallet: wallet,
-    fee: parseInt(tx.body().fee().toString()),
+    fee: withCMLScope((own) => parseInt(own(tx.body()).fee().toString())),
     exUnits: exUnits,
     resolvedInputs: options.resolvedInputs ?? [],
     slotConfig: options.slotConfig,
@@ -197,7 +204,10 @@ export const makeTxSignBuilder = (
       makeScriptContexts(config.txComplete, scriptContextOptions(options)),
     toJSON: () =>
       S.decodeUnknownSync(S.parseJson(S.Object))(config.txComplete.to_json()),
-    toHash: () => CML.hash_transaction(config.txComplete.body()).to_hex(),
+    toHash: () =>
+      withCMLScope((own) =>
+        own(CML.hash_transaction(own(config.txComplete.body()))).to_hex(),
+      ),
     complete: () =>
       makeReturn(CompleteTxSigner.completeTxSigner(config)).unsafeRun(),
     completeProgram: () => CompleteTxSigner.completeTxSigner(config),

@@ -1,5 +1,6 @@
 import { Effect } from "effect";
 import { utxoToCore } from "@lucid-evolution/utils";
+import { withCMLScope } from "@lucid-evolution/core-utils";
 import { UTxO } from "@lucid-evolution/core-types";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import { resolveDatum } from "./TxUtils.js";
@@ -20,7 +21,6 @@ export const readFrom = (utxos: UTxO[]) =>
         config.lucidConfig.provider,
       );
 
-      const coreUtxo = utxoToCore({ ...utxo, datum: resolvedDatum });
       const exists = config.readInputs.some(
         (input) =>
           input.txHash === utxo.txHash &&
@@ -28,7 +28,11 @@ export const readFrom = (utxos: UTxO[]) =>
       );
 
       if (!exists) {
-        config.txBuilder.add_reference_input(coreUtxo);
+        withCMLScope((own) =>
+          config.txBuilder.add_reference_input(
+            own(utxoToCore({ ...utxo, datum: resolvedDatum })),
+          ),
+        );
         // Store inputs for later use in the txBuilder
         config.readInputs.push(utxo);
       }
