@@ -1,5 +1,12 @@
 # @lucid-evolution/wallet
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @lucid-evolution/utils@0.1.73
+
 ## 0.2.0
 
 ### Minor Changes
