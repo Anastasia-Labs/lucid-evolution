@@ -2,6 +2,7 @@ import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { CBORHex } from "../types.js";
 import { Effect, pipe } from "effect";
 import { networkToId, getAddressDetails } from "@lucid-evolution/utils";
+import { withCMLScope } from "@lucid-evolution/core-utils";
 import {
   Address,
   AddressDetails,
@@ -31,23 +32,33 @@ export const toCMLAddress = (
   Effect.gen(function* ($) {
     const { type } = yield* validateAddressDetails(address, lucidConfig);
     return type === "Byron"
-      ? CML.ByronAddress.from_base58(address).to_address()
+      ? withCMLScope((own) =>
+          own(CML.ByronAddress.from_base58(address)).to_address(),
+        )
       : CML.Address.from_bech32(address);
   });
 
 export const toV1 = (script: string) =>
-  CML.PlutusScript.from_v1(CML.PlutusV1Script.from_cbor_hex(script));
+  withCMLScope((own) =>
+    CML.PlutusScript.from_v1(own(CML.PlutusV1Script.from_cbor_hex(script))),
+  );
 
 export const toV2 = (script: string) =>
-  CML.PlutusScript.from_v2(CML.PlutusV2Script.from_cbor_hex(script));
+  withCMLScope((own) =>
+    CML.PlutusScript.from_v2(own(CML.PlutusV2Script.from_cbor_hex(script))),
+  );
 
 export const toV3 = (script: string) =>
-  CML.PlutusScript.from_v3(CML.PlutusV3Script.from_cbor_hex(script));
+  withCMLScope((own) =>
+    CML.PlutusScript.from_v3(own(CML.PlutusV3Script.from_cbor_hex(script))),
+  );
 
 export const toPartial = (script: CML.PlutusScript, redeemer: CBORHex) =>
-  CML.PartialPlutusWitness.new(
-    CML.PlutusScriptWitness.new_script(script),
-    CML.PlutusData.from_cbor_hex(redeemer),
+  withCMLScope((own) =>
+    CML.PartialPlutusWitness.new(
+      own(CML.PlutusScriptWitness.new_script(script)),
+      own(CML.PlutusData.from_cbor_hex(redeemer)),
+    ),
   );
 
 export const handleRedeemerBuilder = (

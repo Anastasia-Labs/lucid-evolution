@@ -128,7 +128,7 @@ export const readRefInputTwice = Effect.gen(function* () {
     .completeProgram();
   const txSign = yield* txCompose.sign.withWallet().completeProgram();
   yield* txSign.submitProgram();
-});
+}).pipe(withLogRetry, Effect.orDie);
 
 const fetchForOwner = (utxos: UTxO[], ownerKeyHash: PaymentKeyHash) =>
   utxos.filter((value) => {

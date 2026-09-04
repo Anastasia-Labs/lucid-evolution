@@ -1,31 +1,31 @@
 import { Assets, OutRef, TxOutput, UTxO } from "@lucid-evolution/core-types";
+import { CMLOwn, withCMLScope } from "@lucid-evolution/core-utils";
 import { CML } from "./core.js";
 import { fromScriptRef, toScriptRef } from "./scripts.js";
 import { assetsToValue, valueToAssets } from "./value.js";
 
-export const utxoToTransactionOutput = (utxo: UTxO) => {
-  return buildOutput(utxo)
-    .with_value(assetsToValue(utxo.assets))
-    .build()
-    .output();
-};
+export const utxoToTransactionOutput = (utxo: UTxO): CML.TransactionOutput =>
+  withCMLScope((own) => {
+    const value = own(assetsToValue(utxo.assets));
+    const builder = own(buildOutput(utxo, own).with_value(value));
+    return own(builder.build()).output();
+  });
 
-export const utxoToTransactionInput = (utxo: UTxO) => {
-  return CML.TransactionInput.new(
-    CML.TransactionHash.from_hex(utxo.txHash),
-    BigInt(utxo.outputIndex),
+export const utxoToTransactionInput = (utxo: UTxO): CML.TransactionInput =>
+  withCMLScope((own) =>
+    CML.TransactionInput.new(
+      own(CML.TransactionHash.from_hex(utxo.txHash)),
+      BigInt(utxo.outputIndex),
+    ),
   );
-};
 
-export const utxoToCore = (utxo: UTxO): CML.TransactionUnspentOutput => {
-  const out = utxoToTransactionOutput(utxo);
-  const utxoCore = CML.TransactionUnspentOutput.new(
-    utxoToTransactionInput(utxo),
-    out,
+export const utxoToCore = (utxo: UTxO): CML.TransactionUnspentOutput =>
+  withCMLScope((own) =>
+    CML.TransactionUnspentOutput.new(
+      own(utxoToTransactionInput(utxo)),
+      own(utxoToTransactionOutput(utxo)),
+    ),
   );
-  // out.free();
-  return utxoCore;
-};
 
 export function utxosToCores(utxos: UTxO[]): CML.TransactionUnspentOutput[] {
   const result: CML.TransactionUnspentOutput[] = [];
@@ -37,11 +37,10 @@ export function utxosToCores(utxos: UTxO[]): CML.TransactionUnspentOutput[] {
 
 //TODO: test coreToUtxo -> utxoToCore strict equality
 export function coreToUtxo(coreUtxo: CML.TransactionUnspentOutput): UTxO {
-  const utxo = {
-    ...coreToOutRef(coreUtxo.input()),
-    ...coreToTxOutput(coreUtxo.output()),
-  };
-  return utxo;
+  return withCMLScope((own) => ({
+    ...coreToOutRef(own(coreUtxo.input())),
+    ...coreToTxOutput(own(coreUtxo.output())),
+  }));
 }
 
 export function coresToUtxos(utxos: CML.TransactionUnspentOutput[]): UTxO[] {
@@ -53,10 +52,10 @@ export function coresToUtxos(utxos: CML.TransactionUnspentOutput[]): UTxO[] {
 }
 
 export function coreToOutRef(input: CML.TransactionInput): OutRef {
-  return {
-    txHash: input.transaction_id().to_hex(),
+  return withCMLScope((own) => ({
+    txHash: own(input.transaction_id()).to_hex(),
     outputIndex: parseInt(input.index().toString()),
-  };
+  }));
 }
 
 export function coresToOutRefs(inputs: CML.TransactionInput[]): OutRef[] {
@@ -68,13 +67,17 @@ export function coresToOutRefs(inputs: CML.TransactionInput[]): OutRef[] {
 }
 
 export function coreToTxOutput(output: CML.TransactionOutput): TxOutput {
-  return {
-    assets: valueToAssets(output.amount()),
-    address: output.address().to_bech32(undefined),
-    datumHash: output.datum()?.as_hash()?.to_hex(),
-    datum: output.datum()?.as_datum()?.to_cbor_hex(),
-    scriptRef: output.script_ref() && fromScriptRef(output.script_ref()!),
-  };
+  return withCMLScope((own) => {
+    const datum = own(output.datum());
+    const scriptRef = own(output.script_ref());
+    return {
+      assets: valueToAssets(own(output.amount())),
+      address: own(output.address()).to_bech32(undefined),
+      datumHash: own(datum?.as_hash())?.to_hex(),
+      datum: own(datum?.as_datum())?.to_cbor_hex(),
+      scriptRef: scriptRef && fromScriptRef(scriptRef),
+    };
+  });
 }
 
 export function coresToTxOutputs(outputs: CML.TransactionOutput[]): TxOutput[] {
@@ -254,40 +257,50 @@ export const calculateMinLovelaceFromUTxO = (
   coinsPerUtxoByte: bigint,
   utxo: UTxO,
 ): bigint =>
-  buildOutput(utxo)
-    .with_asset_and_min_required_coin(
-      assetsToValue(utxo.assets).multi_asset(),
-      coinsPerUtxoByte,
-    )
-    .build()
-    .output()
-    .amount()
-    .coin();
+  withCMLScope((own) => {
+    const value = own(assetsToValue(utxo.assets));
+    const builder = own(
+      buildOutput(utxo, own).with_asset_and_min_required_coin(
+        own(value.multi_asset()),
+        coinsPerUtxoByte,
+      ),
+    );
+    const output = own(own(builder.build()).output());
+    return own(output.amount()).coin();
+  });
 
-const buildOutput = (utxo: UTxO): CML.TransactionOutputAmountBuilder => {
-  const builder = CML.TransactionOutputBuilder.new().with_address(
-    CML.Address.from_bech32(utxo.address),
+/**
+ * Every builder stage is a fresh CML object; they are all registered with the
+ * caller's scope so only the caller's final result outlives the conversion.
+ */
+const buildOutput = (
+  utxo: UTxO,
+  own: CMLOwn,
+): CML.TransactionOutputAmountBuilder => {
+  const address = own(CML.Address.from_bech32(utxo.address));
+  const addressed = own(
+    own(CML.TransactionOutputBuilder.new()).with_address(address),
   );
-  return utxo.scriptRef
-    ? buildDatum(utxo, builder)
-        .with_reference_script(toScriptRef(utxo.scriptRef))
-        .next()
-    : buildDatum(utxo, builder).next();
+  const builder = buildDatum(utxo, addressed, own);
+  if (!utxo.scriptRef) return own(builder.next());
+  const scriptRef = own(toScriptRef(utxo.scriptRef));
+  return own(own(builder.with_reference_script(scriptRef)).next());
 };
 
 const buildDatum = (
   utxo: UTxO,
   builder: CML.TransactionOutputBuilder,
+  own: CMLOwn,
 ): CML.TransactionOutputBuilder => {
   // with DatumHash
-  if (utxo.datumHash && utxo.datum)
-    return builder.with_communication_data(
-      CML.PlutusData.from_cbor_hex(utxo.datum),
-    );
+  if (utxo.datumHash && utxo.datum) {
+    const datum = own(CML.PlutusData.from_cbor_hex(utxo.datum));
+    return own(builder.with_communication_data(datum));
+  }
   // with InlineDatum
-  if (utxo.datum)
-    return builder.with_data(
-      CML.DatumOption.new_datum(CML.PlutusData.from_cbor_hex(utxo.datum)),
-    );
+  if (utxo.datum) {
+    const datum = own(CML.PlutusData.from_cbor_hex(utxo.datum));
+    return own(builder.with_data(own(CML.DatumOption.new_datum(datum))));
+  }
   return builder;
 };

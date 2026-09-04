@@ -9,34 +9,40 @@ import {
   WithdrawalValidator,
 } from "@lucid-evolution/core-types";
 import { CML } from "../../core.js";
+import { withCMLScope } from "@lucid-evolution/core-utils";
+
+const scriptHashHex = (script: {
+  hash(): CML.ScriptHash;
+  free(): void;
+}): string => withCMLScope((own) => own(own(script).hash()).to_hex());
 
 export const attachScript = ({ type, script }: Validator) => {
   //TODO: script should be a branded type
   switch (type) {
     case "Native":
       return {
-        key: CML.NativeScript.from_cbor_hex(script).hash().to_hex(),
+        key: scriptHashHex(CML.NativeScript.from_cbor_hex(script)),
         value: { type, script },
       };
     case "PlutusV1":
       return {
-        key: CML.PlutusV1Script.from_cbor_hex(applyDoubleCborEncoding(script))
-          .hash()
-          .to_hex(),
+        key: scriptHashHex(
+          CML.PlutusV1Script.from_cbor_hex(applyDoubleCborEncoding(script)),
+        ),
         value: { type, script: applyDoubleCborEncoding(script) },
       };
     case "PlutusV2":
       return {
-        key: CML.PlutusV2Script.from_cbor_hex(applyDoubleCborEncoding(script))
-          .hash()
-          .to_hex(),
+        key: scriptHashHex(
+          CML.PlutusV2Script.from_cbor_hex(applyDoubleCborEncoding(script)),
+        ),
         value: { type, script: applyDoubleCborEncoding(script) },
       };
     case "PlutusV3":
       return {
-        key: CML.PlutusV3Script.from_cbor_hex(applyDoubleCborEncoding(script))
-          .hash()
-          .to_hex(),
+        key: scriptHashHex(
+          CML.PlutusV3Script.from_cbor_hex(applyDoubleCborEncoding(script)),
+        ),
         value: { type, script: applyDoubleCborEncoding(script) },
       };
     default:

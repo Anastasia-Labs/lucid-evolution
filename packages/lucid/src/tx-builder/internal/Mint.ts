@@ -1,5 +1,5 @@
 import { Effect, pipe } from "effect";
-import { fromHex } from "@lucid-evolution/core-utils";
+import { withCMLScope } from "@lucid-evolution/core-utils";
 import { Assets, Redeemer } from "@lucid-evolution/core-types";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { toPartial, toV1, toV2, toV3 } from "./TxUtils.js";
@@ -21,68 +21,57 @@ export const mintAssets = (assets: Assets) => (redeemer?: Redeemer) =>
     const { config } = yield* TxConfig;
     const units = Object.keys(assets);
     const policyId = units[0].slice(0, 56);
-    const mintAssets = CML.MapAssetNameToNonZeroInt64.new();
     for (const unit of units) {
       if (unit.slice(0, 56) !== policyId) {
         yield* mintError(ERROR_MESSAGE.MULTIPLE_POLICIES);
       }
-      mintAssets.insert(CML.AssetName.from_hex(unit.slice(56)), assets[unit]);
     }
-    const mintBuilder = CML.SingleMintBuilder.new(mintAssets);
     const policy = yield* pipe(
       Effect.fromNullable(config.scripts.get(policyId)),
       Effect.orElseFail(() =>
         mintError(ERROR_MESSAGE.MISSING_POLICY(policyId)),
       ),
     );
-    switch (policy.type) {
-      case "Native":
-        config.txBuilder.add_mint(
-          mintBuilder.native_script(
-            CML.NativeScript.from_cbor_hex(policy.script),
-            CML.NativeScriptWitnessInfo.assume_signature_count(),
-          ),
+    const red =
+      policy.type === "Native"
+        ? undefined
+        : yield* pipe(
+            Effect.fromNullable(redeemer),
+            Effect.orElseFail(() => mintError(ERROR_MESSAGE.MISSING_REDEEMER)),
+          );
+    withCMLScope((own) => {
+      const mintAssets = own(CML.MapAssetNameToNonZeroInt64.new());
+      for (const unit of units) {
+        mintAssets.insert(
+          own(CML.AssetName.from_hex(unit.slice(56))),
+          assets[unit],
         );
-        break;
-
-      case "PlutusV1": {
-        const red = yield* pipe(
-          Effect.fromNullable(redeemer),
-          Effect.orElseFail(() => mintError(ERROR_MESSAGE.MISSING_REDEEMER)),
-        );
-        config.txBuilder.add_mint(
-          mintBuilder.plutus_script(
-            toPartial(toV1(policy.script), red),
-            CML.Ed25519KeyHashList.new(),
-          ),
-        );
-        break;
       }
-      case "PlutusV2": {
-        const red = yield* pipe(
-          Effect.fromNullable(redeemer),
-          Effect.orElseFail(() => mintError(ERROR_MESSAGE.MISSING_REDEEMER)),
-        );
-        config.txBuilder.add_mint(
-          mintBuilder.plutus_script(
-            toPartial(toV2(policy.script), red),
-            CML.Ed25519KeyHashList.new(),
-          ),
-        );
-        break;
-      }
-      case "PlutusV3": {
-        const red = yield* pipe(
-          Effect.fromNullable(redeemer),
-          Effect.orElseFail(() => mintError(ERROR_MESSAGE.MISSING_REDEEMER)),
-        );
-        config.txBuilder.add_mint(
-          mintBuilder.plutus_script(
-            toPartial(toV3(policy.script), red),
-            CML.Ed25519KeyHashList.new(),
-          ),
-        );
-        break;
-      }
-    }
+      // `native_script` and `plutus_script` consume the mint builder itself;
+      // their arguments and the result are ours to free.
+      const mintBuilder = CML.SingleMintBuilder.new(mintAssets);
+      const result = own(
+        policy.type === "Native"
+          ? mintBuilder.native_script(
+              own(CML.NativeScript.from_cbor_hex(policy.script)),
+              own(CML.NativeScriptWitnessInfo.assume_signature_count()),
+            )
+          : mintBuilder.plutus_script(
+              own(
+                toPartial(
+                  own(
+                    policy.type === "PlutusV1"
+                      ? toV1(policy.script)
+                      : policy.type === "PlutusV2"
+                        ? toV2(policy.script)
+                        : toV3(policy.script),
+                  ),
+                  red!,
+                ),
+              ),
+              own(CML.Ed25519KeyHashList.new()),
+            ),
+      );
+      config.txBuilder.add_mint(result);
+    });
   });

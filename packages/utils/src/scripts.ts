@@ -21,7 +21,7 @@ import {
   UPLCConst,
   UPLCProgram,
 } from "@harmoniclabs/uplc";
-import { fromHex, toHex } from "@lucid-evolution/core-utils";
+import { fromHex, toHex, withCMLScope } from "@lucid-evolution/core-utils";
 import { decode } from "cbor-x";
 import { dataFromCbor } from "@harmoniclabs/plutus-data";
 
@@ -31,118 +31,137 @@ export function validatorToAddress(
   stakeCredential?: Credential,
 ): Address {
   const validatorHash = validatorToScriptHash(validator);
-  if (stakeCredential) {
-    return CML.BaseAddress.new(
-      networkToId(network),
-      CML.Credential.new_script(CML.ScriptHash.from_hex(validatorHash)),
-      stakeCredential.type === "Key"
-        ? CML.Credential.new_pub_key(
-            CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
-          )
-        : CML.Credential.new_script(
-            CML.ScriptHash.from_hex(stakeCredential.hash),
-          ),
-    )
-      .to_address()
-      .to_bech32(undefined);
-  } else {
-    return CML.EnterpriseAddress.new(
-      networkToId(network),
-      CML.Credential.new_script(CML.ScriptHash.from_hex(validatorHash)),
-    )
-      .to_address()
-      .to_bech32(undefined);
-  }
+  return withCMLScope((own) => {
+    const paymentCredential = own(
+      CML.Credential.new_script(own(CML.ScriptHash.from_hex(validatorHash))),
+    );
+    if (stakeCredential) {
+      const stake =
+        stakeCredential.type === "Key"
+          ? own(
+              CML.Credential.new_pub_key(
+                own(CML.Ed25519KeyHash.from_hex(stakeCredential.hash)),
+              ),
+            )
+          : own(
+              CML.Credential.new_script(
+                own(CML.ScriptHash.from_hex(stakeCredential.hash)),
+              ),
+            );
+      const address = own(
+        CML.BaseAddress.new(networkToId(network), paymentCredential, stake),
+      );
+      return own(address.to_address()).to_bech32(undefined);
+    }
+    const address = own(
+      CML.EnterpriseAddress.new(networkToId(network), paymentCredential),
+    );
+    return own(address.to_address()).to_bech32(undefined);
+  });
 }
 
 export function validatorToScriptHash(validator: Validator): ScriptHash {
-  switch (validator.type) {
-    case "Native":
-      return CML.NativeScript.from_cbor_hex(validator.script).hash().to_hex();
-    case "PlutusV1":
-      return CML.PlutusScript.from_v1(
-        CML.PlutusV1Script.from_cbor_hex(
-          applyDoubleCborEncoding(validator.script),
-        ),
-      )
-        .hash()
-        .to_hex();
-    case "PlutusV2":
-      return CML.PlutusScript.from_v2(
-        CML.PlutusV2Script.from_cbor_hex(
-          applyDoubleCborEncoding(validator.script),
-        ),
-      )
-        .hash()
-        .to_hex();
-    case "PlutusV3":
-      return CML.PlutusScript.from_v3(
-        CML.PlutusV3Script.from_cbor_hex(
-          applyDoubleCborEncoding(validator.script),
-        ),
-      )
-        .hash()
-        .to_hex();
-    default:
-      throw new Error("No variant matched");
-  }
+  return withCMLScope((own) => {
+    switch (validator.type) {
+      case "Native":
+        return own(
+          own(CML.NativeScript.from_cbor_hex(validator.script)).hash(),
+        ).to_hex();
+      case "PlutusV1": {
+        const script = own(
+          CML.PlutusV1Script.from_cbor_hex(
+            applyDoubleCborEncoding(validator.script),
+          ),
+        );
+        return own(own(CML.PlutusScript.from_v1(script)).hash()).to_hex();
+      }
+      case "PlutusV2": {
+        const script = own(
+          CML.PlutusV2Script.from_cbor_hex(
+            applyDoubleCborEncoding(validator.script),
+          ),
+        );
+        return own(own(CML.PlutusScript.from_v2(script)).hash()).to_hex();
+      }
+      case "PlutusV3": {
+        const script = own(
+          CML.PlutusV3Script.from_cbor_hex(
+            applyDoubleCborEncoding(validator.script),
+          ),
+        );
+        return own(own(CML.PlutusScript.from_v3(script)).hash()).to_hex();
+      }
+      default:
+        throw new Error("No variant matched");
+    }
+  });
 }
 
 export function toScriptRef(script: Script): CML.Script {
-  switch (script.type) {
-    case "Native":
-      return CML.Script.new_native(
-        CML.NativeScript.from_cbor_hex(script.script),
-      );
-    case "PlutusV1":
-      return CML.Script.new_plutus_v1(
-        CML.PlutusV1Script.from_cbor_hex(
-          applyDoubleCborEncoding(script.script),
-        ),
-      );
-    case "PlutusV2":
-      return CML.Script.new_plutus_v2(
-        CML.PlutusV2Script.from_cbor_hex(
-          applyDoubleCborEncoding(script.script),
-        ),
-      );
-    case "PlutusV3":
-      return CML.Script.new_plutus_v3(
-        CML.PlutusV3Script.from_cbor_hex(
-          applyDoubleCborEncoding(script.script),
-        ),
-      );
-    default:
-      throw new Error("No variant matched.");
-  }
+  return withCMLScope((own) => {
+    switch (script.type) {
+      case "Native":
+        return CML.Script.new_native(
+          own(CML.NativeScript.from_cbor_hex(script.script)),
+        );
+      case "PlutusV1":
+        return CML.Script.new_plutus_v1(
+          own(
+            CML.PlutusV1Script.from_cbor_hex(
+              applyDoubleCborEncoding(script.script),
+            ),
+          ),
+        );
+      case "PlutusV2":
+        return CML.Script.new_plutus_v2(
+          own(
+            CML.PlutusV2Script.from_cbor_hex(
+              applyDoubleCborEncoding(script.script),
+            ),
+          ),
+        );
+      case "PlutusV3":
+        return CML.Script.new_plutus_v3(
+          own(
+            CML.PlutusV3Script.from_cbor_hex(
+              applyDoubleCborEncoding(script.script),
+            ),
+          ),
+        );
+      default:
+        throw new Error("No variant matched.");
+    }
+  });
 }
 
 export function fromScriptRef(scriptRef: CML.Script): Script {
-  const kind = scriptRef.kind();
-  switch (kind) {
-    case 0:
-      return {
-        type: "Native",
-        script: scriptRef.as_native()!.to_cbor_hex(),
-      };
-    case 1:
-      return {
-        type: "PlutusV1",
-        script: scriptRef.as_plutus_v1()!.to_cbor_hex(),
-      };
-    case 2:
-      return {
-        type: "PlutusV2",
-        script: scriptRef.as_plutus_v2()!.to_cbor_hex(),
-      };
-    case 3:
-      return {
-        type: "PlutusV3",
-        script: scriptRef.as_plutus_v3()!.to_cbor_hex(),
-      };
-    default:
-      throw new Error("No variant matched.");
-  }
+  return withCMLScope((own) => {
+    const kind = scriptRef.kind();
+    switch (kind) {
+      case 0:
+        return {
+          type: "Native",
+          script: own(scriptRef.as_native()!).to_cbor_hex(),
+        };
+      case 1:
+        return {
+          type: "PlutusV1",
+          script: own(scriptRef.as_plutus_v1()!).to_cbor_hex(),
+        };
+      case 2:
+        return {
+          type: "PlutusV2",
+          script: own(scriptRef.as_plutus_v2()!).to_cbor_hex(),
+        };
+      case 3:
+        return {
+          type: "PlutusV3",
+          script: own(scriptRef.as_plutus_v3()!).to_cbor_hex(),
+        };
+      default:
+        throw new Error("No variant matched.");
+    }
+  });
 }
 
 export function mintingPolicyToId(mintingPolicy: MintingPolicy): PolicyId {

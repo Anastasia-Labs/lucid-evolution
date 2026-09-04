@@ -15,7 +15,7 @@ import {
   Wallet,
   WalletApi,
 } from "@lucid-evolution/core-types";
-import { fromHex, toHex } from "@lucid-evolution/core-utils";
+import { fromHex, toHex, withCMLScope } from "@lucid-evolution/core-utils";
 import {
   coreToUtxo,
   credentialToRewardAddress,
@@ -132,17 +132,15 @@ export const makeWalletFromSeed = (
 
     const usedKeyHashes = discoverOwnUsedTxKeyHashes(tx, ownKeyHashes, utxos);
 
-    const txWitnessSetBuilder = CML.TransactionWitnessSetBuilder.new();
-    for (const keyHash of usedKeyHashes) {
-      const priv = CML.PrivateKey.from_bech32(privKeyHashMap[keyHash]!);
-      const witness = CML.make_vkey_witness(
-        CML.hash_transaction(tx.body()),
-        priv,
-      );
-      txWitnessSetBuilder.add_vkey(witness);
-    }
-
-    return txWitnessSetBuilder.build();
+    return withCMLScope((own) => {
+      const txWitnessSetBuilder = own(CML.TransactionWitnessSetBuilder.new());
+      const txHash = own(CML.hash_transaction(own(tx.body())));
+      for (const keyHash of usedKeyHashes) {
+        const priv = own(CML.PrivateKey.from_bech32(privKeyHashMap[keyHash]!));
+        txWitnessSetBuilder.add_vkey(own(CML.make_vkey_witness(txHash, priv)));
+      }
+      return txWitnessSetBuilder.build();
+    });
   };
   return {
     overrideUTxOs: (utxos: UTxO[]) => (config.overriddenUTxOs = utxos),
@@ -223,13 +221,14 @@ export const makeWalletFromPrivateKey = (
   const signTx = async (
     tx: CML.Transaction,
   ): Promise<CML.TransactionWitnessSet> => {
-    const witness = CML.make_vkey_witness(
-      CML.hash_transaction(tx.body()),
-      priv,
-    );
-    const txWitnessSetBuilder = CML.TransactionWitnessSetBuilder.new();
-    txWitnessSetBuilder.add_vkey(witness);
-    return txWitnessSetBuilder.build();
+    return withCMLScope((own) => {
+      const witness = own(
+        CML.make_vkey_witness(own(CML.hash_transaction(own(tx.body()))), priv),
+      );
+      const txWitnessSetBuilder = own(CML.TransactionWitnessSetBuilder.new());
+      txWitnessSetBuilder.add_vkey(witness);
+      return txWitnessSetBuilder.build();
+    });
   };
 
   return {

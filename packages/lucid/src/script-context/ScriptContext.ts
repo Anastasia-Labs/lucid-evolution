@@ -12,9 +12,11 @@ import {
   validatorToScriptHash,
 } from "@lucid-evolution/utils";
 import { CML } from "../core.js";
+import { withCMLScope } from "@lucid-evolution/core-utils";
 import {
   buildCanonicalRedeemerInfo,
   canonicalRedeemerEntries,
+  freeCanonicalRedeemerEntries,
   proposalProcedureForRedeemerIndex,
   type CanonicalRedeemerEntry,
   type CanonicalRedeemerInfo,
@@ -1013,7 +1015,7 @@ const redeemersFromWitnessSet = (
   redeemerByPurpose: Map<string, PlutusDataValue>;
   purposesByKey: Map<string, ScriptPurposeData>;
 } => {
-  const redeemers = tx.witness_set().redeemers();
+  const redeemers = withCMLScope((own) => own(tx.witness_set()).redeemers());
   if (!redeemers) {
     return {
       redeemerMap: new Map(),
@@ -1021,10 +1023,17 @@ const redeemersFromWitnessSet = (
       purposesByKey: new Map(),
     };
   }
-  const entries = canonicalRedeemerEntries(redeemers).map((entry) => {
-    const purpose = purposeFromRedeemerEntry(entry, info, tx);
-    return [purpose, datumFromPlutusData(entry.data)] as const;
-  });
+  const cmlEntries = canonicalRedeemerEntries(redeemers);
+  let entries;
+  try {
+    entries = cmlEntries.map((entry) => {
+      const purpose = purposeFromRedeemerEntry(entry, info, tx);
+      return [purpose, datumFromPlutusData(entry.data)] as const;
+    });
+  } finally {
+    freeCanonicalRedeemerEntries(cmlEntries);
+    redeemers.free();
+  }
   const sortedEntries = [...entries].sort(([left], [right]) =>
     compareScriptPurpose(left, right),
   );
