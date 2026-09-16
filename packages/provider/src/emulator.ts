@@ -92,6 +92,12 @@ export function generateEmulatorAccount(assets: Assets): EmulatorAccount {
   };
 }
 
+/**
+ * Protocol major version assumed when the protocol parameters carry none.
+ * Matches current mainnet (Conway, PlutusV3 script contexts).
+ */
+const DEFAULT_PROTOCOL_MAJOR_VERSION = 11;
+
 export class Emulator implements Provider {
   readonly [EMULATOR_PROVIDER_BRAND] = true;
   ledger: Record<FlatOutRef, { utxo: UTxO; spent: boolean }>;
@@ -515,6 +521,10 @@ export class Emulator implements Provider {
 
     const nativeHashesOptional: Record<ScriptHash, CML.NativeScript> = {};
     const plutusHashesOptional: ScriptHash[] = [];
+    // Every PlutusV3 script the transaction carries (witness set or script
+    // reference); the ledger's reference-input disjointness rule depends on
+    // whether one of them runs.
+    const plutusV3Hashes = new Set<ScriptHash>();
 
     const plutusHashes = withCMLScope((own) => {
       const scriptHashes: ScriptHash[] = [];
@@ -524,18 +534,21 @@ export class Emulator implements Provider {
           | CML.PlutusV2ScriptList
           | CML.PlutusV3ScriptList
           | undefined,
+        isPlutusV3 = false,
       ) => {
         own(scripts);
         for (let i = 0; i < (scripts?.len() || 0); i++) {
           withCMLScope((own) => {
             const script = own(scripts!.get(i));
-            scriptHashes.push(own(script.hash()).to_hex());
+            const scriptHash = own(script.hash()).to_hex();
+            scriptHashes.push(scriptHash);
+            if (isPlutusV3) plutusV3Hashes.add(scriptHash);
           });
         }
       };
       collectHashes(witnesses.plutus_v1_scripts());
       collectHashes(witnesses.plutus_v2_scripts());
-      collectHashes(witnesses.plutus_v3_scripts());
+      collectHashes(witnesses.plutus_v3_scripts(), true);
       return scriptHashes;
     });
 
@@ -548,6 +561,7 @@ export class Emulator implements Provider {
     };
 
     const resolvedInputs: ResolvedInput[] = [];
+    const inputOutRefs = new Set<string>();
 
     // Check existence of inputs and look for script refs.
     for (let i = 0; i < inputs.len(); i++) {
@@ -555,6 +569,7 @@ export class Emulator implements Provider {
         const input = own(inputs.get(i));
         return own(input.transaction_id()).to_hex() + input.index().toString();
       });
+      inputOutRefs.add(outRef);
 
       const entryLedger = this.ledger[outRef];
 
@@ -599,7 +614,9 @@ export class Emulator implements Provider {
             const script = CML.PlutusScript.from_v3(
               CML.PlutusV3Script.from_cbor_bytes(fromHex(scriptRef.script)),
             );
-            plutusHashesOptional.push(script.hash().to_hex());
+            const scriptHash = script.hash().to_hex();
+            plutusHashesOptional.push(scriptHash);
+            plutusV3Hashes.add(scriptHash);
             break;
           }
         }
@@ -613,6 +630,7 @@ export class Emulator implements Provider {
 
     // Check existence of reference inputs and look for script refs.
     const referenceInputs = body.reference_inputs();
+    const nonDisjointRefInputs: string[] = [];
     for (let i = 0; i < (referenceInputs?.len() || 0); i++) {
       const outRef = withCMLScope((own) => {
         const input = own(referenceInputs!.get(i));
@@ -627,6 +645,12 @@ export class Emulator implements Provider {
             txHash: entry?.utxo.txHash,
             outputIndex: entry?.utxo.outputIndex,
           })}\nIt does not exist or was already spent.`,
+        );
+      }
+
+      if (inputOutRefs.has(outRef)) {
+        nonDisjointRefInputs.push(
+          `${entry.utxo.txHash}#${entry.utxo.outputIndex}`,
         );
       }
 
@@ -658,7 +682,9 @@ export class Emulator implements Provider {
             const script = CML.PlutusScript.from_v3(
               CML.PlutusV3Script.from_cbor_bytes(fromHex(scriptRef.script)),
             );
-            plutusHashesOptional.push(script.hash().to_hex());
+            const scriptHash = script.hash().to_hex();
+            plutusHashesOptional.push(scriptHash);
+            plutusV3Hashes.add(scriptHash);
             break;
           }
         }
@@ -1197,6 +1223,34 @@ export class Emulator implements Provider {
     );
     if (extraDatumHash) {
       throw new Error(`Extraneous plutus data. Datum hash: ${extraDatumHash}`);
+    }
+
+    // Reference inputs must be disjoint from inputs, as the ledger requires.
+    // Protocol versions 9 and 10 reject any overlap in the UTXO rule
+    // (BabbageNonDisjointRefInputs). From protocol version 11 the check is
+    // part of building a PlutusV3 script context
+    // (ReferenceInputsNotDisjointFromInputs), so only a transaction that
+    // runs a PlutusV3 script is rejected; PlutusV1 and PlutusV2 contexts
+    // tolerate the overlap, as did protocol versions 8 and below.
+
+    if (nonDisjointRefInputs.length > 0) {
+      const protocolMajorVersion =
+        this.protocolParameters.protocolMajorVersion ??
+        DEFAULT_PROTOCOL_MAJOR_VERSION;
+      const overlap = nonDisjointRefInputs.join(", ");
+      if (protocolMajorVersion === 9 || protocolMajorVersion === 10) {
+        throw new Error(
+          `BabbageNonDisjointRefInputs: reference inputs must be disjoint from inputs at protocol version ${protocolMajorVersion}. Overlapping: ${overlap}`,
+        );
+      }
+      const runsPlutusV3 = [...consumedHashes].some((hash) =>
+        plutusV3Hashes.has(hash as ScriptHash),
+      );
+      if (protocolMajorVersion >= 11 && runsPlutusV3) {
+        throw new Error(
+          `ReferenceInputsNotDisjointFromInputs: a PlutusV3 script context cannot be built while reference inputs overlap inputs. Overlapping: ${overlap}`,
+        );
+      }
     }
 
     // Apply transitions
