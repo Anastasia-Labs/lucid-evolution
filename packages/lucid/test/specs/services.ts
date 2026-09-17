@@ -1,4 +1,4 @@
-import { Config, Context, Effect, Layer, pipe } from "effect";
+import { Config, Context, Effect, Layer, Schedule, pipe } from "effect";
 import {
   applyDoubleCborEncoding,
   Blockfrost,
@@ -81,11 +81,11 @@ const makeUser = Effect.gen(function* ($) {
   );
   user.selectWallet.fromSeed(networkConfig.WALLET_SEED);
   yield* pipe(
-    Effect.promise(() => user.wallet().address()),
+    Effect.tryPromise(() => user.wallet().address()),
     Effect.flatMap((address) => Effect.log(`Wallet : ${address}`)),
   );
   yield* pipe(
-    Effect.promise(() => user.wallet().getUtxos()),
+    Effect.tryPromise(() => user.wallet().getUtxos()),
     Effect.flatMap((utxos) =>
       Effect.log(`Total Wallet UTxOs: ${utxos.length}`),
     ),
@@ -93,7 +93,15 @@ const makeUser = Effect.gen(function* ($) {
   return {
     user,
   };
-}).pipe(Effect.orDie);
+}).pipe(
+  // Provider requests fail here as errors, not defects, so a stalled or
+  // rate-limited Blockfrost call is retried instead of failing the test.
+  Effect.tapErrorCause(Effect.log),
+  Effect.retry(
+    Schedule.compose(Schedule.exponential(10_000), Schedule.recurs(3)),
+  ),
+  Effect.orDie,
+);
 
 export class User extends Context.Tag("User")<
   User,

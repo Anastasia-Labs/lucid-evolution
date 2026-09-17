@@ -5,7 +5,10 @@ import {
   validatorToAddress,
 } from "@lucid-evolution/utils";
 import { CML } from "../src/core.js";
-import { Emulator, generateEmulatorAccountFromPrivateKey } from "../src";
+import {
+  Emulator,
+  generateEmulatorAccountFromPrivateKey,
+} from "../src/index.js";
 
 /*
   The ledger requires a transaction's reference inputs to be disjoint from
