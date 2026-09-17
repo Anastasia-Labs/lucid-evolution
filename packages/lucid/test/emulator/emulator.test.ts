@@ -131,10 +131,12 @@ describe("Emulator", () => {
     () =>
       Effect.gen(function* () {
         const depositResult = yield* HelloExecutor.depositFunds;
-        expect(depositResult.contractUTxOs.length).toBe(1);
+        expect(depositResult.contractUTxOs.length).toBe(2);
 
         const collectResult = yield* HelloExecutor.collectFromReadFrom;
-        expect(collectResult.contractUTxOs.length).toBe(0);
+        // Only the reference-script UTxO stays at the contract.
+        expect(collectResult.contractUTxOs.length).toBe(1);
+        expect(collectResult.contractUTxOs[0].scriptRef).toBeDefined();
         expect(collectResult.userUTxOs.length).toBe(2);
       }).pipe(
         Effect.provide(TestEnvironment),

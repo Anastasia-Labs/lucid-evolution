@@ -27,6 +27,17 @@ import {
 import packageJson from "../package.json" with { type: "json" };
 import * as _Blockfrost from "./internal/blockfrost.js";
 
+/**
+ * Default per-request timeout. Without one a stalled Blockfrost connection
+ * waits for the runtime's own socket timeout, which is five minutes under Node.
+ */
+const DEFAULT_REQUEST_TIMEOUT_MS = 30_000;
+
+export interface BlockfrostOptions {
+  /** Abort any single request after this many milliseconds. Defaults to 30 000. */
+  readonly requestTimeoutMs?: number;
+}
+
 const toBlockfrostQueryPredicate = (
   addressOrCredential: Address | Credential,
 ): string => {
@@ -42,14 +53,36 @@ const toBlockfrostQueryPredicate = (
 export class Blockfrost implements Provider {
   url: string;
   projectId: string;
+  private readonly requestTimeoutMs: number;
 
-  constructor(url: string, projectId?: string) {
+  constructor(
+    url: string,
+    projectId?: string,
+    options: BlockfrostOptions = {},
+  ) {
     this.url = url;
     this.projectId = projectId || "";
+    const timeout = options.requestTimeoutMs ?? DEFAULT_REQUEST_TIMEOUT_MS;
+    if (!Number.isFinite(timeout) || timeout <= 0) {
+      throw new TypeError("requestTimeoutMs must be a positive finite number.");
+    }
+    this.requestTimeoutMs = timeout;
+  }
+
+  /** `fetch` bounded by the provider's request timeout, combined with any caller-supplied signal. */
+  private fetch(input: string, init: RequestInit = {}): Promise<Response> {
+    const timeout = AbortSignal.timeout(this.requestTimeoutMs);
+    const signal =
+      init.signal == null
+        ? timeout
+        : typeof AbortSignal.any === "function"
+          ? AbortSignal.any([init.signal, timeout])
+          : init.signal;
+    return fetch(input, { ...init, signal });
   }
 
   async getProtocolParameters(): Promise<ProtocolParameters> {
-    const result = await fetch(`${this.url}/epochs/latest/parameters`, {
+    const result = await this.fetch(`${this.url}/epochs/latest/parameters`, {
       headers: { project_id: this.projectId, lucid },
     }).then((res) => res.json());
     return {
@@ -78,7 +111,7 @@ export class Blockfrost implements Provider {
   }
 
   async getTreasury(): Promise<bigint> {
-    const result = await fetch(`${this.url}/network`, {
+    const result = await this.fetch(`${this.url}/network`, {
       headers: { project_id: this.projectId, lucid },
     }).then((res) => res.json());
     if (!result || result.error || result.supply?.treasury === undefined) {
@@ -93,7 +126,7 @@ export class Blockfrost implements Provider {
     let page = 1;
     while (true) {
       const pageResult: BlockfrostUtxoResult | BlockfrostUtxoError =
-        await fetch(
+        await this.fetch(
           `${this.url}/addresses/${queryPredicate}/utxos?page=${page}`,
           { headers: { project_id: this.projectId, lucid } },
         ).then((res) => res.json());
@@ -121,7 +154,7 @@ export class Blockfrost implements Provider {
     let page = 1;
     while (true) {
       const pageResult: BlockfrostUtxoResult | BlockfrostUtxoError =
-        await fetch(
+        await this.fetch(
           `${this.url}/addresses/${queryPredicate}/utxos/${unit}?page=${page}`,
           { headers: { project_id: this.projectId, lucid } },
         ).then((res) => res.json());
@@ -141,7 +174,7 @@ export class Blockfrost implements Provider {
   }
 
   async getUtxoByUnit(unit: Unit): Promise<UTxO> {
-    const addresses = await fetch(
+    const addresses = await this.fetch(
       `${this.url}/assets/${unit}/addresses?count=2`,
       { headers: { project_id: this.projectId, lucid } },
     ).then((res) => res.json());
@@ -168,7 +201,7 @@ export class Blockfrost implements Provider {
     const queryHashes = [...new Set(outRefs.map((outRef) => outRef.txHash))];
     const utxos = await Promise.all(
       queryHashes.map(async (txHash) => {
-        const result = await fetch(`${this.url}/txs/${txHash}/utxos`, {
+        const result = await this.fetch(`${this.url}/txs/${txHash}/utxos`, {
           headers: { project_id: this.projectId, lucid },
         }).then((res) => res.json());
         if (!result || result.error) {
@@ -203,7 +236,7 @@ export class Blockfrost implements Provider {
   async getRewardAccount(
     rewardAddress: RewardAddress,
   ): Promise<RewardAccountState> {
-    const response = await fetch(`${this.url}/accounts/${rewardAddress}`, {
+    const response = await this.fetch(`${this.url}/accounts/${rewardAddress}`, {
       headers: { project_id: this.projectId, lucid },
     });
     if (response.status === 404) {
@@ -228,9 +261,12 @@ export class Blockfrost implements Provider {
   }
 
   async getDatum(datumHash: DatumHash): Promise<Datum> {
-    const datum = await fetch(`${this.url}/scripts/datum/${datumHash}/cbor`, {
-      headers: { project_id: this.projectId, lucid },
-    })
+    const datum = await this.fetch(
+      `${this.url}/scripts/datum/${datumHash}/cbor`,
+      {
+        headers: { project_id: this.projectId, lucid },
+      },
+    )
       .then((res) => res.json())
       .then((res) => res.cbor);
     if (!datum || datum.error) {
@@ -242,7 +278,7 @@ export class Blockfrost implements Provider {
   awaitTx(txHash: TxHash, checkInterval = 3000): Promise<boolean> {
     return new Promise((res) => {
       const confirmation = setInterval(async () => {
-        const isConfirmed = await fetch(`${this.url}/txs/${txHash}/cbor`, {
+        const isConfirmed = await this.fetch(`${this.url}/txs/${txHash}/cbor`, {
           headers: { project_id: this.projectId, lucid },
         }).then((res) => res.json());
         if (isConfirmed && !isConfirmed.error) {
@@ -258,7 +294,7 @@ export class Blockfrost implements Provider {
     txHash: TxHash,
     options: TransactionStatusOptions = {},
   ): Promise<TransactionStatus> {
-    const response = await fetch(`${this.url}/txs/${txHash}`, {
+    const response = await this.fetch(`${this.url}/txs/${txHash}`, {
       headers: { project_id: this.projectId, lucid },
       signal: options.signal,
     });
@@ -283,7 +319,7 @@ export class Blockfrost implements Provider {
   }
 
   async submitTx(tx: Transaction): Promise<TxHash> {
-    const result = await fetch(`${this.url}/tx/submit`, {
+    const result = await this.fetch(`${this.url}/tx/submit`, {
       method: "POST",
       headers: {
         "Content-Type": "application/cbor",
@@ -323,20 +359,20 @@ export class Blockfrost implements Provider {
             datum: r.inline_datum || undefined,
             scriptRef: r.reference_script_hash
               ? await (async () => {
-                  const { type } = await fetch(
+                  const { type } = await this.fetch(
                     `${this.url}/scripts/${r.reference_script_hash}`,
                     {
                       headers: { project_id: this.projectId, lucid },
                     },
                   ).then((res) => res.json());
 
-                  const { cbor: script } = await fetch(
+                  const { cbor: script } = await this.fetch(
                     `${this.url}/scripts/${r.reference_script_hash}/cbor`,
                     { headers: { project_id: this.projectId, lucid } },
                   ).then((res) => res.json());
                   switch (type) {
                     case "timelock":
-                      const { json: native } = await fetch(
+                      const { json: native } = await this.fetch(
                         `${this.url}/scripts/${r.reference_script_hash}/json`,
                         { headers: { project_id: this.projectId, lucid } },
                       ).then((res) => res.json());
@@ -381,7 +417,7 @@ export class Blockfrost implements Provider {
           : {}),
       };
 
-      const res = await fetch(`${this.url}/utils/txs/evaluate/utxos`, {
+      const res = await this.fetch(`${this.url}/utils/txs/evaluate/utxos`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

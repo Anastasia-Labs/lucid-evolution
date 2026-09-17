@@ -32,7 +32,9 @@ const onchainDescribe =
     ? describe.sequential
     : describe.skip;
 
-onchainDescribe("Onchain testing", () => {
+// Each test talks to preprod through a shared wallet and Blockfrost; a stalled
+// request or another process spending the wallet fails one attempt, not the run.
+onchainDescribe("Onchain testing", { retry: 2 }, () => {
   test.skip("TxChain", async () => {
     const program = pipe(
       TxChain.depositFundsCollect,

@@ -140,3 +140,59 @@ describe("Blockfrost transaction evaluation", () => {
     });
   });
 });
+
+describe("Blockfrost request timeout", () => {
+  test("bounds every request with an abort signal", async () => {
+    const fetchSpy = mockEmptyUtxos();
+    const provider = new Blockfrost("https://blockfrost.example", "key");
+    await provider.getUtxos(
+      "addr_test1vqrmw7c4e3y6q9x3lm9n8v4v0q3l3s9m3v0q3l3s9m3v0qw7c4e3",
+    );
+    const init = fetchSpy.mock.calls[0]![1] as RequestInit;
+    expect(init.signal).toBeInstanceOf(AbortSignal);
+  });
+
+  test("combines a caller-supplied signal with the timeout", async () => {
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(JSON.stringify({ block_height: 1 }), {
+        headers: { "content-type": "application/json" },
+      }),
+    );
+    const provider = new Blockfrost("https://blockfrost.example", "key");
+    const controller = new AbortController();
+    await provider.getTransactionStatus("00".repeat(32), {
+      signal: controller.signal,
+    });
+    const init = fetchSpy.mock.calls[0]![1] as RequestInit;
+    expect(init.signal).toBeInstanceOf(AbortSignal);
+    expect(init.signal!.aborted).toBe(false);
+    controller.abort();
+    expect(init.signal!.aborted).toBe(true);
+  });
+
+  test("times out a request that never answers", async () => {
+    vi.spyOn(globalThis, "fetch").mockImplementation(
+      (_input, init) =>
+        new Promise((_resolve, reject) => {
+          init!.signal!.addEventListener("abort", () =>
+            reject(init!.signal!.reason),
+          );
+        }),
+    );
+    const provider = new Blockfrost("https://blockfrost.example", "key", {
+      requestTimeoutMs: 20,
+    });
+    await expect(provider.getProtocolParameters()).rejects.toMatchObject({
+      name: "TimeoutError",
+    });
+  });
+
+  test("rejects a non-positive timeout", () => {
+    expect(
+      () =>
+        new Blockfrost("https://blockfrost.example", "key", {
+          requestTimeoutMs: 0,
+        }),
+    ).toThrow(TypeError);
+  });
+});
