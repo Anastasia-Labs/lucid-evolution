@@ -1,5 +1,13 @@
 # @lucid-evolution/lucid
 
+## 0.6.5
+
+### Patch Changes
+
+- Updated dependencies [[`deaaac1`](https://github.com/Anastasia-Labs/lucid-evolution/commit/deaaac1dabf004910261def3bcc147c64ed2cb6f), [`31e81d0`](https://github.com/Anastasia-Labs/lucid-evolution/commit/31e81d09a87339fc7a5977f36eab7c8c95fc8ed1)]:
+  - @lucid-evolution/provider@0.2.4
+  - @lucid-evolution/tx-graph@0.0.6
+
 ## 0.6.4
 
 ### Patch Changes

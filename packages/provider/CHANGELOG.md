@@ -1,5 +1,13 @@
 # @lucid-evolution/provider
 
+## 0.2.4
+
+### Patch Changes
+
+- [#732](https://github.com/Anastasia-Labs/lucid-evolution/pull/732) [`deaaac1`](https://github.com/Anastasia-Labs/lucid-evolution/commit/deaaac1dabf004910261def3bcc147c64ed2cb6f) Thanks [@colll78](https://github.com/colll78)! - Blockfrost requests now abort after a configurable `requestTimeoutMs` (default 30 seconds) instead of waiting for the runtime's socket timeout, five minutes under Node. Pass `new Blockfrost(url, projectId, { requestTimeoutMs })` to change it.
+
+- [#732](https://github.com/Anastasia-Labs/lucid-evolution/pull/732) [`31e81d0`](https://github.com/Anastasia-Labs/lucid-evolution/commit/31e81d09a87339fc7a5977f36eab7c8c95fc8ed1) Thanks [@colll78](https://github.com/colll78)! - Emulator: reject a transaction whose reference inputs overlap its inputs the way the ledger does. Protocol major versions 9 and 10 refuse any overlap (`BabbageNonDisjointRefInputs`); from major version 11 the overlap is refused only when the transaction runs a PlutusV3 script (`ReferenceInputsNotDisjointFromInputs`), since the check is part of building the PlutusV3 script context. The protocol version comes from `protocolParameters.protocolMajorVersion`, defaulting to 11 when unset.
+
 ## 0.2.3
 
 ### Patch Changes
