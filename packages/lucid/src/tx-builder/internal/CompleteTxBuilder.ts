@@ -1725,6 +1725,7 @@ const makeDefaultAikenEvaluator = (): EvaluatorAdapter => ({
       BigInt(context.slotConfig.zeroTime),
       BigInt(context.slotConfig.zeroSlot),
       context.slotConfig.slotLength,
+      context.protocolParameters.protocolMajorVersion,
     );
     return decodeLegacyRedeemers(uplcEval);
   },
