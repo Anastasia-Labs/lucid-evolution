@@ -56,6 +56,10 @@ function passArrayJsValueToWasm0(array, malloc) {
     return ptr;
 }
 
+function isLikeNone(x) {
+    return x === undefined || x === null;
+}
+
 function takeFromExternrefTable0(idx) {
     const value = wasm.__wbindgen_export_0.get(idx);
     wasm.__externref_table_dealloc(idx);
@@ -82,9 +86,10 @@ function getArrayJsValueFromWasm0(ptr, len) {
  * @param {bigint} slot_config_x
  * @param {bigint} slot_config_y
  * @param {number} slot_config_z
+ * @param {number | null} [protocol_major_version]
  * @returns {Uint8Array[]}
  */
-module.exports.eval_phase_two_raw = function(tx_bytes, utxos_bytes_x, utxos_bytes_y, cost_mdls_bytes, initial_budget_n, initial_budget_d, slot_config_x, slot_config_y, slot_config_z) {
+module.exports.eval_phase_two_raw = function(tx_bytes, utxos_bytes_x, utxos_bytes_y, cost_mdls_bytes, initial_budget_n, initial_budget_d, slot_config_x, slot_config_y, slot_config_z, protocol_major_version) {
     const ptr0 = passArray8ToWasm0(tx_bytes, wasm.__wbindgen_malloc);
     const len0 = WASM_VECTOR_LEN;
     const ptr1 = passArrayJsValueToWasm0(utxos_bytes_x, wasm.__wbindgen_malloc);
@@ -93,7 +98,7 @@ module.exports.eval_phase_two_raw = function(tx_bytes, utxos_bytes_x, utxos_byte
     const len2 = WASM_VECTOR_LEN;
     const ptr3 = passArray8ToWasm0(cost_mdls_bytes, wasm.__wbindgen_malloc);
     const len3 = WASM_VECTOR_LEN;
-    const ret = wasm.eval_phase_two_raw(ptr0, len0, ptr1, len1, ptr2, len2, ptr3, len3, initial_budget_n, initial_budget_d, slot_config_x, slot_config_y, slot_config_z);
+    const ret = wasm.eval_phase_two_raw(ptr0, len0, ptr1, len1, ptr2, len2, ptr3, len3, initial_budget_n, initial_budget_d, slot_config_x, slot_config_y, slot_config_z, !isLikeNone(protocol_major_version), isLikeNone(protocol_major_version) ? 0 : protocol_major_version);
     if (ret[3]) {
         throw takeFromExternrefTable0(ret[2]);
     }
