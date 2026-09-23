@@ -7,7 +7,12 @@ import {
   Script,
   UTxO,
 } from "@lucid-evolution/core-types";
-import { fromHex, toHex } from "@lucid-evolution/core-utils";
+import {
+  CMLOwn,
+  fromHex,
+  toHex,
+  withCMLScope,
+} from "@lucid-evolution/core-utils";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { decode, encode } from "cbor-x";
 import ScalusLib from "scalus";
@@ -96,8 +101,11 @@ const applyDoubleCborEncoding = (script: string) => {
   }
 };
 
-const assetsToValue = (assets: Assets): CML.Value => {
-  const multiAsset = CML.MultiAsset.new();
+// Every CML object is a handle to wasm memory that is only reclaimed by `free()`
+// (or, much later, by a major GC). The conversions below run for every UTxO on
+// every evaluation, so each temporary is registered with the caller's scope.
+const assetsToValue = (assets: Assets, own: CMLOwn): CML.Value => {
+  const multiAsset = own(CML.MultiAsset.new());
   const lovelace = assets.lovelace ? BigInt(assets.lovelace) : 0n;
   const units = Object.keys(assets);
   const policies = Array.from(
@@ -109,89 +117,123 @@ const assetsToValue = (assets: Assets): CML.Value => {
   );
 
   for (const policy of policies) {
-    const assetsValue = CML.MapAssetNameToCoin.new();
+    const assetsValue = own(CML.MapAssetNameToCoin.new());
     for (const unit of units.filter((unit) => unit.slice(0, 56) === policy)) {
       assetsValue.insert(
-        CML.AssetName.from_hex(unit.slice(56)),
+        own(CML.AssetName.from_hex(unit.slice(56))),
         BigInt(assets[unit]),
       );
     }
-    multiAsset.insert_assets(CML.ScriptHash.from_hex(policy), assetsValue);
+    multiAsset.insert_assets(own(CML.ScriptHash.from_hex(policy)), assetsValue);
   }
 
-  return CML.Value.new(lovelace, multiAsset);
+  return own(CML.Value.new(lovelace, multiAsset));
 };
 
-const toScriptRef = (script: Script): CML.Script => {
+const toScriptRef = (script: Script, own: CMLOwn): CML.Script => {
   switch (script.type) {
     case "Native":
-      return CML.Script.new_native(
-        CML.NativeScript.from_cbor_hex(script.script),
+      return own(
+        CML.Script.new_native(
+          own(CML.NativeScript.from_cbor_hex(script.script)),
+        ),
       );
     case "PlutusV1":
-      return CML.Script.new_plutus_v1(
-        CML.PlutusV1Script.from_cbor_hex(
-          applyDoubleCborEncoding(script.script),
+      return own(
+        CML.Script.new_plutus_v1(
+          own(
+            CML.PlutusV1Script.from_cbor_hex(
+              applyDoubleCborEncoding(script.script),
+            ),
+          ),
         ),
       );
     case "PlutusV2":
-      return CML.Script.new_plutus_v2(
-        CML.PlutusV2Script.from_cbor_hex(
-          applyDoubleCborEncoding(script.script),
+      return own(
+        CML.Script.new_plutus_v2(
+          own(
+            CML.PlutusV2Script.from_cbor_hex(
+              applyDoubleCborEncoding(script.script),
+            ),
+          ),
         ),
       );
     case "PlutusV3":
-      return CML.Script.new_plutus_v3(
-        CML.PlutusV3Script.from_cbor_hex(
-          applyDoubleCborEncoding(script.script),
+      return own(
+        CML.Script.new_plutus_v3(
+          own(
+            CML.PlutusV3Script.from_cbor_hex(
+              applyDoubleCborEncoding(script.script),
+            ),
+          ),
         ),
       );
   }
 };
 
-const utxoToTransactionInput = (utxo: UTxO): CML.TransactionInput =>
-  CML.TransactionInput.new(
-    CML.TransactionHash.from_hex(utxo.txHash),
-    BigInt(utxo.outputIndex),
+const utxoToTransactionInput = (
+  utxo: UTxO,
+  own: CMLOwn,
+): CML.TransactionInput =>
+  own(
+    CML.TransactionInput.new(
+      own(CML.TransactionHash.from_hex(utxo.txHash)),
+      BigInt(utxo.outputIndex),
+    ),
   );
 
 const buildDatum = (
   utxo: UTxO,
   builder: CML.TransactionOutputBuilder,
+  own: CMLOwn,
 ): CML.TransactionOutputBuilder => {
   if (utxo.datumHash && utxo.datum) {
-    return builder.with_communication_data(
-      CML.PlutusData.from_cbor_hex(utxo.datum),
+    return own(
+      builder.with_communication_data(
+        own(CML.PlutusData.from_cbor_hex(utxo.datum)),
+      ),
     );
   }
   if (utxo.datum) {
-    return builder.with_data(
-      CML.DatumOption.new_datum(CML.PlutusData.from_cbor_hex(utxo.datum)),
-    );
+    const datum = own(CML.PlutusData.from_cbor_hex(utxo.datum));
+    return own(builder.with_data(own(CML.DatumOption.new_datum(datum))));
   }
   return builder;
 };
 
-const buildOutput = (utxo: UTxO): CML.TransactionOutputAmountBuilder => {
-  const builder = CML.TransactionOutputBuilder.new().with_address(
-    CML.Address.from_bech32(utxo.address),
+const buildOutput = (
+  utxo: UTxO,
+  own: CMLOwn,
+): CML.TransactionOutputAmountBuilder => {
+  const address = own(CML.Address.from_bech32(utxo.address));
+  const builder = buildDatum(
+    utxo,
+    own(own(CML.TransactionOutputBuilder.new()).with_address(address)),
+    own,
   );
-  return utxo.scriptRef
-    ? buildDatum(utxo, builder)
-        .with_reference_script(toScriptRef(utxo.scriptRef))
-        .next()
-    : buildDatum(utxo, builder).next();
+  if (!utxo.scriptRef) return own(builder.next());
+  const scriptRef = toScriptRef(utxo.scriptRef, own);
+  return own(own(builder.with_reference_script(scriptRef)).next());
 };
 
-const utxoToTransactionOutput = (utxo: UTxO): CML.TransactionOutput =>
-  buildOutput(utxo).with_value(assetsToValue(utxo.assets)).build().output();
+const utxoToTransactionOutput = (
+  utxo: UTxO,
+  own: CMLOwn,
+): CML.TransactionOutput => {
+  const amount = own(
+    buildOutput(utxo, own).with_value(assetsToValue(utxo.assets, own)),
+  );
+  return own(own(amount.build()).output());
+};
 
 export const buildUtxoMapCbor = (utxos: UTxO[]): Uint8Array => {
   const pairs = utxos
-    .map((utxo) => ({
-      input: utxoToTransactionInput(utxo).to_cbor_bytes(),
-      output: utxoToTransactionOutput(utxo).to_cbor_bytes(),
-    }))
+    .map((utxo) =>
+      withCMLScope((own) => ({
+        input: utxoToTransactionInput(utxo, own).to_cbor_bytes(),
+        output: utxoToTransactionOutput(utxo, own).to_cbor_bytes(),
+      })),
+    )
     .sort((a, b) => compareBytes(a.input, b.input));
 
   return concatBytes([
