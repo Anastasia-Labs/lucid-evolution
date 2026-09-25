@@ -1,5 +1,11 @@
 # @lucid-evolution/scalus-uplc
 
+## 0.1.5
+
+### Patch Changes
+
+- [#735](https://github.com/Anastasia-Labs/lucid-evolution/pull/735) [`d347f31`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d347f310cc1e8943363d86a409c8d998c687279b) Thanks [@nau](https://github.com/nau)! - Free the CML wasm objects that `buildUtxoMapCbor` creates for every UTxO on every evaluation instead of leaving them to the wasm-bindgen finalizer. The Scalus evaluator no longer slows down as a long-running process or test file evaluates more transactions: on a Midgard fault-proof suite file with about 53,000 evaluations, the file now runs in 960 s instead of timing out after 3,983 s. The encoded UTxO map is byte-identical.
+
 ## 0.1.4
 
 ### Patch Changes
