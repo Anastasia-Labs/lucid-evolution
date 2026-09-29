@@ -1,44 +1,30 @@
 import {
   Assets,
   EvalRedeemer,
-  EvaluatorAdapter,
   EvaluationInput,
+  EvaluatorAdapter,
   RedeemerTag,
-  Script,
   UTxO,
 } from "@lucid-evolution/core-types";
-import {
-  CMLOwn,
-  fromHex,
-  toHex,
-  withCMLScope,
-} from "@lucid-evolution/core-utils";
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
-import { decode, encode } from "cbor-x";
-import ScalusLib from "scalus";
+import { fromHex } from "@lucid-evolution/core-utils";
+import type { Utxo, Value } from "scalus";
+
+type Scalus = typeof import("scalus");
+let scalusModule: Promise<Scalus> | undefined;
+// Loaded on first evaluation. Scalus is ESM-only, and `import()` reaches it from the CJS build on
+// any Node version, where a top-level `require` would need Node 20.19 or 22.12.
+const loadScalus = (): Promise<Scalus> => (scalusModule ??= import("scalus"));
 
 export type ScalusEvaluatorOptions = {
   name?: string;
+  /**
+   * The ledger protocol version to cost against. Taken from the provider's protocol parameters
+   * when they carry it, and 11 (van Rossem, what mainnet runs) otherwise.
+   */
   protocolMajorVersion?: number;
 };
 
-type ScalusRedeemer = {
-  tag: string;
-  index: number;
-  budget: {
-    memory: number | bigint;
-    steps: number | bigint;
-  };
-};
-
-type ScalusEvalPlutusScripts = (
-  txCborBytes: Uint8Array,
-  utxoCborBytes: Uint8Array,
-  slotConfig: InstanceType<typeof ScalusLib.SlotConfig>,
-  costModels: number[][],
-  protocolMajorVersion?: number,
-) => unknown[];
-
+/** Scalus names a redeemer's purpose as the ledger CDDL does; Lucid uses Ogmios' names. */
 const SCALUS_TAGS: Record<string, RedeemerTag> = {
   Spend: "spend",
   Mint: "mint",
@@ -48,221 +34,32 @@ const SCALUS_TAGS: Record<string, RedeemerTag> = {
   Proposing: "propose",
 };
 
-const concatBytes = (chunks: Uint8Array[]): Uint8Array => {
-  const length = chunks.reduce((total, chunk) => total + chunk.length, 0);
-  const result = new Uint8Array(length);
-  let offset = 0;
-  for (const chunk of chunks) {
-    result.set(chunk, offset);
-    offset += chunk.length;
-  }
-  return result;
-};
+const DEFAULT_PROTOCOL_MAJOR_VERSION = 11;
 
-const cborMapHeader = (length: number): Uint8Array => {
-  if (!Number.isSafeInteger(length) || length < 0) {
-    throw new Error(`Invalid CBOR map length ${length}`);
-  }
-  if (length < 24) return Uint8Array.of(0xa0 + length);
-  if (length <= 0xff) return Uint8Array.of(0xb8, length);
-  if (length <= 0xffff) return Uint8Array.of(0xb9, length >> 8, length & 0xff);
-  if (length <= 0xffffffff) {
-    return Uint8Array.of(
-      0xba,
-      (length >>> 24) & 0xff,
-      (length >>> 16) & 0xff,
-      (length >>> 8) & 0xff,
-      length & 0xff,
-    );
-  }
-  throw new Error(`CBOR map length ${length} is too large`);
-};
-
-const compareBytes = (a: Uint8Array, b: Uint8Array): number => {
-  if (a.length !== b.length) return a.length - b.length;
-  for (let i = 0; i < a.length; i++) {
-    const diff = a[i] - b[i];
-    if (diff !== 0) return diff;
-  }
-  return 0;
-};
-
-const applyDoubleCborEncoding = (script: string) => {
-  try {
-    decode(decode(fromHex(script)));
-    return script;
-  } catch (error) {
-    try {
-      decode(fromHex(script));
-      return toHex(Uint8Array.from(encode(fromHex(script).buffer)));
-    } catch (error) {
-      return toHex(Uint8Array.from(encode(encode(fromHex(script).buffer))));
-    }
-  }
-};
-
-// Every CML object is a handle to wasm memory that is only reclaimed by `free()`
-// (or, much later, by a major GC). The conversions below run for every UTxO on
-// every evaluation, so each temporary is registered with the caller's scope.
-const assetsToValue = (assets: Assets, own: CMLOwn): CML.Value => {
-  const multiAsset = own(CML.MultiAsset.new());
-  const lovelace = assets.lovelace ? BigInt(assets.lovelace) : 0n;
-  const units = Object.keys(assets);
-  const policies = Array.from(
-    new Set(
-      units
-        .filter((unit) => unit !== "lovelace")
-        .map((unit) => unit.slice(0, 56)),
-    ),
-  );
-
-  for (const policy of policies) {
-    const assetsValue = own(CML.MapAssetNameToCoin.new());
-    for (const unit of units.filter((unit) => unit.slice(0, 56) === policy)) {
-      assetsValue.insert(
-        own(CML.AssetName.from_hex(unit.slice(56))),
-        BigInt(assets[unit]),
-      );
-    }
-    multiAsset.insert_assets(own(CML.ScriptHash.from_hex(policy)), assetsValue);
-  }
-
-  return own(CML.Value.new(lovelace, multiAsset));
-};
-
-const toScriptRef = (script: Script, own: CMLOwn): CML.Script => {
-  switch (script.type) {
-    case "Native":
-      return own(
-        CML.Script.new_native(
-          own(CML.NativeScript.from_cbor_hex(script.script)),
-        ),
-      );
-    case "PlutusV1":
-      return own(
-        CML.Script.new_plutus_v1(
-          own(
-            CML.PlutusV1Script.from_cbor_hex(
-              applyDoubleCborEncoding(script.script),
-            ),
-          ),
-        ),
-      );
-    case "PlutusV2":
-      return own(
-        CML.Script.new_plutus_v2(
-          own(
-            CML.PlutusV2Script.from_cbor_hex(
-              applyDoubleCborEncoding(script.script),
-            ),
-          ),
-        ),
-      );
-    case "PlutusV3":
-      return own(
-        CML.Script.new_plutus_v3(
-          own(
-            CML.PlutusV3Script.from_cbor_hex(
-              applyDoubleCborEncoding(script.script),
-            ),
-          ),
-        ),
-      );
-  }
-};
-
-const utxoToTransactionInput = (
-  utxo: UTxO,
-  own: CMLOwn,
-): CML.TransactionInput =>
-  own(
-    CML.TransactionInput.new(
-      own(CML.TransactionHash.from_hex(utxo.txHash)),
-      BigInt(utxo.outputIndex),
-    ),
-  );
-
-const buildDatum = (
-  utxo: UTxO,
-  builder: CML.TransactionOutputBuilder,
-  own: CMLOwn,
-): CML.TransactionOutputBuilder => {
-  if (utxo.datumHash && utxo.datum) {
-    return own(
-      builder.with_communication_data(
-        own(CML.PlutusData.from_cbor_hex(utxo.datum)),
+const toValue = ({ Asset, Value }: Scalus, assets: Assets): Value =>
+  new Value(
+    assets.lovelace ? BigInt(assets.lovelace) : 0n,
+    Object.entries(assets)
+      .filter(([unit]) => unit !== "lovelace")
+      .map(
+        ([unit, quantity]) =>
+          new Asset(unit.slice(0, 56), unit.slice(56), BigInt(quantity)),
       ),
-    );
-  }
-  if (utxo.datum) {
-    const datum = own(CML.PlutusData.from_cbor_hex(utxo.datum));
-    return own(builder.with_data(own(CML.DatumOption.new_datum(datum))));
-  }
-  return builder;
-};
-
-const buildOutput = (
-  utxo: UTxO,
-  own: CMLOwn,
-): CML.TransactionOutputAmountBuilder => {
-  const address = own(CML.Address.from_bech32(utxo.address));
-  const builder = buildDatum(
-    utxo,
-    own(own(CML.TransactionOutputBuilder.new()).with_address(address)),
-    own,
   );
-  if (!utxo.scriptRef) return own(builder.next());
-  const scriptRef = toScriptRef(utxo.scriptRef, own);
-  return own(own(builder.with_reference_script(scriptRef)).next());
-};
 
-const utxoToTransactionOutput = (
-  utxo: UTxO,
-  own: CMLOwn,
-): CML.TransactionOutput => {
-  const amount = own(
-    buildOutput(utxo, own).with_value(assetsToValue(utxo.assets, own)),
+/** The UTxO as a Scalus `Utxo`, which `evaluator.evaluateTx` takes without any CBOR. */
+const toScalusUtxo = (scalus: Scalus, utxo: UTxO): Utxo => {
+  let result = new scalus.Utxo(
+    utxo.txHash,
+    utxo.outputIndex,
+    utxo.address,
+    toValue(scalus, utxo.assets),
   );
-  return own(own(amount.build()).output());
-};
-
-export const buildUtxoMapCbor = (utxos: UTxO[]): Uint8Array => {
-  const pairs = utxos
-    .map((utxo) =>
-      withCMLScope((own) => ({
-        input: utxoToTransactionInput(utxo, own).to_cbor_bytes(),
-        output: utxoToTransactionOutput(utxo, own).to_cbor_bytes(),
-      })),
-    )
-    .sort((a, b) => compareBytes(a.input, b.input));
-
-  return concatBytes([
-    cborMapHeader(pairs.length),
-    ...pairs.flatMap(({ input, output }) => [input, output]),
-  ]);
-};
-
-const assertSafeInteger = (value: number | bigint, label: string): number => {
-  const asNumber = typeof value === "bigint" ? Number(value) : value;
-  if (!Number.isSafeInteger(asNumber)) {
-    throw new Error(`${label} must be a safe integer`);
-  }
-  return asNumber;
-};
-
-const inferProtocolMajorVersion = (
-  context: EvaluationInput["context"],
-): number | undefined => {
-  if (context.protocolParameters.protocolMajorVersion !== undefined) {
-    return assertSafeInteger(
-      context.protocolParameters.protocolMajorVersion,
-      "protocol major version",
-    );
-  }
-  if (context.protocolParameters.costModels.PlutusV3.length >= 350) {
-    return 11;
-  }
-  return undefined;
+  // A datum hash is what the output carries; `datum` is then only its resolved value.
+  if (utxo.datumHash) result = result.withDatumHash(utxo.datumHash);
+  else if (utxo.datum) result = result.withInlineDatum(fromHex(utxo.datum));
+  if (utxo.scriptRef) result = result.withScriptRef(utxo.scriptRef);
+  return result;
 };
 
 export const mapScalusTag = (tag: string): RedeemerTag => {
@@ -271,55 +68,33 @@ export const mapScalusTag = (tag: string): RedeemerTag => {
   return mapped;
 };
 
-export const decodeCostModels = (
-  costModels: EvaluationInput["context"]["protocolParameters"]["costModels"],
-): number[][] =>
-  (["PlutusV1", "PlutusV2", "PlutusV3"] as const).map((version) =>
-    costModels[version].map((cost, index) =>
-      assertSafeInteger(cost, `${version} cost model parameter ${index}`),
-    ),
-  );
-
-const toEvalRedeemer = (redeemer: ScalusRedeemer): EvalRedeemer => ({
-  redeemer_tag: mapScalusTag(redeemer.tag),
-  redeemer_index: assertSafeInteger(redeemer.index, "redeemer index"),
-  ex_units: {
-    mem: assertSafeInteger(redeemer.budget.memory, "redeemer memory budget"),
-    steps: assertSafeInteger(redeemer.budget.steps, "redeemer step budget"),
-  },
-});
-
 export const createScalusEvaluator = (
   options: ScalusEvaluatorOptions = {},
 ): EvaluatorAdapter => ({
   name: options.name ?? "scalus",
-  evaluate: async ({ tx, additionalUTxOs, context }) => {
-    const { zeroTime, zeroSlot, slotLength } = context.slotConfig;
-    const slotConfig = new ScalusLib.SlotConfig(
-      assertSafeInteger(zeroTime, "slot zeroTime"),
-      assertSafeInteger(zeroSlot, "slot zeroSlot"),
-      assertSafeInteger(slotLength, "slot length"),
-    );
-    const evalPlutusScripts = ScalusLib.Scalus
-      .evalPlutusScripts as ScalusEvalPlutusScripts;
-    const evalArgs = [
-      fromHex(tx),
-      buildUtxoMapCbor(additionalUTxOs),
-      slotConfig,
-      decodeCostModels(context.protocolParameters.costModels),
-    ] as const;
-    const protocolMajorVersion =
-      options.protocolMajorVersion !== undefined
-        ? assertSafeInteger(
-            options.protocolMajorVersion,
-            "protocol major version",
-          )
-        : inferProtocolMajorVersion(context);
-    const redeemers =
-      protocolMajorVersion !== undefined
-        ? evalPlutusScripts(...evalArgs, protocolMajorVersion)
-        : evalPlutusScripts(...evalArgs);
-    const scalusRedeemers = redeemers as ScalusRedeemer[];
-    return scalusRedeemers.map(toEvalRedeemer);
+  evaluate: async ({
+    tx,
+    additionalUTxOs,
+    context,
+  }: EvaluationInput): Promise<EvalRedeemer[]> => {
+    const scalus = await loadScalus();
+    return scalus.evaluator
+      .evaluateTx(
+        tx,
+        additionalUTxOs.map((utxo) => toScalusUtxo(scalus, utxo)),
+        context.slotConfig,
+        context.protocolParameters.costModels,
+        options.protocolMajorVersion ??
+          context.protocolParameters.protocolMajorVersion ??
+          DEFAULT_PROTOCOL_MAJOR_VERSION,
+      )
+      .map((redeemer) => ({
+        redeemer_tag: mapScalusTag(redeemer.tag),
+        redeemer_index: redeemer.index,
+        ex_units: {
+          mem: Number(redeemer.budget.memory),
+          steps: Number(redeemer.budget.steps),
+        },
+      }));
   },
 });

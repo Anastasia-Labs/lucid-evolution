@@ -3,191 +3,127 @@ import {
   EvaluationInput,
   ProtocolParameters,
 } from "@lucid-evolution/core-types";
-import { createScalusEvaluator, decodeCostModels } from "../src/index.js";
+import { createScalusEvaluator, mapScalusTag } from "../src/index.js";
 
 const mocks = vi.hoisted(() => ({
-  evalPlutusScripts: vi.fn((..._args: unknown[]): unknown[] => []),
+  evaluateTx: vi.fn((..._args: unknown[]): unknown[] => []),
 }));
 
-vi.mock("scalus", () => ({
-  default: {
-    SlotConfig: class SlotConfig {
-      constructor(
-        readonly zeroTime: number,
-        readonly zeroSlot: number,
-        readonly slotLength: number,
-      ) {}
-    },
-    Scalus: {
-      evalPlutusScripts: mocks.evalPlutusScripts,
-    },
-  },
-}));
-
-const costModels = {
-  PlutusV1: [1],
-  PlutusV2: [2],
-  PlutusV3: [3],
-};
-
-const protocolParameters: ProtocolParameters = {
-  minFeeA: 44,
-  minFeeB: 155381,
-  maxTxSize: 16384,
-  maxValSize: 5000,
-  keyDeposit: 2_000_000n,
-  poolDeposit: 500_000_000n,
-  drepDeposit: 500_000_000n,
-  govActionDeposit: 100_000_000_000n,
-  priceMem: 0.0577,
-  priceStep: 0.0000721,
-  maxTxExMem: 14_000_000n,
-  maxTxExSteps: 10_000_000_000n,
-  coinsPerUtxoByte: 4310n,
-  collateralPercentage: 150,
-  maxCollateralInputs: 3,
-  minFeeRefScriptCostPerByte: 15,
-  costModels,
-};
-
-const makeEvaluationInput = (): EvaluationInput => ({
-  tx: "80",
-  additionalUTxOs: [],
-  context: {
-    network: "Custom",
-    slotConfig: { zeroTime: 0, zeroSlot: 0, slotLength: 1000 },
-    protocolParameters,
-    costModels: undefined as never,
-  },
+// Scalus takes UTxOs as handles now, so the mock needs the three value classes the adapter
+// builds, not just the evaluation entry point.
+vi.mock("scalus", () => {
+  class Utxo {
+    constructor(
+      readonly txHash: string,
+      readonly outputIndex: number,
+      readonly address: string,
+      readonly value: unknown,
+    ) {}
+    withDatumHash() {
+      return this;
+    }
+    withInlineDatum() {
+      return this;
+    }
+    withScriptRef() {
+      return this;
+    }
+  }
+  class Value {
+    constructor(
+      readonly coin: bigint,
+      readonly assets: unknown[],
+    ) {}
+  }
+  class Asset {
+    constructor(
+      readonly policyId: string,
+      readonly assetName: string,
+      readonly quantity: bigint,
+    ) {}
+  }
+  return { Utxo, Value, Asset, evaluator: { evaluateTx: mocks.evaluateTx } };
 });
 
-beforeEach(() => {
-  mocks.evalPlutusScripts.mockReset();
-  mocks.evalPlutusScripts.mockReturnValue([]);
-});
+const COST_MODELS = {
+  PlutusV1: [1, 2, 3],
+  PlutusV2: [4, 5, 6],
+  PlutusV3: [7, 8, 9],
+};
 
-describe("Scalus evaluator adapter", () => {
-  test("rejects unsafe cost model values", () => {
-    const unsafeCostModels = structuredClone(costModels);
-    unsafeCostModels.PlutusV1[0] = Number.MAX_SAFE_INTEGER + 1;
+const protocolParameters = (
+  overrides: Partial<ProtocolParameters> = {},
+): ProtocolParameters =>
+  ({ costModels: COST_MODELS, ...overrides }) as ProtocolParameters;
 
-    expect(() => decodeCostModels(unsafeCostModels)).toThrow(/safe integer/);
+const input = (overrides: Partial<ProtocolParameters> = {}): EvaluationInput =>
+  ({
+    tx: "00",
+    additionalUTxOs: [],
+    context: {
+      slotConfig: { zeroTime: 0, zeroSlot: 0, slotLength: 1000 },
+      protocolParameters: protocolParameters(overrides),
+    },
+  }) as unknown as EvaluationInput;
+
+/** The protocol major version the adapter handed to Scalus on its last call. */
+const versionPassed = () => mocks.evaluateTx.mock.calls.at(-1)?.[4];
+
+describe("scalus evaluator adapter", () => {
+  beforeEach(() => {
+    mocks.evaluateTx.mockReset();
+    mocks.evaluateTx.mockReturnValue([]);
+  });
+
+  test("maps every redeemer tag Scalus can produce", () => {
+    expect(mapScalusTag("Spend")).toBe("spend");
+    expect(mapScalusTag("Cert")).toBe("publish");
+    expect(mapScalusTag("Reward")).toBe("withdraw");
+    // An unknown tag is an error rather than a default, so a tag added upstream cannot silently
+    // become a spend redeemer.
+    expect(() => mapScalusTag("Nonsense")).toThrow(/Unknown Scalus redeemer/);
   });
 
   test("returns an empty result from Scalus without treating it as adapter failure", async () => {
-    const evaluator = createScalusEvaluator();
-
-    await expect(evaluator.evaluate(makeEvaluationInput())).resolves.toEqual(
+    await expect(createScalusEvaluator().evaluate(input())).resolves.toEqual(
       [],
     );
   });
 
   test("converts Scalus redeemer results into Lucid evaluator results", async () => {
-    mocks.evalPlutusScripts.mockReturnValueOnce([
-      {
-        tag: "Cert",
-        index: 1,
-        budget: { memory: 2n, steps: 3n },
-      },
+    mocks.evaluateTx.mockReturnValue([
+      { tag: "Mint", index: 1, budget: { memory: 1000n, steps: 2000n } },
     ]);
-    const evaluator = createScalusEvaluator();
-
-    await expect(evaluator.evaluate(makeEvaluationInput())).resolves.toEqual([
+    await expect(createScalusEvaluator().evaluate(input())).resolves.toEqual([
       {
-        redeemer_tag: "publish",
+        redeemer_tag: "mint",
         redeemer_index: 1,
-        ex_units: { mem: 2, steps: 3 },
+        ex_units: { mem: 1000, steps: 2000 },
       },
     ]);
   });
 
-  test("passes the configured protocol major version when Scalus exposes it", async () => {
-    mocks.evalPlutusScripts.mockImplementationOnce(
-      (
-        _tx,
-        _utxos,
-        _slotConfig,
-        _costModels,
-        _protocolMajorVersion,
-      ): unknown[] => [],
-    );
-    const evaluator = createScalusEvaluator({ protocolMajorVersion: 11 });
-
-    await expect(evaluator.evaluate(makeEvaluationInput())).resolves.toEqual(
-      [],
-    );
-
-    expect(mocks.evalPlutusScripts).toHaveBeenCalledWith(
-      expect.any(Uint8Array),
-      expect.any(Uint8Array),
-      expect.any(Object),
-      [[1], [2], [3]],
-      11,
-    );
+  test("passes the cost models through untouched", async () => {
+    await createScalusEvaluator().evaluate(input());
+    expect(mocks.evaluateTx.mock.calls[0]?.[3]).toBe(COST_MODELS);
   });
 
-  test("infers PV11 from the PlutusV3 cost model length when no version is provided", async () => {
-    mocks.evalPlutusScripts.mockImplementationOnce(
-      (
-        _tx,
-        _utxos,
-        _slotConfig,
-        _costModels,
-        _protocolMajorVersion,
-      ): unknown[] => [],
+  test("prefers the version the option names", async () => {
+    await createScalusEvaluator({ protocolMajorVersion: 9 }).evaluate(
+      input({ protocolMajorVersion: 10 }),
     );
-    const input = makeEvaluationInput();
-    input.context.protocolParameters = {
-      ...input.context.protocolParameters,
-      costModels: {
-        ...input.context.protocolParameters.costModels,
-        PlutusV3: Array(350).fill(0),
-      },
-    };
-    const evaluator = createScalusEvaluator();
-
-    await expect(evaluator.evaluate(input)).resolves.toEqual([]);
-
-    expect(mocks.evalPlutusScripts).toHaveBeenCalledWith(
-      expect.any(Uint8Array),
-      expect.any(Uint8Array),
-      expect.any(Object),
-      expect.any(Array),
-      11,
-    );
+    expect(versionPassed()).toBe(9);
   });
 
-  test.each([
-    [
-      "redeemer index",
-      {
-        tag: "Spend",
-        index: Number.MAX_SAFE_INTEGER + 1,
-        budget: { memory: 1, steps: 1 },
-      },
-    ],
-    [
-      "redeemer memory budget",
-      {
-        tag: "Spend",
-        index: 0,
-        budget: { memory: Number.MAX_SAFE_INTEGER + 1, steps: 1 },
-      },
-    ],
-    [
-      "redeemer step budget",
-      {
-        tag: "Spend",
-        index: 0,
-        budget: { memory: 1, steps: Number.MAX_SAFE_INTEGER + 1 },
-      },
-    ],
-  ])("rejects unsafe %s values returned by Scalus", async (label, redeemer) => {
-    mocks.evalPlutusScripts.mockReturnValueOnce([redeemer]);
-    const evaluator = createScalusEvaluator();
+  test("otherwise uses the version the provider reports", async () => {
+    await createScalusEvaluator().evaluate(input({ protocolMajorVersion: 10 }));
+    expect(versionPassed()).toBe(10);
+  });
 
-    await expect(evaluator.evaluate(makeEvaluationInput())).rejects.toThrow(
-      `${label} must be a safe integer`,
-    );
+  test("falls back to 11 when the provider reports no version", async () => {
+    // Blockfrost and the emulator both set it; a provider that does not gets mainnet's version
+    // rather than a guess, so costing never silently uses a protocol nobody asked for.
+    await createScalusEvaluator().evaluate(input());
+    expect(versionPassed()).toBe(11);
   });
 });
