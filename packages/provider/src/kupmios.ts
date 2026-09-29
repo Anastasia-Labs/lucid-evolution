@@ -560,6 +560,8 @@ const toProtocolParameters = (
   result: Ogmios.ProtocolParameters,
 ): ProtocolParameters => {
   return {
+    protocolMajorVersion: result.version.major,
+    protocolMinorVersion: result.version.minor,
     minFeeA: result.minFeeCoefficient,
     minFeeB: result.minFeeConstant.ada.lovelace,
     maxTxSize: result.maxTransactionSize.bytes,

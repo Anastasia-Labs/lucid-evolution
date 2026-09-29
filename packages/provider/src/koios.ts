@@ -86,6 +86,8 @@ export class Koios implements Provider {
     );
 
     return {
+      protocolMajorVersion: result.protocol_major,
+      protocolMinorVersion: result.protocol_minor,
       minFeeA: result.min_fee_a,
       minFeeB: result.min_fee_b,
       maxTxSize: result.max_tx_size,
