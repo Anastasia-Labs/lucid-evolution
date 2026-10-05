@@ -886,9 +886,9 @@ checksum = "7dd6e30e90baa6f72411720665d41d89b9a3d039dc45b8faea1ddd07f617f6af"
 
 [[package]]
 name = "uplc"
-version = "1.1.22"
+version = "1.1.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4a551c4786ef2045b2d05297eec4bffc84ada7e6058f414c5d3550a62a4ffcbb"
+checksum = "6040ff5aabfd77c7757b3736c736d1a58fa06e8a43f78970bfa29f18b2729b54"
 dependencies = [
  "bitvec",
  "blst",

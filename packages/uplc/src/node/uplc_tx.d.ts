@@ -10,6 +10,7 @@ export function eval_phase_two_raw(
   slot_config_x: bigint,
   slot_config_y: bigint,
   slot_config_z: number,
+  protocol_major_version?: number | null,
 ): Uint8Array[];
 export function apply_params_to_script(
   params_bytes: Uint8Array,

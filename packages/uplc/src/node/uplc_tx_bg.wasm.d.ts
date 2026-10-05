@@ -21,6 +21,8 @@ export const eval_phase_two_raw: (
   k: bigint,
   l: bigint,
   m: number,
+  n: number,
+  o: number,
 ) => [number, number, number, number];
 export const __wbindgen_export_0: WebAssembly.Table;
 export const __wbindgen_malloc: (a: number, b: number) => number;
