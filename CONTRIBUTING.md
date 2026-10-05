@@ -59,7 +59,6 @@ Under `packages/lucid`, create an `.env` file with the following variables:
 VITE_API_URL="https://cardano-preprod.blockfrost.io/api/v0/"
 VITE_BLOCKFROST_KEY="your_blockfrost_preprod_key"
 VITE_SEED="your_test_wallet_seed_phrase"
-VITE_MAESTRO_KEY="your_maestro_key"
 VITE_BLOCKFROST_KEY_MAINNET="your_blockfrost_mainnet_key"
 VITE_KUPO_URL="your_kupo_endpoint_url"
 VITE_OGMIOS_URL="your_ogmios_endpoint_url"
@@ -75,7 +74,6 @@ VITE_OGMIOS_URL="your_ogmios_endpoint_url"
 #### Step 2: Obtain Required Keys
 
 - **Blockfrost**: Register at [blockfrost.io](https://blockfrost.io) to get API keys for both Preprod and Mainnet
-- **Maestro**: Get an API key from [gomaestro.org](https://www.gomaestro.org)
 - **Kupo & Ogmios**: For these services, you'll need the full authenticated HTTP endpoint URLs, not just API keys. You can run these services locally or use a provider that offers them.
 - **Test Wallet**: Create a test wallet with funds on the Preprod network for on-chain tests
 

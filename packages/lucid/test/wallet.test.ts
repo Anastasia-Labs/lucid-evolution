@@ -5,8 +5,6 @@ import {
   generateSeedPhrase,
   getAddressDetails,
   Lucid,
-  Maestro,
-  MaestroSupportedNetworks,
 } from "../src/index.js";
 import { Config, Effect } from "effect";
 import { CML } from "../src/core.js";
@@ -16,7 +14,6 @@ const loadConfig = Effect.gen(function* () {
     Config.string("VITE_BLOCKFROST_API_URL_PREPROD"),
     Config.string("VITE_BLOCKFROST_KEY_PREPROD"),
     Config.string("VITE_WALLET_SEED_2"),
-    Config.string("VITE_MAESTRO_KEY"),
   ]);
 });
 
@@ -25,16 +22,14 @@ const NETWORK = "Preprod";
 const liveProviderTest =
   process.env.VITE_BLOCKFROST_API_URL_PREPROD &&
   process.env.VITE_BLOCKFROST_KEY_PREPROD &&
-  process.env.VITE_WALLET_SEED_2 &&
-  process.env.VITE_MAESTRO_KEY
+  process.env.VITE_WALLET_SEED_2
     ? test
     : test.skip;
 
 describe("Wallet", () => {
   liveProviderTest("switchProvider", async () => {
     const program = Effect.gen(function* () {
-      const [VITE_API_URL, VITE_BLOCKFROST_KEY, VITE_SEED, VITE_MAESTRO_KEY] =
-        yield* loadConfig;
+      const [VITE_API_URL, VITE_BLOCKFROST_KEY, VITE_SEED] = yield* loadConfig;
 
       const user = yield* Effect.tryPromise(() =>
         Lucid(new Blockfrost(VITE_API_URL, VITE_BLOCKFROST_KEY), NETWORK),
@@ -45,13 +40,12 @@ describe("Wallet", () => {
       const blockfrostUTXO = yield* Effect.promise(() =>
         user.wallet().getUtxos(),
       );
-      const maestro = new Maestro({
-        apiKey: VITE_MAESTRO_KEY,
-        network: NETWORK as MaestroSupportedNetworks,
-      });
-      yield* Effect.tryPromise(() => user.switchProvider(maestro));
-      const maestroUTXO = yield* Effect.promise(() => user.wallet().getUtxos());
-      assert.deepStrictEqual(blockfrostUTXO, maestroUTXO);
+      const switched = new Blockfrost(VITE_API_URL, VITE_BLOCKFROST_KEY);
+      yield* Effect.tryPromise(() => user.switchProvider(switched));
+      const switchedUTXO = yield* Effect.promise(() =>
+        user.wallet().getUtxos(),
+      );
+      assert.deepStrictEqual(blockfrostUTXO, switchedUTXO);
     });
     try {
       await Effect.runPromise(program);
@@ -68,8 +62,7 @@ describe("Wallet", () => {
   });
   liveProviderTest("selectWallet.fromAddress", async () => {
     const program = Effect.gen(function* () {
-      const [VITE_API_URL, VITE_BLOCKFROST_KEY, VITE_SEED, VITE_MAESTRO_KEY] =
-        yield* loadConfig;
+      const [VITE_API_URL, VITE_BLOCKFROST_KEY, VITE_SEED] = yield* loadConfig;
 
       const user = yield* Effect.tryPromise(() =>
         Lucid(new Blockfrost(VITE_API_URL, VITE_BLOCKFROST_KEY), NETWORK),

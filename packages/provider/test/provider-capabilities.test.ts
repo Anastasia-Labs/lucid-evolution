@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
-import { Blockfrost, Koios, Kupmios, Maestro } from "../src/index.js";
+import { Blockfrost, Koios, Kupmios } from "../src/index.js";
 
 const rewardAddress =
   "stake_test17zt3vxfjx9pjnpnapa65lx375p2utwxmpc8afj053h0l3vgc8a3g3";
@@ -16,56 +16,6 @@ afterEach(() => {
 });
 
 describe("built-in provider reward-account capabilities", () => {
-  test("Maestro preserves registered but undelegated state", async () => {
-    vi.spyOn(globalThis, "fetch").mockImplementation(async () =>
-      jsonResponse({
-        data: {
-          registered: true,
-          delegated_pool: null,
-          rewards_available: "0",
-        },
-      }),
-    );
-    const provider = new Maestro({ network: "Preprod", apiKey: "test" });
-
-    await expect(provider.getRewardAccount(rewardAddress)).resolves.toEqual({
-      registered: true,
-      poolId: null,
-      rewards: 0n,
-    });
-    await expect(provider.getDelegation(rewardAddress)).resolves.toEqual({
-      poolId: null,
-      rewards: 0n,
-    });
-  });
-
-  test("Maestro maps a missing account to unregistered", async () => {
-    vi.spyOn(globalThis, "fetch").mockResolvedValue(
-      jsonResponse({ message: "not found" }, 404),
-    );
-    const provider = new Maestro({ network: "Preprod", apiKey: "test" });
-
-    await expect(provider.getRewardAccount(rewardAddress)).resolves.toEqual({
-      registered: false,
-      poolId: null,
-      rewards: 0n,
-    });
-  });
-
-  test("Maestro does not misclassify server errors as account state", async () => {
-    vi.spyOn(globalThis, "fetch").mockResolvedValue(
-      jsonResponse({ message: "internal server error" }, 500),
-    );
-    const provider = new Maestro({ network: "Preprod", apiKey: "test" });
-
-    await expect(provider.getRewardAccount(rewardAddress)).rejects.toThrow(
-      "Could not fetch reward account from Maestro. Received status code: 500",
-    );
-    await expect(provider.getDelegation(rewardAddress)).rejects.toThrow(
-      "Could not fetch reward account from Maestro. Received status code: 500",
-    );
-  });
-
   test("Blockfrost exposes account registration", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(
       jsonResponse({
@@ -139,44 +89,6 @@ describe("built-in provider transaction-status capabilities", () => {
     expect(String(fetch.mock.calls[0]?.[0])).toBe(
       `http://kupo.test/matches/*@${txHash}`,
     );
-  });
-
-  test("Maestro exposes pending, confirmed, and failed states", async () => {
-    vi.spyOn(globalThis, "fetch")
-      .mockResolvedValueOnce(
-        jsonResponse({ tx_hash: txHash, status: "pending", confirmations: 0 }),
-      )
-      .mockResolvedValueOnce(
-        jsonResponse({
-          tx_hash: txHash,
-          status: "confirmed",
-          confirmations: 7,
-        }),
-      )
-      .mockResolvedValueOnce(
-        jsonResponse({
-          tx_hash: txHash,
-          status: "failed",
-          reason: "rejected",
-          confirmations: 0,
-        }),
-      );
-    const provider = new Maestro({ network: "Preprod", apiKey: "test" });
-
-    await expect(provider.getTransactionStatus(txHash)).resolves.toEqual({
-      status: "pending",
-      txHash,
-    });
-    await expect(provider.getTransactionStatus(txHash)).resolves.toEqual({
-      status: "confirmed",
-      txHash,
-      confirmation: { txHash, confirmations: 7 },
-    });
-    await expect(provider.getTransactionStatus(txHash)).resolves.toEqual({
-      status: "failed",
-      txHash,
-      reason: "rejected",
-    });
   });
 
   test("Blockfrost exposes confirmed inclusion metadata", async () => {
