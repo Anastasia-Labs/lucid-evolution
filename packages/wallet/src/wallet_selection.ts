@@ -327,6 +327,17 @@ export const makeWalletFromAPI = (
             );
       return utxos;
     },
+    // Exposed only when the CIP-30 wallet implements getCollateral.
+    ...(typeof api.getCollateral !== "function"
+      ? {}
+      : {
+          getCollateral: async (): Promise<UTxO[]> =>
+            ((await api.getCollateral()) || []).map((utxo) =>
+              coreToUtxo(
+                CML.TransactionUnspentOutput.from_cbor_bytes(fromHex(utxo)),
+              ),
+            ),
+        }),
     getUtxosCore: async (): Promise<CML.TransactionUnspentOutput[]> => {
       const utxos =
         config.overriddenUTxOs !== undefined

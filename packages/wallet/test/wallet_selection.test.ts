@@ -1,5 +1,6 @@
 import { describe, expect, test, vi } from "vitest";
-import { Provider, WalletApi } from "@lucid-evolution/core-types";
+import { Provider, UTxO, WalletApi } from "@lucid-evolution/core-types";
+import { utxoToCore } from "@lucid-evolution/utils";
 import { CML } from "../src/core.js";
 import { makeWalletFromAPI } from "../src/wallet_selection.js";
 
@@ -139,5 +140,52 @@ describe("makeWalletFromAPI submitTxs", () => {
     await expect(
       makeWalletFromAPI(provider, api).submitTxs!([TX_CBOR, TX_CBOR]),
     ).rejects.toThrow("unexpected number of transaction hashes");
+  });
+});
+
+describe("makeWalletFromAPI getCollateral", () => {
+  const collateral: UTxO = {
+    txHash: "2".repeat(64),
+    outputIndex: 1,
+    address:
+      "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950",
+    assets: { lovelace: 5_000_000n },
+    datumHash: undefined,
+    datum: undefined,
+    scriptRef: undefined,
+  };
+
+  test("returns the CIP-30 wallet's collateral", async () => {
+    const getCollateral = vi.fn(async () => [
+      utxoToCore(collateral).to_cbor_hex(),
+    ]);
+    const getUtxos = vi.fn();
+    const wallet = makeWalletFromAPI(
+      provider,
+      makeApi({ getCollateral, getUtxos }),
+    );
+
+    expect(await wallet.getCollateral!()).toEqual([collateral]);
+    expect(getUtxos).not.toHaveBeenCalled();
+  });
+
+  test("returns an empty list when the CIP-30 wallet returns none", async () => {
+    const wallet = makeWalletFromAPI(
+      provider,
+      makeApi({
+        getCollateral: vi.fn(async () => null as unknown as string[]),
+      }),
+    );
+
+    expect(await wallet.getCollateral!()).toEqual([]);
+  });
+
+  test("is absent when the CIP-30 wallet has no getCollateral", () => {
+    const wallet = makeWalletFromAPI(
+      provider,
+      makeApi({ getCollateral: undefined }),
+    );
+
+    expect(wallet.getCollateral).toBeUndefined();
   });
 });

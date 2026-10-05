@@ -277,10 +277,19 @@ const completeCurrentConfig = (
           ),
         ),
       );
+      // A wallet that names its collateral candidates is used as is, even
+      // when the list is empty.
+      const collateralCandidates =
+        wallet.getCollateral === undefined
+          ? walletInputs
+          : yield* Effect.tryPromise({
+              try: () => wallet.getCollateral!(),
+              catch: (error) => completeTxError(error),
+            });
       const collateralInput = yield* findCollateral(
         config.lucidConfig.protocolParameters.coinsPerUtxoByte,
         totalCollateral,
-        walletInputs,
+        collateralCandidates,
       );
       yield* applyCollateral(totalCollateral, collateralInput, changeAddress);
       evaluatedScriptBody =
