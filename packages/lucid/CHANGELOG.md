@@ -1,5 +1,18 @@
 # @lucid-evolution/lucid
 
+## 0.6.7
+
+### Patch Changes
+
+- [#734](https://github.com/Anastasia-Labs/lucid-evolution/pull/734) [`8e693eb`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8e693ebf6eb5f2b3788a13bad5f5d9550ee3b179) Thanks [@jtranq](https://github.com/jtranq)! - Update the Aiken evaluator to 1.1.23 and forward the provider protocol version. Preserve protocol 10 behavior when the version is omitted.
+
+- Updated dependencies [[`8e693eb`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8e693ebf6eb5f2b3788a13bad5f5d9550ee3b179)]:
+  - @lucid-evolution/uplc@0.2.24
+  - @lucid-evolution/utils@0.1.75
+  - @lucid-evolution/provider@0.2.6
+  - @lucid-evolution/tx-graph@0.0.7
+  - @lucid-evolution/wallet@0.2.3
+
 ## 0.6.6
 
 ### Patch Changes
