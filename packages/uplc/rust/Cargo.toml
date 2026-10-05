@@ -17,9 +17,9 @@ getrandom = { version = "0.2", features = ["js"] }
 
 [profile.release]
 codegen-units = 1
-opt-level = "z"
+opt-level = 3
 lto = true
 debug = false
 
 [package.metadata.wasm-pack.profile.release]
-wasm-opt = ['-Oz']
+wasm-opt = ['-O3']
