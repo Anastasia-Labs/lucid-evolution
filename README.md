@@ -59,11 +59,6 @@ There are a growing number of projects that are built on top of `lucid-evolution
       <a style="text-decoration:none;" href="https://meld.com/"  target="_blank">Meld</a>
     </td>
     <td align="center">
-      <img src="https://avatars.githubusercontent.com/u/84299480?v=4" height="50px;" alt="Maestro" />
-      <br />
-      <a style="text-decoration:none;" href="https://www.gomaestro.org" target="_blank">Maestro</a>
-    </td>
-    <td align="center">
       <img src="https://avatars.githubusercontent.com/u/131367296?s=200&v=4"  height="50px;" alt="Mynth" />
       <br />
       <a style="text-decoration:none;" href="https://mynth.ai/"  target="_blank">Mynth</a>
