@@ -1,5 +1,11 @@
 # @lucid-evolution/uplc
 
+## 0.2.24
+
+### Patch Changes
+
+- [#734](https://github.com/Anastasia-Labs/lucid-evolution/pull/734) [`8e693eb`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8e693ebf6eb5f2b3788a13bad5f5d9550ee3b179) Thanks [@jtranq](https://github.com/jtranq)! - Update the Aiken evaluator to 1.1.23 and forward the provider protocol version. Preserve protocol 10 behavior when the version is omitted.
+
 ## 0.2.23
 
 ### Patch Changes
