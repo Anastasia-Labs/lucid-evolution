@@ -20,6 +20,7 @@ import {
   coreToUtxo,
   credentialToRewardAddress,
   getAddressDetails,
+  isEqualUTxO,
   utxoToCore,
 } from "@lucid-evolution/utils";
 import { CML } from "./core.js";
@@ -327,6 +328,40 @@ export const makeWalletFromAPI = (
             );
       return utxos;
     },
+    // Exposed only when the CIP-30 wallet implements getCollateral. With a
+    // UTxO override, only candidates in the override are returned, so a
+    // collateral UTxO spent by a pending chained transaction is not reused.
+    ...(typeof api.getCollateral !== "function"
+      ? {}
+      : {
+          getCollateral: async (amount?: bigint): Promise<UTxO[]> => {
+            // CIP-30 takes the amount as CBOR-encoded Coin.
+            const params =
+              amount === undefined
+                ? undefined
+                : {
+                    amount: withCMLScope((own) =>
+                      toHex(own(CML.Value.from_coin(amount)).to_cbor_bytes()),
+                    ),
+                  };
+            const hexes = (await api.getCollateral!(params)) || [];
+            const candidates = withCMLScope((own) =>
+              hexes.map((utxo) =>
+                coreToUtxo(
+                  own(
+                    CML.TransactionUnspentOutput.from_cbor_bytes(fromHex(utxo)),
+                  ),
+                ),
+              ),
+            );
+            const override = config.overriddenUTxOs;
+            return override === undefined
+              ? candidates
+              : candidates.filter((candidate) =>
+                  override.some((utxo) => isEqualUTxO(utxo, candidate)),
+                );
+          },
+        }),
     getUtxosCore: async (): Promise<CML.TransactionUnspentOutput[]> => {
       const utxos =
         config.overriddenUTxOs !== undefined
