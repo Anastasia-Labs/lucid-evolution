@@ -1,7 +1,12 @@
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { CBORHex } from "../types.js";
 import { Effect, pipe } from "effect";
-import { networkToId, getAddressDetails } from "@lucid-evolution/utils";
+import {
+  applyDoubleCborEncoding,
+  getAddressDetails,
+  networkToId,
+  scriptCborBytes,
+} from "@lucid-evolution/utils";
 import { withCMLScope } from "@lucid-evolution/core-utils";
 import {
   Address,
@@ -38,20 +43,60 @@ export const toCMLAddress = (
       : CML.Address.from_bech32(address);
   });
 
+/**
+ * Script bytes from the shared script cache when `script` is already double
+ * CBOR encoded (always the case for scripts in `config.scripts`), so a script
+ * replayed by delayed completion is not decoded from hex again. Anything else
+ * takes the original `from_cbor_hex` path.
+ */
+const cachedPlutusBytes = (
+  type: "PlutusV1" | "PlutusV2" | "PlutusV3",
+  script: string,
+): Uint8Array | undefined => {
+  try {
+    return applyDoubleCborEncoding(script) === script
+      ? scriptCborBytes({ type, script })
+      : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
 export const toV1 = (script: string) =>
-  withCMLScope((own) =>
-    CML.PlutusScript.from_v1(own(CML.PlutusV1Script.from_cbor_hex(script))),
-  );
+  withCMLScope((own) => {
+    const bytes = cachedPlutusBytes("PlutusV1", script);
+    return CML.PlutusScript.from_v1(
+      own(
+        bytes
+          ? CML.PlutusV1Script.from_cbor_bytes(bytes)
+          : CML.PlutusV1Script.from_cbor_hex(script),
+      ),
+    );
+  });
 
 export const toV2 = (script: string) =>
-  withCMLScope((own) =>
-    CML.PlutusScript.from_v2(own(CML.PlutusV2Script.from_cbor_hex(script))),
-  );
+  withCMLScope((own) => {
+    const bytes = cachedPlutusBytes("PlutusV2", script);
+    return CML.PlutusScript.from_v2(
+      own(
+        bytes
+          ? CML.PlutusV2Script.from_cbor_bytes(bytes)
+          : CML.PlutusV2Script.from_cbor_hex(script),
+      ),
+    );
+  });
 
 export const toV3 = (script: string) =>
-  withCMLScope((own) =>
-    CML.PlutusScript.from_v3(own(CML.PlutusV3Script.from_cbor_hex(script))),
-  );
+  withCMLScope((own) => {
+    const bytes = cachedPlutusBytes("PlutusV3", script);
+    return CML.PlutusScript.from_v3(
+      own(
+        bytes
+          ? CML.PlutusV3Script.from_cbor_bytes(bytes)
+          : CML.PlutusV3Script.from_cbor_hex(script),
+      ),
+    );
+  });
 
 export const toPartial = (script: CML.PlutusScript, redeemer: CBORHex) =>
   withCMLScope((own) =>

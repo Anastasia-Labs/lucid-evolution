@@ -30,7 +30,11 @@ import {
   generateSeedPhrase,
   PROTOCOL_PARAMETERS_DEFAULT,
 } from "@lucid-evolution/utils";
-import { coreToUtxo, getAddressDetails } from "@lucid-evolution/utils";
+import {
+  coreToUtxo,
+  getAddressDetails,
+  ScriptCache,
+} from "@lucid-evolution/utils";
 import { CMLOwn, fromHex, withCMLScope } from "@lucid-evolution/core-utils";
 import { walletFromSeed } from "@lucid-evolution/wallet";
 import {
@@ -161,8 +165,12 @@ export class Emulator implements Provider {
    * `transactionHistory`, these are its only pending entries.
    */
   #pendingTxHashes: TxHash[] = [];
-  /** Script hashes of reference scripts, keyed by type and CBOR. */
-  #scriptRefHashes = new Map<string, ScriptHash>();
+  /**
+   * Script hashes of reference scripts, keyed by type and CBOR. A plain Map
+   * keyed by long script text puts every script of the same length in one
+   * hash bucket; `ScriptCache` keys a fingerprint and is bounded.
+   */
+  #scriptRefHashes = new ScriptCache<ScriptHash>(4096, 64 * 1024 * 1024);
 
   constructor(
     accounts: EmulatorAccount[],
@@ -1260,8 +1268,10 @@ export class Emulator implements Provider {
 
   /** Hash of a reference script, computed once per distinct script. */
   private scriptRefHash(scriptRef: Script): ScriptHash {
-    const key = `${scriptRef.type}:${scriptRef.script}`;
-    let scriptHash = this.#scriptRefHashes.get(key);
+    let scriptHash = this.#scriptRefHashes.get(
+      scriptRef.type,
+      scriptRef.script,
+    );
     if (scriptHash === undefined) {
       scriptHash = withCMLScope((own) => {
         const bytes = fromHex(scriptRef.script);
@@ -1296,7 +1306,7 @@ export class Emulator implements Provider {
             ).to_hex();
         }
       });
-      this.#scriptRefHashes.set(key, scriptHash);
+      this.#scriptRefHashes.set(scriptRef.type, scriptRef.script, scriptHash);
     }
     return scriptHash;
   }

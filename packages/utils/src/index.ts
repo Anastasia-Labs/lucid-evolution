@@ -10,6 +10,7 @@ export * from "./label.js";
 export * from "./native.js";
 export * from "./network.js";
 export * from "./scripts.js";
+export { ScriptCache } from "./script-cache.js";
 export * from "./time.js";
 export * from "./utxo.js";
 export * from "./value.js";
