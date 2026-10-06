@@ -162,13 +162,13 @@ type InternalCompleteOptions = {
   walletCollateral?: Effect.Effect<UTxO[]>;
   knownRedeemerExUnits?: KnownRedeemerExUnits;
   redeemerInputFingerprint?: string;
-  /**
-   * Fail when the selected collateral does not cover the final fee. Without
-   * coin selection nothing else funds a fee that grew after the collateral
-   * was sized.
-   */
-  checkFinalCollateral?: boolean;
 };
+
+/** The collateral the ledger requires for `fee`, rounded up. */
+const requiredCollateral = (
+  fee: bigint,
+  collateralPercentage: number,
+): bigint => (fee * BigInt(collateralPercentage) + 99n) / 100n;
 
 type KnownRedeemerExUnits = Map<
   string,
@@ -290,20 +290,25 @@ const completeCurrentConfig = (
     // UPLC evaluation need to be performed again if new inputs are selected during coin selection.
     // Because increasing the inputs can increase the script execution budgets.
     // Set collateral input if there are script executions
-    let appliedCollateral: bigint | undefined;
+    let collateral: CollateralState | undefined;
     if (hasPlutusScriptExecutions) {
       const estimatedFee = yield* estimateFee(config, true);
 
-      const totalCollateral = BigInt(
-        Math.ceil(
-          Math.max(
-            (config.lucidConfig.protocolParameters.collateralPercentage *
-              Number(estimatedFee)) /
-              100,
-            Number(setCollateral),
-          ),
-        ),
-      );
+      // The fee is still an estimate here. The second round tops the
+      // collateral up as its fee fixed point settles the final fee. A
+      // bootstrap attempt's fee covers the maximum execution budget rather
+      // than the scripts' cost, so it does not size the collateral.
+      const bootstrap = internalOptions.bootstrapExUnits === true;
+      const estimatedCollateral = bootstrap
+        ? 0n
+        : requiredCollateral(
+            estimatedFee,
+            config.lucidConfig.protocolParameters.collateralPercentage,
+          );
+      const totalCollateral =
+        estimatedCollateral > setCollateral
+          ? estimatedCollateral
+          : setCollateral;
       const walletCollateral = yield* internalOptions.walletCollateral ??
         fetchWalletCollateral(wallet, totalCollateral, presetWalletInputs);
       const collateralInput = yield* selectCollateral(
@@ -312,8 +317,13 @@ const completeCurrentConfig = (
         walletCollateral,
         walletInputs,
       );
-      yield* applyCollateral(totalCollateral, collateralInput, changeAddress);
-      appliedCollateral = totalCollateral;
+      collateral = yield* applyCollateral(totalCollateral, collateralInput, {
+        minimum: setCollateral,
+        walletCollateral,
+        walletInputs,
+        changeAddress,
+      });
+      if (!bootstrap) finalEvaluation.collateral = collateral;
       // A first round that found redeemers already set an explicit fee.
       finalEvaluation.explicitFee = evaluatedScriptBody;
       evaluatedScriptBody =
@@ -339,6 +349,16 @@ const completeCurrentConfig = (
         : config.minFee !== undefined
     ) {
       yield* applyEffectiveFee(config, true, evaluatedScriptBody);
+      // Cover the fee just applied, re-applying it while a top-up grows it.
+      for (let topUps = 0; finalEvaluation.collateral; topUps++) {
+        const fee = yield* estimateFee(config, true);
+        if (!(yield* topUpCollateral(config, finalEvaluation.collateral, fee)))
+          break;
+        if (topUps >= MAX_EVALUATION_ATTEMPTS) {
+          return yield* collateralConvergenceError();
+        }
+        yield* applyEffectiveFee(config, true, evaluatedScriptBody);
+      }
     }
     withCMLScope((own) =>
       config.txBuilder.add_change_if_needed(
@@ -385,26 +405,16 @@ const completeCurrentConfig = (
     );
     if (transaction !== normalizedTransaction) normalizedTransaction.free();
 
-    if (
-      internalOptions.checkFinalCollateral === true &&
-      appliedCollateral !== undefined &&
-      evaluatedScriptBody
-    ) {
-      // The collateral was sized from a provisional fee estimate, so check it
-      // against the final fee.
-      const collateral = appliedCollateral;
-      const fee = withCMLScope((own) => own(transaction.body()).fee());
-      const requiredCollateral =
-        (fee *
-          BigInt(config.lucidConfig.protocolParameters.collateralPercentage) +
-          99n) /
-        100n;
-      if (collateral < requiredCollateral) {
-        transaction.free();
-        return yield* completeTxError(
-          `Final transaction requires ${requiredCollateral} Lovelace collateral, but only ${collateral} was selected. Rebuild with setCollateral covering the final fee.`,
-        );
-      }
+    // The fee fixed point keeps the collateral covering the fee, so this only
+    // guards against a transaction the ledger would reject. A bootstrap
+    // attempt's fee covers the maximum budget and only feeds the delayed
+    // redeemers, so it is not checked.
+    if (internalOptions.bootstrapExUnits !== true) {
+      yield* checkFinalCollateral(
+        transaction,
+        collateral?.inputs ?? [],
+        config.lucidConfig.protocolParameters.collateralPercentage,
+      ).pipe(Effect.tapError(() => Effect.sync(() => transaction.free())));
     }
 
     const derivedInputs = deriveInputsFromTransaction(transaction);
@@ -433,6 +443,67 @@ const completeCurrentConfig = (
       }),
     );
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
+
+/**
+ * Checks the ledger's collateral rule on a completed transaction with
+ * redeemers: its collateral inputs minus the collateral return must cover
+ * `collateralPercentage` of the fee, and a `total_collateral` field must equal
+ * that balance.
+ */
+const checkFinalCollateral = (
+  transaction: CML.Transaction,
+  collateralInputs: ReadonlyArray<UTxO>,
+  collateralPercentage: number,
+): Effect.Effect<void, TxBuilderError> =>
+  Effect.suspend(() => {
+    const { hasRedeemers, inputKeys, fee, returned, totalCollateral } =
+      withCMLScope((own) => {
+        const body = own(transaction.body());
+        const inputs = own(body.collateral_inputs());
+        const collateralReturn = own(body.collateral_return());
+        return {
+          hasRedeemers:
+            own(own(transaction.witness_set()).redeemers()) !== undefined,
+          inputKeys: Array.from({ length: inputs?.len() ?? 0 }, (_, index) => {
+            const input = own(inputs!.get(index));
+            return `${own(input.transaction_id()).to_hex()}#${input.index()}`;
+          }),
+          fee: body.fee(),
+          returned: collateralReturn
+            ? own(collateralReturn.amount()).coin()
+            : 0n,
+          totalCollateral: body.total_collateral(),
+        };
+      });
+    if (!hasRedeemers) return Effect.void;
+    if (inputKeys.length === 0) {
+      return completeTxError(
+        "Transaction runs scripts but has no collateral inputs",
+      );
+    }
+    const byKey = new Map(
+      collateralInputs.map((utxo) => [outRefKey(utxo), utxo]),
+    );
+    let collateral = -returned;
+    for (const key of inputKeys) {
+      const utxo = byKey.get(key);
+      if (utxo === undefined) {
+        return completeTxError(`Unable to resolve collateral input ${key}`);
+      }
+      collateral += utxo.assets.lovelace ?? 0n;
+    }
+    if (totalCollateral !== undefined && totalCollateral !== collateral) {
+      return completeTxError(
+        `Total collateral ${totalCollateral} does not match the collateral balance ${collateral}`,
+      );
+    }
+    const required = requiredCollateral(fee, collateralPercentage);
+    return collateral < required
+      ? completeTxError(
+          `Final transaction requires ${required} Lovelace collateral, but only ${collateral} was selected`,
+        )
+      : Effect.void;
+  });
 
 const completeStaticFromActions = (
   sourceConfig: TxBuilder.TxBuilderConfig,
@@ -692,19 +763,12 @@ export const complete = (options: CompleteOptions = {}) =>
     const completionOptions: CompleteOptions = defaultEvaluator
       ? { ...options, evaluator: makeAikenEvaluator() }
       : options;
-    const internalOptions: InternalCompleteOptions = {
-      checkFinalCollateral: options.coinSelection === false,
-    };
     if (config.actions.length === 0)
-      return yield* completeCurrentConfig(completionOptions, internalOptions);
+      return yield* completeCurrentConfig(completionOptions);
     if (hasDelayedActions(config)) {
       return yield* completeDelayedFromActions(config, completionOptions);
     }
-    return yield* completeStaticFromActions(
-      config,
-      completionOptions,
-      internalOptions,
-    );
+    return yield* completeStaticFromActions(config, completionOptions, {});
   });
 
 type EvaluationMode = {
@@ -721,6 +785,11 @@ type EvaluationMode = {
    * is unchanged since that fee was computed.
    */
   settled?: boolean;
+  /**
+   * The applied collateral, topped up to cover each fee the evaluation
+   * applies.
+   */
+  collateral?: CollateralState;
 };
 
 export const selectionAndEvaluation = (
@@ -1506,44 +1575,185 @@ export const setRedeemerstoZero = (tx: CML.Transaction): CML.Transaction =>
     return tx;
   });
 
-const applyCollateral = (
-  setCollateral: bigint,
-  collateralInputs: UTxO[],
+/**
+ * The collateral applied to the builder. It only grows, which bounds the fee
+ * fixed point that tops it up.
+ */
+type CollateralState = {
+  inputs: UTxO[];
+  /** The collateral amount: the inputs minus the collateral return. */
+  total: bigint;
+  /** Whether the builder carries a collateral return. */
+  hasReturn: boolean;
+  /** The configured lower bound, `setCollateral`. */
+  minimum: bigint;
+  /** Candidates for top-ups: the wallet's preferred ones first. */
+  walletCollateral: UTxO[];
+  walletInputs: UTxO[];
+  changeAddress: string;
+};
+
+/**
+ * Sets the collateral return to what `inputs` hold beyond `total`, unless
+ * nothing is left. CML replaces an earlier return, and derives
+ * `total_collateral` from the inputs and the return when it builds.
+ */
+const setCollateralReturn = (
+  config: TxBuilder.TxBuilderConfig,
+  inputs: UTxO[],
+  total: bigint,
   changeAddress: string,
-) =>
+): boolean => {
+  const returnassets = pipe(
+    sumAssetsFromInputs(inputs),
+    Record.union({ lovelace: -total }, _BigInt.sum),
+  );
+  // Collateral that matches the amount exactly has nothing to return.
+  if (Object.values(returnassets).every((amount) => amount === 0n)) {
+    return false;
+  }
+  withCMLScope((own) => {
+    const collateralOutputBuilder = own(
+      own(CML.TransactionOutputBuilder.new()).with_address(
+        own(CML.Address.from_bech32(changeAddress)),
+      ),
+    );
+    const result = own(
+      own(
+        own(collateralOutputBuilder.next()).with_value(
+          own(assetsToValue(returnassets)),
+        ),
+      ).build(),
+    );
+    config.txBuilder.set_collateral_return(own(result.output()));
+  });
+  return true;
+};
+
+const addCollateralInputs = (
+  config: TxBuilder.TxBuilderConfig,
+  inputs: UTxO[],
+) => {
+  for (const utxo of inputs) {
+    withCMLScope((own) => {
+      const core = own(utxoToCore(utxo));
+      const builder = own(
+        CML.SingleInputBuilder.from_transaction_unspent_output(core),
+      );
+      config.txBuilder.add_collateral(own(builder.payment_key()));
+    });
+  }
+};
+
+const applyCollateral = (
+  totalCollateral: bigint,
+  collateralInputs: UTxO[],
+  context: Omit<CollateralState, "inputs" | "total" | "hasReturn">,
+): Effect.Effect<CollateralState, never, TxConfig> =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
-    for (const utxo of collateralInputs) {
-      withCMLScope((own) => {
-        const core = own(utxoToCore(utxo));
-        const builder = own(
-          CML.SingleInputBuilder.from_transaction_unspent_output(core),
-        );
-        config.txBuilder.add_collateral(own(builder.payment_key()));
-      });
-    }
-    const returnassets = pipe(
-      sumAssetsFromInputs(collateralInputs),
-      Record.union({ lovelace: -setCollateral }, _BigInt.sum),
-    );
-    // Collateral that matches the amount exactly has nothing to return.
-    if (Object.values(returnassets).every((amount) => amount === 0n)) return;
+    addCollateralInputs(config, collateralInputs);
+    return {
+      ...context,
+      inputs: collateralInputs,
+      total: totalCollateral,
+      hasReturn: setCollateralReturn(
+        config,
+        collateralInputs,
+        totalCollateral,
+        context.changeAddress,
+      ),
+    };
+  });
 
-    withCMLScope((own) => {
-      const collateralOutputBuilder = own(
-        own(CML.TransactionOutputBuilder.new()).with_address(
-          own(CML.Address.from_bech32(changeAddress)),
-        ),
-      );
-      const result = own(
-        own(
-          own(collateralOutputBuilder.next()).with_value(
-            own(assetsToValue(returnassets)),
+const collateralConvergenceError = () =>
+  completeTxError(
+    `Collateral did not converge with the fee after ${MAX_EVALUATION_ATTEMPTS} top-ups`,
+  );
+
+/**
+ * Raises the collateral in place to cover `fee`: by shrinking the collateral
+ * return when the selected inputs still leave a valid one, and otherwise by
+ * adding inputs, from the wallet's collateral candidates first. Returns
+ * whether the builder changed, in which case its fee needs re-estimating.
+ */
+const topUpCollateral = (
+  config: TxBuilder.TxBuilderConfig,
+  state: CollateralState,
+  fee: bigint,
+): Effect.Effect<boolean, TxBuilderError> =>
+  Effect.gen(function* () {
+    const { collateralPercentage, coinsPerUtxoByte, maxCollateralInputs } =
+      config.lucidConfig.protocolParameters;
+    const feeCollateral = requiredCollateral(fee, collateralPercentage);
+    const required =
+      feeCollateral > state.minimum ? feeCollateral : state.minimum;
+    if (required <= state.total) return false;
+
+    const leftover = pipe(
+      sumAssetsFromInputs(state.inputs),
+      Record.union({ lovelace: -required }, _BigInt.sum),
+    );
+    const leftoverLovelace = leftover.lovelace ?? 0n;
+    if (
+      state.hasReturn &&
+      leftoverLovelace >=
+        calculateMinLovelace(coinsPerUtxoByte, leftover, state.changeAddress)
+    ) {
+      setCollateralReturn(config, state.inputs, required, state.changeAddress);
+      state.total = required;
+      return true;
+    }
+
+    // The selected inputs cannot cover it: select more, so that the inputs
+    // cover `required` plus a valid collateral return.
+    const requiredAssets: Assets =
+      leftoverLovelace < 0n ? { lovelace: -leftoverLovelace } : {};
+    const externalAssets: Assets =
+      leftoverLovelace < 0n ? { ...leftover, lovelace: 0n } : leftover;
+    const error = completeTxError(
+      `Your wallet does not have enough funds to cover the required ${required} Lovelace collateral. Or it contains UTxOs with reference scripts; which
+      are excluded from collateral selection.`,
+    );
+    const select = (candidates: UTxO[]) =>
+      recursive(
+        sortUTxOs(
+          excludeUTxOs(candidates, state.inputs).filter(
+            (utxo) => !utxo.scriptRef,
           ),
-        ).build(),
+        ),
+        requiredAssets,
+        coinsPerUtxoByte,
+        externalAssets,
+        false,
+        error,
       );
-      config.txBuilder.set_collateral_return(own(result.output()));
-    });
+    const { selected } = yield* pipe(
+      select(state.walletCollateral),
+      Effect.orElse(() =>
+        select([
+          ...state.walletCollateral,
+          ...excludeUTxOs(state.walletInputs, state.walletCollateral),
+        ]),
+      ),
+    );
+    const maxInputs = maxCollateralInputs ?? 3;
+    if (state.inputs.length + selected.length > maxInputs) {
+      return yield* completeTxError(
+        `Covering the required ${required} Lovelace collateral needs ${state.inputs.length + selected.length} collateral inputs, but at most ${maxInputs} are allowed`,
+      );
+    }
+    addCollateralInputs(config, selected);
+    state.inputs = [...state.inputs, ...selected];
+    state.hasReturn =
+      setCollateralReturn(
+        config,
+        state.inputs,
+        required,
+        state.changeAddress,
+      ) || state.hasReturn;
+    state.total = required;
+    return true;
   });
 
 // Collateral candidates preferred by the wallet, limited to the preset wallet
@@ -1888,12 +2098,34 @@ const evaluateUntilStable = (
     let forceExplicitFee = explicitFee || config.minFee !== undefined;
 
     for (let attempt = 0; attempt < MAX_EVALUATION_ATTEMPTS; attempt++) {
-      const candidate = yield* buildEvaluationCandidate(
+      let candidate = yield* buildEvaluationCandidate(
         config,
         changeAddress,
         script_calculation,
         forceExplicitFee,
       );
+      // Top the collateral up to cover the candidate's fee. A top-up grows
+      // the body, so the fee is applied again until the collateral covers it.
+      // Scripts never see collateral, so this adds no evaluation unless the
+      // fee changes.
+      const collateral = bootstrapExUnits ? undefined : mode.collateral;
+      for (let topUps = 0; collateral !== undefined; topUps++) {
+        const fee = withCMLScope((own) => own(candidate.body()).fee());
+        const toppedUp = yield* topUpCollateral(config, collateral, fee).pipe(
+          Effect.tapError(() => Effect.sync(() => candidate.free())),
+        );
+        if (!toppedUp) break;
+        candidate.free();
+        if (topUps >= MAX_EVALUATION_ATTEMPTS) {
+          return yield* collateralConvergenceError();
+        }
+        candidate = yield* buildEvaluationCandidate(
+          config,
+          changeAddress,
+          script_calculation,
+          forceExplicitFee,
+        );
+      }
       const redeemers = withCMLScope((own) =>
         own(candidate.witness_set()).redeemers(),
       );

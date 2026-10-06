@@ -303,12 +303,21 @@ describe("static script spend", () => {
     ).rejects.toThrow(/insufficient|enough|balance|negative/i);
   });
 
-  test("collateral below the final fee's requirement is refused", async () => {
+  test("a setCollateral below the final fee's requirement is raised to cover it", async () => {
     const fixture = await setup();
-    await expect(
-      spend(fixture, { coinSelection: false, setCollateral: 0n }),
-    ).rejects.toThrow(
-      /Final transaction requires \d+ Lovelace collateral, but only \d+ was selected/,
+    const result = await spend(fixture, {
+      coinSelection: false,
+      setCollateral: 0n,
+    });
+    const tx = result.toTransaction();
+    const required =
+      (tx.body().fee() *
+        BigInt(PROTOCOL_PARAMETERS_DEFAULT.collateralPercentage) +
+        99n) /
+      100n;
+    expect(tx.body().total_collateral()).toBe(required);
+    await fixture.lucid.awaitTx(
+      await (await result.sign.withWallet().complete()).submit(),
     );
   });
 
@@ -334,9 +343,15 @@ describe("static script spend", () => {
       totalSteps(recorded[0]),
     );
     expectFinalEvaluated(result.toTransaction(), recorded);
-    await expect(
-      spend(fixture, { coinSelection: false, setCollateral: 0n }),
-    ).rejects.toThrow(/Final transaction requires \d+ Lovelace collateral/);
+    // Collateral sized from the provisional fee is raised to the final one.
+    const raised = await spend(fixture, {
+      coinSelection: false,
+      setCollateral: 0n,
+    });
+    expect(raised.toTransaction().body().fee()).toBe(
+      result.toTransaction().body().fee(),
+    );
+    expectFinalEvaluated(raised.toTransaction(), evaluations);
 
     await fixture.lucid.awaitTx(
       await (await result.sign.withWallet().complete()).submit(),
