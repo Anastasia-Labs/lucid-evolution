@@ -1,9 +1,47 @@
 {
   "name": "@lucid-evolution/uplc",
   "version": "0.2.24",
-  "main": "./dist/node/uplc_tx.js",
-  "browser": "./dist/browser/uplc_tx.js",
-  "types": "./dist/node/uplc_tx.d.ts",
+  "main": "./dist/speed/node/uplc_tx.js",
+  "browser": "./dist/size/browser/uplc_tx.js",
+  "types": "./dist/speed/node/uplc_tx.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/speed/node/uplc_tx.d.ts",
+      "workerd": "./dist/size/browser/uplc_tx.js",
+      "edge-light": "./dist/size/browser/uplc_tx.js",
+      "worker": "./dist/size/browser/uplc_tx.js",
+      "browser": "./dist/size/browser/uplc_tx.js",
+      "default": "./dist/speed/node/uplc_tx.js"
+    },
+    "./speed": {
+      "types": "./dist/speed/node/uplc_tx.d.ts",
+      "workerd": "./dist/speed/browser/uplc_tx.js",
+      "edge-light": "./dist/speed/browser/uplc_tx.js",
+      "worker": "./dist/speed/browser/uplc_tx.js",
+      "browser": "./dist/speed/browser/uplc_tx.js",
+      "default": "./dist/speed/node/uplc_tx.js"
+    },
+    "./size": {
+      "types": "./dist/size/node/uplc_tx.d.ts",
+      "workerd": "./dist/size/browser/uplc_tx.js",
+      "edge-light": "./dist/size/browser/uplc_tx.js",
+      "worker": "./dist/size/browser/uplc_tx.js",
+      "browser": "./dist/size/browser/uplc_tx.js",
+      "default": "./dist/size/node/uplc_tx.js"
+    },
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "speed": [
+        "./dist/speed/node/uplc_tx.d.ts"
+      ],
+      "size": [
+        "./dist/size/node/uplc_tx.d.ts"
+      ]
+    }
+  },
   "files": [
     "dist"
   ],
@@ -11,9 +49,9 @@
     "access": "public"
   },
   "scripts": {
-    "build-local": "rm -rf dist && cd rust ;  wasm-pack build --target bundler --out-dir ../src/browser && wasm-pack build --target nodejs --out-dir ../src/node && pnpm clean-garbage",
+    "build-local": "rm -rf dist && cd rust && wasm-pack build --target bundler --out-dir ../src/speed/browser && wasm-pack build --target nodejs --out-dir ../src/speed/node && wasm-pack build --profile release-size --target bundler --out-dir ../src/size/browser && wasm-pack build --profile release-size --target nodejs --out-dir ../src/size/node && cd .. && pnpm clean-garbage",
     "build": "cp -r src dist",
-    "clean-garbage": "rm src/browser/.gitignore src/browser/package.json src/node/.gitignore src/node/package.json",
+    "clean-garbage": "for d in speed/browser speed/node size/browser size/node; do rm -f src/$d/.gitignore src/$d/package.json; done",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   }
 }
