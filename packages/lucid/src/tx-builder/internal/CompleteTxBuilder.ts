@@ -1984,9 +1984,6 @@ const makeProviderEvaluator = (provider: Provider): EvaluatorAdapter => ({
     provider.evaluateTx(tx, additionalUTxOs),
 });
 
-/** The subset of `@lucid-evolution/uplc` used by the Aiken evaluator. */
-export type UPLCModule = Pick<typeof UPLC, "eval_phase_two_raw">;
-
 type AikenEvaluationRequest = {
   txBytes: Uint8Array;
   inputBytes: Uint8Array[];
