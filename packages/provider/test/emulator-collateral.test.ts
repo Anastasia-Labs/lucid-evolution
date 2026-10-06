@@ -20,7 +20,9 @@ import {
     - that balance covers collateralPercentage of the fee
       (InsufficientCollateral);
     - total_collateral, when present, equals that balance
-      (IncorrectTotalCollateralField).
+      (IncorrectTotalCollateralField);
+    - the collateral return holds at least its minimum ADA
+      (BabbageOutputTooSmallUTxO).
 */
 
 const FEE = 200_000n;
@@ -183,6 +185,19 @@ describe("Emulator collateral checks", () => {
         totalCollateral: 5_000_000n,
       }),
     ).rejects.toThrow(/IncorrectTotalCollateralField/);
+  });
+
+  test("rejects a collateral return below its minimum ADA", async () => {
+    const fixture = setup([{ lovelace: 5_000_000n }]);
+    await expect(
+      spendScript(fixture, {
+        collateral: fixture.collateral,
+        collateralReturn: { lovelace: 500_000n },
+        totalCollateral: 4_500_000n,
+      }),
+    ).rejects.toThrow(
+      /BabbageOutputTooSmallUTxO: collateral return holds 500000 Lovelace/,
+    );
   });
 
   test("rejects collateral that keeps native assets", async () => {

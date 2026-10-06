@@ -1281,8 +1281,9 @@ export class Emulator implements Provider {
    * The ledger's collateral rules for a transaction with redeemers: at least
    * one and at most `maxCollateralInputs` collateral inputs, a balance (inputs
    * minus the collateral return) of ADA only that covers
-   * `collateralPercentage` of the fee, and a `total_collateral` field, when
-   * present, equal to that balance.
+   * `collateralPercentage` of the fee, a `total_collateral` field, when
+   * present, equal to that balance, and a collateral return holding at least
+   * its minimum ADA.
    */
   private checkCollateral(
     body: CML.TransactionBody,
@@ -1305,6 +1306,16 @@ export class Emulator implements Provider {
     const balance: Assets = { ...collateralBalance };
     const collateralReturn = own(body.collateral_return());
     if (collateralReturn) {
+      const minLovelace = CML.min_ada_required(
+        collateralReturn,
+        this.protocolParameters.coinsPerUtxoByte,
+      );
+      const returnedLovelace = own(collateralReturn.amount()).coin();
+      if (returnedLovelace < minLovelace) {
+        throw new Error(
+          `BabbageOutputTooSmallUTxO: collateral return holds ${returnedLovelace} Lovelace, but needs at least ${minLovelace} Lovelace.`,
+        );
+      }
       const returned = valueToAssets(own(collateralReturn.amount()));
       for (const [unit, amount] of Object.entries(returned)) {
         balance[unit] = (balance[unit] ?? 0n) - amount;
