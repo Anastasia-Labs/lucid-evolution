@@ -2091,7 +2091,8 @@ export const makeAikenEvaluator = (
   uplc: UPLCModule = UPLC,
 ): EvaluatorAdapter => {
   let previous:
-    { request: AikenEvaluationRequest; redeemers: Uint8Array[] } | undefined;
+    | { request: AikenEvaluationRequest; redeemers: Uint8Array[] }
+    | undefined;
   let costModels: { source: CML.CostModels; bytes: Uint8Array } | undefined;
   const encodedUTxOs = new Map<string, EncodedUTxO>();
 
