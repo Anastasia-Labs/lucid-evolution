@@ -659,7 +659,9 @@ const SCRIPT_CACHE_MAX_ENTRIES: usize = 64;
 /// Upper bound on the estimated memory held by cached decoded scripts.
 const SCRIPT_CACHE_MAX_BYTES: usize = 64 * 1024 * 1024;
 /// Conservative estimate of decoded program size per byte of serialised script.
-const DECODED_BYTES_PER_SCRIPT_BYTE: usize = 128;
+/// Adversarial scripts (long lambda chains) measured about 209 heap bytes per
+/// script byte.
+const DECODED_BYTES_PER_SCRIPT_BYTE: usize = 256;
 
 struct CachedProgram {
     program: Program<NamedDeBruijn>,
@@ -720,11 +722,22 @@ thread_local! {
     static SCRIPT_CACHE: RefCell<ScriptCache> = RefCell::new(ScriptCache::default());
 }
 
+/// Runs `f` on the script cache, or returns `None` when the cache is
+/// unavailable. A trap inside an earlier borrow (wasm aborts without
+/// unwinding) leaves the cache borrowed for good; evaluation then continues
+/// without it instead of panicking on every later call.
+fn with_script_cache<T>(f: impl FnOnce(&mut ScriptCache) -> T) -> Option<T> {
+    SCRIPT_CACHE
+        .try_with(|cache| cache.try_borrow_mut().ok().map(|mut cache| f(&mut cache)))
+        .ok()
+        .flatten()
+}
+
 /// Decodes a script the way `uplc::tx::eval` does, reusing a previous decoding of
 /// the same script when available. Cached programs are shared immutably: applying
 /// arguments wraps the root term without touching the cached nodes.
 fn decode_program(script: &FoundScript) -> Result<Program<NamedDeBruijn>, Error> {
-    if let Some(program) = SCRIPT_CACHE.with(|cache| cache.borrow_mut().get(&script.hash)) {
+    if let Some(program) = with_script_cache(|cache| cache.get(&script.hash)).flatten() {
         return Ok(program);
     }
 
@@ -732,11 +745,22 @@ fn decode_program(script: &FoundScript) -> Result<Program<NamedDeBruijn>, Error>
     let program: Program<NamedDeBruijn> =
         Program::<FakeNamedDeBruijn>::from_cbor(script.bytes, &mut buffer)?.into();
 
-    SCRIPT_CACHE.with(|cache| {
-        cache
-            .borrow_mut()
-            .insert(script.hash, &program, script.bytes.len())
-    });
+    with_script_cache(|cache| cache.insert(script.hash, &program, script.bytes.len()));
 
     Ok(program)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn script_cache_is_skipped_while_borrowed() {
+        assert_eq!(with_script_cache(|cache| cache.entries.len()), Some(0));
+        SCRIPT_CACHE.with(|cache| {
+            let _held = cache.borrow_mut();
+            assert_eq!(with_script_cache(|cache| cache.entries.len()), None);
+        });
+        assert_eq!(with_script_cache(|cache| cache.entries.len()), Some(0));
+    }
 }
