@@ -9,24 +9,13 @@ import * as TypeBox from "@sinclair/typebox";
 //   Type,
 // } from "@sinclair/typebox";
 import { Datum, Exact, Json, Redeemer } from "@lucid-evolution/core-types";
-import {
-  fromHex,
-  fromText,
-  toHex,
-  withCMLScope,
-} from "@lucid-evolution/core-utils";
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import { fromHex, fromText, toHex } from "@lucid-evolution/core-utils";
 export * from "@sinclair/typebox";
 
-export class Constr<T> {
-  index: number;
-  fields: T[];
-
-  constructor(index: number, fields: T[]) {
-    this.index = index;
-    this.fields = fields;
-  }
-}
+import { Constr } from "./constr.js";
+import { decodePlutusData, encodePlutusData } from "./data-cbor.js";
+import { cmlDataFromCbor, cmlDataToCbor } from "./data-cml.js";
+export { Constr } from "./constr.js";
 
 export declare namespace Data {
   export type Static<
@@ -290,57 +279,12 @@ function to<T = Data>(
   options: { canonical?: boolean } = {},
 ): Datum | Redeemer {
   const { canonical = false } = options;
-  // CML containers clone what is added to them, so every intermediate
-  // PlutusData is freed as soon as it has been copied into its parent.
-  function serialize(data: Data): CML.PlutusData {
-    try {
-      return withCMLScope((own) => {
-        if (typeof data === "bigint") {
-          return CML.PlutusData.new_integer(
-            own(CML.BigInteger.from_str(data.toString())),
-          );
-        } else if (typeof data === "string") {
-          return CML.PlutusData.new_bytes(fromHex(data));
-        } else if (data instanceof Constr) {
-          const { index, fields } = data;
-          const plutusList = own(CML.PlutusDataList.new());
-
-          fields.forEach((field) => plutusList.add(own(serialize(field))));
-
-          const alternative = own(CML.BigInteger.from_str(index.toString()));
-          return CML.PlutusData.new_constr_plutus_data(
-            own(CML.ConstrPlutusData.new(alternative.as_u64()!, plutusList)),
-          );
-        } else if (data instanceof Array) {
-          const plutusList = own(CML.PlutusDataList.new());
-
-          data.forEach((arg) => plutusList.add(own(serialize(arg))));
-
-          return CML.PlutusData.new_list(plutusList);
-        } else if (data instanceof Map) {
-          const plutusMap = own(CML.PlutusMap.new());
-
-          for (const [key, value] of data.entries()) {
-            plutusMap.set(own(serialize(key)), own(serialize(value)));
-          }
-
-          return CML.PlutusData.new_map(plutusMap);
-        }
-        throw new Error("Unsupported type");
-      });
-    } catch (error) {
-      throw new Error("Could not serialize the data: " + error);
-    }
-  }
   const d = type ? castTo<T>(data, type) : (data as Data);
-  return withCMLScope((own) => {
-    const serialized = own(serialize(d));
-    return canonical
-      ? (serialized.to_canonical_cbor_hex() as Datum | Redeemer)
-      : (own(serialized.to_cardano_node_format()).to_cbor_hex() as
-          | Datum
-          | Redeemer);
-  });
+  // The JavaScript encoder declines anything it does not encode exactly as
+  // CML would; CML then produces the result or the error.
+  return (encodePlutusData(d, canonical) ?? cmlDataToCbor(d, canonical)) as
+    | Datum
+    | Redeemer;
 }
 
 /**
@@ -348,45 +292,9 @@ function to<T = Data>(
  *  Or apply a shape and cast the cbor encoded data to a certain type.
  */
 function from<T = Data>(raw: Datum | Redeemer, type?: T): T {
-  // `data` is borrowed from the caller; every accessor result is a fresh CML
-  // copy and is freed once it has been converted.
-  function deserialize(data: CML.PlutusData): Data {
-    return withCMLScope((own) => {
-      if (data.kind() === 0) {
-        const constr = own(data.as_constr_plutus_data()!);
-        const l = own(constr.fields());
-        const desL = [];
-        for (let i = 0; i < l.len(); i++) {
-          desL.push(deserialize(own(l.get(i))));
-        }
-        return new Constr(parseInt(constr.alternative().toString()), desL);
-      } else if (data.kind() === 1) {
-        const m = own(data.as_map()!);
-        const desM: Map<Data, Data> = new Map();
-        const keys = own(m.keys());
-        for (let i = 0; i < keys.len(); i++) {
-          const key = own(keys.get(i));
-          desM.set(deserialize(key), deserialize(own(m.get(key)!)));
-        }
-        return desM;
-      } else if (data.kind() === 2) {
-        const l = own(data.as_list()!);
-        const desL = [];
-        for (let i = 0; i < l.len(); i++) {
-          desL.push(deserialize(own(l.get(i))));
-        }
-        return desL;
-      } else if (data.kind() === 3) {
-        return BigInt(own(data.as_integer()!).to_str());
-      } else if (data.kind() === 4) {
-        return toHex(data.as_bytes()!);
-      }
-      throw new Error("Unsupported type");
-    });
-  }
-  const data = withCMLScope((own) =>
-    deserialize(own(CML.PlutusData.from_cbor_hex(raw))),
-  );
+  // The JavaScript decoder declines anything it does not decode exactly as
+  // CML would; CML then produces the result or the error.
+  const data = decodePlutusData(raw) ?? cmlDataFromCbor(raw);
 
   return type ? castFrom<T>(data, type) : (data as T);
 }

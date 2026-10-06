@@ -13,6 +13,7 @@ import {
 import { CML } from "./core.js";
 import { networkToId } from "./network.js";
 import { applyDoubleCborEncoding } from "./cbor.js";
+import { ScriptCache } from "./script-cache.js";
 import { Data } from "@lucid-evolution/plutus";
 import {
   Application,
@@ -61,7 +62,129 @@ export function validatorToAddress(
 }
 
 export function validatorToScriptHash(validator: Validator): ScriptHash {
+  const info = tryScriptInfo(validator);
+  return info === undefined
+    ? decodingValidatorToScriptHash(validator)
+    : info.hash;
+}
+
+/**
+ * The script's CBOR as CML reads it: the double CBOR encoded script
+ * (`applyDoubleCborEncoding`) for Plutus scripts, the script itself for native
+ * scripts. Returns a fresh copy.
+ */
+export function scriptCborBytes(script: Script): Uint8Array {
+  return scriptInfo(script).bytes.slice();
+}
+
+export function toScriptRef(script: Script): CML.Script {
+  const info = tryScriptInfo(script);
+  if (info === undefined) return decodingToScriptRef(script);
+  // CML copies the bytes into wasm memory and never writes to them.
+  const { bytes } = info;
   return withCMLScope((own) => {
+    switch (script.type) {
+      case "Native":
+        return CML.Script.new_native(
+          own(CML.NativeScript.from_cbor_bytes(bytes)),
+        );
+      case "PlutusV1":
+        return CML.Script.new_plutus_v1(
+          own(CML.PlutusV1Script.from_cbor_bytes(bytes)),
+        );
+      case "PlutusV2":
+        return CML.Script.new_plutus_v2(
+          own(CML.PlutusV2Script.from_cbor_bytes(bytes)),
+        );
+      case "PlutusV3":
+        return CML.Script.new_plutus_v3(
+          own(CML.PlutusV3Script.from_cbor_bytes(bytes)),
+        );
+      default:
+        throw new Error("No variant matched.");
+    }
+  });
+}
+
+/**
+ * What every script conversion needs, computed once per distinct script.
+ * Only strings and bytes that never leave this module are stored.
+ */
+type ScriptInfo = {
+  readonly hash: ScriptHash;
+  /** CBOR bytes of the script as CML reads it, see `scriptCborBytes`. */
+  readonly bytes: Uint8Array;
+};
+
+const scriptInfoCache = new ScriptCache<ScriptInfo>(
+  4096,
+  64 * 1024 * 1024,
+  (info) => info.bytes.length + info.hash.length,
+);
+
+const scriptInfo = (script: Script): ScriptInfo =>
+  scriptInfoCache.getOrCompute(script.type, script.script, () =>
+    computeScriptInfo(script),
+  );
+
+/**
+ * `undefined` when the script cannot be read; callers then run the original
+ * conversion so the caller sees the same error as before.
+ */
+const tryScriptInfo = (script: Script): ScriptInfo | undefined => {
+  try {
+    if (typeof script.script !== "string") return undefined;
+    return scriptInfo(script);
+  } catch {
+    return undefined;
+  }
+};
+
+const computeScriptInfo = ({ type, script }: Script): ScriptInfo =>
+  withCMLScope((own) => {
+    switch (type) {
+      case "Native": {
+        const bytes = fromHex(script);
+        const hash = own(
+          own(CML.NativeScript.from_cbor_bytes(bytes)).hash(),
+        ).to_hex();
+        return { hash, bytes };
+      }
+      case "PlutusV1": {
+        const bytes = fromHex(applyDoubleCborEncoding(script));
+        const plutus = own(
+          CML.PlutusScript.from_v1(
+            own(CML.PlutusV1Script.from_cbor_bytes(bytes)),
+          ),
+        );
+        return { hash: own(plutus.hash()).to_hex(), bytes };
+      }
+      case "PlutusV2": {
+        const bytes = fromHex(applyDoubleCborEncoding(script));
+        const plutus = own(
+          CML.PlutusScript.from_v2(
+            own(CML.PlutusV2Script.from_cbor_bytes(bytes)),
+          ),
+        );
+        return { hash: own(plutus.hash()).to_hex(), bytes };
+      }
+      case "PlutusV3": {
+        const bytes = fromHex(applyDoubleCborEncoding(script));
+        const plutus = own(
+          CML.PlutusScript.from_v3(
+            own(CML.PlutusV3Script.from_cbor_bytes(bytes)),
+          ),
+        );
+        return { hash: own(plutus.hash()).to_hex(), bytes };
+      }
+      default:
+        throw new Error("No variant matched");
+    }
+  });
+
+/** The original, uncached hash. */
+const decodingValidatorToScriptHash = (validator: Validator): ScriptHash =>
+  withCMLScope((own) => {
     switch (validator.type) {
       case "Native":
         return own(
@@ -95,10 +218,10 @@ export function validatorToScriptHash(validator: Validator): ScriptHash {
         throw new Error("No variant matched");
     }
   });
-}
 
-export function toScriptRef(script: Script): CML.Script {
-  return withCMLScope((own) => {
+/** The original, uncached conversion. */
+const decodingToScriptRef = (script: Script): CML.Script =>
+  withCMLScope((own) => {
     switch (script.type) {
       case "Native":
         return CML.Script.new_native(
@@ -132,7 +255,6 @@ export function toScriptRef(script: Script): CML.Script {
         throw new Error("No variant matched.");
     }
   });
-}
 
 export function fromScriptRef(scriptRef: CML.Script): Script {
   return withCMLScope((own) => {

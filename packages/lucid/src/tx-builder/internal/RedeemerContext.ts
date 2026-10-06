@@ -189,22 +189,25 @@ export const registerPendingRedeemer = (
     config.pendingRedeemers.push(pending);
   });
 
-const findResolvedInput = (
-  outRef: OutRef,
+/**
+ * Indexes `candidates` by out-ref. Where several candidates share an out-ref,
+ * the most complete one wins, and the first of equally complete ones.
+ */
+const indexResolvedInputs = (
   candidates: ReadonlyArray<UTxO>,
-): UTxO | undefined => {
-  const key = outRefKey(outRef);
-  let best: UTxO | undefined;
-  let bestScore = -1;
+): Map<string, UTxO> => {
+  const best = new Map<string, { utxo: UTxO; score: number }>();
   for (const candidate of candidates) {
-    if (outRefKey(candidate) !== key) continue;
+    const key = outRefKey(candidate);
     const score = resolvedUtxoCompletenessScore(candidate);
-    if (score > bestScore) {
-      best = candidate;
-      bestScore = score;
+    const current = best.get(key);
+    if (current === undefined || score > current.score) {
+      best.set(key, { utxo: candidate, score });
     }
   }
-  return best;
+  const index = new Map<string, UTxO>();
+  for (const [key, { utxo }] of best) index.set(key, utxo);
+  return index;
 };
 
 const resolvedUtxoCompletenessScore = (utxo: UTxO): number =>
@@ -221,9 +224,10 @@ export const resolveCanonicalInputs = (
         coreToOutRef(own(bodyInputs.get(i))),
       );
     });
+    const resolvedInputs = indexResolvedInputs(candidates);
     const inputs: UTxO[] = [];
     for (const outRef of outRefs) {
-      const resolved = findResolvedInput(outRef, candidates);
+      const resolved = resolvedInputs.get(outRefKey(outRef));
       if (!resolved) {
         yield* redeemerContextError(
           `Could not resolve transaction input ${outRefKey(outRef)}`,
@@ -247,9 +251,11 @@ export const resolveCanonicalReferenceInputs = (
         coreToOutRef(own(bodyInputs.get(i))),
       );
     });
+    if (outRefs.length === 0) return [];
+    const resolvedInputs = indexResolvedInputs(candidates);
     const inputs: UTxO[] = [];
     for (const outRef of outRefs) {
-      const resolved = findResolvedInput(outRef, candidates);
+      const resolved = resolvedInputs.get(outRefKey(outRef));
       if (!resolved) {
         yield* redeemerContextError(
           `Could not resolve reference input ${outRefKey(outRef)}`,
@@ -434,7 +440,26 @@ const governanceIndex = (
   return ledgerIndex;
 };
 
+/**
+ * Rewrites the builder's vote and propose redeemer indices to the ledger's.
+ * Returns `tx` itself when there is nothing to rewrite (no governance
+ * witnesses were registered, so every index is already the ledger's);
+ * otherwise the returned transaction is a new one the caller owns.
+ */
 export const normalizeGovernanceRedeemerIndices = (
+  tx: CML.Transaction,
+  voteWitnessKeys: readonly string[],
+  proposalWitnessIndices: readonly bigint[],
+): GovernanceRedeemerNormalization =>
+  voteWitnessKeys.length === 0 && proposalWitnessIndices.length === 0
+    ? { transaction: tx, builderKeyByLedgerKey: new Map() }
+    : remapGovernanceRedeemerIndices(
+        tx,
+        voteWitnessKeys,
+        proposalWitnessIndices,
+      );
+
+const remapGovernanceRedeemerIndices = (
   tx: CML.Transaction,
   voteWitnessKeys: readonly string[],
   proposalWitnessIndices: readonly bigint[],

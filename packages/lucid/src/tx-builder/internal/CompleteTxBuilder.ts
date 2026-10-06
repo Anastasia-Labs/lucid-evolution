@@ -16,7 +16,6 @@ import {
   EvaluationContext,
   EvaluatorAdapter,
   Provider,
-  RedeemerPurpose,
   RedeemerTag,
   ScriptType,
   UTxO,
@@ -36,7 +35,6 @@ import * as TxSignBuilder from "../../tx-sign-builder/TxSignBuilder.js";
 import {
   assetsToValue,
   coreToTxOutput,
-  isEqualUTxO,
   selectUTxOs,
   sortUTxOs,
   stringify,
@@ -61,18 +59,17 @@ import {
   buildRedeemersFromCanonicalContext,
   canonicalRedeemerEntries,
   freeCanonicalRedeemerEntries,
-  CanonicalRedeemerInfo,
+  cloneUTxO,
   cloneUTxOs,
   normalizeEvalUTxO,
   normalizeGovernanceRedeemerIndices,
+  outRefKey,
   purposeToWitnessKey,
-  proposalProcedureForRedeemerIndex,
   RedeemerBuilderCache,
   redeemerMapsEqual,
   resolveCanonicalInputs,
   resolveCanonicalReferenceInputs,
   transactionFixedPointFingerprint,
-  voterForRedeemerIndex,
   witnessPurposeKey,
   type BuilderRedeemerKey,
 } from "./RedeemerContext.js";
@@ -142,6 +139,21 @@ type CoinSelectionResult = {
 export const completeTxError = (cause: unknown) =>
   new TxBuilderError({ cause: `{ Complete: ${cause} }` });
 
+/**
+ * The UTxOs of `utxos` whose out-ref is not in `excluded`, in their order.
+ * Equivalent to `Array.differenceWith(isEqualUTxO)`, in linear time.
+ */
+const excludeUTxOs = (
+  utxos: ReadonlyArray<UTxO>,
+  excluded: Iterable<UTxO>,
+): UTxO[] => {
+  const keys = new Set<string>();
+  for (const utxo of excluded) keys.add(outRefKey(utxo));
+  return keys.size === 0
+    ? [...utxos]
+    : utxos.filter((utxo) => !keys.has(outRefKey(utxo)));
+};
+
 type InternalCompleteOptions = {
   bootstrapExUnits?: boolean;
   forceCanonical?: boolean;
@@ -150,7 +162,18 @@ type InternalCompleteOptions = {
   walletCollateral?: Effect.Effect<UTxO[]>;
   knownRedeemerExUnits?: KnownRedeemerExUnits;
   redeemerInputFingerprint?: string;
+  /**
+   * Collateral to select up front, when a replay follows a failed in-place
+   * top-up.
+   */
+  initialCollateral?: bigint;
 };
+
+/** The collateral the ledger requires for `fee`, rounded up. */
+const requiredCollateral = (
+  fee: bigint,
+  collateralPercentage: number,
+): bigint => (fee * BigInt(collateralPercentage) + 99n) / 100n;
 
 type KnownRedeemerExUnits = Map<
   string,
@@ -165,6 +188,41 @@ class RedeemerInputRefreshRequired extends TxBuilderError {
     });
   }
 }
+
+/**
+ * Topping the collateral up in place failed: it needed more collateral inputs
+ * than allowed, or no remaining UTxO could cover it. CML cannot remove
+ * collateral inputs, so the completion is replayed once with its initial
+ * collateral sized to `required`, letting a fresh selection pick fewer, larger
+ * inputs.
+ */
+class CollateralReplayRequired extends TxBuilderError {
+  constructor(
+    error: TxBuilderError,
+    readonly required: bigint,
+    readonly walletInputs: UTxO[],
+    readonly walletCollateral: UTxO[],
+  ) {
+    super({ cause: error.cause });
+  }
+}
+
+/** The internal options for the one replay a failed top-up allows. */
+const collateralReplayOptions = (
+  error: unknown,
+  internalOptions: InternalCompleteOptions,
+): InternalCompleteOptions | undefined =>
+  error instanceof CollateralReplayRequired &&
+  internalOptions.initialCollateral === undefined
+    ? {
+        ...internalOptions,
+        initialCollateral: error.required,
+        walletInputs: internalOptions.walletInputs ?? error.walletInputs,
+        walletCollateral:
+          internalOptions.walletCollateral ??
+          Effect.succeed(error.walletCollateral),
+      }
+    : undefined;
 
 type ExUnitSetter = Pick<CML.TransactionBuilder, "set_exunits">;
 
@@ -249,7 +307,12 @@ const completeCurrentConfig = (
     ).some((value) => value.type !== "Native");
 
     // First round of coin selection and UPLC evaluation. The fee estimation is lacking
-    // the script execution costs as they aren't available yet.
+    // the script execution costs as they aren't available yet. When the second
+    // round follows, the draft is evaluated once rather than to a fixed point:
+    // its ex-units only feed the fee estimate used for coin selection and
+    // collateral, and the second round evaluates the final shape to a fixed
+    // point.
+    const finalEvaluation: EvaluationMode = {};
     let evaluatedScriptBody = yield* selectionAndEvaluation(
       walletInputs,
       changeAddress,
@@ -261,33 +324,49 @@ const completeCurrentConfig = (
       internalOptions.bootstrapExUnits === true,
       internalOptions.knownRedeemerExUnits,
       internalOptions.redeemerInputFingerprint,
+      { provisional: hasPlutusScriptExecutions },
     );
     // Second round of coin selection by including script execution costs in fee estimation.
     // UPLC evaluation need to be performed again if new inputs are selected during coin selection.
     // Because increasing the inputs can increase the script execution budgets.
     // Set collateral input if there are script executions
+    let collateral: CollateralState | undefined;
     if (hasPlutusScriptExecutions) {
       const estimatedFee = yield* estimateFee(config, true);
 
-      const totalCollateral = BigInt(
-        Math.ceil(
-          Math.max(
-            (config.lucidConfig.protocolParameters.collateralPercentage *
-              Number(estimatedFee)) /
-              100,
-            Number(setCollateral),
-          ),
-        ),
-      );
+      // The fee is still an estimate here. The second round tops the
+      // collateral up as its fee fixed point settles the final fee. A
+      // bootstrap attempt's fee covers the maximum execution budget rather
+      // than the scripts' cost, so it does not size the collateral.
+      const bootstrap = internalOptions.bootstrapExUnits === true;
+      const estimatedCollateral = bootstrap
+        ? 0n
+        : requiredCollateral(
+            estimatedFee,
+            config.lucidConfig.protocolParameters.collateralPercentage,
+          );
+      const totalCollateral = [
+        estimatedCollateral,
+        internalOptions.initialCollateral ?? 0n,
+      ].reduce((max, amount) => (amount > max ? amount : max), setCollateral);
       const walletCollateral = yield* internalOptions.walletCollateral ??
         fetchWalletCollateral(wallet, totalCollateral, presetWalletInputs);
       const collateralInput = yield* selectCollateral(
         config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+        config.lucidConfig.protocolParameters.maxCollateralInputs ?? 3,
         totalCollateral,
         walletCollateral,
         walletInputs,
       );
-      yield* applyCollateral(totalCollateral, collateralInput, changeAddress);
+      collateral = yield* applyCollateral(totalCollateral, collateralInput, {
+        minimum: setCollateral,
+        walletCollateral,
+        walletInputs,
+        changeAddress,
+      });
+      if (!bootstrap) finalEvaluation.collateral = collateral;
+      // A first round that found redeemers already set an explicit fee.
+      finalEvaluation.explicitFee = evaluatedScriptBody;
       evaluatedScriptBody =
         (yield* selectionAndEvaluation(
           walletInputs,
@@ -300,9 +379,28 @@ const completeCurrentConfig = (
           internalOptions.bootstrapExUnits === true,
           internalOptions.knownRedeemerExUnits,
           internalOptions.redeemerInputFingerprint,
+          finalEvaluation,
         )) || evaluatedScriptBody;
     }
-    yield* applyEffectiveFee(config, true, evaluatedScriptBody);
+    // Without redeemers or a custom minimum fee, CML computes the fee itself;
+    // a settled evaluation has already applied the effective fee.
+    if (
+      evaluatedScriptBody
+        ? finalEvaluation.settled !== true
+        : config.minFee !== undefined
+    ) {
+      yield* applyEffectiveFee(config, true, evaluatedScriptBody);
+      // Cover the fee just applied, re-applying it while a top-up grows it.
+      for (let topUps = 0; finalEvaluation.collateral; topUps++) {
+        const fee = yield* estimateFee(config, true);
+        if (!(yield* topUpCollateral(config, finalEvaluation.collateral, fee)))
+          break;
+        if (topUps >= MAX_EVALUATION_ATTEMPTS) {
+          return yield* collateralConvergenceError();
+        }
+        yield* applyEffectiveFee(config, true, evaluatedScriptBody);
+      }
+    }
     withCMLScope((own) =>
       config.txBuilder.add_change_if_needed(
         own(CML.Address.from_bech32(changeAddress)),
@@ -336,12 +434,29 @@ const completeCurrentConfig = (
         ).transaction,
       catch: (error) => completeTxError(error),
     });
-    freeCML(builtTransaction, transactionBeforeScriptDataHash);
+    // Normalization may return its input unchanged.
+    freeCML(
+      ...[builtTransaction, transactionBeforeScriptDataHash].filter(
+        (tx) => tx !== normalizedTransaction,
+      ),
+    );
     const transaction = yield* refreshScriptDataHash(
       normalizedTransaction,
       config,
     );
     if (transaction !== normalizedTransaction) normalizedTransaction.free();
+
+    // The fee fixed point keeps the collateral covering the fee, so this only
+    // guards against a transaction the ledger would reject. A bootstrap
+    // attempt's fee covers the maximum budget and only feeds the delayed
+    // redeemers, so it is not checked.
+    if (internalOptions.bootstrapExUnits !== true) {
+      yield* checkFinalCollateral(
+        transaction,
+        collateral?.inputs ?? [],
+        config.lucidConfig.protocolParameters.collateralPercentage,
+      ).pipe(Effect.tapError(() => Effect.sync(() => transaction.free())));
+    }
 
     const derivedInputs = deriveInputsFromTransaction(transaction);
 
@@ -349,7 +464,7 @@ const completeCurrentConfig = (
       (utxo) => utxo.address === walletAddress,
     );
     const updatedWalletInputs = pipe(
-      _Array.differenceWith(isEqualUTxO)(walletInputs, config.consumedInputs),
+      excludeUTxOs(walletInputs, config.consumedInputs),
       (availableWalletInputs) => [
         ...derivedWalletInputs,
         ...availableWalletInputs,
@@ -370,20 +485,90 @@ const completeCurrentConfig = (
     );
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
+/**
+ * Checks the ledger's collateral rule on a completed transaction with
+ * redeemers: its collateral inputs minus the collateral return must cover
+ * `collateralPercentage` of the fee, and a `total_collateral` field must equal
+ * that balance.
+ */
+const checkFinalCollateral = (
+  transaction: CML.Transaction,
+  collateralInputs: ReadonlyArray<UTxO>,
+  collateralPercentage: number,
+): Effect.Effect<void, TxBuilderError> =>
+  Effect.suspend(() => {
+    const { hasRedeemers, inputKeys, fee, returned, totalCollateral } =
+      withCMLScope((own) => {
+        const body = own(transaction.body());
+        const inputs = own(body.collateral_inputs());
+        const collateralReturn = own(body.collateral_return());
+        return {
+          hasRedeemers:
+            own(own(transaction.witness_set()).redeemers()) !== undefined,
+          inputKeys: Array.from({ length: inputs?.len() ?? 0 }, (_, index) => {
+            const input = own(inputs!.get(index));
+            return `${own(input.transaction_id()).to_hex()}#${input.index()}`;
+          }),
+          fee: body.fee(),
+          returned: collateralReturn
+            ? own(collateralReturn.amount()).coin()
+            : 0n,
+          totalCollateral: body.total_collateral(),
+        };
+      });
+    if (!hasRedeemers) return Effect.void;
+    if (inputKeys.length === 0) {
+      return completeTxError(
+        "Transaction runs scripts but has no collateral inputs",
+      );
+    }
+    const byKey = new Map(
+      collateralInputs.map((utxo) => [outRefKey(utxo), utxo]),
+    );
+    let collateral = -returned;
+    for (const key of inputKeys) {
+      const utxo = byKey.get(key);
+      if (utxo === undefined) {
+        return completeTxError(`Unable to resolve collateral input ${key}`);
+      }
+      collateral += utxo.assets.lovelace ?? 0n;
+    }
+    if (totalCollateral !== undefined && totalCollateral !== collateral) {
+      return completeTxError(
+        `Total collateral ${totalCollateral} does not match the collateral balance ${collateral}`,
+      );
+    }
+    const required = requiredCollateral(fee, collateralPercentage);
+    return collateral < required
+      ? completeTxError(
+          `Final transaction requires ${required} Lovelace collateral, but only ${collateral} was selected`,
+        )
+      : Effect.void;
+  });
+
 const completeStaticFromActions = (
   sourceConfig: TxBuilder.TxBuilderConfig,
   options: CompleteOptions,
+  internalOptions: InternalCompleteOptions,
 ) => {
-  const replayConfig = makeReplayConfig(sourceConfig);
-  return pipe(
-    Effect.gen(function* () {
-      yield* replayTxActions(sourceConfig.actions);
-      return yield* completeCurrentConfig(options);
+  const attempt = (internal: InternalCompleteOptions) => {
+    const replayConfig = makeReplayConfig(sourceConfig);
+    return pipe(
+      Effect.gen(function* () {
+        yield* replayTxActions(sourceConfig.actions);
+        return yield* completeCurrentConfig(options, internal);
+      }),
+      Effect.provide(Layer.succeed(TxConfig, { config: replayConfig })),
+      // The completed transaction is copied out of the builder; nothing keeps
+      // the replay's builder alive.
+      Effect.ensuring(Effect.sync(() => replayConfig.txBuilder.free())),
+    );
+  };
+  return attempt(internalOptions).pipe(
+    Effect.catchAll((error) => {
+      const replay = collateralReplayOptions(error, internalOptions);
+      return replay ? attempt(replay) : Effect.fail(error);
     }),
-    Effect.provide(Layer.succeed(TxConfig, { config: replayConfig })),
-    // The completed transaction is copied out of the builder; nothing keeps
-    // the replay's builder alive.
-    Effect.ensuring(Effect.sync(() => replayConfig.txBuilder.free())),
   );
 };
 
@@ -431,6 +616,8 @@ const completeDelayedFromActions = (
     // evaluation uses the same input indices as the bootstrap-built redeemers.
     // Once real ex-units are known, later replays select from scratch again.
     let bootstrapWalletInputs: UTxO[] = [];
+    // Set once a collateral top-up fails, for the one replay that allows.
+    let initialCollateral: bigint | undefined;
 
     for (let attempt = 0; attempt < MAX_EVALUATION_ATTEMPTS; attempt++) {
       const replayConfig = makeReplayConfig(sourceConfig);
@@ -452,6 +639,7 @@ const completeDelayedFromActions = (
               walletCollateral,
               knownRedeemerExUnits,
               redeemerInputFingerprint,
+              initialCollateral,
             },
           );
         }),
@@ -463,6 +651,15 @@ const completeDelayedFromActions = (
       const discardReplay = () => replayConfig.txBuilder.free();
 
       if (Either.isLeft(completion)) {
+        const replay = collateralReplayOptions(completion.left, {
+          initialCollateral,
+        });
+        if (replay) {
+          initialCollateral = replay.initialCollateral;
+          discardReplay();
+          previousFingerprint = undefined;
+          continue;
+        }
         if (!(completion.left instanceof RedeemerInputRefreshRequired)) {
           discardReplay();
           return yield* Effect.fail(completion.left);
@@ -486,10 +683,9 @@ const completeDelayedFromActions = (
       const result = completion.right;
       const tx = result[2].toTransaction();
       if (usedBootstrapExUnits) {
+        const walletKeys = new Set(fixedWalletInputs.map(outRefKey));
         bootstrapWalletInputs = replayConfig.collectedInputs.filter((utxo) =>
-          fixedWalletInputs.some((walletInput) =>
-            isEqualUTxO(walletInput, utxo),
-          ),
+          walletKeys.has(outRefKey(utxo)),
         );
       } else {
         bootstrapWalletInputs = [];
@@ -548,12 +744,11 @@ const buildDelayedRedeemers = (
     return nextRedeemers;
   });
 
+// Canonical encoding keeps the order of the input list, so the inputs are
+// read from the body as it is.
 const canonicalInputFingerprint = (tx: CML.Transaction): string =>
   withCMLScope((own) => {
-    const canonical = own(
-      CML.Transaction.from_cbor_bytes(tx.to_canonical_cbor_bytes()),
-    );
-    const inputs = own(own(canonical.body()).inputs());
+    const inputs = own(own(tx.body()).inputs());
     return Array.from({ length: inputs.len() }, (_, index) =>
       own(inputs.get(index)).to_canonical_cbor_hex(),
     ).join(",");
@@ -565,10 +760,13 @@ const addWalletInputs = (
 ): Effect.Effect<void, TxBuilderError> =>
   Effect.try({
     try: () => {
+      const collected = new Set(config.collectedInputs.map(outRefKey));
+      // A fresh array, so earlier snapshots of collectedInputs are unchanged.
+      const collectedInputs = [...config.collectedInputs];
+      config.collectedInputs = collectedInputs;
       for (const utxo of inputs) {
-        if (config.collectedInputs.some((input) => isEqualUTxO(input, utxo))) {
-          continue;
-        }
+        const key = outRefKey(utxo);
+        if (collected.has(key)) continue;
         withCMLScope((own) => {
           const core = own(utxoToCore(utxo));
           const builder = own(
@@ -576,7 +774,8 @@ const addWalletInputs = (
           );
           config.txBuilder.add_input(own(builder.payment_key()));
         });
-        config.collectedInputs = [...config.collectedInputs, utxo];
+        collected.add(key);
+        collectedInputs.push(utxo);
       }
     },
     catch: (error) => completeTxError(error),
@@ -615,13 +814,44 @@ const collectKnownRedeemerExUnits = (
 export const complete = (options: CompleteOptions = {}) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
+    const defaultEvaluator =
+      options.localUPLCEval !== false &&
+      options.evaluator == null &&
+      config.lucidConfig.evaluator == null;
+    // One default evaluator per completion, so its internal fee, collateral
+    // and delayed-redeemer passes can reuse an identical evaluation. Custom
+    // evaluators are called for every request as before.
+    const completionOptions: CompleteOptions = defaultEvaluator
+      ? { ...options, evaluator: makeAikenEvaluator() }
+      : options;
     if (config.actions.length === 0)
-      return yield* completeCurrentConfig(options);
+      return yield* completeCurrentConfig(completionOptions);
     if (hasDelayedActions(config)) {
-      return yield* completeDelayedFromActions(config, options);
+      return yield* completeDelayedFromActions(config, completionOptions);
     }
-    return yield* completeStaticFromActions(config, options);
+    return yield* completeStaticFromActions(config, completionOptions, {});
   });
+
+type EvaluationMode = {
+  /**
+   * Evaluate the draft once instead of to a fixed point. Only valid when a
+   * later round evaluates the final transaction to a fixed point.
+   */
+  provisional?: boolean;
+  /** The builder already carries an explicit fee from an earlier round. */
+  explicitFee?: boolean;
+  /**
+   * Set by the evaluation when it stops at a script-aware fixed point. The
+   * builder's explicit fee is then already its effective fee, and the builder
+   * is unchanged since that fee was computed.
+   */
+  settled?: boolean;
+  /**
+   * The applied collateral, topped up to cover each fee the evaluation
+   * applies.
+   */
+  collateral?: CollateralState;
+};
 
 export const selectionAndEvaluation = (
   walletInputs: UTxO[],
@@ -634,13 +864,14 @@ export const selectionAndEvaluation = (
   bootstrapExUnits: boolean = false,
   knownRedeemerExUnits?: KnownRedeemerExUnits,
   redeemerInputFingerprint?: string,
+  evaluationMode: EvaluationMode = {},
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
     const refScriptInputs = config.readInputs.filter(
       (input) => input.scriptRef,
     );
-    const availableInputs = _Array.differenceWith(isEqualUTxO)(walletInputs, [
+    const availableInputs = excludeUTxOs(walletInputs, [
       ...config.collectedInputs,
       ...refScriptInputs,
     ]);
@@ -655,13 +886,8 @@ export const selectionAndEvaluation = (
           )
         : { selected: [], burnable: { lovelace: 0n } };
 
-    let estimatedFee = yield* estimateFee(config, script_calculation);
-    if (_Array.isEmptyArray(inputsToAdd)) {
-      estimatedFee += burnable.lovelace;
-    }
     if (_Array.isNonEmptyArray(inputsToAdd)) {
       yield* addWalletInputs(config, inputsToAdd);
-      estimatedFee = yield* estimateFee(config, script_calculation);
     }
 
     const appliedKnownExUnits =
@@ -674,7 +900,7 @@ export const selectionAndEvaluation = (
         : false;
 
     if (appliedKnownExUnits && script_calculation && coinSelection !== false) {
-      const remainingInputs = _Array.differenceWith(isEqualUTxO)(walletInputs, [
+      const remainingInputs = excludeUTxOs(walletInputs, [
         ...config.collectedInputs,
         ...refScriptInputs,
       ]);
@@ -686,7 +912,6 @@ export const selectionAndEvaluation = (
       );
       if (_Array.isNonEmptyArray(additionalInputs)) {
         yield* addWalletInputs(config, additionalInputs);
-        estimatedFee = yield* estimateFee(config, true);
       }
     }
 
@@ -700,6 +925,10 @@ export const selectionAndEvaluation = (
       // inputs for "SPEND" redeemers. As CML currently does not allow updating redeemer of
       // an existing input.
       if (script_calculation) {
+        // Only the error message needs the fee estimate.
+        const estimatedFee =
+          (yield* estimateFee(config, script_calculation)) +
+          (_Array.isEmptyArray(inputsToAdd) ? burnable.lovelace : 0n);
         yield* completeTxError(
           `RedeemerBuilder: Coin selection had to be updated after building redeemers, possibly leading to incorrect indices. Try setting a minimum fee of ${estimatedFee} lovelaces.`,
         );
@@ -720,6 +949,7 @@ export const selectionAndEvaluation = (
       evaluator,
       bootstrapExUnits,
       redeemerInputFingerprint,
+      evaluationMode,
     );
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
@@ -1049,34 +1279,6 @@ const scriptHashFromCertificate = (
       certificate.as_update_drep_cert()?.drep_credential(),
   );
 
-const voterByKey = (
-  body: CML.TransactionBody,
-  voterKey: string | undefined,
-): CML.Voter | undefined => {
-  if (!voterKey) return undefined;
-  const voters = body.voting_procedures()?.keys();
-  if (!voters) return undefined;
-  for (let i = 0; i < voters.len(); i++) {
-    const voter = voters.get(i);
-    if (voter.to_canonical_cbor_hex() === voterKey) return voter;
-  }
-  return undefined;
-};
-
-const proposalByKey = (
-  body: CML.TransactionBody,
-  proposalKey: string | undefined,
-): CML.ProposalProcedure | undefined => {
-  if (!proposalKey) return undefined;
-  const proposals = body.proposal_procedures();
-  if (!proposals) return undefined;
-  for (let i = 0; i < proposals.len(); i++) {
-    const proposal = proposals.get(i);
-    if (proposal.to_canonical_cbor_hex() === proposalKey) return proposal;
-  }
-  return undefined;
-};
-
 const scriptTypeToLanguage = (
   scriptType: ScriptType,
 ): CML.Language | undefined => {
@@ -1103,51 +1305,171 @@ const languageSortOrder = (language: CML.Language): number => {
   }
 };
 
-const scriptHashForPurpose = (
-  purpose: RedeemerPurpose,
-  tx: CML.Transaction,
-  info: CanonicalRedeemerInfo,
-): string | undefined => {
-  switch (purpose.tag) {
-    case "spend": {
-      const input = info.inputs.find(
-        (candidate) =>
-          candidate.txHash === purpose.input.txHash &&
-          candidate.outputIndex === purpose.input.outputIndex,
-      );
-      return input
-        ? getAddressDetails(input.address).paymentCredential?.hash
-        : undefined;
+type RedeemerPurposeIndex = { tag: RedeemerTag; index: bigint };
+
+const redeemerPurposeIndices = (
+  redeemers: CML.Redeemers,
+): RedeemerPurposeIndex[] =>
+  withCMLScope((own) => {
+    const purposes: RedeemerPurposeIndex[] = [];
+    const legacy = own(redeemers.as_arr_legacy_redeemer());
+    if (legacy) {
+      for (let i = 0; i < legacy.len(); i++) {
+        const redeemer = own(legacy.get(i));
+        purposes.push({
+          tag: fromCMLRedeemerTag(redeemer.tag()),
+          index: redeemer.index(),
+        });
+      }
     }
-    case "mint":
-      return purpose.policyId;
-    case "withdraw":
-      return getAddressDetails(purpose.rewardAddress).stakeCredential?.hash;
-    case "publish":
-      return withCMLScope((own) => {
-        const certificate = own(
-          own(info.txBody.certs())?.get(Number(purpose.index)),
+    const map = own(redeemers.as_map_redeemer_key_to_redeemer_val());
+    if (map) {
+      const keys = own(map.keys());
+      for (let i = 0; i < keys.len(); i++) {
+        const key = own(keys.get(i));
+        purposes.push({
+          tag: fromCMLRedeemerTag(key.tag()),
+          index: key.index(),
+        });
+      }
+    }
+    return purposes;
+  });
+
+const listIndex = (index: bigint, length: number): number | undefined =>
+  index >= 0n && index < BigInt(length) ? Number(index) : undefined;
+
+const credentialHash = (credential: CML.Credential): string =>
+  withCMLScope((own) =>
+    (own(credential.as_script()) ?? own(credential.as_pub_key()))!.to_hex(),
+  );
+
+/**
+ * The script hash run by each redeemer of `tx`, located the way the ledger
+ * indexes redeemers: spend by input order, mint and withdraw by canonical map
+ * key order, publish by certificate order, and vote and propose by the order
+ * of the canonical body's voters and proposals. `undefined` where the
+ * redeemer's purpose cannot be resolved.
+ */
+const redeemerScriptHashes = (
+  tx: CML.Transaction,
+  resolvedInputs: ReadonlyArray<UTxO>,
+): Array<RedeemerPurposeIndex & { scriptHash: string | undefined }> =>
+  withCMLScope((own) => {
+    const redeemers = own(own(tx.witness_set()).redeemers());
+    if (!redeemers) return [];
+    const body = own(tx.body());
+    let canonicalBody: CML.TransactionBody | undefined;
+    const canonical = () =>
+      (canonicalBody ??= own(
+        CML.TransactionBody.from_cbor_bytes(body.to_canonical_cbor_bytes()),
+      ));
+    let bodyInputs: CML.TransactionInputList | undefined;
+    let addresses: Map<string, string> | undefined;
+    const paymentHashes = new Map<string, string | undefined>();
+    const paymentHash = (address: string): string | undefined => {
+      if (!paymentHashes.has(address)) {
+        paymentHashes.set(
+          address,
+          getAddressDetails(address).paymentCredential?.hash,
         );
-        return certificate ? scriptHashFromCertificate(certificate) : undefined;
-      });
-    case "vote":
-      return withCMLScope((own) => {
-        const voter = own(
-          voterByKey(info.txBody, purpose.voterKey) ??
-            voterForRedeemerIndex(tx, purpose.index),
+      }
+      return paymentHashes.get(address);
+    };
+    const addressOf = (key: string): string | undefined => {
+      if (addresses === undefined) {
+        addresses = new Map();
+        for (const utxo of resolvedInputs) {
+          const utxoKey = outRefKey(utxo);
+          if (!addresses.has(utxoKey)) addresses.set(utxoKey, utxo.address);
+        }
+      }
+      return addresses.get(key);
+    };
+    // Map keys of equal length sort canonically in byte order, which is the
+    // order of their lowercase hex.
+    let policyIds: string[] | undefined;
+    const sortedPolicyIds = () => {
+      if (policyIds === undefined) {
+        const policies = own(own(body.mint())?.keys());
+        policyIds = Array.from({ length: policies?.len() ?? 0 }, (_, i) =>
+          own(policies!.get(i)).to_hex(),
+        ).sort();
+      }
+      return policyIds;
+    };
+    let withdrawals: Array<{ key: string; hash: string }> | undefined;
+    const sortedWithdrawals = () => {
+      if (withdrawals === undefined) {
+        const rewardAddresses = own(own(body.withdrawals())?.keys());
+        withdrawals = Array.from(
+          { length: rewardAddresses?.len() ?? 0 },
+          (_, i) => {
+            const rewardAddress = own(rewardAddresses!.get(i));
+            return {
+              key: own(rewardAddress.to_address()).to_hex(),
+              hash: credentialHash(own(rewardAddress.payment())),
+            };
+          },
+        ).sort((left, right) =>
+          left.key < right.key ? -1 : left.key > right.key ? 1 : 0,
         );
-        return own(voter?.script_hash())?.to_hex();
-      });
-    case "propose":
-      return withCMLScope((own) => {
-        const proposal = own(
-          proposalByKey(info.txBody, purpose.proposalKey) ??
-            proposalProcedureForRedeemerIndex(tx, purpose.index),
-        );
-        return own(own(proposal?.gov_action())?.script_hash())?.to_hex();
-      });
-  }
-};
+      }
+      return withdrawals;
+    };
+
+    const scriptHash = ({ tag, index }: RedeemerPurposeIndex) => {
+      switch (tag) {
+        case "spend": {
+          const inputs = (bodyInputs ??= own(body.inputs()));
+          const position = listIndex(index, inputs.len());
+          if (position === undefined) return undefined;
+          const input = own(inputs.get(position));
+          const address = addressOf(
+            `${own(input.transaction_id()).to_hex()}#${input.index()}`,
+          );
+          return address ? paymentHash(address) : undefined;
+        }
+        case "mint": {
+          const policies = sortedPolicyIds();
+          const position = listIndex(index, policies.length);
+          return position === undefined ? undefined : policies[position];
+        }
+        case "withdraw": {
+          const entries = sortedWithdrawals();
+          const position = listIndex(index, entries.length);
+          return position === undefined ? undefined : entries[position].hash;
+        }
+        case "publish": {
+          const certs = own(body.certs());
+          const position = listIndex(index, certs?.len() ?? 0);
+          return position === undefined
+            ? undefined
+            : scriptHashFromCertificate(own(certs!.get(position)));
+        }
+        case "vote": {
+          const voters = own(own(canonical().voting_procedures())?.keys());
+          const position = listIndex(index, voters?.len() ?? 0);
+          return position === undefined
+            ? undefined
+            : own(own(voters!.get(position)).script_hash())?.to_hex();
+        }
+        case "propose": {
+          const proposals = own(canonical().proposal_procedures());
+          const position = listIndex(index, proposals?.len() ?? 0);
+          return position === undefined
+            ? undefined
+            : own(
+                own(own(proposals!.get(position)).gov_action()).script_hash(),
+              )?.to_hex();
+        }
+      }
+    };
+    return redeemerPurposeIndices(redeemers).map((purpose) => ({
+      ...purpose,
+      scriptHash: scriptHash(purpose),
+    }));
+  });
 
 const usedPlutusLanguages = (
   tx: CML.Transaction,
@@ -1163,34 +1485,26 @@ const usedPlutusLanguages = (
       return found;
     });
 
-    const resolvedInputs = [
+    const purposes = redeemerScriptHashes(tx, [
       ...config.walletInputs,
       ...config.collectedInputs,
       ...config.readInputs,
-    ];
-    const redeemerInfo = yield* buildCanonicalRedeemerInfo(tx, resolvedInputs);
-
-    for (const purpose of redeemerInfo.redeemers) {
-      const scriptHash = scriptHashForPurpose(purpose, tx, redeemerInfo);
+    ]);
+    for (const { tag, index, scriptHash } of purposes) {
       if (!scriptHash) {
-        redeemerInfo.txBody.free();
-        yield* completeTxError(
-          `Unable to resolve script hash for ${purpose.tag}:${purpose.index} redeemer`,
+        return yield* completeTxError(
+          `Unable to resolve script hash for ${tag}:${index} redeemer`,
         );
-        continue;
       }
       const script = config.scripts.get(scriptHash);
       if (!script) {
-        redeemerInfo.txBody.free();
-        yield* completeTxError(
-          `Unable to resolve script for ${purpose.tag} redeemer ${scriptHash}`,
+        return yield* completeTxError(
+          `Unable to resolve script for ${tag} redeemer ${scriptHash}`,
         );
-        continue;
       }
       const language = scriptTypeToLanguage(script.type);
       if (language !== undefined) languages.add(language);
     }
-    redeemerInfo.txBody.free();
 
     const result = CML.LanguageList.new();
     [...languages]
@@ -1322,44 +1636,208 @@ export const setRedeemerstoZero = (tx: CML.Transaction): CML.Transaction =>
     return tx;
   });
 
-const applyCollateral = (
-  setCollateral: bigint,
-  collateralInputs: UTxO[],
+/**
+ * The collateral applied to the builder. It only grows, which bounds the fee
+ * fixed point that tops it up.
+ */
+type CollateralState = {
+  inputs: UTxO[];
+  /** The collateral amount: the inputs minus the collateral return. */
+  total: bigint;
+  /** Whether the builder carries a collateral return. */
+  hasReturn: boolean;
+  /** The configured lower bound, `setCollateral`. */
+  minimum: bigint;
+  /** Candidates for top-ups: the wallet's preferred ones first. */
+  walletCollateral: UTxO[];
+  walletInputs: UTxO[];
+  changeAddress: string;
+};
+
+/**
+ * Sets the collateral return to what `inputs` hold beyond `total`, unless
+ * nothing is left. CML replaces an earlier return, and derives
+ * `total_collateral` from the inputs and the return when it builds.
+ */
+const setCollateralReturn = (
+  config: TxBuilder.TxBuilderConfig,
+  inputs: UTxO[],
+  total: bigint,
   changeAddress: string,
-) =>
+): boolean => {
+  const returnassets = pipe(
+    sumAssetsFromInputs(inputs),
+    Record.union({ lovelace: -total }, _BigInt.sum),
+  );
+  // Collateral that matches the amount exactly has nothing to return.
+  if (Object.values(returnassets).every((amount) => amount === 0n)) {
+    return false;
+  }
+  withCMLScope((own) => {
+    const collateralOutputBuilder = own(
+      own(CML.TransactionOutputBuilder.new()).with_address(
+        own(CML.Address.from_bech32(changeAddress)),
+      ),
+    );
+    const result = own(
+      own(
+        own(collateralOutputBuilder.next()).with_value(
+          own(assetsToValue(returnassets)),
+        ),
+      ).build(),
+    );
+    config.txBuilder.set_collateral_return(own(result.output()));
+  });
+  return true;
+};
+
+const addCollateralInputs = (
+  config: TxBuilder.TxBuilderConfig,
+  inputs: UTxO[],
+) => {
+  for (const utxo of inputs) {
+    withCMLScope((own) => {
+      const core = own(utxoToCore(utxo));
+      const builder = own(
+        CML.SingleInputBuilder.from_transaction_unspent_output(core),
+      );
+      config.txBuilder.add_collateral(own(builder.payment_key()));
+    });
+  }
+};
+
+const applyCollateral = (
+  totalCollateral: bigint,
+  collateralInputs: UTxO[],
+  context: Omit<CollateralState, "inputs" | "total" | "hasReturn">,
+): Effect.Effect<CollateralState, never, TxConfig> =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
-    for (const utxo of collateralInputs) {
-      withCMLScope((own) => {
-        const core = own(utxoToCore(utxo));
-        const builder = own(
-          CML.SingleInputBuilder.from_transaction_unspent_output(core),
-        );
-        config.txBuilder.add_collateral(own(builder.payment_key()));
-      });
-    }
-    const returnassets = pipe(
-      sumAssetsFromInputs(collateralInputs),
-      Record.union({ lovelace: -setCollateral }, _BigInt.sum),
-    );
-    // Collateral that matches the amount exactly has nothing to return.
-    if (Object.values(returnassets).every((amount) => amount === 0n)) return;
+    addCollateralInputs(config, collateralInputs);
+    return {
+      ...context,
+      inputs: collateralInputs,
+      total: totalCollateral,
+      hasReturn: setCollateralReturn(
+        config,
+        collateralInputs,
+        totalCollateral,
+        context.changeAddress,
+      ),
+    };
+  });
 
-    withCMLScope((own) => {
-      const collateralOutputBuilder = own(
-        own(CML.TransactionOutputBuilder.new()).with_address(
-          own(CML.Address.from_bech32(changeAddress)),
+const collateralConvergenceError = () =>
+  completeTxError(
+    `Collateral did not converge with the fee after ${MAX_EVALUATION_ATTEMPTS} top-ups`,
+  );
+
+/**
+ * Raises the collateral in place to cover `fee`: by shrinking the collateral
+ * return when the selected inputs still leave a valid one, and otherwise by
+ * adding inputs, from the wallet's collateral candidates first. Returns
+ * whether the builder changed, in which case its fee needs re-estimating.
+ */
+const topUpCollateral = (
+  config: TxBuilder.TxBuilderConfig,
+  state: CollateralState,
+  fee: bigint,
+): Effect.Effect<boolean, TxBuilderError> =>
+  Effect.gen(function* () {
+    const { collateralPercentage, coinsPerUtxoByte, maxCollateralInputs } =
+      config.lucidConfig.protocolParameters;
+    const feeCollateral = requiredCollateral(fee, collateralPercentage);
+    const required =
+      feeCollateral > state.minimum ? feeCollateral : state.minimum;
+    if (required <= state.total) return false;
+
+    const leftover = pipe(
+      sumAssetsFromInputs(state.inputs),
+      Record.union({ lovelace: -required }, _BigInt.sum),
+    );
+    const leftoverLovelace = leftover.lovelace ?? 0n;
+    if (
+      state.hasReturn &&
+      leftoverLovelace >=
+        calculateMinLovelace(coinsPerUtxoByte, leftover, state.changeAddress)
+    ) {
+      setCollateralReturn(config, state.inputs, required, state.changeAddress);
+      state.total = required;
+      return true;
+    }
+
+    // The selected inputs cannot cover it: select more, so that the inputs
+    // cover `required` plus a valid collateral return.
+    const requiredAssets: Assets =
+      leftoverLovelace < 0n ? { lovelace: -leftoverLovelace } : {};
+    const externalAssets: Assets =
+      leftoverLovelace < 0n ? { ...leftover, lovelace: 0n } : leftover;
+    const error = completeTxError(
+      `Your wallet does not have enough funds to cover the required ${required} Lovelace collateral. Or it contains UTxOs with reference scripts; which
+      are excluded from collateral selection.`,
+    );
+    // CML cannot remove collateral inputs, so a failure here asks for one
+    // replay that selects the whole collateral up front.
+    const replay = (cause: TxBuilderError) =>
+      new CollateralReplayRequired(
+        cause,
+        required,
+        state.walletInputs,
+        state.walletCollateral,
+      );
+    const select = (candidates: UTxO[]) =>
+      recursive(
+        sortUTxOs(
+          excludeUTxOs(candidates, state.inputs).filter(
+            (utxo) => !utxo.scriptRef,
+          ),
+        ),
+        requiredAssets,
+        coinsPerUtxoByte,
+        externalAssets,
+        false,
+        error,
+      );
+    const { selected } = yield* pipe(
+      select(state.walletCollateral),
+      Effect.orElse(() =>
+        select([
+          ...state.walletCollateral,
+          ...excludeUTxOs(state.walletInputs, state.walletCollateral),
+        ]),
+      ),
+      Effect.mapError(replay),
+    );
+    const maxInputs = maxCollateralInputs ?? 3;
+    if (state.inputs.length + selected.length > maxInputs) {
+      return yield* Effect.fail(
+        replay(
+          completeTxError(
+            `Covering the required ${required} Lovelace collateral needs ${state.inputs.length + selected.length} collateral inputs, but at most ${maxInputs} are allowed`,
+          ),
         ),
       );
-      const result = own(
-        own(
-          own(collateralOutputBuilder.next()).with_value(
-            own(assetsToValue(returnassets)),
-          ),
-        ).build(),
+    }
+    // The selection leaves a collateral return of at least the minimum ADA,
+    // so the return is always overwritten. CML cannot clear one, so a builder
+    // that already has a return must not be left with a stale one.
+    const inputs = [...state.inputs, ...selected];
+    const hasReturn = setCollateralReturn(
+      config,
+      inputs,
+      required,
+      state.changeAddress,
+    );
+    if (state.hasReturn && !hasReturn) {
+      return yield* completeTxError(
+        `Covering the required ${required} Lovelace collateral leaves no collateral return to replace the existing one`,
       );
-      config.txBuilder.set_collateral_return(own(result.output()));
-    });
+    }
+    addCollateralInputs(config, selected);
+    state.inputs = inputs;
+    state.hasReturn = hasReturn;
+    state.total = required;
+    return true;
   });
 
 // Collateral candidates preferred by the wallet, limited to the preset wallet
@@ -1369,8 +1847,9 @@ const fetchWalletCollateral = (
   wallet: Wallet,
   amount: bigint,
   presetWalletInputs: UTxO[],
-): Effect.Effect<UTxO[]> =>
-  wallet.getCollateral === undefined
+): Effect.Effect<UTxO[]> => {
+  const presetKeys = new Set(presetWalletInputs.map(outRefKey));
+  return wallet.getCollateral === undefined
     ? Effect.succeed([])
     : pipe(
         Effect.tryPromise(() => wallet.getCollateral!(amount)),
@@ -1378,11 +1857,12 @@ const fetchWalletCollateral = (
           presetWalletInputs.length === 0
             ? candidates
             : candidates.filter((candidate) =>
-                presetWalletInputs.some((utxo) => isEqualUTxO(utxo, candidate)),
+                presetKeys.has(outRefKey(candidate)),
               ),
         ),
         Effect.orElseSucceed((): UTxO[] => []),
       );
+};
 
 // Selects collateral from the wallet's candidates when they cover it, and
 // otherwise from the wallet's UTxOs. A candidate holding exactly the
@@ -1390,12 +1870,14 @@ const fetchWalletCollateral = (
 // commonly set aside exactly 5 ADA.
 const selectCollateral = (
   coinsPerUtxoByte: bigint,
+  maxCollateralInputs: number,
   totalCollateral: bigint,
   walletCollateral: UTxO[],
   walletInputs: UTxO[],
 ): Effect.Effect<UTxO[], TxBuilderError> => {
   const fromWalletInputs = findCollateral(
     coinsPerUtxoByte,
+    maxCollateralInputs,
     totalCollateral,
     walletInputs,
   );
@@ -1408,13 +1890,19 @@ const selectCollateral = (
   return walletCollateral.length === 0
     ? fromWalletInputs
     : pipe(
-        findCollateral(coinsPerUtxoByte, totalCollateral, walletCollateral),
+        findCollateral(
+          coinsPerUtxoByte,
+          maxCollateralInputs,
+          totalCollateral,
+          walletCollateral,
+        ),
         Effect.orElse(() => fromWalletInputs),
       );
 };
 
 const findCollateral = (
   coinsPerUtxoByte: bigint,
+  maxCollateralInputs: number,
   setCollateral: bigint,
   inputs: UTxO[],
 ): Effect.Effect<UTxO[], TxBuilderError, never> =>
@@ -1435,9 +1923,9 @@ const findCollateral = (
       false,
       error,
     );
-    if (selected.length > 3)
+    if (selected.length > maxCollateralInputs)
       yield* completeTxError(
-        `Selected ${selected.length} inputs as collateral, but max collateral inputs is 3 to cover the ${setCollateral} Lovelace collateral ${stringify(selected)}`,
+        `Selected ${selected.length} inputs as collateral, but max collateral inputs is ${maxCollateralInputs} to cover the ${setCollateral} Lovelace collateral ${stringify(selected)}`,
       );
     return selected;
   });
@@ -1547,7 +2035,11 @@ const buildEvaluationCandidate = (
   forceExplicitFee: boolean,
 ): Effect.Effect<CML.Transaction, TxBuilderError> =>
   Effect.gen(function* () {
-    yield* applyEffectiveFee(config, script_calculation, forceExplicitFee);
+    const fee = yield* applyEffectiveFee(
+      config,
+      script_calculation,
+      forceExplicitFee,
+    );
     const candidate = yield* buildEvaluationDraft(config, changeAddress);
     const hasRedeemers = withCMLScope(
       (own) => own(own(candidate.witness_set()).redeemers()) !== undefined,
@@ -1556,7 +2048,12 @@ const buildEvaluationCandidate = (
       return candidate;
     }
     candidate.free();
-    yield* applyEffectiveFee(config, script_calculation, true);
+    if (config.minFee === undefined) {
+      // The builder is unchanged since `fee` was computed.
+      config.txBuilder.set_fee(fee);
+    } else {
+      yield* applyEffectiveFee(config, script_calculation, true);
+    }
     return yield* buildEvaluationDraft(config, changeAddress);
   });
 
@@ -1577,7 +2074,7 @@ const prepareRedeemerContextCandidate = (
         ).transaction,
       catch: (error) => completeTxError(error),
     });
-    canonical.free();
+    if (normalized !== canonical) canonical.free();
     const refreshed = yield* refreshScriptDataHash(normalized, config);
     if (refreshed !== normalized) normalized.free();
     return refreshed;
@@ -1604,8 +2101,8 @@ const applyKnownRedeemerExUnits = (
         ),
       catch: (error) => completeTxError(error),
     });
-    candidate.free();
     const transaction = normalization.transaction;
+    if (transaction !== candidate) candidate.free();
     const expectedKeys = withCMLScope((own) => {
       const redeemers = own(own(transaction.witness_set()).redeemers());
       return redeemers ? expectedRedeemerKeySet(redeemers) : undefined;
@@ -1652,14 +2149,26 @@ const applyKnownRedeemerExUnits = (
     return true;
   });
 
-const evaluationFixedPointFingerprint = (tx: CML.Transaction): string => {
-  const zeroed = setRedeemerstoZero(tx);
-  try {
-    return transactionFixedPointFingerprint(zeroed);
-  } finally {
-    if (zeroed !== tx) zeroed.free();
-  }
-};
+/**
+ * What phase-two scripts can observe of a candidate: its canonical body and
+ * each redeemer's purpose and data, in canonical redeemer order. Ex-units are
+ * left out, since evaluation replaces them.
+ */
+const evaluationFixedPointFingerprint = (tx: CML.Transaction): Uint8Array[] =>
+  withCMLScope((own) => {
+    const parts = [own(tx.body()).to_canonical_cbor_bytes()];
+    const redeemers = own(own(tx.witness_set()).redeemers());
+    if (!redeemers) return parts;
+    const entries = canonicalRedeemerEntries(redeemers);
+    try {
+      for (const entry of entries) {
+        parts.push(entry.sortKey, entry.data.to_canonical_cbor_bytes());
+      }
+    } finally {
+      freeCanonicalRedeemerEntries(entries);
+    }
+    return parts;
+  });
 
 const evaluateUntilStable = (
   config: TxBuilder.TxBuilderConfig,
@@ -1669,22 +2178,46 @@ const evaluateUntilStable = (
   localUPLCEval: boolean,
   evaluator: EvaluatorAdapter | undefined,
   bootstrapExUnits: boolean,
-  redeemerInputFingerprint?: string,
+  redeemerInputFingerprint: string | undefined,
+  mode: EvaluationMode,
 ): Effect.Effect<
   boolean,
   TxBuilderError | EvaluatorError | RedeemerInputRefreshRequired
 > =>
   Effect.gen(function* () {
-    let previousFingerprint: string | undefined;
-    let forceExplicitFee = config.minFee !== undefined;
+    const { provisional = false, explicitFee = false } = mode;
+    let previousFingerprint: Uint8Array[] | undefined;
+    let forceExplicitFee = explicitFee || config.minFee !== undefined;
 
     for (let attempt = 0; attempt < MAX_EVALUATION_ATTEMPTS; attempt++) {
-      const candidate = yield* buildEvaluationCandidate(
+      let candidate = yield* buildEvaluationCandidate(
         config,
         changeAddress,
         script_calculation,
         forceExplicitFee,
       );
+      // Top the collateral up to cover the candidate's fee. A top-up grows
+      // the body, so the fee is applied again until the collateral covers it.
+      // Scripts never see collateral, so this adds no evaluation unless the
+      // fee changes.
+      const collateral = bootstrapExUnits ? undefined : mode.collateral;
+      for (let topUps = 0; collateral !== undefined; topUps++) {
+        const fee = withCMLScope((own) => own(candidate.body()).fee());
+        const toppedUp = yield* topUpCollateral(config, collateral, fee).pipe(
+          Effect.tapError(() => Effect.sync(() => candidate.free())),
+        );
+        if (!toppedUp) break;
+        candidate.free();
+        if (topUps >= MAX_EVALUATION_ATTEMPTS) {
+          return yield* collateralConvergenceError();
+        }
+        candidate = yield* buildEvaluationCandidate(
+          config,
+          changeAddress,
+          script_calculation,
+          forceExplicitFee,
+        );
+      }
       const redeemers = withCMLScope((own) =>
         own(candidate.witness_set()).redeemers(),
       );
@@ -1724,8 +2257,12 @@ const evaluateUntilStable = (
       // Re-evaluate only when the zero-exunit candidate changes in a way that
       // scripts can observe, such as fee or change-output drift after ex-units.
       const fingerprint = evaluationFixedPointFingerprint(candidate);
-      if (fingerprint === previousFingerprint) {
+      if (
+        previousFingerprint !== undefined &&
+        sameByteArrays(fingerprint, previousFingerprint)
+      ) {
         candidate.free();
+        if (script_calculation) mode.settled = true;
         return true;
       }
       previousFingerprint = fingerprint;
@@ -1737,6 +2274,8 @@ const evaluateUntilStable = (
         localUPLCEval,
         evaluator,
       ).pipe(Effect.ensuring(Effect.sync(() => candidate.free())));
+      // A later round evaluates the final transaction to a fixed point.
+      if (provisional) return true;
     }
 
     return yield* completeTxError(
@@ -1769,15 +2308,112 @@ const makeProviderEvaluator = (provider: Provider): EvaluatorAdapter => ({
     provider.evaluateTx(tx, additionalUTxOs),
 });
 
+type AikenEvaluationRequest = {
+  txBytes: Uint8Array;
+  inputBytes: Uint8Array[];
+  outputBytes: Uint8Array[];
+  costModels: Uint8Array;
+  maxSteps: bigint;
+  maxMemory: bigint;
+  zeroTime: bigint;
+  zeroSlot: bigint;
+  slotLength: number;
+  protocolMajorVersion: number | undefined;
+};
+
+const sameBytes = (left: Uint8Array, right: Uint8Array): boolean => {
+  if (left === right) return true;
+  if (left.length !== right.length) return false;
+  for (let index = 0; index < left.length; index++) {
+    if (left[index] !== right[index]) return false;
+  }
+  return true;
+};
+
+const sameByteArrays = (
+  left: ReadonlyArray<Uint8Array>,
+  right: ReadonlyArray<Uint8Array>,
+): boolean =>
+  left.length === right.length &&
+  left.every((bytes, index) => sameBytes(bytes, right[index]));
+
+const sameAikenRequest = (
+  left: AikenEvaluationRequest,
+  right: AikenEvaluationRequest,
+): boolean =>
+  sameBytes(left.txBytes, right.txBytes) &&
+  sameByteArrays(left.inputBytes, right.inputBytes) &&
+  sameByteArrays(left.outputBytes, right.outputBytes) &&
+  sameBytes(left.costModels, right.costModels) &&
+  left.maxSteps === right.maxSteps &&
+  left.maxMemory === right.maxMemory &&
+  left.zeroTime === right.zeroTime &&
+  left.zeroSlot === right.zeroSlot &&
+  Object.is(left.slotLength, right.slotLength) &&
+  Object.is(left.protocolMajorVersion, right.protocolMajorVersion);
+
 /**
- * The subset of `@lucid-evolution/uplc` used by the Aiken evaluator. Both the
- * `@lucid-evolution/uplc/speed` and `@lucid-evolution/uplc/size` builds
- * satisfy it.
+ * Whether two asset maps are equal in content and in key order. The output
+ * encoding, and so the script context a script sees, follows the key order.
+ */
+const sameAssets = (left: Assets, right: Assets): boolean => {
+  const leftUnits = Object.keys(left);
+  const rightUnits = Object.keys(right);
+  return (
+    leftUnits.length === rightUnits.length &&
+    leftUnits.every(
+      (unit, index) => unit === rightUnits[index] && left[unit] === right[unit],
+    )
+  );
+};
+
+/** Whether two UTxOs encode to the same transaction output. */
+const sameTxOutput = (left: UTxO, right: UTxO): boolean =>
+  left.address === right.address &&
+  (left.datumHash ?? undefined) === (right.datumHash ?? undefined) &&
+  (left.datum ?? undefined) === (right.datum ?? undefined) &&
+  (left.scriptRef ?? undefined)?.type ===
+    (right.scriptRef ?? undefined)?.type &&
+  (left.scriptRef ?? undefined)?.script ===
+    (right.scriptRef ?? undefined)?.script &&
+  sameAssets(left.assets, right.assets);
+
+type EncodedUTxO = Readonly<{
+  utxo: UTxO;
+  input: Uint8Array;
+  output: Uint8Array;
+}>;
+
+/**
+ * Evaluates a transaction given as CBOR bytes, sparing the built-in evaluator
+ * the hex round trip of the public `EvaluatorAdapter` contract.
+ */
+const evaluateTxBytes = Symbol("evaluateTxBytes");
+
+type BytesEvaluator = (
+  txBytes: Uint8Array,
+  additionalUTxOs: UTxO[],
+  context: EvaluationContext,
+) => Promise<EvalRedeemer[]>;
+
+type BuiltInEvaluatorAdapter = EvaluatorAdapter & {
+  readonly [evaluateTxBytes]: BytesEvaluator;
+};
+
+/**
+ * The subset of `@lucid-evolution/uplc` used by the Aiken evaluator.
  */
 export type UPLCModule = Pick<typeof UPLC, "eval_phase_two_raw">;
 
 /**
- * Creates the built-in Aiken evaluator backed by the given uplc build.
+ * The built-in evaluator, backed by the given uplc build. It remembers its last successful request and
+ * returns that result again when the next request is byte-for-byte the same
+ * (transaction, resolved UTxOs, cost models, budget, slot configuration and
+ * protocol version). Evaluation is deterministic, so the result is the same.
+ * Failures are not remembered. It also keeps the CBOR encoding of the
+ * resolved UTxOs of its latest request, since one completion evaluates the
+ * same inputs repeatedly; encodings the latest request did not use are
+ * dropped, so a long-lived evaluator does not grow.
  *
  * @example
  * import * as UPLCSize from "@lucid-evolution/uplc/size";
@@ -1787,33 +2423,111 @@ export type UPLCModule = Pick<typeof UPLC, "eval_phase_two_raw">;
  */
 export const makeAikenEvaluator = (
   uplc: UPLCModule = UPLC,
-): EvaluatorAdapter => ({
-  name: "aiken",
-  evaluate: async ({ tx, additionalUTxOs, context }) => {
-    const { txBytes, inputBytes, outputBytes } = withCMLScope((own) => ({
-      txBytes: own(CML.Transaction.from_cbor_hex(tx)).to_cbor_bytes(),
-      inputBytes: additionalUTxOs.map((utxo) =>
-        own(utxoToTransactionInput(utxo)).to_cbor_bytes(),
-      ),
-      outputBytes: additionalUTxOs.map((utxo) =>
-        own(utxoToTransactionOutput(utxo)).to_cbor_bytes(),
-      ),
+): EvaluatorAdapter => {
+  let previous:
+    | { request: AikenEvaluationRequest; redeemers: Uint8Array[] }
+    | undefined;
+  let costModels: { source: CML.CostModels; bytes: Uint8Array } | undefined;
+  // Encodings used by the latest request, by out-ref.
+  let encodedUTxOs = new Map<string, EncodedUTxO>();
+
+  // The cached arrays are private to this evaluator and never modified.
+  const encodeUTxO = (utxo: UTxO): EncodedUTxO => {
+    const key = `${utxo.txHash}#${utxo.outputIndex}`;
+    const cached = encodedUTxOs.get(key);
+    if (cached !== undefined && sameTxOutput(cached.utxo, utxo)) return cached;
+    return withCMLScope((own) => ({
+      utxo: cloneUTxO(utxo),
+      input: own(utxoToTransactionInput(utxo)).to_cbor_bytes(),
+      output: own(utxoToTransactionOutput(utxo)).to_cbor_bytes(),
     }));
-    const uplcEval = uplc.eval_phase_two_raw(
+  };
+
+  const encodeUTxOs = (utxos: ReadonlyArray<UTxO>): EncodedUTxO[] => {
+    const used = new Map<string, EncodedUTxO>();
+    const encoded = utxos.map((utxo) => {
+      const result = encodeUTxO(utxo);
+      used.set(`${utxo.txHash}#${utxo.outputIndex}`, result);
+      return result;
+    });
+    encodedUTxOs = used;
+    return encoded;
+  };
+
+  const encodeCostModels = (source: CML.CostModels): Uint8Array => {
+    if (costModels?.source !== source) {
+      costModels = { source, bytes: source.to_cbor_bytes() };
+    }
+    return costModels.bytes;
+  };
+
+  const evaluate: BytesEvaluator = async (
+    txBytes,
+    additionalUTxOs,
+    context,
+  ) => {
+    const encoded = encodeUTxOs(additionalUTxOs);
+    const request: AikenEvaluationRequest = {
       txBytes,
-      inputBytes,
-      outputBytes,
-      context.costModels.to_cbor_bytes(),
-      context.protocolParameters.maxTxExSteps,
-      context.protocolParameters.maxTxExMem,
-      BigInt(context.slotConfig.zeroTime),
-      BigInt(context.slotConfig.zeroSlot),
-      context.slotConfig.slotLength,
-      context.protocolParameters.protocolMajorVersion,
+      inputBytes: encoded.map(({ input }) => input),
+      outputBytes: encoded.map(({ output }) => output),
+      costModels: encodeCostModels(context.costModels),
+      maxSteps: context.protocolParameters.maxTxExSteps,
+      maxMemory: context.protocolParameters.maxTxExMem,
+      zeroTime: BigInt(context.slotConfig.zeroTime),
+      zeroSlot: BigInt(context.slotConfig.zeroSlot),
+      slotLength: context.slotConfig.slotLength,
+      protocolMajorVersion: context.protocolParameters.protocolMajorVersion,
+    };
+    if (previous && sameAikenRequest(previous.request, request)) {
+      // Decode again so callers never share the remembered result.
+      return decodeLegacyRedeemers(previous.redeemers);
+    }
+    previous = undefined;
+    // A copy, so later changes to the caller's bytes cannot alter the key.
+    const remembered: AikenEvaluationRequest = {
+      ...request,
+      txBytes: txBytes.slice(),
+    };
+    const uplcEval = uplc.eval_phase_two_raw(
+      request.txBytes,
+      request.inputBytes,
+      request.outputBytes,
+      request.costModels,
+      request.maxSteps,
+      request.maxMemory,
+      request.zeroTime,
+      request.zeroSlot,
+      request.slotLength,
+      request.protocolMajorVersion,
     );
-    return decodeLegacyRedeemers(uplcEval);
-  },
-});
+    const result = decodeLegacyRedeemers(uplcEval);
+    previous = {
+      request: remembered,
+      redeemers: uplcEval.map((bytes) => bytes.slice()),
+    };
+    return result;
+  };
+
+  const adapter: BuiltInEvaluatorAdapter = {
+    name: "aiken",
+    evaluate: ({ tx, additionalUTxOs, context }) =>
+      evaluate(
+        withCMLScope((own) =>
+          own(CML.Transaction.from_cbor_hex(tx)).to_cbor_bytes(),
+        ),
+        additionalUTxOs,
+        context,
+      ),
+    [evaluateTxBytes]: evaluate,
+  };
+  return adapter;
+};
+
+const bytesEvaluator = (
+  adapter: EvaluatorAdapter,
+): BytesEvaluator | undefined =>
+  (adapter as Partial<BuiltInEvaluatorAdapter>)[evaluateTxBytes];
 
 const resolveEvaluatorAdapter = (
   config: TxBuilder.TxBuilderConfig,
@@ -1874,11 +2588,15 @@ const evaluateTransaction = (
     });
     const normalized = normalization.transaction;
     const zeroed = setRedeemerstoZero(normalized);
+    // Each step may return its input unchanged; `tx` belongs to the caller.
+    const releaseCopies = (...copies: CML.Transaction[]) =>
+      freeCML(...copies.filter((copy) => copy !== tx));
     const txEvaluation = yield* refreshScriptDataHash(zeroed, config).pipe(
-      Effect.tapError(() => Effect.sync(() => freeCML(normalized, zeroed))),
+      Effect.tapError(() =>
+        Effect.sync(() => releaseCopies(normalized, zeroed)),
+      ),
     );
-    // Any of the three may be the same object; freeCML frees each one once.
-    const release = () => freeCML(normalized, zeroed, txEvaluation);
+    const release = () => releaseCopies(normalized, zeroed, txEvaluation);
     const expectedKeys = withCMLScope((own) => {
       const redeemers = own(own(txEvaluation.witness_set()).redeemers());
       return redeemers ? expectedRedeemerKeySet(redeemers) : undefined;
@@ -1892,15 +2610,20 @@ const evaluateTransaction = (
       walletInputs,
       config,
     ).pipe(Effect.tapError(() => Effect.sync(release)));
-    const txHex = txEvaluation.to_cbor_hex();
+    const context = makeEvaluationContext(config);
+    const evaluateBytes = bytesEvaluator(adapter);
+    let run: () => Promise<EvalRedeemer[]>;
+    if (evaluateBytes) {
+      const txBytes = txEvaluation.to_cbor_bytes();
+      run = () => evaluateBytes(txBytes, txUtxos, context);
+    } else {
+      const txHex = txEvaluation.to_cbor_hex();
+      run = () =>
+        adapter.evaluate({ tx: txHex, additionalUTxOs: txUtxos, context });
+    }
     release();
     const evalRedeemers = yield* Effect.tryPromise({
-      try: () =>
-        adapter.evaluate({
-          tx: txHex,
-          additionalUTxOs: txUtxos,
-          context: makeEvaluationContext(config),
-        }),
+      try: run,
       catch: (error) => wrapEvaluatorCause(error, name),
     });
 
@@ -2043,10 +2766,7 @@ export const recursive = (
     let remainingInputs = inputs;
 
     while (extraLovelace) {
-      remainingInputs = _Array.differenceWith(isEqualUTxO)(
-        remainingInputs,
-        selected,
-      );
+      remainingInputs = excludeUTxOs(remainingInputs, selected);
 
       const extraSelected = selectUTxOs(remainingInputs, extraLovelace, true);
       if (_Array.isEmptyArray(extraSelected)) {

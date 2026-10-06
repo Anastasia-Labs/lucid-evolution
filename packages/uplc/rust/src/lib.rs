@@ -1,3 +1,5 @@
+mod eval;
+
 use js_sys;
 use uplc::tx;
 use wasm_bindgen::prelude::*;
@@ -25,17 +27,15 @@ pub fn eval_phase_two_raw(
         .zip(utxos_bytes_y.into_iter())
         .map(|(x, y)| (x.to_vec(), y.to_vec()))
         .collect::<Vec<(Vec<u8>, Vec<u8>)>>();
-    return tx::eval_phase_two_raw_with_protocol(
+    return eval::eval_phase_two_raw(
         tx_bytes,
         &utxos_bytes,
-        Some(cost_mdls_bytes),
+        cost_mdls_bytes,
         (initial_budget_n, initial_budget_d),
         (slot_config_x, slot_config_y, slot_config_z),
         protocol as u16,
-        false,
-        |_| (),
     )
-    .map(|r| r.iter().map(|i| js_sys::Uint8Array::from(&i.0[..])).collect())
+    .map(|r| r.iter().map(|i| js_sys::Uint8Array::from(&i[..])).collect())
     .map_err(|e| e.to_string().into());
 }
 
