@@ -23,3 +23,12 @@ Once you've completed the previous step, you can build the UPLC package by runni
 ```
 pnpm build
 ```
+
+## Speed and size builds
+
+The package ships two builds of the evaluator:
+
+- **speed** (`-O3`, ~1.77 MB wasm): faster script evaluation.
+- **size** (`-Oz`, ~0.94 MB wasm): smaller download.
+
+`@lucid-evolution/uplc` resolves to the speed build on Node, Bun and Deno, and to the size build in browser bundles and edge runtimes (`browser`, `worker`, `workerd` and `edge-light` export conditions). To pick a variant explicitly, import `@lucid-evolution/uplc/speed` or `@lucid-evolution/uplc/size`.

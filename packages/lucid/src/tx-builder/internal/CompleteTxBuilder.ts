@@ -1769,7 +1769,25 @@ const makeProviderEvaluator = (provider: Provider): EvaluatorAdapter => ({
     provider.evaluateTx(tx, additionalUTxOs),
 });
 
-const makeDefaultAikenEvaluator = (): EvaluatorAdapter => ({
+/**
+ * The subset of `@lucid-evolution/uplc` used by the Aiken evaluator. Both the
+ * `@lucid-evolution/uplc/speed` and `@lucid-evolution/uplc/size` builds
+ * satisfy it.
+ */
+export type UPLCModule = Pick<typeof UPLC, "eval_phase_two_raw">;
+
+/**
+ * Creates the built-in Aiken evaluator backed by the given uplc build.
+ *
+ * @example
+ * import * as UPLCSize from "@lucid-evolution/uplc/size";
+ * const lucid = await Lucid(provider, "Preprod", {
+ *   evaluator: makeAikenEvaluator(UPLCSize),
+ * });
+ */
+export const makeAikenEvaluator = (
+  uplc: UPLCModule = UPLC,
+): EvaluatorAdapter => ({
   name: "aiken",
   evaluate: async ({ tx, additionalUTxOs, context }) => {
     const { txBytes, inputBytes, outputBytes } = withCMLScope((own) => ({
@@ -1781,7 +1799,7 @@ const makeDefaultAikenEvaluator = (): EvaluatorAdapter => ({
         own(utxoToTransactionOutput(utxo)).to_cbor_bytes(),
       ),
     }));
-    const uplcEval = UPLC.eval_phase_two_raw(
+    const uplcEval = uplc.eval_phase_two_raw(
       txBytes,
       inputBytes,
       outputBytes,
@@ -1804,9 +1822,7 @@ const resolveEvaluatorAdapter = (
 ): EvaluatorAdapter =>
   localUPLCEval === false
     ? makeProviderEvaluator(config.lucidConfig.provider)
-    : (evaluator ??
-      config.lucidConfig.evaluator ??
-      makeDefaultAikenEvaluator());
+    : (evaluator ?? config.lucidConfig.evaluator ?? makeAikenEvaluator());
 
 const makeEvaluationContext = (
   config: TxBuilder.TxBuilderConfig,
