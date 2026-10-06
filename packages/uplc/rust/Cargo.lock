@@ -927,6 +927,11 @@ version = "0.1.0"
 dependencies = [
  "getrandom",
  "js-sys",
+ "pallas-addresses",
+ "pallas-codec",
+ "pallas-crypto",
+ "pallas-primitives",
+ "pallas-traverse",
  "uplc",
  "wasm-bindgen",
 ]
