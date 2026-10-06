@@ -137,6 +137,11 @@ const setup = async (script: Script = alwaysSucceedV3Script) => {
 
 type Fixture = Awaited<ReturnType<typeof setup>>;
 
+const withThreshold = (threshold: bigint): Script => ({
+  type: "PlutusV3",
+  script: applyParamsToScript(feeThresholdV3Script.script, [threshold]),
+});
+
 // Spends the script UTxO, paying `amount` to the wallet. With
 // coinSelection: false the script input alone funds the payment and fee.
 const spend = (
@@ -177,7 +182,10 @@ describe("default evaluator reuse within one completion", () => {
   test("a delayed-redeemer completion evaluates each distinct request once", async () => {
     const fixture = await setup();
     const first = await recordEvaluations(() => spendDelayed(fixture));
-    expect(first.evaluations.length).toBeGreaterThan(0);
+    // The bootstrap attempt evaluates nothing; the first real attempt
+    // evaluates its draft once and its final transaction once; the
+    // confirming attempt repeats the final request.
+    expect(first.evaluations).toHaveLength(2);
     const keys = first.evaluations.map((evaluation) => evaluation.key);
     expect(new Set(keys).size).toBe(keys.length);
     expectFinalEvaluated(first.result.toTransaction(), first.evaluations);
@@ -220,12 +228,27 @@ describe("default evaluator reuse within one completion", () => {
     // The delayed fixed point repeats its final request; a custom evaluator
     // is asked again rather than served a remembered result.
     for (const recorded of [fromOptions, configured]) {
-      expect(recorded.length).toBeGreaterThan(new Set(recorded).size);
+      expect(recorded).toHaveLength(3);
+      expect(new Set(recorded).size).toBe(2);
     }
+  });
+
+  test("a custom evaluator sees the draft once and the final transaction once", async () => {
+    const fixture = await setup();
+    const recorded: string[] = [];
+    const { result, evaluations: wasm } = await recordEvaluations(() =>
+      spend(fixture, { evaluator: recordingEvaluator(fixture, recorded) }),
+    );
+    expect(wasm).toHaveLength(0);
+    expect(recorded).toHaveLength(2);
+    const final = result.toTransaction();
+    expect(
+      bodyWithoutScriptDataHash(CML.Transaction.from_cbor_hex(recorded[1])),
+    ).toBe(bodyWithoutScriptDataHash(final));
   });
 });
 
-describe("static completion with coinSelection: false", () => {
+describe("static script spend", () => {
   test("evaluates the collateral-free draft once and the final transaction to a fixed point", async () => {
     const fixture = await setup();
     const { result, evaluations: recorded } = await recordEvaluations(() =>
@@ -238,14 +261,39 @@ describe("static completion with coinSelection: false", () => {
     );
   });
 
-  test("automatic coin selection evaluates each distinct request once", async () => {
+  test("automatic coin selection evaluates the draft once and the final transaction once", async () => {
     const fixture = await setup();
     const { result, evaluations: recorded } = await recordEvaluations(() =>
       spend(fixture, { coinSelection: true }),
     );
-    const keys = recorded.map((evaluation) => evaluation.key);
-    expect(new Set(keys).size).toBe(keys.length);
+    expect(recorded).toHaveLength(2);
     expectFinalEvaluated(result.toTransaction(), recorded);
+    await fixture.lucid.awaitTx(
+      await (await result.sign.withWallet().complete()).submit(),
+    );
+  });
+
+  test("automatic coin selection evaluates a fee-dependent script in its final context", async () => {
+    // Below the threshold for any fee: find the provisional and final fees.
+    const probe = await setup(withThreshold(100_000_000n));
+    const probed = await recordEvaluations(() => spend(probe, {}));
+    const provisionalFee = evaluatedFee(probed.evaluations[0]);
+    const finalFee = probed.result.toTransaction().body().fee();
+    expect(finalFee).toBeGreaterThan(provisionalFee);
+
+    const threshold = (provisionalFee + finalFee) / 2n;
+    const fixture = await setup(withThreshold(threshold));
+    const { result, evaluations: recorded } = await recordEvaluations(() =>
+      spend(fixture, {}),
+    );
+    expect(recorded.length).toBeGreaterThanOrEqual(3);
+    expect(totalSteps(recorded.at(-1)!)).toBeGreaterThan(
+      totalSteps(recorded[0]),
+    );
+    expectFinalEvaluated(result.toTransaction(), recorded);
+    await fixture.lucid.awaitTx(
+      await (await result.sign.withWallet().complete()).submit(),
+    );
   });
 
   test("an unfunded payment is still refused", async () => {
@@ -265,11 +313,6 @@ describe("static completion with coinSelection: false", () => {
   });
 
   test("a script whose cost depends on the fee is evaluated in its final context", async () => {
-    const withThreshold = (threshold: bigint): Script => ({
-      type: "PlutusV3",
-      script: applyParamsToScript(feeThresholdV3Script.script, [threshold]),
-    });
-
     // Below the threshold for any fee: find the provisional and final fees.
     const probe = await setup(withThreshold(100_000_000n));
     const probed = await recordEvaluations(() =>
