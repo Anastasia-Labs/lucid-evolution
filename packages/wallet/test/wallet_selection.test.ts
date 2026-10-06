@@ -172,12 +172,42 @@ describe("makeWalletFromAPI getCollateral", () => {
   test("returns an empty list when the CIP-30 wallet returns none", async () => {
     const wallet = makeWalletFromAPI(
       provider,
-      makeApi({
-        getCollateral: vi.fn(async () => null as unknown as string[]),
-      }),
+      makeApi({ getCollateral: vi.fn(async () => null) }),
     );
 
     expect(await wallet.getCollateral!()).toEqual([]);
+  });
+
+  test("passes the amount as CBOR-encoded Coin", async () => {
+    const getCollateral = vi.fn(async () => []);
+    const wallet = makeWalletFromAPI(provider, makeApi({ getCollateral }));
+
+    await wallet.getCollateral!(5_000_000n);
+    await wallet.getCollateral!();
+
+    expect(getCollateral.mock.calls).toEqual([
+      [{ amount: "1a004c4b40" }],
+      [undefined],
+    ]);
+  });
+
+  test("returns only candidates in the UTxO override", async () => {
+    const other: UTxO = { ...collateral, txHash: "3".repeat(64) };
+    const wallet = makeWalletFromAPI(
+      provider,
+      makeApi({
+        getCollateral: vi.fn(async () =>
+          [collateral, other].map((utxo) => utxoToCore(utxo).to_cbor_hex()),
+        ),
+      }),
+    );
+
+    wallet.overrideUTxOs([other]);
+    expect(await wallet.getCollateral!()).toEqual([other]);
+    wallet.overrideUTxOs([]);
+    expect(await wallet.getCollateral!()).toEqual([]);
+    wallet.clearUTxOOverride!();
+    expect(await wallet.getCollateral!()).toEqual([collateral, other]);
   });
 
   test("is absent when the CIP-30 wallet has no getCollateral", () => {

@@ -23,7 +23,9 @@ export type WalletApi = {
   };
   signTxs?(txs: TransactionSignatureRequest[]): Promise<string[]>;
   submitTx(tx: string): Promise<string>;
-  getCollateral(): Promise<string[]>;
+  getCollateral?(params?: {
+    amount: string;
+  }): Promise<string[] | null | undefined>;
   experimental: {
     signTxs?(txs: TransactionSignatureRequest[]): Promise<string[]>;
     getCollateral(): Promise<string[]>;

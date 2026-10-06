@@ -62,3 +62,21 @@ lucid.clearUTxOOverride();
 ```
 
 Overrides remain active until replaced or explicitly cleared.
+
+## Collateral selection
+
+Transactions that run Plutus scripts need collateral. When the selected wallet
+names its own collateral, as a CIP-30 wallet does through `getCollateral`,
+`complete()` uses those UTxOs first:
+
+1. The wallet's candidates are limited to the active UTxO override, or to
+   `presetWalletInputs` when given, so a UTxO spent by a pending chained
+   transaction is not reused.
+2. If the candidates cover the required collateral, they are used. A candidate
+   holding exactly the required amount in ADA is used without a collateral
+   return.
+3. Otherwise, including when the wallet returns no collateral or the call
+   fails, collateral is selected from the wallet's UTxOs.
+
+Wallets without `getCollateral`, such as seed and private key wallets, always
+use step 3.

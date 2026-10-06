@@ -362,12 +362,13 @@ export interface Wallet {
   getUtxos(): Promise<UTxO[]>;
   getUtxosCore(): Promise<Array<CML.TransactionUnspentOutput>>;
   /**
-   * Collateral candidates chosen by the wallet, separate from the UTxOs used
-   * for coin selection. When present, transaction completion selects
-   * collateral only from these, and an empty list is not replaced by the
-   * wallet's other UTxOs.
+   * Collateral candidates preferred by the wallet, separate from the UTxOs
+   * used for coin selection. `amount` is the collateral, in lovelace, the
+   * transaction needs. Transaction completion uses these first and falls back
+   * to the wallet's UTxOs when the list is empty, cannot cover the
+   * collateral, or the call fails.
    */
-  getCollateral?(): Promise<UTxO[]>;
+  getCollateral?(amount?: bigint): Promise<UTxO[]>;
   getDelegation(): Promise<Delegation>;
   signTx(tx: CML.Transaction): Promise<CML.TransactionWitnessSet>;
   signTxs?(txs: CML.Transaction[]): Promise<CML.TransactionWitnessSet[]>;

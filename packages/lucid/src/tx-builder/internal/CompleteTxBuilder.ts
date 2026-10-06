@@ -146,6 +146,8 @@ type InternalCompleteOptions = {
   bootstrapExUnits?: boolean;
   forceCanonical?: boolean;
   walletInputs?: UTxO[];
+  // Fetches the wallet's collateral candidates at most once across attempts.
+  walletCollateral?: Effect.Effect<UTxO[]>;
   knownRedeemerExUnits?: KnownRedeemerExUnits;
   redeemerInputFingerprint?: string;
 };
@@ -277,19 +279,13 @@ const completeCurrentConfig = (
           ),
         ),
       );
-      // A wallet that names its collateral candidates is used as is, even
-      // when the list is empty.
-      const collateralCandidates =
-        wallet.getCollateral === undefined
-          ? walletInputs
-          : yield* Effect.tryPromise({
-              try: () => wallet.getCollateral!(),
-              catch: (error) => completeTxError(error),
-            });
-      const collateralInput = yield* findCollateral(
+      const walletCollateral = yield* internalOptions.walletCollateral ??
+        fetchWalletCollateral(wallet, totalCollateral, presetWalletInputs);
+      const collateralInput = yield* selectCollateral(
         config.lucidConfig.protocolParameters.coinsPerUtxoByte,
         totalCollateral,
-        collateralCandidates,
+        walletCollateral,
+        walletInputs,
       );
       yield* applyCollateral(totalCollateral, collateralInput, changeAddress);
       evaluatedScriptBody =
@@ -408,6 +404,13 @@ const completeDelayedFromActions = (
             catch: (error) => completeTxError(error),
           })
         : presetWalletInputs;
+    const walletCollateral = yield* Effect.cached(
+      fetchWalletCollateral(
+        wallet,
+        options.setCollateral ?? 5_000_000n,
+        presetWalletInputs,
+      ),
+    );
 
     let currentRedeemers = new Map<number, string>();
     const redeemerBuilderCache: RedeemerBuilderCache = new Map();
@@ -446,6 +449,7 @@ const completeDelayedFromActions = (
               forceCanonical: true,
               bootstrapExUnits: missingRedeemers,
               walletInputs: fixedWalletInputs,
+              walletCollateral,
               knownRedeemerExUnits,
               redeemerInputFingerprint,
             },
@@ -1338,6 +1342,8 @@ const applyCollateral = (
       sumAssetsFromInputs(collateralInputs),
       Record.union({ lovelace: -setCollateral }, _BigInt.sum),
     );
+    // Collateral that matches the amount exactly has nothing to return.
+    if (Object.values(returnassets).every((amount) => amount === 0n)) return;
 
     withCMLScope((own) => {
       const collateralOutputBuilder = own(
@@ -1355,6 +1361,57 @@ const applyCollateral = (
       config.txBuilder.set_collateral_return(own(result.output()));
     });
   });
+
+// Collateral candidates preferred by the wallet, limited to the preset wallet
+// inputs when given. A failed call yields no candidates, since collateral then
+// comes from the wallet's UTxOs.
+const fetchWalletCollateral = (
+  wallet: Wallet,
+  amount: bigint,
+  presetWalletInputs: UTxO[],
+): Effect.Effect<UTxO[]> =>
+  wallet.getCollateral === undefined
+    ? Effect.succeed([])
+    : pipe(
+        Effect.tryPromise(() => wallet.getCollateral!(amount)),
+        Effect.map((candidates) =>
+          presetWalletInputs.length === 0
+            ? candidates
+            : candidates.filter((candidate) =>
+                presetWalletInputs.some((utxo) => isEqualUTxO(utxo, candidate)),
+              ),
+        ),
+        Effect.orElseSucceed((): UTxO[] => []),
+      );
+
+// Selects collateral from the wallet's candidates when they cover it, and
+// otherwise from the wallet's UTxOs. A candidate holding exactly the
+// collateral in ADA is used without a collateral return, since wallets
+// commonly set aside exactly 5 ADA.
+const selectCollateral = (
+  coinsPerUtxoByte: bigint,
+  totalCollateral: bigint,
+  walletCollateral: UTxO[],
+  walletInputs: UTxO[],
+): Effect.Effect<UTxO[], TxBuilderError> => {
+  const fromWalletInputs = findCollateral(
+    coinsPerUtxoByte,
+    totalCollateral,
+    walletInputs,
+  );
+  const exact = walletCollateral.find(
+    (utxo) =>
+      Object.keys(utxo.assets).length === 1 &&
+      utxo.assets.lovelace === totalCollateral,
+  );
+  if (exact !== undefined) return Effect.succeed([exact]);
+  return walletCollateral.length === 0
+    ? fromWalletInputs
+    : pipe(
+        findCollateral(coinsPerUtxoByte, totalCollateral, walletCollateral),
+        Effect.orElse(() => fromWalletInputs),
+      );
+};
 
 const findCollateral = (
   coinsPerUtxoByte: bigint,
