@@ -13,6 +13,7 @@ import {
   Address,
   Assets,
   EvalRedeemer,
+  EvaluationBytesInput,
   EvaluationContext,
   EvaluatorAdapter,
   Provider,
@@ -2384,21 +2385,11 @@ type EncodedUTxO = Readonly<{
   output: Uint8Array;
 }>;
 
-/**
- * Evaluates a transaction given as CBOR bytes, sparing the built-in evaluator
- * the hex round trip of the public `EvaluatorAdapter` contract.
- */
-const evaluateTxBytes = Symbol("evaluateTxBytes");
-
 type BytesEvaluator = (
   txBytes: Uint8Array,
   additionalUTxOs: UTxO[],
   context: EvaluationContext,
 ) => Promise<EvalRedeemer[]>;
-
-type BuiltInEvaluatorAdapter = EvaluatorAdapter & {
-  readonly [evaluateTxBytes]: BytesEvaluator;
-};
 
 /**
  * The subset of `@lucid-evolution/uplc` used by the Aiken evaluator.
@@ -2509,7 +2500,7 @@ export const makeAikenEvaluator = (
     return result;
   };
 
-  const adapter: BuiltInEvaluatorAdapter = {
+  const adapter: EvaluatorAdapter = {
     name: "aiken",
     evaluate: ({ tx, additionalUTxOs, context }) =>
       evaluate(
@@ -2519,15 +2510,14 @@ export const makeAikenEvaluator = (
         additionalUTxOs,
         context,
       ),
-    [evaluateTxBytes]: evaluate,
   };
+  // Non-enumerable, as `EvaluatorAdapter.evaluateBytes` asks.
+  Object.defineProperty(adapter, "evaluateBytes", {
+    value: ({ tx, additionalUTxOs, context }: EvaluationBytesInput) =>
+      evaluate(tx, additionalUTxOs, context),
+  });
   return adapter;
 };
-
-const bytesEvaluator = (
-  adapter: EvaluatorAdapter,
-): BytesEvaluator | undefined =>
-  (adapter as Partial<BuiltInEvaluatorAdapter>)[evaluateTxBytes];
 
 const resolveEvaluatorAdapter = (
   config: TxBuilder.TxBuilderConfig,
@@ -2611,11 +2601,15 @@ const evaluateTransaction = (
       config,
     ).pipe(Effect.tapError(() => Effect.sync(release)));
     const context = makeEvaluationContext(config);
-    const evaluateBytes = bytesEvaluator(adapter);
     let run: () => Promise<EvalRedeemer[]>;
-    if (evaluateBytes) {
+    if (adapter.evaluateBytes) {
       const txBytes = txEvaluation.to_cbor_bytes();
-      run = () => evaluateBytes(txBytes, txUtxos, context);
+      run = () =>
+        adapter.evaluateBytes!({
+          tx: txBytes,
+          additionalUTxOs: txUtxos,
+          context,
+        });
     } else {
       const txHex = txEvaluation.to_cbor_hex();
       run = () =>

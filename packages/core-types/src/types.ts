@@ -99,9 +99,22 @@ export type EvaluationInput = {
   context: EvaluationContext;
 };
 
+/** An `EvaluationInput` with the transaction as CBOR bytes instead of hex. */
+export type EvaluationBytesInput = Omit<EvaluationInput, "tx"> & {
+  tx: Uint8Array;
+};
+
 export type EvaluatorAdapter = {
   name?: string;
   evaluate(input: EvaluationInput): Promise<EvalRedeemer[]>;
+  /**
+   * The same evaluation as `evaluate`, with the transaction as CBOR bytes.
+   * When an adapter has it, Lucid calls it instead of `evaluate` and skips
+   * the hex round trip. Define it as non-enumerable, so that an adapter
+   * copied with a replaced `evaluate` (`{ ...adapter, evaluate }`) does not
+   * keep a bytes path that bypasses the replacement.
+   */
+  evaluateBytes?(input: EvaluationBytesInput): Promise<EvalRedeemer[]>;
 };
 
 export type Credential = {

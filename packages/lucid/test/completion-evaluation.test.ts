@@ -8,6 +8,7 @@ import {
   generateEmulatorAccount,
   Lucid,
   LucidEvolution,
+  makeAikenEvaluator,
   PROTOCOL_PARAMETERS_DEFAULT,
   Script,
   UTxO,
@@ -356,5 +357,78 @@ describe("static script spend", () => {
     await fixture.lucid.awaitTx(
       await (await result.sign.withWallet().complete()).submit(),
     );
+  });
+});
+
+describe("evaluator bytes path", () => {
+  const bytesEvaluator = (
+    fixture: Fixture,
+    viaBytes: Uint8Array[],
+    viaHex: string[],
+  ): EvaluatorAdapter => {
+    const adapter: EvaluatorAdapter = {
+      name: "bytes",
+      evaluate: async ({ tx, additionalUTxOs }) => {
+        viaHex.push(tx);
+        return fixture.emulator.evaluateTx(tx, additionalUTxOs as UTxO[]);
+      },
+    };
+    Object.defineProperty(adapter, "evaluateBytes", {
+      value: async ({
+        tx,
+        additionalUTxOs,
+      }: {
+        tx: Uint8Array;
+        additionalUTxOs: UTxO[];
+      }) => {
+        viaBytes.push(tx);
+        return fixture.emulator.evaluateTx(
+          Buffer.from(tx).toString("hex"),
+          additionalUTxOs,
+        );
+      },
+    });
+    return adapter;
+  };
+
+  test("an adapter with evaluateBytes receives the transaction as bytes", async () => {
+    const fixture = await setup();
+    const viaBytes: Uint8Array[] = [];
+    const viaHex: string[] = [];
+    const result = await spend(fixture, {
+      evaluator: bytesEvaluator(fixture, viaBytes, viaHex),
+    });
+    expect(viaHex).toHaveLength(0);
+    expect(viaBytes).toHaveLength(2);
+    expect(
+      bodyWithoutScriptDataHash(CML.Transaction.from_cbor_bytes(viaBytes[1])),
+    ).toBe(bodyWithoutScriptDataHash(result.toTransaction()));
+  });
+
+  test("a copy with a replaced evaluate does not keep the bytes path", async () => {
+    const fixture = await setup();
+    const viaBytes: Uint8Array[] = [];
+    const ignored: string[] = [];
+    const wrapped: string[] = [];
+    const base = bytesEvaluator(fixture, viaBytes, ignored);
+    await spend(fixture, {
+      evaluator: {
+        ...base,
+        evaluate: (input) => {
+          wrapped.push(input.tx);
+          return base.evaluate(input);
+        },
+      },
+    });
+    expect(viaBytes).toHaveLength(0);
+    expect(wrapped).toHaveLength(2);
+  });
+
+  test("the built-in evaluator's bytes path is not enumerable", () => {
+    const keys = Object.keys(makeAikenEvaluator());
+    expect(keys).not.toContain("evaluateBytes");
+    expect(
+      typeof (makeAikenEvaluator() as EvaluatorAdapter).evaluateBytes,
+    ).toBe("function");
   });
 });
