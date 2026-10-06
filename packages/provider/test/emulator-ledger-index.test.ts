@@ -5,9 +5,10 @@ import { CML } from "../src/core.js";
 import { Emulator } from "../src/index.js";
 
 /*
-  The emulator answers UTxO queries from secondary indexes. These tests
-  compare every query with a scan of the whole ledger (the previous
-  implementation) after the kinds of direct ledger edits tests make.
+  The emulator answers UTxO queries without enumerating the ledger record
+  while only the emulator writes to it. These tests compare every query
+  with a scan of the whole ledger (the previous implementation) after the
+  kinds of direct ledger edits tests make.
 */
 
 const keyHash = (byte: number) => byte.toString(16).padStart(2, "0").repeat(28);

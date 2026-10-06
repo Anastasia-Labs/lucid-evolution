@@ -1,4 +1,4 @@
-import { Address, Unit, UTxO } from "@lucid-evolution/core-types";
+import { Address, Credential, Unit, UTxO } from "@lucid-evolution/core-types";
 import { getAddressDetails } from "@lucid-evolution/utils";
 
 /** Concatenation of txHash + outputIndex */
@@ -6,201 +6,240 @@ export type FlatOutRef = string;
 
 export type LedgerEntry = { utxo: UTxO; spent: boolean };
 
-type Bucket = Map<FlatOutRef, LedgerEntry>;
-
-const addToBucket = <K>(
-  buckets: Map<K, Bucket>,
-  key: K,
-  outRef: FlatOutRef,
-  entry: LedgerEntry,
-) => {
-  let bucket = buckets.get(key);
-  if (!bucket) {
-    bucket = new Map();
-    buckets.set(key, bucket);
-  }
-  bucket.set(outRef, entry);
-};
-
-const removeFromBucket = <K>(
-  buckets: Map<K, Bucket>,
-  key: K,
-  outRef: FlatOutRef,
-) => {
-  const bucket = buckets.get(key);
-  if (!bucket) return;
-  bucket.delete(outRef);
-  if (bucket.size === 0) buckets.delete(key);
+/**
+ * True for keys that a plain object does not keep in insertion order
+ * (array indices come first, in ascending order) or does not store as an
+ * own property at all (`__proto__`).
+ */
+const isUnorderedKey = (key: string): boolean => {
+  if (key === "__proto__") return true;
+  if (key.length > 10) return false;
+  const index = Number(key);
+  return (
+    Number.isInteger(index) && index < 2 ** 32 - 1 && String(index) === key
+  );
 };
 
 /**
- * The emulator's confirmed UTxO set, with secondary indexes by address,
- * payment credential hash and unit.
+ * The emulator's confirmed UTxO set: the plain record exposed as
+ * `emulator.ledger`.
  *
- * `entries` is the plain record the emulator has always exposed as `ledger`,
- * and `view` is a proxy over it that keeps the indexes in step when callers
- * add, replace or delete entries directly. Every index bucket is a Map, so
- * it iterates in insertion order, which is the iteration order of
- * `entries`; query results therefore come back in the same order as a scan
- * of the whole ledger.
+ * Every query answers exactly what a scan of the record answers, in record
+ * order. While no caller holds a reference to the record, only the emulator
+ * writes to it, so a dense array mirrors its keys and entries in record
+ * order and queries walk that array instead of enumerating a large
+ * dictionary-mode object. Entries are read live during the walk, so in-place
+ * edits to a UTxO (its address, its assets, or `spent`) through a reference
+ * obtained elsewhere are still seen.
  *
- * Each entry's `spent` flag is an accessor that records the outref when it
- * is set, so a block can drop spent entries without scanning the ledger.
+ * Once the record has been handed out (`expose`) or supplied by a caller
+ * (`replace`), it may be changed in any way at any time, so the mirror is
+ * dropped and every read enumerates the record itself, as the emulator
+ * always did.
  */
 export class EmulatorLedger {
-  readonly entries: Record<FlatOutRef, LedgerEntry>;
-  readonly view: Record<FlatOutRef, LedgerEntry>;
-  private readonly spentOutRefs = new Set<FlatOutRef>();
-  private readonly byAddress = new Map<Address, Bucket>();
-  private readonly byPaymentHash = new Map<string, Bucket>();
-  private readonly byUnit = new Map<Unit, Bucket>();
-  private readonly paymentHashes = new Map<Address, string | undefined>();
-  /** Set when a direct write may have broken index order; rebuilt lazily. */
-  private stale = false;
+  #record: Record<FlatOutRef, LedgerEntry> = {};
+  #exposed = false;
+  /** Record keys in record order; `undefined` marks a deleted slot. */
+  #keys: (FlatOutRef | undefined)[] = [];
+  /** Record entries, parallel to `#keys`. */
+  #entries: (LedgerEntry | undefined)[] = [];
+  #slots = new Map<FlatOutRef, number>();
+  #holes = 0;
+  /** Per slot, the address whose payment hash `#slotHashes` holds. */
+  #slotHashAddresses: (Address | undefined)[] = [];
+  #slotHashes: (string | undefined)[] = [];
+  #paymentHashes = new Map<Address, string | undefined>();
 
-  constructor(entries: Record<FlatOutRef, LedgerEntry> = {}) {
-    this.entries = entries;
-    for (const [outRef, entry] of Object.entries(entries)) {
-      this.track(outRef, entry);
-      this.index(outRef, entry);
-    }
-    this.view = new Proxy(entries, {
-      set: (target, property, value, receiver) => {
-        if (typeof property !== "string") {
-          return Reflect.set(target, property, value, receiver);
-        }
-        this.set(property, value);
-        return true;
-      },
-      deleteProperty: (target, property) => {
-        if (typeof property !== "string") {
-          return Reflect.deleteProperty(target, property);
-        }
-        this.delete(property);
-        return true;
-      },
-      defineProperty: (target, property, descriptor) => {
-        this.stale = true;
-        return Reflect.defineProperty(target, property, descriptor);
-      },
-    });
+  /** The record, for internal reads that do not let it escape. */
+  get record(): Record<FlatOutRef, LedgerEntry> {
+    return this.#record;
+  }
+
+  /** Returns the record to a caller, who may then change it at any time. */
+  expose(): Record<FlatOutRef, LedgerEntry> {
+    this.#dropMirror();
+    return this.#record;
+  }
+
+  /** Adopts a record supplied by a caller. */
+  replace(record: Record<FlatOutRef, LedgerEntry>) {
+    this.#record = record;
+    this.#dropMirror();
   }
 
   get(outRef: FlatOutRef): LedgerEntry | undefined {
-    return this.entries[outRef];
+    return this.#record[outRef];
   }
 
   set(outRef: FlatOutRef, entry: LedgerEntry) {
-    const previous = this.entries[outRef];
-    this.entries[outRef] = entry;
-    this.track(outRef, entry);
-    if (previous === entry) return;
-    if (previous) {
-      // A replaced key keeps its position in the record, which an index
-      // bucket cannot express when the address or units change.
-      this.stale = true;
-    } else if (!this.stale) {
-      this.index(outRef, entry);
+    this.#record[outRef] = entry;
+    if (this.#exposed) return;
+    if (isUnorderedKey(outRef)) {
+      this.#dropMirror();
+      return;
     }
-  }
-
-  delete(outRef: FlatOutRef) {
-    const entry = this.entries[outRef];
-    if (!entry) return;
-    delete this.entries[outRef];
-    if (!this.stale) this.unindex(outRef, entry);
-  }
-
-  /** Removes every entry whose `spent` flag was set. */
-  deleteSpent() {
-    for (const outRef of this.spentOutRefs) {
-      if (this.entries[outRef]?.spent) this.delete(outRef);
+    const slot = this.#slots.get(outRef);
+    if (slot === undefined) {
+      this.#slots.set(outRef, this.#keys.length);
+      this.#keys.push(outRef);
+      this.#entries.push(entry);
+      this.#slotHashAddresses.push(undefined);
+      this.#slotHashes.push(undefined);
+    } else {
+      this.#entries[slot] = entry;
     }
-    this.spentOutRefs.clear();
-  }
-
-  byAddressEntries(address: Address): Iterable<LedgerEntry> {
-    this.refresh();
-    return this.live(this.byAddress.get(address));
-  }
-
-  byPaymentHashEntries(hash: string): Iterable<LedgerEntry> {
-    this.refresh();
-    return this.live(this.byPaymentHash.get(hash));
-  }
-
-  byUnitEntries(unit: Unit): Iterable<LedgerEntry> {
-    this.refresh();
-    return this.live(this.byUnit.get(unit));
   }
 
   /**
-   * Yields the bucket's entries that are still in the ledger. A bucket can
-   * hold a stale reference only if an entry's assets were edited in place
-   * before it was removed.
+   * Moves the mempool into the record, then deletes every entry marked
+   * spent, as the emulator always has.
    */
-  private *live(bucket: Bucket | undefined): Iterable<LedgerEntry> {
-    if (!bucket) return;
-    for (const [outRef, entry] of bucket) {
-      if (this.entries[outRef] === entry) yield entry;
+  applyMempool(mempool: Record<FlatOutRef, LedgerEntry>) {
+    for (const [outRef, { utxo, spent }] of Object.entries(mempool)) {
+      this.set(outRef, { utxo, spent });
     }
+    const record = this.#record;
+    if (this.#exposed) {
+      for (const [outRef, { spent }] of Object.entries(record)) {
+        if (spent) delete record[outRef];
+      }
+      return;
+    }
+    const keys = this.#keys;
+    const entries = this.#entries;
+    for (let slot = 0; slot < entries.length; slot++) {
+      const entry = entries[slot];
+      if (entry === undefined || !entry.spent) continue;
+      const outRef = keys[slot]!;
+      delete record[outRef];
+      this.#slots.delete(outRef);
+      keys[slot] = undefined;
+      entries[slot] = undefined;
+      this.#holes++;
+    }
+    if (this.#holes > 64 && this.#holes * 2 > entries.length) this.#compact();
   }
 
-  private track(outRef: FlatOutRef, entry: LedgerEntry) {
-    let spent = entry.spent;
-    const spentOutRefs = this.spentOutRefs;
-    Object.defineProperty(entry, "spent", {
-      configurable: true,
-      enumerable: true,
-      get: () => spent,
-      set: (value: boolean) => {
-        spent = value;
-        if (value) spentOutRefs.add(outRef);
-      },
-    });
-    if (spent) spentOutRefs.add(outRef);
+  /**
+   * Unspent UTxOs at an address or payment credential, optionally holding
+   * `unit`, in record order.
+   */
+  utxosAt(addressOrCredential: Address | Credential, unit?: Unit): UTxO[] {
+    const utxos: UTxO[] = [];
+    const entries = this.#inOrder();
+    if (typeof addressOrCredential === "string") {
+      for (let i = 0; i < entries.length; i++) {
+        const entry = entries[i];
+        if (entry === undefined && !this.#exposed) continue;
+        const { utxo, spent } = entry!;
+        if (
+          !spent &&
+          utxo.address === addressOrCredential &&
+          (unit === undefined || utxo.assets[unit] > 0n)
+        ) {
+          utxos.push(utxo);
+        }
+      }
+      return utxos;
+    }
+    const hash = addressOrCredential.hash;
+    // In the mirror, remember each slot's payment hash with the address it
+    // came from, so the walk does not look addresses up in a map.
+    const hashAddresses = this.#slotHashAddresses;
+    const hashes = this.#slotHashes;
+    for (let i = 0; i < entries.length; i++) {
+      const entry = entries[i];
+      if (entry === undefined && !this.#exposed) continue;
+      const { utxo, spent } = entry!;
+      if (spent) continue;
+      const address = utxo.address;
+      let paymentHash: string | undefined;
+      if (this.#exposed) {
+        paymentHash = this.#paymentHashOf(address);
+      } else if (hashAddresses[i] === address) {
+        paymentHash = hashes[i];
+      } else {
+        paymentHash = this.#paymentHashOf(address);
+        hashAddresses[i] = address;
+        hashes[i] = paymentHash;
+      }
+      if (
+        paymentHash === hash &&
+        (unit === undefined || utxo.assets[unit] > 0n)
+      ) {
+        utxos.push(utxo);
+      }
+    }
+    return utxos;
   }
 
-  private paymentHashOf(address: Address): string | undefined {
-    if (this.paymentHashes.has(address)) return this.paymentHashes.get(address);
-    let hash: string | undefined;
-    try {
-      hash = getAddressDetails(address).paymentCredential?.hash;
-    } catch (_e) {
-      hash = undefined;
+  /** Unspent UTxOs holding `unit`, in record order. */
+  utxosWithUnit(unit: Unit): UTxO[] {
+    const utxos: UTxO[] = [];
+    const entries = this.#inOrder();
+    for (let i = 0; i < entries.length; i++) {
+      const entry = entries[i];
+      if (entry === undefined && !this.#exposed) continue;
+      const { utxo, spent } = entry!;
+      if (!spent && utxo.assets[unit] > 0n) utxos.push(utxo);
     }
-    this.paymentHashes.set(address, hash);
+    return utxos;
+  }
+
+  /**
+   * The record's entries in record order. From the mirror, deleted slots
+   * are `undefined`; from an exposed record, every value is as stored, so a
+   * malformed entry fails a query just as a scan of the record would.
+   */
+  #inOrder(): readonly (LedgerEntry | undefined)[] {
+    if (!this.#exposed) return this.#entries;
+    const record = this.#record;
+    const keys = Object.keys(record);
+    const entries = new Array<LedgerEntry>(keys.length);
+    for (let i = 0; i < keys.length; i++) entries[i] = record[keys[i]];
+    return entries;
+  }
+
+  /** Payment credential hash of an address; parse errors propagate. */
+  #paymentHashOf(address: Address): string | undefined {
+    if (this.#paymentHashes.has(address))
+      return this.#paymentHashes.get(address);
+    const hash = getAddressDetails(address).paymentCredential?.hash;
+    this.#paymentHashes.set(address, hash);
     return hash;
   }
 
-  private index(outRef: FlatOutRef, entry: LedgerEntry) {
-    const { address, assets } = entry.utxo;
-    addToBucket(this.byAddress, address, outRef, entry);
-    const paymentHash = this.paymentHashOf(address);
-    if (paymentHash !== undefined) {
-      addToBucket(this.byPaymentHash, paymentHash, outRef, entry);
+  #compact() {
+    const keys: FlatOutRef[] = [];
+    const entries: LedgerEntry[] = [];
+    const hashAddresses: (Address | undefined)[] = [];
+    const hashes: (string | undefined)[] = [];
+    this.#slots.clear();
+    for (let slot = 0; slot < this.#entries.length; slot++) {
+      const entry = this.#entries[slot];
+      if (entry === undefined) continue;
+      const outRef = this.#keys[slot]!;
+      this.#slots.set(outRef, keys.length);
+      keys.push(outRef);
+      entries.push(entry);
+      hashAddresses.push(this.#slotHashAddresses[slot]);
+      hashes.push(this.#slotHashes[slot]);
     }
-    for (const unit in assets) addToBucket(this.byUnit, unit, outRef, entry);
+    this.#keys = keys;
+    this.#entries = entries;
+    this.#slotHashAddresses = hashAddresses;
+    this.#slotHashes = hashes;
+    this.#holes = 0;
   }
 
-  private unindex(outRef: FlatOutRef, entry: LedgerEntry) {
-    const { address, assets } = entry.utxo;
-    removeFromBucket(this.byAddress, address, outRef);
-    const paymentHash = this.paymentHashOf(address);
-    if (paymentHash !== undefined) {
-      removeFromBucket(this.byPaymentHash, paymentHash, outRef);
-    }
-    for (const unit in assets) removeFromBucket(this.byUnit, unit, outRef);
-  }
-
-  private refresh() {
-    if (!this.stale) return;
-    this.byAddress.clear();
-    this.byPaymentHash.clear();
-    this.byUnit.clear();
-    for (const [outRef, entry] of Object.entries(this.entries)) {
-      this.index(outRef, entry);
-    }
-    this.stale = false;
+  #dropMirror() {
+    this.#exposed = true;
+    this.#keys = [];
+    this.#entries = [];
+    this.#slots.clear();
+    this.#slotHashAddresses = [];
+    this.#slotHashes = [];
+    this.#holes = 0;
   }
 }

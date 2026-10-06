@@ -39,6 +39,12 @@ import {
   LedgerEntry,
 } from "./internal/emulator-ledger.js";
 
+type TransactionHistory = Record<
+  TxHash,
+  | { status: "pending" }
+  | { status: "confirmed"; blockHeight: number; slot: number }
+>;
+
 const EMULATOR_PROVIDER_BRAND = Symbol.for(
   "@lucid-evolution/provider/Emulator",
 );
@@ -103,7 +109,21 @@ const DEFAULT_PROTOCOL_MAJOR_VERSION = 11;
 
 export class Emulator implements Provider {
   readonly [EMULATOR_PROVIDER_BRAND] = true;
-  private confirmed = new EmulatorLedger();
+  #confirmed = new EmulatorLedger();
+  /**
+   * The confirmed UTxO set, keyed by txHash + outputIndex: a plain record
+   * that callers may read, edit, replace or snapshot freely. It is an own
+   * enumerable property, defined here so it keeps its place among the
+   * instance's keys.
+   */
+  declare ledger: Record<FlatOutRef, LedgerEntry>;
+  #ledgerProperty = Object.defineProperty(this, "ledger", {
+    configurable: true,
+    enumerable: true,
+    get: () => this.#confirmed.expose(),
+    set: (entries: Record<FlatOutRef, LedgerEntry>) =>
+      this.#confirmed.replace(entries),
+  });
   mempool: Record<FlatOutRef, LedgerEntry> = {};
   /**
    * Only stake key registrations/delegations and rewards are tracked.
@@ -119,15 +139,11 @@ export class Emulator implements Provider {
   protocolParameters: ProtocolParameters;
   datumTable: Record<DatumHash, Datum> = {};
   treasury: Lovelace;
-  transactionHistory: Record<
-    TxHash,
-    | { status: "pending" }
-    | { status: "confirmed"; blockHeight: number; slot: number }
-  > = {};
+  transactionHistory: TransactionHistory = {};
   /** Transactions submitted since the last block, in submission order. */
-  private pendingTxHashes: TxHash[] = [];
+  #pendingTxHashes: TxHash[] = [];
   /** Script hashes of reference scripts, keyed by type and CBOR. */
-  private scriptRefHashes = new Map<string, ScriptHash>();
+  #scriptRefHashes = new Map<string, ScriptHash>();
 
   constructor(
     accounts: EmulatorAccount[],
@@ -149,7 +165,7 @@ export class Emulator implements Provider {
         );
       }
 
-      this.confirmed.set(GENESIS_HASH + index, {
+      this.#confirmed.set(GENESIS_HASH + index, {
         utxo: {
           txHash: GENESIS_HASH,
           outputIndex: index,
@@ -170,24 +186,12 @@ export class Emulator implements Provider {
     this.treasury = treasury;
   }
 
-  /**
-   * The confirmed UTxO set, keyed by txHash + outputIndex. Entries can be
-   * added, replaced or deleted directly, and the query indexes follow.
-   */
-  get ledger(): Record<FlatOutRef, LedgerEntry> {
-    return this.confirmed.view;
-  }
-
-  set ledger(entries: Record<FlatOutRef, LedgerEntry>) {
-    this.confirmed = new EmulatorLedger(entries);
-  }
-
   now(): UnixTime {
     return this.time;
   }
 
   private confirmPendingTransactions(blockHeight: number, slot: number) {
-    for (const txHash of this.pendingTxHashes) {
+    for (const txHash of this.#pendingTxHashes) {
       if (this.transactionHistory[txHash]?.status === "pending") {
         this.transactionHistory[txHash] = {
           status: "confirmed",
@@ -196,16 +200,12 @@ export class Emulator implements Provider {
         };
       }
     }
-    this.pendingTxHashes = [];
+    this.#pendingTxHashes = [];
   }
 
   /** Moves the mempool into the ledger and drops spent entries. */
   private applyMempool() {
-    for (const [outRef, entry] of Object.entries(this.mempool)) {
-      if (entry.spent) this.confirmed.delete(outRef);
-      else this.confirmed.set(outRef, { utxo: entry.utxo, spent: false });
-    }
-    this.confirmed.deleteSpent();
+    this.#confirmed.applyMempool(this.mempool);
     this.mempool = {};
   }
 
@@ -238,20 +238,8 @@ export class Emulator implements Provider {
     this.applyMempool();
   }
 
-  private entriesAt(
-    addressOrCredential: Address | Credential,
-  ): Iterable<LedgerEntry> {
-    return typeof addressOrCredential === "string"
-      ? this.confirmed.byAddressEntries(addressOrCredential)
-      : this.confirmed.byPaymentHashEntries(addressOrCredential.hash);
-  }
-
   getUtxos(addressOrCredential: Address | Credential): Promise<UTxO[]> {
-    const utxos: UTxO[] = [];
-    for (const { utxo, spent } of this.entriesAt(addressOrCredential)) {
-      if (!spent) utxos.push(utxo);
-    }
-    return Promise.resolve(utxos);
+    return Promise.resolve(this.#confirmed.utxosAt(addressOrCredential));
   }
 
   getProtocolParameters(): Promise<ProtocolParameters> {
@@ -270,27 +258,20 @@ export class Emulator implements Provider {
     addressOrCredential: Address | Credential,
     unit: Unit,
   ): Promise<UTxO[]> {
-    const utxos: UTxO[] = [];
-    for (const { utxo, spent } of this.entriesAt(addressOrCredential)) {
-      if (!spent && utxo.assets[unit] > 0n) utxos.push(utxo);
-    }
-    return Promise.resolve(utxos);
+    return Promise.resolve(this.#confirmed.utxosAt(addressOrCredential, unit));
   }
 
   getUtxosByOutRef(outRefs: OutRef[]): Promise<UTxO[]> {
     return Promise.resolve(
       outRefs.flatMap((outRef) => {
-        const entry = this.confirmed.get(outRef.txHash + outRef.outputIndex);
+        const entry = this.#confirmed.get(outRef.txHash + outRef.outputIndex);
         return entry && !entry.spent ? entry.utxo : [];
       }),
     );
   }
 
   getUtxoByUnit(unit: string): Promise<UTxO> {
-    const utxos: UTxO[] = [];
-    for (const { utxo, spent } of this.confirmed.byUnitEntries(unit)) {
-      if (!spent && utxo.assets[unit] > 0n) utxos.push(utxo);
-    }
+    const utxos = this.#confirmed.utxosWithUnit(unit);
 
     if (utxos.length > 1) {
       throw new Error("Unit needs to be an NFT or only held by one address.");
@@ -587,7 +568,7 @@ export class Emulator implements Provider {
       });
       inputOutRefs.add(outRef);
 
-      const entryLedger = this.confirmed.get(outRef);
+      const entryLedger = this.#confirmed.get(outRef);
 
       const { entry, type }: ResolvedInput = !entryLedger
         ? { entry: this.mempool[outRef]!, type: "Mempool" }
@@ -619,7 +600,7 @@ export class Emulator implements Provider {
         return own(input.transaction_id()).to_hex() + input.index().toString();
       });
 
-      const entry = this.confirmed.get(outRef) || this.mempool[outRef];
+      const entry = this.#confirmed.get(outRef) || this.mempool[outRef];
 
       if (!entry || entry.spent) {
         throw new Error(
@@ -743,7 +724,7 @@ export class Emulator implements Provider {
         return own(input.transaction_id()).to_hex() + input.index().toString();
       });
 
-      const entry = this.confirmed.get(outRef) || this.mempool[outRef];
+      const entry = this.#confirmed.get(outRef) || this.mempool[outRef];
 
       if (!entry || entry.spent) {
         throw new Error(
@@ -1247,7 +1228,7 @@ export class Emulator implements Provider {
     }
 
     this.transactionHistory[txHash] = { status: "pending" };
-    this.pendingTxHashes.push(txHash);
+    this.#pendingTxHashes.push(txHash);
 
     return txHash;
   }
@@ -1255,7 +1236,7 @@ export class Emulator implements Provider {
   /** Hash of a reference script, computed once per distinct script. */
   private scriptRefHash(scriptRef: Script): ScriptHash {
     const key = `${scriptRef.type}:${scriptRef.script}`;
-    let scriptHash = this.scriptRefHashes.get(key);
+    let scriptHash = this.#scriptRefHashes.get(key);
     if (scriptHash === undefined) {
       scriptHash = withCMLScope((own) => {
         const bytes = fromHex(scriptRef.script);
@@ -1290,7 +1271,7 @@ export class Emulator implements Provider {
             ).to_hex();
         }
       });
-      this.scriptRefHashes.set(key, scriptHash);
+      this.#scriptRefHashes.set(key, scriptHash);
     }
     return scriptHash;
   }
@@ -1370,7 +1351,7 @@ export class Emulator implements Provider {
     const totalBalances: Assets = {};
 
     const balances: Record<Address, Assets> = {};
-    for (const { utxo } of Object.values(this.confirmed.entries)) {
+    for (const { utxo } of Object.values(this.#confirmed.record)) {
       for (const [unit, quantity] of Object.entries(utxo.assets)) {
         if (!balances[utxo.address]) {
           balances[utxo.address] = { [unit]: quantity };
