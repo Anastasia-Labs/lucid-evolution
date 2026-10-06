@@ -139,8 +139,27 @@ export class Emulator implements Provider {
   protocolParameters: ProtocolParameters;
   datumTable: Record<DatumHash, Datum> = {};
   treasury: Lovelace;
-  transactionHistory: TransactionHistory = {};
-  /** Transactions submitted since the last block, in submission order. */
+  #history: TransactionHistory = {};
+  /** Whether a caller holds `transactionHistory`, and may edit it. */
+  #historyExposed = false;
+  /** Every transaction status, keyed by hash; a plain record, like `ledger`. */
+  declare transactionHistory: TransactionHistory;
+  #historyProperty = Object.defineProperty(this, "transactionHistory", {
+    configurable: true,
+    enumerable: true,
+    get: () => {
+      this.#historyExposed = true;
+      return this.#history;
+    },
+    set: (history: TransactionHistory) => {
+      this.#historyExposed = true;
+      this.#history = history;
+    },
+  });
+  /**
+   * Transactions submitted since the last block. While no caller holds
+   * `transactionHistory`, these are its only pending entries.
+   */
   #pendingTxHashes: TxHash[] = [];
   /** Script hashes of reference scripts, keyed by type and CBOR. */
   #scriptRefHashes = new Map<string, ScriptHash>();
@@ -190,14 +209,20 @@ export class Emulator implements Provider {
     return this.time;
   }
 
+  /** Confirms every pending transaction in `transactionHistory`. */
   private confirmPendingTransactions(blockHeight: number, slot: number) {
-    for (const txHash of this.#pendingTxHashes) {
-      if (this.transactionHistory[txHash]?.status === "pending") {
-        this.transactionHistory[txHash] = {
-          status: "confirmed",
-          blockHeight,
-          slot,
-        };
+    const history = this.#history;
+    if (this.#historyExposed) {
+      for (const [txHash, { status }] of Object.entries(history)) {
+        if (status === "pending") {
+          history[txHash] = { status: "confirmed", blockHeight, slot };
+        }
+      }
+    } else {
+      for (const txHash of this.#pendingTxHashes) {
+        if (history[txHash].status === "pending") {
+          history[txHash] = { status: "confirmed", blockHeight, slot };
+        }
       }
     }
     this.#pendingTxHashes = [];
@@ -297,7 +322,7 @@ export class Emulator implements Provider {
   }
 
   awaitTx(txHash: string): Promise<boolean> {
-    if (this.transactionHistory[txHash]?.status === "pending") {
+    if (this.#history[txHash]?.status === "pending") {
       this.awaitBlock();
       return Promise.resolve(true);
     }
@@ -316,7 +341,7 @@ export class Emulator implements Provider {
       );
     }
 
-    const status = this.transactionHistory[txHash];
+    const status = this.#history[txHash];
     if (!status) return Promise.resolve({ status: "not_found", txHash });
     if (status.status === "pending") {
       return Promise.resolve({ status: "pending", txHash });
@@ -1227,7 +1252,7 @@ export class Emulator implements Provider {
       this.datumTable[datumHash] = datum;
     }
 
-    this.transactionHistory[txHash] = { status: "pending" };
+    this.#history[txHash] = { status: "pending" };
     this.#pendingTxHashes.push(txHash);
 
     return txHash;

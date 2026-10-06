@@ -224,3 +224,33 @@ describe("Emulator ledger maintained by blocks alone", () => {
     expect(Object.keys(emulator.ledger)).toHaveLength(2 + 300);
   });
 });
+
+describe("Emulator transaction history edits", () => {
+  test("a pending entry written by hand is confirmed by the next block", async () => {
+    const emulator = newEmulator();
+    const txHash = "ab".repeat(32);
+    emulator.transactionHistory[txHash] = { status: "pending" };
+    expect(await emulator.getTransactionStatus(txHash)).toEqual({
+      status: "pending",
+      txHash,
+    });
+    emulator.awaitBlock(1);
+    expect(emulator.transactionHistory[txHash]).toEqual({
+      status: "confirmed",
+      blockHeight: 1,
+      slot: 20,
+    });
+  });
+
+  test("a replaced history record is confirmed by the next block", () => {
+    const emulator = newEmulator();
+    const txHash = "cd".repeat(32);
+    emulator.transactionHistory = { [txHash]: { status: "pending" } };
+    emulator.awaitSlot(20);
+    expect(emulator.transactionHistory[txHash]).toEqual({
+      status: "confirmed",
+      blockHeight: 1,
+      slot: 20,
+    });
+  });
+});
