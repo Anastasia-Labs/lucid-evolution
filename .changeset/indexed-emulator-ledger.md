@@ -1,0 +1,5 @@
+---
+"@lucid-evolution/provider": patch
+---
+
+Speed up the emulator. UTxO queries by address, payment credential and unit read secondary indexes instead of scanning the ledger and parsing every address, and keep returning results in ledger order. Each block drops only the entries marked spent and confirms only the transactions submitted since the last block. Reference script hashes are computed once per script. `submitTx` frees every CML object it creates, uses sets for its witness checks, and no longer reads a freed key list when it verifies a native script supplied through a script reference, which used to fail with "null pointer passed to rust". Direct edits to `emulator.ledger` (adding, replacing or deleting entries, setting `spent`, or assigning a new record) are still honoured.

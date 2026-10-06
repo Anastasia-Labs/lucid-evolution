@@ -15,6 +15,7 @@ import {
   Provider,
   RewardAddress,
   RewardAccountState,
+  Script,
   ScriptHash,
   Transaction,
   TransactionStatus,
@@ -30,11 +31,13 @@ import {
   PROTOCOL_PARAMETERS_DEFAULT,
 } from "@lucid-evolution/utils";
 import { coreToUtxo, getAddressDetails } from "@lucid-evolution/utils";
-import { freeCML, fromHex, withCMLScope } from "@lucid-evolution/core-utils";
+import { CMLOwn, fromHex, withCMLScope } from "@lucid-evolution/core-utils";
 import { walletFromSeed } from "@lucid-evolution/wallet";
-
-/** Concatentation of txHash + outputIndex */
-type FlatOutRef = string;
+import {
+  EmulatorLedger,
+  FlatOutRef,
+  LedgerEntry,
+} from "./internal/emulator-ledger.js";
 
 const EMULATOR_PROVIDER_BRAND = Symbol.for(
   "@lucid-evolution/provider/Emulator",
@@ -100,8 +103,8 @@ const DEFAULT_PROTOCOL_MAJOR_VERSION = 11;
 
 export class Emulator implements Provider {
   readonly [EMULATOR_PROVIDER_BRAND] = true;
-  ledger: Record<FlatOutRef, { utxo: UTxO; spent: boolean }>;
-  mempool: Record<FlatOutRef, { utxo: UTxO; spent: boolean }> = {};
+  private confirmed = new EmulatorLedger();
+  mempool: Record<FlatOutRef, LedgerEntry> = {};
   /**
    * Only stake key registrations/delegations and rewards are tracked.
    * Other certificates are not tracked.
@@ -121,6 +124,10 @@ export class Emulator implements Provider {
     | { status: "pending" }
     | { status: "confirmed"; blockHeight: number; slot: number }
   > = {};
+  /** Transactions submitted since the last block, in submission order. */
+  private pendingTxHashes: TxHash[] = [];
+  /** Script hashes of reference scripts, keyed by type and CBOR. */
+  private scriptRefHashes = new Map<string, ScriptHash>();
 
   constructor(
     accounts: EmulatorAccount[],
@@ -131,7 +138,6 @@ export class Emulator implements Provider {
     this.blockHeight = 0;
     this.slot = 0;
     this.time = Date.now();
-    this.ledger = {};
     accounts.forEach(({ address, assets, outputData }, index) => {
       if (
         [outputData?.hash, outputData?.asHash, outputData?.inline].filter(
@@ -143,7 +149,7 @@ export class Emulator implements Provider {
         );
       }
 
-      this.ledger[GENESIS_HASH + index] = {
+      this.confirmed.set(GENESIS_HASH + index, {
         utxo: {
           txHash: GENESIS_HASH,
           outputIndex: index,
@@ -158,10 +164,22 @@ export class Emulator implements Provider {
           scriptRef: outputData?.scriptRef,
         },
         spent: false,
-      };
+      });
     });
     this.protocolParameters = protocolParameters;
     this.treasury = treasury;
+  }
+
+  /**
+   * The confirmed UTxO set, keyed by txHash + outputIndex. Entries can be
+   * added, replaced or deleted directly, and the query indexes follow.
+   */
+  get ledger(): Record<FlatOutRef, LedgerEntry> {
+    return this.confirmed.view;
+  }
+
+  set ledger(entries: Record<FlatOutRef, LedgerEntry>) {
+    this.confirmed = new EmulatorLedger(entries);
   }
 
   now(): UnixTime {
@@ -169,8 +187,8 @@ export class Emulator implements Provider {
   }
 
   private confirmPendingTransactions(blockHeight: number, slot: number) {
-    for (const [txHash, status] of Object.entries(this.transactionHistory)) {
-      if (status.status === "pending") {
+    for (const txHash of this.pendingTxHashes) {
+      if (this.transactionHistory[txHash]?.status === "pending") {
         this.transactionHistory[txHash] = {
           status: "confirmed",
           blockHeight,
@@ -178,6 +196,17 @@ export class Emulator implements Provider {
         };
       }
     }
+    this.pendingTxHashes = [];
+  }
+
+  /** Moves the mempool into the ledger and drops spent entries. */
+  private applyMempool() {
+    for (const [outRef, entry] of Object.entries(this.mempool)) {
+      if (entry.spent) this.confirmed.delete(outRef);
+      else this.confirmed.set(outRef, { utxo: entry.utxo, spent: false });
+    }
+    this.confirmed.deleteSpent();
+    this.mempool = {};
   }
 
   awaitSlot(length = 1) {
@@ -191,15 +220,7 @@ export class Emulator implements Provider {
         currentHeight + 1,
         (currentHeight + 1) * 20,
       );
-      for (const [outRef, { utxo, spent }] of Object.entries(this.mempool)) {
-        this.ledger[outRef] = { utxo, spent };
-      }
-
-      for (const [outRef, { spent }] of Object.entries(this.ledger)) {
-        if (spent) delete this.ledger[outRef];
-      }
-
-      this.mempool = {};
+      this.applyMempool();
     }
   }
 
@@ -214,32 +235,22 @@ export class Emulator implements Provider {
       this.confirmPendingTransactions(previousHeight + 1, previousSlot + 20);
     }
 
-    for (const [outRef, { utxo, spent }] of Object.entries(this.mempool)) {
-      this.ledger[outRef] = { utxo, spent };
-    }
+    this.applyMempool();
+  }
 
-    for (const [outRef, { spent }] of Object.entries(this.ledger)) {
-      if (spent) delete this.ledger[outRef];
-    }
-
-    this.mempool = {};
+  private entriesAt(
+    addressOrCredential: Address | Credential,
+  ): Iterable<LedgerEntry> {
+    return typeof addressOrCredential === "string"
+      ? this.confirmed.byAddressEntries(addressOrCredential)
+      : this.confirmed.byPaymentHashEntries(addressOrCredential.hash);
   }
 
   getUtxos(addressOrCredential: Address | Credential): Promise<UTxO[]> {
-    const utxos: UTxO[] = Object.values(this.ledger).flatMap(
-      ({ utxo, spent }) => {
-        if (spent) return [];
-        if (typeof addressOrCredential === "string") {
-          return addressOrCredential === utxo.address ? utxo : [];
-        } else {
-          const { paymentCredential } = getAddressDetails(utxo.address);
-          return paymentCredential?.hash === addressOrCredential.hash
-            ? utxo
-            : [];
-        }
-      },
-    );
-
+    const utxos: UTxO[] = [];
+    for (const { utxo, spent } of this.entriesAt(addressOrCredential)) {
+      if (!spent) utxos.push(utxo);
+    }
     return Promise.resolve(utxos);
   }
 
@@ -259,39 +270,27 @@ export class Emulator implements Provider {
     addressOrCredential: Address | Credential,
     unit: Unit,
   ): Promise<UTxO[]> {
-    const utxos: UTxO[] = Object.values(this.ledger).flatMap(
-      ({ utxo, spent }) => {
-        if (spent) return [];
-        if (typeof addressOrCredential === "string") {
-          return addressOrCredential === utxo.address && utxo.assets[unit] > 0n
-            ? utxo
-            : [];
-        } else {
-          const { paymentCredential } = getAddressDetails(utxo.address);
-          return paymentCredential?.hash === addressOrCredential.hash &&
-            utxo.assets[unit] > 0n
-            ? utxo
-            : [];
-        }
-      },
-    );
-
+    const utxos: UTxO[] = [];
+    for (const { utxo, spent } of this.entriesAt(addressOrCredential)) {
+      if (!spent && utxo.assets[unit] > 0n) utxos.push(utxo);
+    }
     return Promise.resolve(utxos);
   }
 
   getUtxosByOutRef(outRefs: OutRef[]): Promise<UTxO[]> {
     return Promise.resolve(
       outRefs.flatMap((outRef) => {
-        const entry = this.ledger[outRef.txHash + outRef.outputIndex];
+        const entry = this.confirmed.get(outRef.txHash + outRef.outputIndex);
         return entry && !entry.spent ? entry.utxo : [];
       }),
     );
   }
 
   getUtxoByUnit(unit: string): Promise<UTxO> {
-    const utxos: UTxO[] = Object.values(this.ledger).flatMap(
-      ({ utxo, spent }) => (!spent && utxo.assets[unit] > 0n ? utxo : []),
-    );
+    const utxos: UTxO[] = [];
+    for (const { utxo, spent } of this.confirmed.byUnitEntries(unit)) {
+      if (!spent && utxo.assets[unit] > 0n) utxos.push(utxo);
+    }
 
     if (utxos.length > 1) {
       throw new Error("Unit needs to be an NFT or only held by one address.");
@@ -392,12 +391,16 @@ export class Emulator implements Provider {
           - Withdrawals
           - Validity interval
      */
+    return withCMLScope((own) => Promise.resolve(this.applyTx(tx, own)));
+  }
 
-    const desTx = CML.Transaction.from_cbor_hex(tx);
+  /** Validates `tx` and applies it to the mempool; returns its hash. */
+  private applyTx(tx: Transaction, own: CMLOwn): TxHash {
+    const desTx = own(CML.Transaction.from_cbor_hex(tx));
 
-    const body = desTx.body();
-    const witnesses = desTx.witness_set();
-    const datums = witnesses.plutus_datums();
+    const body = own(desTx.body());
+    const witnesses = own(desTx.witness_set());
+    const datums = own(witnesses.plutus_datums());
 
     const txHash = CML.hash_transaction(body).to_hex();
 
@@ -458,7 +461,7 @@ export class Emulator implements Provider {
     const consumedHashes = new Set();
 
     // Witness keys
-    const keyHashes = withCMLScope((own) => {
+    const keyHashList = withCMLScope((own) => {
       const keyHashes: string[] = [];
       const vkeyWitnesses = own(witnesses.vkeywitnesses());
       for (let i = 0; i < (vkeyWitnesses?.len() || 0); i++) {
@@ -477,16 +480,17 @@ export class Emulator implements Provider {
       }
       return keyHashes;
     });
+    const keyHashes = new Set(keyHashList);
 
     // We only need this to verify native scripts. The check happens in the CML.
-    const edKeyHashes = CML.Ed25519KeyHashList.new();
-    keyHashes.forEach((keyHash) =>
+    const edKeyHashes = own(CML.Ed25519KeyHashList.new());
+    keyHashList.forEach((keyHash) =>
       withCMLScope((own) =>
         edKeyHashes.add(own(CML.Ed25519KeyHash.from_hex(keyHash))),
       ),
     );
 
-    const nativeHashes = withCMLScope((own) => {
+    const nativeHashList = withCMLScope((own) => {
       const scriptHashes: string[] = [];
       const nativeScripts = own(witnesses.native_scripts());
 
@@ -517,16 +521,17 @@ export class Emulator implements Provider {
       }
       return scriptHashes;
     });
-    edKeyHashes.free();
+    const nativeHashes = new Set(nativeHashList);
 
-    const nativeHashesOptional: Record<ScriptHash, CML.NativeScript> = {};
-    const plutusHashesOptional: ScriptHash[] = [];
+    // Native scripts from script references, as CBOR hex by script hash.
+    const nativeHashesOptional: Record<ScriptHash, string> = {};
+    const plutusHashesOptional = new Set<ScriptHash>();
     // Every PlutusV3 script the transaction carries (witness set or script
     // reference); the ledger's reference-input disjointness rule depends on
     // whether one of them runs.
     const plutusV3Hashes = new Set<ScriptHash>();
 
-    const plutusHashes = withCMLScope((own) => {
+    const plutusHashList = withCMLScope((own) => {
       const scriptHashes: ScriptHash[] = [];
       const collectHashes = (
         scripts:
@@ -551,8 +556,19 @@ export class Emulator implements Provider {
       collectHashes(witnesses.plutus_v3_scripts(), true);
       return scriptHashes;
     });
+    const plutusHashes = new Set(plutusHashList);
 
-    const inputs = body.inputs();
+    const collectScriptRef = (scriptRef: Script) => {
+      const scriptHash = this.scriptRefHash(scriptRef);
+      if (scriptRef.type === "Native") {
+        nativeHashesOptional[scriptHash] = scriptRef.script;
+        return;
+      }
+      plutusHashesOptional.add(scriptHash);
+      if (scriptRef.type === "PlutusV3") plutusV3Hashes.add(scriptHash);
+    };
+
+    const inputs = own(body.inputs());
     // inputs.sort();
 
     type ResolvedInput = {
@@ -571,7 +587,7 @@ export class Emulator implements Provider {
       });
       inputOutRefs.add(outRef);
 
-      const entryLedger = this.ledger[outRef];
+      const entryLedger = this.confirmed.get(outRef);
 
       const { entry, type }: ResolvedInput = !entryLedger
         ? { entry: this.mempool[outRef]!, type: "Mempool" }
@@ -587,49 +603,15 @@ export class Emulator implements Provider {
       }
 
       const scriptRef = entry.utxo.scriptRef;
-      if (scriptRef) {
-        switch (scriptRef.type) {
-          case "Native": {
-            const script = CML.NativeScript.from_cbor_bytes(
-              fromHex(scriptRef.script),
-            );
-            nativeHashesOptional[script.hash().to_hex()] = script;
-            break;
-          }
-          case "PlutusV1": {
-            const script = CML.PlutusScript.from_v1(
-              CML.PlutusV1Script.from_cbor_bytes(fromHex(scriptRef.script)),
-            );
-            plutusHashesOptional.push(script.hash().to_hex());
-            break;
-          }
-          case "PlutusV2": {
-            const script = CML.PlutusScript.from_v2(
-              CML.PlutusV2Script.from_cbor_bytes(fromHex(scriptRef.script)),
-            );
-            plutusHashesOptional.push(script.hash().to_hex());
-            break;
-          }
-          case "PlutusV3": {
-            const script = CML.PlutusScript.from_v3(
-              CML.PlutusV3Script.from_cbor_bytes(fromHex(scriptRef.script)),
-            );
-            const scriptHash = script.hash().to_hex();
-            plutusHashesOptional.push(scriptHash);
-            plutusV3Hashes.add(scriptHash);
-            break;
-          }
-        }
-      }
+      if (scriptRef) collectScriptRef(scriptRef);
 
       if (entry.utxo.datumHash) consumedHashes.add(entry.utxo.datumHash);
 
       resolvedInputs.push({ entry, type });
     }
-    inputs.free();
 
     // Check existence of reference inputs and look for script refs.
-    const referenceInputs = body.reference_inputs();
+    const referenceInputs = own(body.reference_inputs());
     const nonDisjointRefInputs: string[] = [];
     for (let i = 0; i < (referenceInputs?.len() || 0); i++) {
       const outRef = withCMLScope((own) => {
@@ -637,7 +619,7 @@ export class Emulator implements Provider {
         return own(input.transaction_id()).to_hex() + input.index().toString();
       });
 
-      const entry = this.ledger[outRef] || this.mempool[outRef];
+      const entry = this.confirmed.get(outRef) || this.mempool[outRef];
 
       if (!entry || entry.spent) {
         throw new Error(
@@ -655,48 +637,18 @@ export class Emulator implements Provider {
       }
 
       const scriptRef = entry.utxo.scriptRef;
-      if (scriptRef) {
-        switch (scriptRef.type) {
-          case "Native": {
-            const script = CML.NativeScript.from_cbor_bytes(
-              fromHex(scriptRef.script),
-            );
-            nativeHashesOptional[script.hash().to_hex()] = script;
-            break;
-          }
-          case "PlutusV1": {
-            const script = CML.PlutusScript.from_v1(
-              CML.PlutusV1Script.from_cbor_bytes(fromHex(scriptRef.script)),
-            );
-            plutusHashesOptional.push(script.hash().to_hex());
-            break;
-          }
-          case "PlutusV2": {
-            const script = CML.PlutusScript.from_v2(
-              CML.PlutusV2Script.from_cbor_bytes(fromHex(scriptRef.script)),
-            );
-            plutusHashesOptional.push(script.hash().to_hex());
-            break;
-          }
-          case "PlutusV3": {
-            const script = CML.PlutusScript.from_v3(
-              CML.PlutusV3Script.from_cbor_bytes(fromHex(scriptRef.script)),
-            );
-            const scriptHash = script.hash().to_hex();
-            plutusHashesOptional.push(scriptHash);
-            plutusV3Hashes.add(scriptHash);
-            break;
-          }
-        }
-      }
+      if (scriptRef) collectScriptRef(scriptRef);
 
       if (entry.utxo.datumHash) consumedHashes.add(entry.utxo.datumHash);
     }
-    referenceInputs?.free();
 
     type Tag = "Spend" | "Mint" | "Cert" | "Reward" | "Proposing" | "Voting";
 
-    const redeemers = (() => {
+    const redeemerKey = (tag: Tag | null, index: number | null) =>
+      `${tag}:${index}`;
+
+    // Tag and index of every redeemer, as `redeemerKey` strings.
+    const redeemers = withCMLScope((own) => {
       const tagMap: Record<number, Tag> = {
         0: "Spend",
         1: "Mint",
@@ -705,32 +657,29 @@ export class Emulator implements Provider {
         4: "Proposing",
         5: "Voting",
       };
-      const collected = [];
-      const redeemers = witnesses.redeemers();
-      const arrLegacyRedeemer = redeemers?.as_arr_legacy_redeemer();
+      const collected = new Set<string>();
+      const redeemers = own(witnesses.redeemers());
+      const arrLegacyRedeemer = own(redeemers?.as_arr_legacy_redeemer());
       if (arrLegacyRedeemer) {
         for (let i = 0; i < (arrLegacyRedeemer.len() || 0); i++) {
-          const redeemer = arrLegacyRedeemer.get(i);
-          collected.push({
-            tag: tagMap[redeemer.tag()],
-            index: Number(redeemer.index()),
-          });
+          const redeemer = own(arrLegacyRedeemer.get(i));
+          collected.add(
+            redeemerKey(tagMap[redeemer.tag()], Number(redeemer.index())),
+          );
         }
       }
-      const mapRedeemerKeyToRedeemerVal =
-        redeemers?.as_map_redeemer_key_to_redeemer_val();
+      const mapRedeemerKeyToRedeemerVal = own(
+        redeemers?.as_map_redeemer_key_to_redeemer_val(),
+      );
       if (mapRedeemerKeyToRedeemerVal) {
-        const keys = mapRedeemerKeyToRedeemerVal.keys();
+        const keys = own(mapRedeemerKeyToRedeemerVal.keys());
         for (let i = 0; i < (keys.len() || 0); i++) {
-          const key = keys.get(i);
-          collected.push({
-            tag: tagMap[key.tag()],
-            index: Number(key.index()),
-          });
+          const key = own(keys.get(i));
+          collected.add(redeemerKey(tagMap[key.tag()], Number(key.index())));
         }
       }
       return collected;
-    })();
+    });
 
     function checkAndConsumeHash(
       credential: Credential,
@@ -739,7 +688,7 @@ export class Emulator implements Provider {
     ) {
       switch (credential.type) {
         case "Key": {
-          if (!keyHashes.includes(credential.hash)) {
+          if (!keyHashes.has(credential.hash)) {
             throw new Error(
               `Missing vkey witness. Key hash: ${credential.hash}`,
             );
@@ -748,39 +697,32 @@ export class Emulator implements Provider {
           break;
         }
         case "Script": {
-          if (nativeHashes.includes(credential.hash)) {
+          if (nativeHashes.has(credential.hash)) {
             consumedHashes.add(credential.hash);
             break;
           } else if (nativeHashesOptional[credential.hash]) {
-            if (
-              !nativeHashesOptional[credential.hash].verify(
-                Number.isInteger(lowerBound)
-                  ? CML.BigInteger.from_str(
-                      lowerBound!.toString(),
-                    ).to_js_value()
-                  : undefined,
-                Number.isInteger(upperBound)
-                  ? CML.BigInteger.from_str(
-                      upperBound!.toString(),
-                    ).to_js_value()
-                  : undefined,
+            const valid = withCMLScope((own) =>
+              own(
+                CML.NativeScript.from_cbor_hex(
+                  nativeHashesOptional[credential.hash],
+                ),
+              ).verify(
+                Number.isInteger(lowerBound) ? BigInt(lowerBound!) : undefined,
+                Number.isInteger(upperBound) ? BigInt(upperBound!) : undefined,
                 edKeyHashes,
-              )
-            ) {
+              ),
+            );
+            if (!valid) {
               throw new Error(
                 `Invalid native script witness. Script hash: ${credential.hash}`,
               );
             }
             break;
           } else if (
-            plutusHashes.includes(credential.hash) ||
-            plutusHashesOptional.includes(credential.hash)
+            plutusHashes.has(credential.hash) ||
+            plutusHashesOptional.has(credential.hash)
           ) {
-            if (
-              redeemers.find(
-                (redeemer) => redeemer.tag === tag && redeemer.index === index,
-              )
-            ) {
+            if (redeemers.has(redeemerKey(tag, index))) {
               consumedHashes.add(credential.hash);
               break;
             }
@@ -794,14 +736,14 @@ export class Emulator implements Provider {
 
     // Check collateral inputs
 
-    const collateralInputs = body.collateral_inputs();
+    const collateralInputs = own(body.collateral_inputs());
     for (let i = 0; i < (collateralInputs?.len() || 0); i++) {
       const outRef = withCMLScope((own) => {
         const input = own(collateralInputs!.get(i));
         return own(input.transaction_id()).to_hex() + input.index().toString();
       });
 
-      const entry = this.ledger[outRef] || this.mempool[outRef];
+      const entry = this.confirmed.get(outRef) || this.mempool[outRef];
 
       if (!entry || entry.spent) {
         throw new Error(
@@ -818,19 +760,21 @@ export class Emulator implements Provider {
       }
       checkAndConsumeHash(paymentCredential!, null, null);
     }
-    collateralInputs?.free();
 
     // Check required signers
 
-    for (let i = 0; i < (body.required_signers()?.len() || 0); i++) {
-      const signer = body.required_signers()!.get(i);
+    const requiredSigners = own(body.required_signers());
+    for (let i = 0; i < (requiredSigners?.len() || 0); i++) {
+      const signer = own(requiredSigners!.get(i));
       checkAndConsumeHash({ type: "Key", hash: signer.to_hex() }, null, null);
     }
 
     // Check mint witnesses
 
-    for (let index = 0; index < (body.mint()?.keys().len() || 0); index++) {
-      const policyId = body.mint()!.keys().get(index).to_hex();
+    const mint = own(body.mint());
+    const policyIds = own(mint?.keys());
+    for (let index = 0; index < (policyIds?.len() || 0); index++) {
+      const policyId = own(policyIds!.get(index)).to_hex();
       checkAndConsumeHash({ type: "Script", hash: policyId }, "Mint", index);
     }
 
@@ -1193,14 +1137,14 @@ export class Emulator implements Provider {
 
     // Check consumed witnesses
 
-    const [extraKeyHash] = keyHashes.filter(
+    const [extraKeyHash] = keyHashList.filter(
       (keyHash) => !consumedHashes.has(keyHash),
     );
     if (extraKeyHash) {
       throw new Error(`Extraneous vkey witness. Key hash: ${extraKeyHash}`);
     }
 
-    const [extraNativeHash] = nativeHashes.filter(
+    const [extraNativeHash] = nativeHashList.filter(
       (scriptHash) => !consumedHashes.has(scriptHash),
     );
     if (extraNativeHash) {
@@ -1209,7 +1153,7 @@ export class Emulator implements Provider {
       );
     }
 
-    const [extraPlutusHash] = plutusHashes.filter(
+    const [extraPlutusHash] = plutusHashList.filter(
       (scriptHash) => !consumedHashes.has(scriptHash),
     );
     if (extraPlutusHash) {
@@ -1255,12 +1199,8 @@ export class Emulator implements Provider {
 
     // Apply transitions
 
-    resolvedInputs.forEach(({ entry, type }) => {
-      const outRef = entry.utxo.txHash + entry.utxo.outputIndex;
+    resolvedInputs.forEach(({ entry }) => {
       entry.spent = true;
-
-      if (type === "Ledger") this.ledger[outRef] = entry;
-      else if (type === "Mempool") this.mempool[outRef] = entry;
     });
 
     withdrawalRequests.forEach(({ rewardAddress, withdrawal }) => {
@@ -1307,9 +1247,52 @@ export class Emulator implements Provider {
     }
 
     this.transactionHistory[txHash] = { status: "pending" };
+    this.pendingTxHashes.push(txHash);
 
-    freeCML(datums, witnesses, body, desTx);
-    return Promise.resolve(txHash);
+    return txHash;
+  }
+
+  /** Hash of a reference script, computed once per distinct script. */
+  private scriptRefHash(scriptRef: Script): ScriptHash {
+    const key = `${scriptRef.type}:${scriptRef.script}`;
+    let scriptHash = this.scriptRefHashes.get(key);
+    if (scriptHash === undefined) {
+      scriptHash = withCMLScope((own) => {
+        const bytes = fromHex(scriptRef.script);
+        switch (scriptRef.type) {
+          case "Native":
+            return own(
+              own(CML.NativeScript.from_cbor_bytes(bytes)).hash(),
+            ).to_hex();
+          case "PlutusV1":
+            return own(
+              own(
+                CML.PlutusScript.from_v1(
+                  own(CML.PlutusV1Script.from_cbor_bytes(bytes)),
+                ),
+              ).hash(),
+            ).to_hex();
+          case "PlutusV2":
+            return own(
+              own(
+                CML.PlutusScript.from_v2(
+                  own(CML.PlutusV2Script.from_cbor_bytes(bytes)),
+                ),
+              ).hash(),
+            ).to_hex();
+          case "PlutusV3":
+            return own(
+              own(
+                CML.PlutusScript.from_v3(
+                  own(CML.PlutusV3Script.from_cbor_bytes(bytes)),
+                ),
+              ).hash(),
+            ).to_hex();
+        }
+      });
+      this.scriptRefHashes.set(key, scriptHash);
+    }
+    return scriptHash;
   }
 
   async evaluateTx(
@@ -1387,7 +1370,7 @@ export class Emulator implements Provider {
     const totalBalances: Assets = {};
 
     const balances: Record<Address, Assets> = {};
-    for (const { utxo } of Object.values(this.ledger)) {
+    for (const { utxo } of Object.values(this.confirmed.entries)) {
       for (const [unit, quantity] of Object.entries(utxo.assets)) {
         if (!balances[utxo.address]) {
           balances[utxo.address] = { [unit]: quantity };
