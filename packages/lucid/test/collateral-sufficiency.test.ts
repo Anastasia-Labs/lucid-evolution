@@ -378,3 +378,155 @@ describe("collateral top-up", () => {
     expect(required).toBeGreaterThan(5_000_000n);
   });
 });
+
+// Pays each amount to the wallet as its own UTxO, returning those UTxOs.
+const fundWallet = async (fixture: Fixture, amounts: bigint[]) => {
+  let builder = fixture.lucid.newTx();
+  for (const lovelace of amounts) {
+    builder = builder.pay.ToAddress(fixture.address, { lovelace });
+  }
+  const signBuilder = await builder.complete();
+  const txHash = await (
+    await signBuilder.sign.withWallet().complete()
+  ).submit();
+  await fixture.lucid.awaitTx(txHash);
+  return (await fixture.lucid.wallet().getUtxos())
+    .filter((utxo) => utxo.txHash === txHash)
+    .filter((utxo) => amounts.includes(utxo.assets.lovelace));
+};
+
+const outRefKeys = (utxos: UTxO[]) =>
+  utxos.map(({ txHash, outputIndex }) => `${txHash}#${outputIndex}`);
+
+describe("collateral input limits", () => {
+  test("a top-up that would exceed maxCollateralInputs replays once with fresh collateral", async () => {
+    const fixture = await setup(alwaysSucceedV3Script);
+    const small = await fundWallet(fixture, [
+      2_000_000n,
+      2_000_000n,
+      2_000_000n,
+    ]);
+    const wallet = fixture.lucid.wallet();
+    const getUtxos = wallet.getUtxos.bind(wallet);
+    let utxoCalls = 0;
+    wallet.getUtxos = async () => {
+      utxoCalls++;
+      return getUtxos();
+    };
+    // Three small candidates make the initial collateral, at the cap of 3.
+    wallet.getCollateral = async () => small;
+    const { evaluator } = countingEvaluator(growingExUnits);
+    const signBuilder = await spend(fixture, { evaluator });
+    const collateral = collateralOutRefs(signBuilder);
+    expect(collateral).toHaveLength(1);
+    expect(outRefKeys(small)).not.toContain(collateral[0]);
+    // The replay reuses the wallet's UTxOs.
+    expect(utxoCalls).toBe(1);
+    const required = await expectLedgerCollateral(fixture, signBuilder);
+    expect(required).toBeGreaterThan(6_000_000n);
+  });
+
+  test("a delayed completion replays once with fresh collateral", async () => {
+    const fixture = await setup(alwaysSucceedV3Script);
+    const small = await fundWallet(fixture, [
+      2_000_000n,
+      2_000_000n,
+      2_000_000n,
+    ]);
+    fixture.lucid.wallet().getCollateral = async () => small;
+    const { evaluator } = countingEvaluator(growingExUnits);
+    const signBuilder = await fixture.lucid
+      .newTx()
+      .collectFrom([fixture.input], (context) =>
+        Data.to(context.inputIndex(fixture.input)!),
+      )
+      .attach.SpendingValidator(fixture.script)
+      .pay.ToAddress(fixture.address, { lovelace: 10_000_000n })
+      .complete({ evaluator });
+    const collateral = collateralOutRefs(signBuilder);
+    expect(collateral).toHaveLength(1);
+    expect(outRefKeys(small)).not.toContain(collateral[0]);
+    await expectLedgerCollateral(fixture, signBuilder);
+  });
+
+  test("a top-up past a cap of one input replays with a single larger input", async () => {
+    const fixture = await setup(alwaysSucceedV3Script, {
+      ...EXPENSIVE_PRICES,
+      maxCollateralInputs: 1,
+    });
+    const fiveAda = (await fixture.lucid.wallet().getUtxos()).find(
+      (utxo) => utxo.assets.lovelace === 5_000_000n,
+    )!;
+    // Exactly the default collateral, so a top-up needs a second input.
+    fixture.lucid.wallet().getCollateral = async () => [fiveAda];
+    const { evaluator } = countingEvaluator(growingExUnits);
+    const signBuilder = await spend(fixture, { evaluator });
+    const collateral = collateralOutRefs(signBuilder);
+    expect(collateral).toHaveLength(1);
+    expect(collateral).not.toContain(
+      `${fiveAda.txHash}#${fiveAda.outputIndex}`,
+    );
+    await expectLedgerCollateral(fixture, signBuilder);
+  });
+
+  test("fails clearly when the replay cannot cover the collateral either", async () => {
+    const fixture = await setup(alwaysSucceedV3Script, {
+      ...EXPENSIVE_PRICES,
+      maxCollateralInputs: 1,
+    });
+    const smallUTxOs = (await fixture.lucid.wallet().getUtxos()).filter(
+      (utxo) => utxo.assets.lovelace < 10_000_000n,
+    );
+    const fiveAda = smallUTxOs.find(
+      (utxo) => utxo.assets.lovelace === 5_000_000n,
+    )!;
+    let collateralCalls = 0;
+    fixture.lucid.wallet().getCollateral = async () => {
+      collateralCalls++;
+      return [fiveAda];
+    };
+    const { evaluator } = countingEvaluator(growingExUnits);
+    // The script input pays for the transaction; no wallet UTxO covers the
+    // final collateral on its own.
+    await expect(
+      spend(fixture, { evaluator, presetWalletInputs: smallUTxOs }),
+    ).rejects.toThrow(
+      /not have enough funds to cover the required \d+ Lovelace collateral/,
+    );
+    expect(collateralCalls).toBe(1);
+  });
+
+  test("initial collateral selection uses maxCollateralInputs below 3", async () => {
+    const fixture = await setup(alwaysSucceedV3Script, {
+      ...PROTOCOL_PARAMETERS_DEFAULT,
+      maxCollateralInputs: 1,
+    });
+    const small = await fundWallet(fixture, [
+      2_000_000n,
+      2_000_000n,
+      2_000_000n,
+    ]);
+    // Covering 5 ADA from these takes three inputs, more than allowed.
+    fixture.lucid.wallet().getCollateral = async () => small;
+    const signBuilder = await spend(fixture);
+    const collateral = collateralOutRefs(signBuilder);
+    expect(collateral).toHaveLength(1);
+    expect(outRefKeys(small)).not.toContain(collateral[0]);
+    await expectLedgerCollateral(fixture, signBuilder);
+  });
+
+  test("initial collateral selection uses maxCollateralInputs above 3", async () => {
+    const fixture = await setup(alwaysSucceedV3Script, {
+      ...PROTOCOL_PARAMETERS_DEFAULT,
+      maxCollateralInputs: 4,
+    });
+    const amounts = [1_600_000n, 1_600_000n, 1_600_000n, 1_600_000n];
+    const small = await fundWallet(fixture, amounts);
+    // Covering 5 ADA from the wallet's candidates takes four inputs.
+    fixture.lucid.wallet().getCollateral = async () => small;
+    const signBuilder = await spend(fixture);
+    const collateral = collateralOutRefs(signBuilder);
+    expect(collateral.sort()).toEqual(outRefKeys(small).sort());
+    await expectLedgerCollateral(fixture, signBuilder);
+  });
+});

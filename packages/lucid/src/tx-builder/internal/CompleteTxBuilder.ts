@@ -162,6 +162,11 @@ type InternalCompleteOptions = {
   walletCollateral?: Effect.Effect<UTxO[]>;
   knownRedeemerExUnits?: KnownRedeemerExUnits;
   redeemerInputFingerprint?: string;
+  /**
+   * Collateral to select up front, when a replay follows a failed in-place
+   * top-up.
+   */
+  initialCollateral?: bigint;
 };
 
 /** The collateral the ledger requires for `fee`, rounded up. */
@@ -183,6 +188,41 @@ class RedeemerInputRefreshRequired extends TxBuilderError {
     });
   }
 }
+
+/**
+ * Topping the collateral up in place failed: it needed more collateral inputs
+ * than allowed, or no remaining UTxO could cover it. CML cannot remove
+ * collateral inputs, so the completion is replayed once with its initial
+ * collateral sized to `required`, letting a fresh selection pick fewer, larger
+ * inputs.
+ */
+class CollateralReplayRequired extends TxBuilderError {
+  constructor(
+    error: TxBuilderError,
+    readonly required: bigint,
+    readonly walletInputs: UTxO[],
+    readonly walletCollateral: UTxO[],
+  ) {
+    super({ cause: error.cause });
+  }
+}
+
+/** The internal options for the one replay a failed top-up allows. */
+const collateralReplayOptions = (
+  error: unknown,
+  internalOptions: InternalCompleteOptions,
+): InternalCompleteOptions | undefined =>
+  error instanceof CollateralReplayRequired &&
+  internalOptions.initialCollateral === undefined
+    ? {
+        ...internalOptions,
+        initialCollateral: error.required,
+        walletInputs: internalOptions.walletInputs ?? error.walletInputs,
+        walletCollateral:
+          internalOptions.walletCollateral ??
+          Effect.succeed(error.walletCollateral),
+      }
+    : undefined;
 
 type ExUnitSetter = Pick<CML.TransactionBuilder, "set_exunits">;
 
@@ -305,14 +345,15 @@ const completeCurrentConfig = (
             estimatedFee,
             config.lucidConfig.protocolParameters.collateralPercentage,
           );
-      const totalCollateral =
-        estimatedCollateral > setCollateral
-          ? estimatedCollateral
-          : setCollateral;
+      const totalCollateral = [
+        estimatedCollateral,
+        internalOptions.initialCollateral ?? 0n,
+      ].reduce((max, amount) => (amount > max ? amount : max), setCollateral);
       const walletCollateral = yield* internalOptions.walletCollateral ??
         fetchWalletCollateral(wallet, totalCollateral, presetWalletInputs);
       const collateralInput = yield* selectCollateral(
         config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+        config.lucidConfig.protocolParameters.maxCollateralInputs ?? 3,
         totalCollateral,
         walletCollateral,
         walletInputs,
@@ -510,16 +551,24 @@ const completeStaticFromActions = (
   options: CompleteOptions,
   internalOptions: InternalCompleteOptions,
 ) => {
-  const replayConfig = makeReplayConfig(sourceConfig);
-  return pipe(
-    Effect.gen(function* () {
-      yield* replayTxActions(sourceConfig.actions);
-      return yield* completeCurrentConfig(options, internalOptions);
+  const attempt = (internal: InternalCompleteOptions) => {
+    const replayConfig = makeReplayConfig(sourceConfig);
+    return pipe(
+      Effect.gen(function* () {
+        yield* replayTxActions(sourceConfig.actions);
+        return yield* completeCurrentConfig(options, internal);
+      }),
+      Effect.provide(Layer.succeed(TxConfig, { config: replayConfig })),
+      // The completed transaction is copied out of the builder; nothing keeps
+      // the replay's builder alive.
+      Effect.ensuring(Effect.sync(() => replayConfig.txBuilder.free())),
+    );
+  };
+  return attempt(internalOptions).pipe(
+    Effect.catchAll((error) => {
+      const replay = collateralReplayOptions(error, internalOptions);
+      return replay ? attempt(replay) : Effect.fail(error);
     }),
-    Effect.provide(Layer.succeed(TxConfig, { config: replayConfig })),
-    // The completed transaction is copied out of the builder; nothing keeps
-    // the replay's builder alive.
-    Effect.ensuring(Effect.sync(() => replayConfig.txBuilder.free())),
   );
 };
 
@@ -567,6 +616,8 @@ const completeDelayedFromActions = (
     // evaluation uses the same input indices as the bootstrap-built redeemers.
     // Once real ex-units are known, later replays select from scratch again.
     let bootstrapWalletInputs: UTxO[] = [];
+    // Set once a collateral top-up fails, for the one replay that allows.
+    let initialCollateral: bigint | undefined;
 
     for (let attempt = 0; attempt < MAX_EVALUATION_ATTEMPTS; attempt++) {
       const replayConfig = makeReplayConfig(sourceConfig);
@@ -588,6 +639,7 @@ const completeDelayedFromActions = (
               walletCollateral,
               knownRedeemerExUnits,
               redeemerInputFingerprint,
+              initialCollateral,
             },
           );
         }),
@@ -599,6 +651,15 @@ const completeDelayedFromActions = (
       const discardReplay = () => replayConfig.txBuilder.free();
 
       if (Either.isLeft(completion)) {
+        const replay = collateralReplayOptions(completion.left, {
+          initialCollateral,
+        });
+        if (replay) {
+          initialCollateral = replay.initialCollateral;
+          discardReplay();
+          previousFingerprint = undefined;
+          continue;
+        }
         if (!(completion.left instanceof RedeemerInputRefreshRequired)) {
           discardReplay();
           return yield* Effect.fail(completion.left);
@@ -1715,6 +1776,15 @@ const topUpCollateral = (
       `Your wallet does not have enough funds to cover the required ${required} Lovelace collateral. Or it contains UTxOs with reference scripts; which
       are excluded from collateral selection.`,
     );
+    // CML cannot remove collateral inputs, so a failure here asks for one
+    // replay that selects the whole collateral up front.
+    const replay = (cause: TxBuilderError) =>
+      new CollateralReplayRequired(
+        cause,
+        required,
+        state.walletInputs,
+        state.walletCollateral,
+      );
     const select = (candidates: UTxO[]) =>
       recursive(
         sortUTxOs(
@@ -1736,22 +1806,36 @@ const topUpCollateral = (
           ...excludeUTxOs(state.walletInputs, state.walletCollateral),
         ]),
       ),
+      Effect.mapError(replay),
     );
     const maxInputs = maxCollateralInputs ?? 3;
     if (state.inputs.length + selected.length > maxInputs) {
+      return yield* Effect.fail(
+        replay(
+          completeTxError(
+            `Covering the required ${required} Lovelace collateral needs ${state.inputs.length + selected.length} collateral inputs, but at most ${maxInputs} are allowed`,
+          ),
+        ),
+      );
+    }
+    // The selection leaves a collateral return of at least the minimum ADA,
+    // so the return is always overwritten. CML cannot clear one, so a builder
+    // that already has a return must not be left with a stale one.
+    const inputs = [...state.inputs, ...selected];
+    const hasReturn = setCollateralReturn(
+      config,
+      inputs,
+      required,
+      state.changeAddress,
+    );
+    if (state.hasReturn && !hasReturn) {
       return yield* completeTxError(
-        `Covering the required ${required} Lovelace collateral needs ${state.inputs.length + selected.length} collateral inputs, but at most ${maxInputs} are allowed`,
+        `Covering the required ${required} Lovelace collateral leaves no collateral return to replace the existing one`,
       );
     }
     addCollateralInputs(config, selected);
-    state.inputs = [...state.inputs, ...selected];
-    state.hasReturn =
-      setCollateralReturn(
-        config,
-        state.inputs,
-        required,
-        state.changeAddress,
-      ) || state.hasReturn;
+    state.inputs = inputs;
+    state.hasReturn = hasReturn;
     state.total = required;
     return true;
   });
@@ -1786,12 +1870,14 @@ const fetchWalletCollateral = (
 // commonly set aside exactly 5 ADA.
 const selectCollateral = (
   coinsPerUtxoByte: bigint,
+  maxCollateralInputs: number,
   totalCollateral: bigint,
   walletCollateral: UTxO[],
   walletInputs: UTxO[],
 ): Effect.Effect<UTxO[], TxBuilderError> => {
   const fromWalletInputs = findCollateral(
     coinsPerUtxoByte,
+    maxCollateralInputs,
     totalCollateral,
     walletInputs,
   );
@@ -1804,13 +1890,19 @@ const selectCollateral = (
   return walletCollateral.length === 0
     ? fromWalletInputs
     : pipe(
-        findCollateral(coinsPerUtxoByte, totalCollateral, walletCollateral),
+        findCollateral(
+          coinsPerUtxoByte,
+          maxCollateralInputs,
+          totalCollateral,
+          walletCollateral,
+        ),
         Effect.orElse(() => fromWalletInputs),
       );
 };
 
 const findCollateral = (
   coinsPerUtxoByte: bigint,
+  maxCollateralInputs: number,
   setCollateral: bigint,
   inputs: UTxO[],
 ): Effect.Effect<UTxO[], TxBuilderError, never> =>
@@ -1831,9 +1923,9 @@ const findCollateral = (
       false,
       error,
     );
-    if (selected.length > 3)
+    if (selected.length > maxCollateralInputs)
       yield* completeTxError(
-        `Selected ${selected.length} inputs as collateral, but max collateral inputs is 3 to cover the ${setCollateral} Lovelace collateral ${stringify(selected)}`,
+        `Selected ${selected.length} inputs as collateral, but max collateral inputs is ${maxCollateralInputs} to cover the ${setCollateral} Lovelace collateral ${stringify(selected)}`,
       );
     return selected;
   });
