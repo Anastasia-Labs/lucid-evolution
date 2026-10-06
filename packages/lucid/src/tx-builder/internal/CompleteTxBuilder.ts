@@ -2260,10 +2260,19 @@ const sameAikenRequest = (
   Object.is(left.slotLength, right.slotLength) &&
   Object.is(left.protocolMajorVersion, right.protocolMajorVersion);
 
+/**
+ * Whether two asset maps are equal in content and in key order. The output
+ * encoding, and so the script context a script sees, follows the key order.
+ */
 const sameAssets = (left: Assets, right: Assets): boolean => {
-  const keys = Object.keys(left);
-  if (keys.length !== Object.keys(right).length) return false;
-  return keys.every((unit) => left[unit] === right[unit]);
+  const leftUnits = Object.keys(left);
+  const rightUnits = Object.keys(right);
+  return (
+    leftUnits.length === rightUnits.length &&
+    leftUnits.every(
+      (unit, index) => unit === rightUnits[index] && left[unit] === right[unit],
+    )
+  );
 };
 
 /** Whether two UTxOs encode to the same transaction output. */
@@ -2309,9 +2318,10 @@ export type UPLCModule = Pick<typeof UPLC, "eval_phase_two_raw">;
  * returns that result again when the next request is byte-for-byte the same
  * (transaction, resolved UTxOs, cost models, budget, slot configuration and
  * protocol version). Evaluation is deterministic, so the result is the same.
- * Failures are not remembered. It also keeps the CBOR encoding of each
- * resolved UTxO it has seen, since one completion evaluates the same inputs
- * repeatedly.
+ * Failures are not remembered. It also keeps the CBOR encoding of the
+ * resolved UTxOs of its latest request, since one completion evaluates the
+ * same inputs repeatedly; encodings the latest request did not use are
+ * dropped, so a long-lived evaluator does not grow.
  *
  * @example
  * import * as UPLCSize from "@lucid-evolution/uplc/size";
@@ -2326,19 +2336,29 @@ export const makeAikenEvaluator = (
     | { request: AikenEvaluationRequest; redeemers: Uint8Array[] }
     | undefined;
   let costModels: { source: CML.CostModels; bytes: Uint8Array } | undefined;
-  const encodedUTxOs = new Map<string, EncodedUTxO>();
+  // Encodings used by the latest request, by out-ref.
+  let encodedUTxOs = new Map<string, EncodedUTxO>();
 
   // The cached arrays are private to this evaluator and never modified.
   const encodeUTxO = (utxo: UTxO): EncodedUTxO => {
     const key = `${utxo.txHash}#${utxo.outputIndex}`;
     const cached = encodedUTxOs.get(key);
     if (cached !== undefined && sameTxOutput(cached.utxo, utxo)) return cached;
-    const encoded = withCMLScope((own) => ({
+    return withCMLScope((own) => ({
       utxo: cloneUTxO(utxo),
       input: own(utxoToTransactionInput(utxo)).to_cbor_bytes(),
       output: own(utxoToTransactionOutput(utxo)).to_cbor_bytes(),
     }));
-    encodedUTxOs.set(key, encoded);
+  };
+
+  const encodeUTxOs = (utxos: ReadonlyArray<UTxO>): EncodedUTxO[] => {
+    const used = new Map<string, EncodedUTxO>();
+    const encoded = utxos.map((utxo) => {
+      const result = encodeUTxO(utxo);
+      used.set(`${utxo.txHash}#${utxo.outputIndex}`, result);
+      return result;
+    });
+    encodedUTxOs = used;
     return encoded;
   };
 
@@ -2354,7 +2374,7 @@ export const makeAikenEvaluator = (
     additionalUTxOs,
     context,
   ) => {
-    const encoded = additionalUTxOs.map(encodeUTxO);
+    const encoded = encodeUTxOs(additionalUTxOs);
     const request: AikenEvaluationRequest = {
       txBytes,
       inputBytes: encoded.map(({ input }) => input),
