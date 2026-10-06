@@ -52,6 +52,7 @@ const buildTx = (input: {
   amount: bigint;
   signWith?: string;
   redeemer?: boolean;
+  collateral?: OutRef;
 }): string => {
   const inputs = CML.TransactionInputList.new();
   inputs.add(txInput(input.spend.txHash, input.spend.outputIndex));
@@ -69,6 +70,13 @@ const buildTx = (input: {
       referenceInputs.add(txInput(ref.txHash, ref.outputIndex));
     }
     body.set_reference_inputs(referenceInputs);
+  }
+  if (input.collateral) {
+    const collateralInputs = CML.TransactionInputList.new();
+    collateralInputs.add(
+      txInput(input.collateral.txHash, input.collateral.outputIndex),
+    );
+    body.set_collateral_inputs(collateralInputs);
   }
   const witnesses = CML.TransactionWitnessSet.new();
   if (input.signWith) {
@@ -151,6 +159,9 @@ const spendScriptCoin = async (input: {
     payTo: account.address,
     amount: 9_800_000n,
     redeemer: true,
+    // The ledger requires collateral for a transaction that runs scripts.
+    collateral: accountOutRef,
+    signWith: account.privateKey,
   });
   return emulator.submitTx(tx);
 };

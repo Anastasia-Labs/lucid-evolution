@@ -34,6 +34,7 @@ import {
   coreToUtxo,
   getAddressDetails,
   ScriptCache,
+  valueToAssets,
 } from "@lucid-evolution/utils";
 import { CMLOwn, fromHex, withCMLScope } from "@lucid-evolution/core-utils";
 import { walletFromSeed } from "@lucid-evolution/wallet";
@@ -396,7 +397,6 @@ export class Emulator implements Provider {
           - Input value == Output value (including mint value)
           - Min ada requirement
           - Stake key registration deposit amount
-          - Collateral
 
         Checks that need to be done:
           - Verify witnesses
@@ -404,6 +404,7 @@ export class Emulator implements Provider {
           - Stake key registration
           - Withdrawals
           - Validity interval
+          - Collateral
      */
     return withCMLScope((own) => Promise.resolve(this.applyTx(tx, own)));
   }
@@ -751,6 +752,7 @@ export class Emulator implements Provider {
     // Check collateral inputs
 
     const collateralInputs = own(body.collateral_inputs());
+    const collateralBalance: Assets = {};
     for (let i = 0; i < (collateralInputs?.len() || 0); i++) {
       const outRef = withCMLScope((own) => {
         const input = own(collateralInputs!.get(i));
@@ -773,6 +775,15 @@ export class Emulator implements Provider {
         throw new Error("Collateral inputs can only contain vkeys.");
       }
       checkAndConsumeHash(paymentCredential!, null, null);
+      for (const [unit, amount] of Object.entries(entry.utxo.assets)) {
+        collateralBalance[unit] = (collateralBalance[unit] ?? 0n) + amount;
+      }
+    }
+
+    // A transaction that runs scripts must carry enough collateral, as the
+    // ledger's feesOK rule requires.
+    if (redeemers.size > 0) {
+      this.checkCollateral(body, collateralBalance, own);
     }
 
     // Check required signers
@@ -1264,6 +1275,65 @@ export class Emulator implements Provider {
     this.#pendingTxHashes.push(txHash);
 
     return txHash;
+  }
+
+  /**
+   * The ledger's collateral rules for a transaction with redeemers: at least
+   * one and at most `maxCollateralInputs` collateral inputs, a balance (inputs
+   * minus the collateral return) of ADA only that covers
+   * `collateralPercentage` of the fee, and a `total_collateral` field, when
+   * present, equal to that balance.
+   */
+  private checkCollateral(
+    body: CML.TransactionBody,
+    collateralBalance: Assets,
+    own: CMLOwn,
+  ): void {
+    const inputCount = own(body.collateral_inputs())?.len() ?? 0;
+    if (inputCount === 0) {
+      throw new Error(
+        "NoCollateralInputs: a transaction that runs scripts needs collateral inputs.",
+      );
+    }
+    const { maxCollateralInputs, collateralPercentage } =
+      this.protocolParameters;
+    if (inputCount > maxCollateralInputs) {
+      throw new Error(
+        `TooManyCollateralInputs: ${inputCount} collateral inputs, but at most ${maxCollateralInputs} are allowed.`,
+      );
+    }
+    const balance: Assets = { ...collateralBalance };
+    const collateralReturn = own(body.collateral_return());
+    if (collateralReturn) {
+      const returned = valueToAssets(own(collateralReturn.amount()));
+      for (const [unit, amount] of Object.entries(returned)) {
+        balance[unit] = (balance[unit] ?? 0n) - amount;
+      }
+    }
+    const nonAda = Object.entries(balance).filter(
+      ([unit, amount]) => unit !== "lovelace" && amount !== 0n,
+    );
+    if (nonAda.length > 0) {
+      throw new Error(
+        `CollateralContainsNonADA: collateral balance holds ${nonAda
+          .map(([unit, amount]) => `${amount} ${unit}`)
+          .join(", ")}.`,
+      );
+    }
+    const collateral = balance.lovelace ?? 0n;
+    const fee = body.fee();
+    if (collateral * 100n < fee * BigInt(collateralPercentage)) {
+      const required = (fee * BigInt(collateralPercentage) + 99n) / 100n;
+      throw new Error(
+        `InsufficientCollateral: collateral balance is ${collateral} Lovelace, but the fee of ${fee} requires ${required} Lovelace (${collateralPercentage}%).`,
+      );
+    }
+    const totalCollateral = body.total_collateral();
+    if (totalCollateral !== undefined && totalCollateral !== collateral) {
+      throw new Error(
+        `IncorrectTotalCollateralField: total collateral is ${totalCollateral} Lovelace, but the collateral balance is ${collateral} Lovelace.`,
+      );
+    }
   }
 
   /** Hash of a reference script, computed once per distinct script. */
