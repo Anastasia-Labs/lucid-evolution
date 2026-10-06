@@ -20,6 +20,7 @@ import {
   fromCMLRedeemerTag,
 } from "@lucid-evolution/utils";
 import { CML } from "../../core.js";
+import { canonicalTransaction } from "../../CanonicalTransaction.js";
 import { withCMLScope } from "@lucid-evolution/core-utils";
 import { TxBuilderError } from "../../Errors.js";
 import type { TxBuilderConfig } from "../TxBuilder.js";
@@ -467,9 +468,7 @@ const remapGovernanceRedeemerIndices = (
   withCMLScope((own) => {
     // The returned transaction is always a fresh copy; the caller owns it.
     const transaction = CML.Transaction.from_cbor_bytes(tx.to_cbor_bytes());
-    const ledgerIndexTransaction = own(
-      CML.Transaction.from_cbor_bytes(tx.to_canonical_cbor_bytes()),
-    );
+    const ledgerIndexTransaction = own(canonicalTransaction(tx));
     const witnessSet = own(transaction.witness_set());
     const redeemers = own(witnessSet.redeemers());
     const builderKeyByLedgerKey = new Map<string, BuilderRedeemerKey>();
@@ -721,9 +720,7 @@ export const buildCanonicalRedeemerInfo = (
   resolvedInputs: ReadonlyArray<UTxO>,
 ): Effect.Effect<CanonicalRedeemerInfo, TxBuilderError> =>
   Effect.gen(function* () {
-    const canonicalTx = CML.Transaction.from_cbor_bytes(
-      tx.to_canonical_cbor_bytes(),
-    );
+    const canonicalTx = canonicalTransaction(tx);
     const txBody = canonicalTx.body();
     const inputs = yield* resolveCanonicalInputs(canonicalTx, resolvedInputs);
     const referenceInputs = yield* resolveCanonicalReferenceInputs(
@@ -954,7 +951,7 @@ export const redeemerMapsEqual = (
 
 export const transactionFixedPointFingerprint = (tx: CML.Transaction): string =>
   withCMLScope((own) => {
-    const body = own(tx.body()).to_canonical_cbor_hex();
+    const body = own(own(canonicalTransaction(tx)).body()).to_cbor_hex();
     const redeemers = own(own(tx.witness_set()).redeemers());
     const redeemerData: string[] = [];
     const redeemerExUnits: string[] = [];
@@ -964,7 +961,7 @@ export const transactionFixedPointFingerprint = (tx: CML.Transaction): string =>
         for (const redeemer of entries) {
           const index = redeemer.index.toString();
           redeemerData.push(
-            `${redeemer.tag}:${index}:${redeemer.data.to_canonical_cbor_hex()}`,
+            `${redeemer.tag}:${index}:${redeemer.data.to_cbor_hex()}`,
           );
           redeemerExUnits.push(
             `${redeemer.tag}:${index}:${redeemer.exUnits.mem()}:${redeemer.exUnits.steps()}`,

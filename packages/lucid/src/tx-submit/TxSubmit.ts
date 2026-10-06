@@ -4,6 +4,7 @@ import { CML, makeReturn } from "../core.js";
 import { Wallet } from "@lucid-evolution/core-types";
 import { Either } from "effect/Either";
 import { TxSubmitError } from "../Errors.js";
+import { canonicalTransactionHex } from "../CanonicalTransaction.js";
 import { CBORHex, Hash } from "../tx-builder/types.js";
 
 export interface TxSigned {
@@ -94,7 +95,7 @@ export const makeSubmit = (
       try: () =>
         wallet.submitTx(
           options.canonical
-            ? txSigned.to_canonical_cbor_hex()
+            ? canonicalTransactionHex(txSigned)
             : txSigned.to_cbor_hex(),
         ),
       catch: (cause) => new TxSubmitError({ cause }),
@@ -107,7 +108,7 @@ export const makeSubmit = (
       makeReturn(submit(options)).safeRun(),
     toCBOR: (options = { canonical: false }) =>
       options.canonical
-        ? txSigned.to_canonical_cbor_hex()
+        ? canonicalTransactionHex(txSigned)
         : txSigned.to_cbor_hex(),
     toTransaction: () => txSigned,
     toJSON: () =>

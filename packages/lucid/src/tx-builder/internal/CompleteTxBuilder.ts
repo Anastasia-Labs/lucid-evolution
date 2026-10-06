@@ -28,6 +28,7 @@ import {
   TxBuilderError,
 } from "../../Errors.js";
 import { CML } from "../../core.js";
+import { canonicalTransaction } from "../../CanonicalTransaction.js";
 import { freeCML, withCMLScope } from "@lucid-evolution/core-utils";
 import * as UPLC from "@lucid-evolution/uplc";
 import * as TxBuilder from "../TxBuilder.js";
@@ -421,9 +422,7 @@ const completeCurrentConfig = (
     });
     const shouldCanonicalize = canonical || internalOptions.forceCanonical;
     const transactionBeforeScriptDataHash = shouldCanonicalize
-      ? CML.Transaction.from_cbor_bytes(
-          builtTransaction.to_canonical_cbor_bytes(),
-        )
+      ? canonicalTransaction(builtTransaction)
       : builtTransaction;
     const normalizedTransaction = yield* Effect.try({
       try: () =>
@@ -2062,9 +2061,7 @@ const prepareRedeemerContextCandidate = (
   config: TxBuilder.TxBuilderConfig,
 ): Effect.Effect<CML.Transaction, TxBuilderError> =>
   Effect.gen(function* () {
-    const canonical = CML.Transaction.from_cbor_bytes(
-      candidate.to_canonical_cbor_bytes(),
-    );
+    const canonical = canonicalTransaction(candidate);
     const normalized = yield* Effect.try({
       try: () =>
         normalizeGovernanceRedeemerIndices(
@@ -2230,11 +2227,17 @@ const evaluateUntilStable = (
       if (bootstrapExUnits) {
         // Unresolved delayed redeemers prevent phase-two evaluation of the
         // draft, but fee and collateral selection still need script costs.
+        // With setMinFee the inputs fund an explicit fee, which the maximum
+        // transaction budget could exceed before any redeemer exists. That
+        // draft only needs to produce the redeemer context, so it uses zero
+        // ex-units. The resolved redeemers are still evaluated and their fee
+        // checked as usual.
+        const explicitFee = config.minFee !== undefined;
         applyBootstrapRedeemerExUnits(
           redeemers,
           config.txBuilder,
-          config.lucidConfig.protocolParameters.maxTxExMem,
-          config.lucidConfig.protocolParameters.maxTxExSteps,
+          explicitFee ? 0n : config.lucidConfig.protocolParameters.maxTxExMem,
+          explicitFee ? 0n : config.lucidConfig.protocolParameters.maxTxExSteps,
         );
         freeCML(redeemers, candidate);
         return true;
