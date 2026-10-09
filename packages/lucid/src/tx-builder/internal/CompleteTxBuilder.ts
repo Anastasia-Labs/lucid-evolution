@@ -1772,10 +1772,11 @@ const topUpCollateral = (
       leftoverLovelace < 0n ? { lovelace: -leftoverLovelace } : {};
     const externalAssets: Assets =
       leftoverLovelace < 0n ? { ...leftover, lovelace: 0n } : leftover;
-    const error = completeTxError(
-      `Your wallet does not have enough funds to cover the required ${required} Lovelace collateral. Or it contains UTxOs with reference scripts; which
+    const error = () =>
+      completeTxError(
+        `Your wallet does not have enough funds to cover the required ${required} Lovelace collateral. Or it contains UTxOs with reference scripts; which
       are excluded from collateral selection.`,
-    );
+      );
     // CML cannot remove collateral inputs, so a failure here asks for one
     // replay that selects the whole collateral up front.
     const replay = (cause: TxBuilderError) =>
@@ -1911,10 +1912,11 @@ const findCollateral = (
     // For example:
     // A UTXO with 5.5 ADA will result in an error message such as `BabbageOutputTooSmallUTxO`, since only 0.5 ADA would be returned to the collateral return address.
     const collateralLovelace: Assets = { lovelace: setCollateral };
-    const error = completeTxError(
-      `Your wallet does not have enough funds to cover the required ${setCollateral} Lovelace collateral. Or it contains UTxOs with reference scripts; which
+    const error = () =>
+      completeTxError(
+        `Your wallet does not have enough funds to cover the required ${setCollateral} Lovelace collateral. Or it contains UTxOs with reference scripts; which
       are excluded from collateral selection.`,
-    );
+      );
     const { selected } = yield* recursive(
       sortUTxOs(inputs),
       collateralLovelace,
@@ -2759,7 +2761,8 @@ const calculateExtraLovelace = (
  * @param requiredAssets
  * @param coinsPerUtxoByte
  * @param externalAssets
- * @param error
+ * @param error the error when the inputs cannot cover `requiredAssets`,
+ * built only on failure
  * @returns
  */
 export const recursive = (
@@ -2768,17 +2771,19 @@ export const recursive = (
   coinsPerUtxoByte: bigint,
   externalAssets: Assets = {},
   includeLeftoverLovelaceAsFee?: boolean,
-  error?: TxBuilderError,
+  error?: () => TxBuilderError,
 ): Effect.Effect<CoinSelectionResult, TxBuilderError> =>
   Effect.gen(function* () {
     let selected: UTxO[] = [];
-    error ??= completeTxError(
-      `Your wallet does not have enough funds to cover the required assets: ${stringify(requiredAssets)}
-      Or it contains UTxOs with reference scripts; which are excluded from coin selection.`,
-    );
     if (!Record.isEmptyRecord(requiredAssets)) {
       selected = selectUTxOs(inputs, requiredAssets, true);
-      if (_Array.isEmptyArray(selected)) yield* error;
+      if (_Array.isEmptyArray(selected)) {
+        yield* error?.() ??
+          completeTxError(
+            `Your wallet does not have enough funds to cover the required assets: ${stringify(requiredAssets)}
+      Or it contains UTxOs with reference scripts; which are excluded from coin selection.`,
+          );
+      }
     }
 
     const selectedAssets: Assets = sumAssetsFromInputs(selected);
