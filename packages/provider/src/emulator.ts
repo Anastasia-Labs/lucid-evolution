@@ -38,6 +38,7 @@ import {
 } from "@lucid-evolution/utils";
 import { CMLOwn, fromHex, withCMLScope } from "@lucid-evolution/core-utils";
 import { walletFromSeed } from "@lucid-evolution/wallet";
+import { verifyEd25519 } from "./internal/ed25519.js";
 import {
   EmulatorLedger,
   FlatOutRef,
@@ -486,7 +487,11 @@ export class Emulator implements Provider {
           const keyHash = own(publicKey.hash()).to_hex();
 
           if (
-            !publicKey.verify(fromHex(txHash), own(witness.ed25519_signature()))
+            !verifyEd25519(
+              publicKey,
+              fromHex(txHash),
+              own(witness.ed25519_signature()),
+            )
           ) {
             throw new Error(`Invalid vkey witness. Key hash: ${keyHash}`);
           }
