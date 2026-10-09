@@ -38,7 +38,7 @@
     "access": "public"
   },
   "scripts": {
-    "build-local": "rm -rf dist && cd rust/cml/wasm && WASM_BINDGEN_WEAKREF=1 wasm-pack build --target bundler --out-dir ../../../src/browser && WASM_BINDGEN_WEAKREF=1 wasm-pack build --target nodejs --out-dir ../../../src/node && cd ../../.. && pnpm clean-garbage",
+    "build-local": "rm -rf dist && cd rust/cml/wasm && WASM_BINDGEN_WEAKREF=1 wasm-pack build --target bundler --out-dir ../../../src/browser && WASM_BINDGEN_WEAKREF=1 CARGO_PROFILE_RELEASE_OPT_LEVEL=3 wasm-pack build --target nodejs --out-dir ../../../src/node && cd ../../.. && pnpm clean-garbage",
     "build": "cp -r src dist",
     "clean-garbage": "for d in browser node; do rm -f src/$d/.gitignore src/$d/package.json; done",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"

@@ -23,6 +23,8 @@ pnpm build
 
 `build-local` runs wasm-pack with `WASM_BINDGEN_WEAKREF=1`, so CML objects are freed by a `FinalizationRegistry` as well as by `.free()`, matching the published `@anastasia-labs` packages.
 
+The browser build keeps the workspace's `opt-level = "z"`, as upstream does, so bundles stay small (2.9 MB, 0.9 MB gzipped). The Node build is compiled with `opt-level = 3` instead: it is 4.7 MB, and it decodes and encodes Plutus data 2–4× faster.
+
 ## License
 
 MIT. See `LICENSE`, `LICENSE-EMURGO` and `LICENSE-IOHK`.
