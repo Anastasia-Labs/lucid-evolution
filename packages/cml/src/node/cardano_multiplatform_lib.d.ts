@@ -7558,6 +7558,12 @@ export class TransactionBuilder {
     set_network_id(network_id: NetworkId): void;
     set_ttl(ttl: bigint): void;
     set_validity_start_interval(validity_start_interval: bigint): void;
+    /**
+     * The CBOR of the output of a UTxO this builder spends, references or
+     * holds as collateral, or `undefined` for any other input. Cheaper than
+     * converting the UTxO again, which parses its datum again.
+     */
+    utxo_output_cbor(input: TransactionInput): Uint8Array | undefined;
 }
 
 export class TransactionBuilderConfig {

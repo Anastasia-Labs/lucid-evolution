@@ -1556,6 +1556,21 @@ impl TransactionBuilder {
             min_fee_with_exunits(self, u64::MAX)
         }
     }
+
+    /// The output of a UTxO this builder spends, references or holds as
+    /// collateral, or `None` for any other input.
+    pub fn utxo_output(&self, input: &TransactionInput) -> Option<&TransactionOutput> {
+        self.inputs
+            .iter()
+            .chain(
+                self.reference_inputs
+                    .iter()
+                    .flat_map(|inputs| inputs.iter()),
+            )
+            .chain(self.collateral.iter().flat_map(|inputs| inputs.iter()))
+            .find(|utxo| utxo.input == *input)
+            .map(|utxo| &utxo.output)
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -6003,5 +6018,26 @@ mod tests {
         assert_eq!(final_tx.body.reference_inputs.unwrap().len(), 1);
         assert!(final_tx.witness_set.plutus_v2_scripts.is_none());
         assert!(final_tx.witness_set.plutus_v1_scripts.is_none());
+    }
+
+    #[test]
+    fn utxo_output_finds_spent_referenced_and_collateral_utxos() {
+        let mut tx_builder = create_default_tx_builder();
+        let spent = make_input(1, Value::from(1_000_000));
+        let referenced = make_input(2, Value::from(2_000_000));
+        let collateral = make_input(3, Value::from(3_000_000));
+        let available = make_input(4, Value::from(4_000_000));
+        tx_builder.add_input(spent.clone()).unwrap();
+        tx_builder.add_reference_input(TransactionUnspentOutput::new(
+            referenced.input.clone(),
+            referenced.utxo_info.clone(),
+        ));
+        tx_builder.add_collateral(collateral.clone()).unwrap();
+        tx_builder.add_utxo(available.clone());
+
+        for utxo in [&spent, &referenced, &collateral] {
+            assert_eq!(tx_builder.utxo_output(&utxo.input), Some(&utxo.utxo_info));
+        }
+        assert_eq!(tx_builder.utxo_output(&available.input), None);
     }
 }

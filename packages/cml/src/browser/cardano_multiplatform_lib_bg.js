@@ -28014,6 +28014,23 @@ export class TransactionBuilder {
     set_validity_start_interval(validity_start_interval) {
         wasm.transactionbuilder_set_validity_start_interval(this.__wbg_ptr, validity_start_interval);
     }
+    /**
+     * The CBOR of the output of a UTxO this builder spends, references or
+     * holds as collateral, or `undefined` for any other input. Cheaper than
+     * converting the UTxO again, which parses its datum again.
+     * @param {TransactionInput} input
+     * @returns {Uint8Array | undefined}
+     */
+    utxo_output_cbor(input) {
+        _assertClass(input, TransactionInput);
+        const ret = wasm.transactionbuilder_utxo_output_cbor(this.__wbg_ptr, input.__wbg_ptr);
+        let v1;
+        if (ret[0] !== 0) {
+            v1 = getArrayU8FromWasm0(ret[0], ret[1]).slice();
+            wasm.__wbindgen_free(ret[0], ret[1] * 1, 1);
+        }
+        return v1;
+    }
 }
 if (Symbol.dispose) TransactionBuilder.prototype[Symbol.dispose] = TransactionBuilder.prototype.free;
 

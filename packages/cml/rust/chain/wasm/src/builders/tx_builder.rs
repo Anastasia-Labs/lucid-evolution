@@ -1,4 +1,5 @@
 use cml_chain::builders::tx_builder::{ChangeSelectionAlgo, CoinSelectionStrategyCIP2};
+use cml_core::serialization::Serialize;
 use cml_core_wasm::{impl_wasm_cbor_event_serialize_api, impl_wasm_conversions};
 use cml_crypto_wasm::Ed25519KeyHash;
 use wasm_bindgen::prelude::{wasm_bindgen, JsError};
@@ -377,6 +378,15 @@ impl TransactionBuilder {
     /// this is done to simplify the library code, but can be fixed later
     pub fn min_fee(&self, script_calulation: bool) -> Result<Coin, JsError> {
         self.0.min_fee(script_calulation).map_err(Into::into)
+    }
+
+    /// The CBOR of the output of a UTxO this builder spends, references or
+    /// holds as collateral, or `undefined` for any other input. Cheaper than
+    /// converting the UTxO again, which parses its datum again.
+    pub fn utxo_output_cbor(&self, input: &TransactionInput) -> Option<Vec<u8>> {
+        self.0
+            .utxo_output(input.as_ref())
+            .map(|output| output.to_cbor_bytes())
     }
 
     /// Warning: this function will mutate the /fee/ field
