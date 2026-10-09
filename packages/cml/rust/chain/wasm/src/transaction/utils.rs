@@ -6,9 +6,9 @@ use crate::{
 };
 use cml_core::Slot;
 use cml_crypto_wasm::{DatumHash, ScriptHash};
-use wasm_bindgen::prelude::wasm_bindgen;
+use wasm_bindgen::prelude::{wasm_bindgen, JsError};
 
-use super::TransactionWitnessSet;
+use super::{Transaction, TransactionWitnessSet};
 
 #[wasm_bindgen]
 impl TransactionOutput {
@@ -92,5 +92,23 @@ impl TransactionWitnessSet {
 
     pub fn languages(&self) -> LanguageList {
         self.0.languages().into()
+    }
+}
+
+#[wasm_bindgen]
+impl Transaction {
+    /// A copy of this transaction whose ledger containers use canonical CBOR
+    /// while its Plutus data keeps the original encoding. Inline and witness
+    /// datums are kept as they are, and a redeemer keeps its canonical
+    /// encoding only when its Plutus value is unchanged.
+    pub fn to_canonical_keeping_plutus_data(&self) -> Result<Transaction, JsError> {
+        self.0
+            .to_canonical_keeping_plutus_data()
+            .map(Into::into)
+            .map_err(|e| {
+                JsError::new(&format!(
+                    "Transaction::to_canonical_keeping_plutus_data: {e}"
+                ))
+            })
     }
 }

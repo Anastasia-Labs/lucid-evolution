@@ -7332,6 +7332,13 @@ export class Transaction {
      */
     to_canonical_cbor_hex(): string;
     /**
+     * A copy of this transaction whose ledger containers use canonical CBOR
+     * while its Plutus data keeps the original encoding. Inline and witness
+     * datums are kept as they are, and a redeemer keeps its canonical
+     * encoding only when its Plutus value is unchanged.
+     */
+    to_canonical_keeping_plutus_data(): Transaction;
+    /**
      *
      *             * Serialize this type to CBOR bytes
      *             * This type type supports encoding preservation so this will preserve round-trip CBOR formats.
