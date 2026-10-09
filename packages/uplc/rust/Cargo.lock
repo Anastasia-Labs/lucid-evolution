@@ -891,8 +891,7 @@ checksum = "b4ac048d71ede7ee76d585517add45da530660ef4390e49b098733c6e897f254"
 [[package]]
 name = "uplc"
 version = "1.1.24"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3c44c0e0c131c76e52bd11b2b3c411589210b7c73ada19cb02ff33aa2969654a"
+source = "git+https://github.com/colll78/aiken.git?rev=6868a8d9d240060a83600de66ab236175ecb6139#6868a8d9d240060a83600de66ab236175ecb6139"
 dependencies = [
  "bitvec",
  "blst",
@@ -927,11 +926,6 @@ version = "0.1.0"
 dependencies = [
  "getrandom",
  "js-sys",
- "pallas-addresses",
- "pallas-codec",
- "pallas-crypto",
- "pallas-primitives",
- "pallas-traverse",
  "uplc",
  "wasm-bindgen",
 ]
