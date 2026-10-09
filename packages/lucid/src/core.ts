@@ -1,6 +1,6 @@
 import { Effect } from "effect";
 
-export * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+export * as CML from "@lucid-evolution/cml";
 
 export const makeReturn = <A, E>(program: Effect.Effect<A, E>) => {
   return {

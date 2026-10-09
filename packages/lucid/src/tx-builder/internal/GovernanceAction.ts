@@ -8,7 +8,7 @@ import {
   GovernanceVote,
   Redeemer,
 } from "@lucid-evolution/core-types";
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import * as CML from "@lucid-evolution/cml";
 import { Effect, pipe } from "effect";
 import {
   ERROR_MESSAGE,

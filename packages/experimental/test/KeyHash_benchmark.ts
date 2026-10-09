@@ -1,5 +1,5 @@
 import { Bench } from "tinybench";
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import * as CML from "@lucid-evolution/cml";
 import * as KeyHash from "../src/KeyHash.js";
 import { Effect, pipe, Schema } from "effect";
 

@@ -1,6 +1,6 @@
 import { pipe, Record, Schema, SchemaAST } from "effect";
 import * as Bytes from "./Bytes.js";
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import * as CML from "@lucid-evolution/cml";
 import { ParseIssue } from "effect/ParseResult";
 
 /**

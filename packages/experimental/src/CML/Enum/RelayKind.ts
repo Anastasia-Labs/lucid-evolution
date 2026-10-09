@@ -1,7 +1,7 @@
 /**
  * @since 2.0.0
  */
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import * as CML from "@lucid-evolution/cml";
 
 /**
  * Type alias for the CML RelayKind enum

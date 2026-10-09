@@ -6,7 +6,7 @@ import {
   KeyHash,
 } from "../src/index.js";
 //TODO: remove this import when CML is no longer needed
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import * as CML from "@lucid-evolution/cml";
 
 const generateAccountForDevnet = () => {
   //TODO: create a PrivateKey module avoid using CML

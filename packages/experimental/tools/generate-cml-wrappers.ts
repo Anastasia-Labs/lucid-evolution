@@ -1025,9 +1025,9 @@ const generate = (config: Config): void => {
 // Run the generator with version specified
 generate({
   sourceFile:
-    "./node_modules/@anastasia-labs/cardano-multiplatform-lib-nodejs/cardano_multiplatform_lib.d.ts",
+    "./node_modules/@lucid-evolution/cml/dist/node/cardano_multiplatform_lib.d.ts",
   outputDir: "./src/CML",
-  libraryImport: "@anastasia-labs/cardano-multiplatform-lib-nodejs",
+  libraryImport: "@lucid-evolution/cml",
   errorUtilPath: "../FormatError.js",
   packageName: "lucid-evolution/experimental",
   version: "2.0.0",
