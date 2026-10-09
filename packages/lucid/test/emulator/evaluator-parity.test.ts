@@ -170,6 +170,8 @@ const cases: ParityCase[] = [
         rewardAmount: 0n,
       });
     }),
+    // The ledger takes only the whole reward balance, as in emulator.test.ts.
+    expectedOutcome: "Failure",
   },
   {
     name: "send all funds to Hello contract",
@@ -196,14 +198,15 @@ const cases: ParityCase[] = [
 ];
 
 describe("emulator evaluator parity", () => {
-  test.each(cases)(
-    "$name has the same outcome with Aiken and Scalus evaluators",
-    async ({
-      program,
-      expectedOutcome,
-      requiresScalusEvaluation,
-      withHelloContract,
-    }) => {
+  // Plain names, which `$name` would quote and cut at 40 characters.
+  for (const {
+    name,
+    program,
+    expectedOutcome = "Success",
+    requiresScalusEvaluation,
+    withHelloContract,
+  } of cases)
+    test(`${name} has the same outcome with Aiken and Scalus evaluators`, async () => {
       const scalusEvaluations: EvaluationInput[] = [];
       const aiken = await runCase(program, AikenEnvironment, withHelloContract);
       const scalus = await runCase(
@@ -212,13 +215,11 @@ describe("emulator evaluator parity", () => {
         withHelloContract,
       );
 
-      expect(scalus._tag).toBe(aiken._tag);
-      if (expectedOutcome) {
-        expect(aiken._tag).toBe(expectedOutcome);
-      }
+      // Both sides, so that two failures never pass as parity.
+      expect(aiken._tag).toBe(expectedOutcome);
+      expect(scalus._tag).toBe(expectedOutcome);
       if (requiresScalusEvaluation) {
         expect(scalusEvaluations.length).toBeGreaterThan(0);
       }
-    },
-  );
+    });
 });
