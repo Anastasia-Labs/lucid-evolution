@@ -1,8 +1,22 @@
-mod eval;
+use std::cell::RefCell;
 
 use js_sys;
-use uplc::tx;
+use uplc::tx::{self, ScriptCache};
 use wasm_bindgen::prelude::*;
+
+/// Upper bound on the scripts kept decoded across calls.
+const SCRIPT_CACHE_MAX_SCRIPTS: usize = 64;
+/// Upper bound on the serialised size of the scripts kept decoded across calls.
+/// A decoded script holds up to about 210 heap bytes per script byte (long
+/// lambda chains), so this keeps the cache under about 64 MB.
+const SCRIPT_CACHE_MAX_SCRIPT_BYTES: usize = 256 * 1024;
+
+thread_local! {
+    static SCRIPT_CACHE: RefCell<ScriptCache> = RefCell::new(ScriptCache::with_limits(
+        SCRIPT_CACHE_MAX_SCRIPTS,
+        SCRIPT_CACHE_MAX_SCRIPT_BYTES,
+    ));
+}
 
 #[wasm_bindgen]
 pub fn eval_phase_two_raw(
@@ -27,16 +41,29 @@ pub fn eval_phase_two_raw(
         .zip(utxos_bytes_y.into_iter())
         .map(|(x, y)| (x.to_vec(), y.to_vec()))
         .collect::<Vec<(Vec<u8>, Vec<u8>)>>();
-    return eval::eval_phase_two_raw(
-        tx_bytes,
-        &utxos_bytes,
-        cost_mdls_bytes,
-        (initial_budget_n, initial_budget_d),
-        (slot_config_x, slot_config_y, slot_config_z),
-        protocol as u16,
-    )
-    .map(|r| r.iter().map(|i| js_sys::Uint8Array::from(&i[..])).collect())
-    .map_err(|e| e.to_string().into());
+    let eval = |script_cache: &mut ScriptCache| {
+        tx::eval_phase_two_raw_with_script_cache(
+            tx_bytes,
+            &utxos_bytes,
+            Some(cost_mdls_bytes),
+            (initial_budget_n, initial_budget_d),
+            (slot_config_x, slot_config_y, slot_config_z),
+            protocol as u16,
+            false,
+            |_| (),
+            script_cache,
+        )
+    };
+    // A trap during an earlier call (wasm aborts without unwinding) leaves the
+    // cache borrowed for good; evaluate with a fresh cache instead of panicking
+    // on every later call.
+    return SCRIPT_CACHE
+        .try_with(|cache| cache.try_borrow_mut().ok().map(|mut cache| eval(&mut cache)))
+        .ok()
+        .flatten()
+        .unwrap_or_else(|| eval(&mut ScriptCache::default()))
+        .map(|r| r.iter().map(|i| js_sys::Uint8Array::from(&i.0[..])).collect())
+        .map_err(|e| e.to_string().into());
 }
 
 #[wasm_bindgen]

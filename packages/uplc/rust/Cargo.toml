@@ -8,13 +8,10 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-uplc = "=1.1.24"
-# Same pallas release as the one `uplc` builds against.
-pallas-addresses = "0.35.1"
-pallas-codec = "0.35.1"
-pallas-crypto = "0.35.1"
-pallas-primitives = "0.35.1"
-pallas-traverse = "0.35.1"
+# Unreleased aiken: main after v1.1.24 (per-transaction script context and
+# shared Data) plus aiken-lang/aiken#1456 (ScriptCache). Switch back to a
+# crates.io version once one is published.
+uplc = { git = "https://github.com/colll78/aiken.git", rev = "6868a8d9d240060a83600de66ab236175ecb6139" }
 wasm-bindgen = "0.2.93"
 js-sys = "0.3.70"
 
