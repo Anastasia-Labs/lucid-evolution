@@ -2388,11 +2388,24 @@ type EncodedUTxO = Readonly<{
   output: Uint8Array;
 }>;
 
+/**
+ * The CBOR of a UTxO's output when the caller already has it, so the
+ * evaluator need not convert the UTxO again.
+ */
+type KnownOutput = (
+  input: CML.TransactionInput,
+  utxo: UTxO,
+) => Uint8Array | undefined;
+
 type BytesEvaluator = (
   txBytes: Uint8Array,
   additionalUTxOs: UTxO[],
   context: EvaluationContext,
+  knownOutput?: KnownOutput,
 ) => Promise<EvalRedeemer[]>;
+
+/** The evaluators `makeAikenEvaluator` created, by adapter. */
+const aikenEvaluators = new WeakMap<EvaluatorAdapter, BytesEvaluator>();
 
 /**
  * The subset of `@lucid-evolution/uplc` used by the Aiken evaluator.
@@ -2426,21 +2439,29 @@ export const makeAikenEvaluator = (
   let encodedUTxOs = new Map<string, EncodedUTxO>();
 
   // The cached arrays are private to this evaluator and never modified.
-  const encodeUTxO = (utxo: UTxO): EncodedUTxO => {
+  const encodeUTxO = (utxo: UTxO, knownOutput?: KnownOutput): EncodedUTxO => {
     const key = `${utxo.txHash}#${utxo.outputIndex}`;
     const cached = encodedUTxOs.get(key);
     if (cached !== undefined && sameTxOutput(cached.utxo, utxo)) return cached;
-    return withCMLScope((own) => ({
-      utxo: cloneUTxO(utxo),
-      input: own(utxoToTransactionInput(utxo)).to_cbor_bytes(),
-      output: own(utxoToTransactionOutput(utxo)).to_cbor_bytes(),
-    }));
+    return withCMLScope((own) => {
+      const input = own(utxoToTransactionInput(utxo));
+      return {
+        utxo: cloneUTxO(utxo),
+        input: input.to_cbor_bytes(),
+        output:
+          knownOutput?.(input, utxo) ??
+          own(utxoToTransactionOutput(utxo)).to_cbor_bytes(),
+      };
+    });
   };
 
-  const encodeUTxOs = (utxos: ReadonlyArray<UTxO>): EncodedUTxO[] => {
+  const encodeUTxOs = (
+    utxos: ReadonlyArray<UTxO>,
+    knownOutput: KnownOutput | undefined,
+  ): EncodedUTxO[] => {
     const used = new Map<string, EncodedUTxO>();
     const encoded = utxos.map((utxo) => {
-      const result = encodeUTxO(utxo);
+      const result = encodeUTxO(utxo, knownOutput);
       used.set(`${utxo.txHash}#${utxo.outputIndex}`, result);
       return result;
     });
@@ -2459,8 +2480,9 @@ export const makeAikenEvaluator = (
     txBytes,
     additionalUTxOs,
     context,
+    knownOutput,
   ) => {
-    const encoded = encodeUTxOs(additionalUTxOs);
+    const encoded = encodeUTxOs(additionalUTxOs, knownOutput);
     const request: AikenEvaluationRequest = {
       txBytes,
       inputBytes: encoded.map(({ input }) => input),
@@ -2519,6 +2541,7 @@ export const makeAikenEvaluator = (
     value: ({ tx, additionalUTxOs, context }: EvaluationBytesInput) =>
       evaluate(tx, additionalUTxOs, context),
   });
+  aikenEvaluators.set(adapter, evaluate);
   return adapter;
 };
 
@@ -2605,7 +2628,16 @@ const evaluateTransaction = (
     ).pipe(Effect.tapError(() => Effect.sync(release)));
     const context = makeEvaluationContext(config);
     let run: () => Promise<EvalRedeemer[]>;
-    if (adapter.evaluateBytes) {
+    const aikenEvaluator = aikenEvaluators.get(adapter);
+    if (aikenEvaluator) {
+      const txBytes = txEvaluation.to_cbor_bytes();
+      // The builder holds every UTxO the draft spends or references. Outputs
+      // with a datum hash are left to the evaluator, which sees them without
+      // their datum (`normalizeEvalUTxO`).
+      const knownOutput: KnownOutput = (input, utxo) =>
+        utxo.datumHash ? undefined : config.txBuilder.utxo_output_cbor(input);
+      run = () => aikenEvaluator(txBytes, txUtxos, context, knownOutput);
+    } else if (adapter.evaluateBytes) {
       const txBytes = txEvaluation.to_cbor_bytes();
       run = () =>
         adapter.evaluateBytes!({
