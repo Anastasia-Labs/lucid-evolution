@@ -1,0 +1,18 @@
+# 16 MiB shadow stack for every wasm build in this workspace.
+#
+# The default wasm-ld shadow stack is 1 MiB (~688 bytes per recursion level
+# of the CBOR/PlutusData recursive-descent decoders), which traps with
+# "RuntimeError: memory access out of bounds" at Plutus Data depth 1,523
+# (PlutusData::from_cbor_bytes) / 1,503 (Transaction::from_cbor_bytes) —
+# well below what fits in a 16,384-byte Cardano transaction (depth ~4,043).
+#
+# Rust places the shadow stack first (before the data segments), so an
+# overflow still traps deterministically instead of corrupting static data;
+# raising the size only moves the data/heap base up by 15 MiB. Cost is
+# ~16.6 MiB of initial linear memory per instance.
+#
+# Note for JS consumers: past the shadow stack, deep recursion next hits the
+# host engine call-stack limit; Node needs --stack-size>=1400 to reach depth
+# 4,043 (V8 executes wasm frames on the machine stack).
+[target.wasm32-unknown-unknown]
+rustflags = ["-C", "link-arg=-zstack-size=16777216"]
