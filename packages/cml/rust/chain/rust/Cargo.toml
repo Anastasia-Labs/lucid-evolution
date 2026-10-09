@@ -1,0 +1,54 @@
+[package]
+name = "cml-chain"
+version = "6.2.0"
+edition = "2018"
+authors = ["dcSpark"]
+license = "MIT"
+description = "Multiplatform SDK for main Cardano blockchain functionality"
+documentation = "https://github.com/dcSpark/cardano-multiplatform-lib/docs"
+repository = "https://github.com/dcSpark/cardano-multiplatform-lib"
+readme = "../../README.md"
+keywords = ["cardano"]
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[features]
+used_from_wasm = ["wasm-bindgen"]
+
+[dependencies]
+cml-core = { "path" = "../../core/rust", version = "6.2.0" }
+cml-crypto = { "path" = "../../crypto/rust", version = "6.2.0" }
+cbor_event = "2.2.0"
+linked-hash-map = "0.5.3"
+derivative = "2.2.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0.57", features = ["arbitrary_precision"] }
+schemars = "0.8.8"
+
+bech32 = "0.7.2"
+hex = "0.4.0"
+itertools = "0.10.1"
+getrandom = { version = "0.2.3", features = ["js"] }
+rand = "0.8.5"
+fraction = "0.10.0"
+base64 = "0.21.5"
+num-bigint = "0.4.0"
+num-integer = "0.1.45"
+thiserror = "1.0.37"
+num = "0.4"
+unicode-segmentation = "1.10.1"
+chrono = "0.4.38"
+
+# non-wasm
+noop_proc_macro = { version = "0.3.0", optional = false }
+
+# wasm
+wasm-bindgen = { version = "0.2.87", optional = true }
+
+
+[dev-dependencies]
+quickcheck = "0.9.2"
+quickcheck_macros = "0.9.1"
+rand_chacha = "0.3.1"
+flaky_test = "0.1.0"
