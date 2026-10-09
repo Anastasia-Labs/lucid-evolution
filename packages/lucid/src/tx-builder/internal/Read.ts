@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import * as Effect from "effect/Effect";
 import { utxoToCore } from "@lucid-evolution/utils";
 import { withCMLScope } from "@lucid-evolution/core-utils";
 import { UTxO } from "@lucid-evolution/core-types";

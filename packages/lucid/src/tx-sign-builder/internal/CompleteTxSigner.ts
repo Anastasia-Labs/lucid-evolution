@@ -1,4 +1,5 @@
-import { Effect, pipe } from "effect";
+import * as Effect from "effect/Effect";
+import { pipe } from "effect/Function";
 import { CML } from "../../core.js";
 import {
   ERROR_MESSAGE,

@@ -1,4 +1,5 @@
-import { Effect, pipe } from "effect";
+import * as Effect from "effect/Effect";
+import { pipe } from "effect/Function";
 import { ERROR_MESSAGE, TxSignerError } from "../../Errors.js";
 import * as TxSignBuilder from "../TxSignBuilder.js";
 import {

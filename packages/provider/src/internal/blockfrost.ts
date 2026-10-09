@@ -1,4 +1,5 @@
-import { pipe, Record } from "effect";
+import * as Record from "effect/Record";
+import { pipe } from "effect/Function";
 import * as CoreType from "@lucid-evolution/core-types";
 import { applySingleCborEncoding } from "@lucid-evolution/utils";
 

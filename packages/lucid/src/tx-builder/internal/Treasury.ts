@@ -1,5 +1,5 @@
 import { Lovelace } from "@lucid-evolution/core-types";
-import { Effect } from "effect";
+import * as Effect from "effect/Effect";
 import { TxBuilderError } from "../../Errors.js";
 import { TxConfig } from "./Service.js";
 

@@ -8,7 +8,7 @@ import {
 } from "@lucid-evolution/core-utils";
 import { CML } from "./core.js";
 import { fromLabel, toLabel } from "./label.js";
-import { pipe } from "effect";
+import { pipe } from "effect/Function";
 
 export function valueToAssets(value: CML.Value): Assets {
   const assets: Assets = {};

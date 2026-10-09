@@ -1,14 +1,12 @@
-import {
-  Effect,
-  pipe,
-  Record,
-  Array as _Array,
-  BigInt as _BigInt,
-  Tuple,
-  Option,
-  Layer,
-  Either,
-} from "effect";
+import * as Effect from "effect/Effect";
+import * as Record from "effect/Record";
+import * as _Array from "effect/Array";
+import * as _BigInt from "effect/BigInt";
+import * as Tuple from "effect/Tuple";
+import * as Option from "effect/Option";
+import * as Layer from "effect/Layer";
+import * as Either from "effect/Either";
+import { pipe } from "effect/Function";
 import {
   Address,
   Assets,
