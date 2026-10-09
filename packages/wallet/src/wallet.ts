@@ -10,6 +10,7 @@ import {
 } from "@lucid-evolution/core-types";
 import { CML } from "./core.js";
 import { mnemonicToEntropy } from "bip39";
+import { bip32RootKeyFromEntropy } from "./root_key.js";
 
 export type FromSeed = {
   address: Address;
@@ -40,7 +41,7 @@ export function walletFromSeed(
   }
 
   const entropy = mnemonicToEntropy(seed);
-  const rootKey = CML.Bip32PrivateKey.from_bip39_entropy(
+  const rootKey = bip32RootKeyFromEntropy(
     fromHex(entropy),
     options?.password
       ? new TextEncoder().encode(options.password)
