@@ -45,4 +45,3 @@ export const mapScalusTag = (tag: string): RedeemerTag => {
   if (!mapped) throw new Error(`Unknown Scalus redeemer tag "${tag}"`);
   return mapped;
 };
-

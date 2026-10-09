@@ -452,6 +452,9 @@ importers:
 
   packages/scalus-uplc:
     dependencies:
+      '@lucid-evolution/cml':
+        specifier: workspace:*
+        version: link:../cml
       '@lucid-evolution/core-types':
         specifier: workspace:*
         version: link:../core-types
@@ -462,6 +465,12 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0
     devDependencies:
+      '@lucid-evolution/provider':
+        specifier: workspace:*
+        version: link:../provider
+      '@lucid-evolution/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@types/node':
         specifier: ^20.12.8
         version: 20.17.58
