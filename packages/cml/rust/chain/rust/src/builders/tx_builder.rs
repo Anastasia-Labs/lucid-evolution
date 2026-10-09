@@ -45,6 +45,7 @@ use std::collections::{BTreeSet, HashMap};
 use std::convert::TryInto;
 use std::io::{BufRead, Seek, Write};
 use std::ops::DerefMut;
+use std::sync::Arc;
 
 #[cfg(not(feature = "used_from_wasm"))]
 use noop_proc_macro::wasm_bindgen;
@@ -220,8 +221,8 @@ pub enum TxBuilderError {
     DuplicateMint(PolicyId, AssetName),
 }
 
-fn min_fee(tx_builder: &TransactionBuilder) -> Result<Coin, TxBuilderError> {
-    let full_tx = fake_full_tx(tx_builder, tx_builder.build_body()?)?;
+fn min_fee(tx_builder: &TransactionBuilder, fee: Coin) -> Result<Coin, TxBuilderError> {
+    let full_tx = fake_full_tx(tx_builder, tx_builder.build_body_with_fee(fee)?)?;
     // we can't know the of scripts yet as they can't be calculated until we build the tx
     crate::fees::min_no_script_fee(&full_tx, &tx_builder.config.fee_algo).map_err(Into::into)
 }
@@ -239,11 +240,12 @@ fn total_ref_script_size_for_fee(tx_builder: &TransactionBuilder) -> Result<u64,
     let mut ref_script_inputs = BTreeSet::new();
     let mut total_ref_script_size = 0u64;
 
-    for utxo in tx_builder
-        .inputs
-        .iter()
-        .chain(tx_builder.reference_inputs.iter().flatten())
-    {
+    for utxo in tx_builder.inputs.iter().chain(
+        tx_builder
+            .reference_inputs
+            .iter()
+            .flat_map(|inputs| inputs.iter()),
+    ) {
         if ref_script_inputs.insert(utxo.input.clone()) {
             if let Some(script_ref) = utxo.output.script_ref() {
                 total_ref_script_size = total_ref_script_size
@@ -256,8 +258,11 @@ fn total_ref_script_size_for_fee(tx_builder: &TransactionBuilder) -> Result<u64,
     Ok(total_ref_script_size)
 }
 
-fn min_fee_with_exunits(tx_builder: &TransactionBuilder) -> Result<Coin, TxBuilderError> {
-    let full_tx = fake_full_tx(tx_builder, tx_builder.build_body()?)?;
+fn min_fee_with_exunits(
+    tx_builder: &TransactionBuilder,
+    fee: Coin,
+) -> Result<Coin, TxBuilderError> {
+    let full_tx = fake_full_tx(tx_builder, tx_builder.build_body_with_fee(fee)?)?;
     // we can't know the of scripts yet as they can't be calculated until we build the tx
 
     let total_ref_script_size = total_ref_script_size_for_fee(tx_builder)?;
@@ -417,10 +422,13 @@ impl TransactionBuilderConfigBuilder {
     }
 }
 
+// The input, collateral, reference input, wallet UTxO and witness fields are
+// shared copy-on-write: fee estimation and change selection work on clones of
+// the builder, and those should not deep-copy every resolved UTxO and datum.
 #[derive(Clone, Debug)]
 pub struct TransactionBuilder {
     config: TransactionBuilderConfig,
-    inputs: Vec<TransactionUnspentOutput>,
+    inputs: Arc<Vec<TransactionUnspentOutput>>,
     outputs: Vec<TransactionOutput>,
     fee: Option<Coin>,
     ttl: Option<Slot>, // absolute slot number
@@ -431,13 +439,13 @@ pub struct TransactionBuilder {
     auxiliary_data: Option<AuxiliaryData>,
     validity_start_interval: Option<Slot>,
     mint: Option<Mint>,
-    collateral: Option<Vec<TransactionUnspentOutput>>,
+    collateral: Option<Arc<Vec<TransactionUnspentOutput>>>,
     required_signers: Option<BTreeSet<Ed25519KeyHash>>,
     network_id: Option<NetworkId>,
-    witness_builders: WitnessBuilders,
-    utxos: Vec<InputBuilderResult>,
+    witness_builders: Arc<WitnessBuilders>,
+    utxos: Arc<Vec<InputBuilderResult>>,
     collateral_return: Option<TransactionOutput>,
-    reference_inputs: Option<Vec<TransactionUnspentOutput>>,
+    reference_inputs: Option<Arc<Vec<TransactionUnspentOutput>>>,
     donation: Option<Coin>,
     current_treasury_value: Option<Coin>,
 }
@@ -748,27 +756,27 @@ impl TransactionBuilder {
             result.required_wits.remove_ref_scripts(reference_inputs);
         }
         if let Some(script_ref) = result.utxo_info.script_ref() {
-            self.witness_builders
+            Arc::make_mut(&mut self.witness_builders)
                 .witness_set_builder
                 .required_wits
                 .script_refs
                 .insert(script_ref.hash());
         }
-        self.witness_builders
+        Arc::make_mut(&mut self.witness_builders)
             .redeemer_set_builder
             .add_spend(&result);
-        self.witness_builders
+        Arc::make_mut(&mut self.witness_builders)
             .witness_set_builder
             .add_required_wits(result.required_wits);
-        self.inputs.push(TransactionUnspentOutput {
+        Arc::make_mut(&mut self.inputs).push(TransactionUnspentOutput {
             input: result.input,
             output: result.utxo_info,
         });
         if let Some(data) = result.aggregate_witness {
-            self.witness_builders
+            Arc::make_mut(&mut self.witness_builders)
                 .witness_set_builder
                 .add_input_aggregate_real_witness_data(&data);
-            self.witness_builders
+            Arc::make_mut(&mut self.witness_builders)
                 .fake_required_witnesses
                 .add_input_aggregate_fake_witness_data(&data);
             if let InputAggregateWitnessData::PlutusScript(script_witness, required_signers, _) =
@@ -819,22 +827,19 @@ impl TransactionBuilder {
     }
 
     pub fn add_utxo(&mut self, result: InputBuilderResult) {
-        self.utxos.push(result);
+        Arc::make_mut(&mut self.utxos).push(result);
     }
 
     /// calculates how much the fee would increase if you added a given output
     pub fn fee_for_input(&self, result: &InputBuilderResult) -> Result<Coin, TxBuilderError> {
-        let mut self_copy = self.clone();
-
         // we need some value for these for it to be a a valid transaction
         // but since we're only calculating the difference between the fee of two transactions
         // it doesn't matter what these are set as, since it cancels out
-        self_copy.set_fee(0);
+        let fee_before = min_fee(self, 0)?;
 
-        let fee_before = min_fee(&self_copy)?;
-
+        let mut self_copy = self.clone();
         self_copy.add_input(result.clone()).unwrap();
-        let fee_after = min_fee(&self_copy)?;
+        let fee_after = min_fee(&self_copy, 0)?;
         fee_after
             .checked_sub(fee_before)
             .ok_or_else(|| ArithmeticError::IntegerOverflow.into())
@@ -842,16 +847,11 @@ impl TransactionBuilder {
 
     /// Add a reference input. Must be called BEFORE adding anything (inputs, certs, etc) that refer to this reference input.
     pub fn add_reference_input(&mut self, utxo: TransactionUnspentOutput) {
-        let reference_inputs = match self.reference_inputs.as_mut() {
-            None => {
-                self.reference_inputs = Some(Vec::<TransactionUnspentOutput>::new());
-                self.reference_inputs.as_mut().unwrap()
-            }
-            Some(inputs) => inputs,
-        };
+        let reference_inputs =
+            Arc::make_mut(self.reference_inputs.get_or_insert_with(Arc::default));
 
         if let Some(script_ref) = utxo.output.script_ref() {
-            self.witness_builders
+            Arc::make_mut(&mut self.witness_builders)
                 .witness_set_builder
                 .required_wits
                 .script_refs
@@ -882,7 +882,7 @@ impl TransactionBuilder {
             ))
         } else {
             if let Some(datum) = builder_result.communication_datum {
-                self.witness_builders
+                Arc::make_mut(&mut self.witness_builders)
                     .witness_set_builder
                     .add_plutus_datum(datum);
             }
@@ -896,17 +896,14 @@ impl TransactionBuilder {
         &self,
         builder: &SingleOutputBuilderResult,
     ) -> Result<Coin, TxBuilderError> {
-        let mut self_copy = self.clone();
-
         // we need some value for these for it to be a a valid transaction
         // but since we're only calculating the different between the fee of two transactions
         // it doesn't matter what these are set as, since it cancels out
-        self_copy.set_fee(0);
+        let fee_before = min_fee(self, 0)?;
 
-        let fee_before = min_fee(&self_copy)?;
-
+        let mut self_copy = self.clone();
         self_copy.add_output(builder.clone())?;
-        let fee_after = min_fee(&self_copy)?;
+        let fee_after = min_fee(&self_copy, 0)?;
         fee_after
             .checked_sub(fee_before)
             .ok_or_else(|| ArithmeticError::IntegerOverflow.into())
@@ -936,16 +933,18 @@ impl TransactionBuilder {
         if let Some(reference_inputs) = &self.reference_inputs {
             result.required_wits.remove_ref_scripts(reference_inputs);
         }
-        self.witness_builders.redeemer_set_builder.add_cert(&result);
+        Arc::make_mut(&mut self.witness_builders)
+            .redeemer_set_builder
+            .add_cert(&result);
         if self.certs.is_none() {
             self.certs = Some(Vec::new());
         }
         self.certs.as_mut().unwrap().push(result.cert);
         if let Some(data) = result.aggregate_witness {
-            self.witness_builders
+            Arc::make_mut(&mut self.witness_builders)
                 .witness_set_builder
                 .add_input_aggregate_real_witness_data(&data);
-            self.witness_builders
+            Arc::make_mut(&mut self.witness_builders)
                 .fake_required_witnesses
                 .add_input_aggregate_fake_witness_data(&data);
             if let InputAggregateWitnessData::PlutusScript(_, required_signers, _) = data {
@@ -954,7 +953,7 @@ impl TransactionBuilder {
                     .for_each(|signer| self.add_required_signer(*signer));
             }
         }
-        self.witness_builders
+        Arc::make_mut(&mut self.witness_builders)
             .witness_set_builder
             .add_required_wits(result.required_wits);
     }
@@ -963,7 +962,7 @@ impl TransactionBuilder {
         if let Some(reference_inputs) = &self.reference_inputs {
             result.required_wits.remove_ref_scripts(reference_inputs);
         }
-        self.witness_builders
+        Arc::make_mut(&mut self.witness_builders)
             .redeemer_set_builder
             .add_proposal(&result);
         if self.proposals.is_none() {
@@ -974,10 +973,10 @@ impl TransactionBuilder {
             .unwrap()
             .append(&mut result.proposals);
         for data in result.aggregate_witnesses {
-            self.witness_builders
+            Arc::make_mut(&mut self.witness_builders)
                 .witness_set_builder
                 .add_input_aggregate_real_witness_data(&data);
-            self.witness_builders
+            Arc::make_mut(&mut self.witness_builders)
                 .fake_required_witnesses
                 .add_input_aggregate_fake_witness_data(&data);
             if let InputAggregateWitnessData::PlutusScript(_, required_signers, _) = data {
@@ -986,7 +985,7 @@ impl TransactionBuilder {
                     .for_each(|signer| self.add_required_signer(*signer));
             }
         }
-        self.witness_builders
+        Arc::make_mut(&mut self.witness_builders)
             .witness_set_builder
             .add_required_wits(result.required_wits);
     }
@@ -995,17 +994,19 @@ impl TransactionBuilder {
         if let Some(reference_inputs) = &self.reference_inputs {
             result.required_wits.remove_ref_scripts(reference_inputs);
         }
-        self.witness_builders.redeemer_set_builder.add_vote(&result);
+        Arc::make_mut(&mut self.witness_builders)
+            .redeemer_set_builder
+            .add_vote(&result);
         if let Some(votes) = self.votes.as_mut() {
             votes.extend(result.votes.take());
         } else {
             self.votes = Some(result.votes);
         }
         for data in result.aggregate_witnesses {
-            self.witness_builders
+            Arc::make_mut(&mut self.witness_builders)
                 .witness_set_builder
                 .add_input_aggregate_real_witness_data(&data);
-            self.witness_builders
+            Arc::make_mut(&mut self.witness_builders)
                 .fake_required_witnesses
                 .add_input_aggregate_fake_witness_data(&data);
             if let InputAggregateWitnessData::PlutusScript(_, required_signers, _) = data {
@@ -1014,7 +1015,7 @@ impl TransactionBuilder {
                     .for_each(|signer| self.add_required_signer(*signer));
             }
         }
-        self.witness_builders
+        Arc::make_mut(&mut self.witness_builders)
             .witness_set_builder
             .add_required_wits(result.required_wits);
     }
@@ -1027,7 +1028,7 @@ impl TransactionBuilder {
         if let Some(reference_inputs) = &self.reference_inputs {
             result.required_wits.remove_ref_scripts(reference_inputs);
         }
-        self.witness_builders
+        Arc::make_mut(&mut self.witness_builders)
             .redeemer_set_builder
             .add_reward(&result);
         if self.withdrawals.is_none() {
@@ -1038,10 +1039,10 @@ impl TransactionBuilder {
             .unwrap()
             .insert(result.address, result.amount);
         if let Some(data) = result.aggregate_witness {
-            self.witness_builders
+            Arc::make_mut(&mut self.witness_builders)
                 .witness_set_builder
                 .add_input_aggregate_real_witness_data(&data);
-            self.witness_builders
+            Arc::make_mut(&mut self.witness_builders)
                 .fake_required_witnesses
                 .add_input_aggregate_fake_witness_data(&data);
             if let InputAggregateWitnessData::PlutusScript(_, required_signers, _) = data {
@@ -1050,7 +1051,7 @@ impl TransactionBuilder {
                     .for_each(|signer| self.add_required_signer(*signer));
             }
         }
-        self.witness_builders
+        Arc::make_mut(&mut self.witness_builders)
             .witness_set_builder
             .add_required_wits(result.required_wits);
     }
@@ -1078,8 +1079,10 @@ impl TransactionBuilder {
         if let Some(reference_inputs) = &self.reference_inputs {
             result.required_wits.remove_ref_scripts(reference_inputs);
         }
-        self.witness_builders.redeemer_set_builder.add_mint(&result);
-        self.witness_builders
+        Arc::make_mut(&mut self.witness_builders)
+            .redeemer_set_builder
+            .add_mint(&result);
+        Arc::make_mut(&mut self.witness_builders)
             .witness_set_builder
             .add_required_wits(result.required_wits.clone());
         let mut mint = self.mint.take().unwrap_or_default();
@@ -1097,10 +1100,10 @@ impl TransactionBuilder {
         }
         self.mint = Some(mint);
         if let Some(data) = result.aggregate_witness {
-            self.witness_builders
+            Arc::make_mut(&mut self.witness_builders)
                 .witness_set_builder
                 .add_input_aggregate_real_witness_data(&data);
-            self.witness_builders
+            Arc::make_mut(&mut self.witness_builders)
                 .fake_required_witnesses
                 .add_input_aggregate_fake_witness_data(&data);
             if let InputAggregateWitnessData::PlutusScript(_, required_signers, _) = data {
@@ -1120,7 +1123,7 @@ impl TransactionBuilder {
     pub fn new(cfg: TransactionBuilderConfig) -> Self {
         Self {
             config: cfg,
-            inputs: Vec::new(),
+            inputs: Arc::default(),
             outputs: Vec::new(),
             fee: None,
             ttl: None,
@@ -1134,8 +1137,8 @@ impl TransactionBuilder {
             collateral: None,
             required_signers: None,
             network_id: None,
-            witness_builders: WitnessBuilders::default(),
-            utxos: Vec::new(),
+            witness_builders: Arc::default(),
+            utxos: Arc::default(),
             collateral_return: None,
             reference_inputs: None,
             donation: None,
@@ -1155,24 +1158,24 @@ impl TransactionBuilder {
             output: result.utxo_info,
         };
         match &mut self.collateral {
-            None => self.collateral = Some(vec![new_input]),
+            None => self.collateral = Some(Arc::new(vec![new_input])),
             Some(collateral) => {
                 if self.config.max_collateral_inputs <= collateral.len().try_into().unwrap() {
                     return Err(TxBuilderError::MaxCollateralInputExceeded(
                         self.config.max_collateral_inputs,
                     ));
                 }
-                collateral.push(new_input);
+                Arc::make_mut(collateral).push(new_input);
             }
         }
 
         // note: collateral doesn't get counted for ref scripts
 
         if let Some(data) = result.aggregate_witness {
-            self.witness_builders
+            Arc::make_mut(&mut self.witness_builders)
                 .witness_set_builder
                 .add_input_aggregate_real_witness_data(&data);
-            self.witness_builders
+            Arc::make_mut(&mut self.witness_builders)
                 .fake_required_witnesses
                 .add_input_aggregate_fake_witness_data(&data);
             if let InputAggregateWitnessData::PlutusScript(_, required_signers, _) = data {
@@ -1181,7 +1184,7 @@ impl TransactionBuilder {
                     .for_each(|signer| self.add_required_signer(*signer));
             }
         }
-        self.witness_builders
+        Arc::make_mut(&mut self.witness_builders)
             .witness_set_builder
             .add_required_wits(result.required_wits);
 
@@ -1191,7 +1194,7 @@ impl TransactionBuilder {
     pub fn add_required_signer(&mut self, hash: Ed25519KeyHash) {
         let mut set = RequiredWitnessSet::new();
         set.add_vkey_key_hash(hash);
-        self.witness_builders
+        Arc::make_mut(&mut self.witness_builders)
             .witness_set_builder
             .add_required_wits(set);
 
@@ -1321,7 +1324,13 @@ impl TransactionBuilder {
 
     fn build_and_size(&self) -> Result<(TransactionBody, usize), TxBuilderError> {
         let fee = self.fee.ok_or(TxBuilderError::FeeNotSpecified)?;
+        self.build_and_size_with_fee(fee)
+    }
 
+    fn build_and_size_with_fee(
+        &self,
+        fee: Coin,
+    ) -> Result<(TransactionBody, usize), TxBuilderError> {
         let redeemers = self.witness_builders.redeemer_set_builder.build(true)?;
         let has_dummy_exunit = redeemers
             .clone()
@@ -1357,17 +1366,14 @@ impl TransactionBuilder {
                                 langs
                             });
                     };
-                    self.inputs
-                        .clone()
-                        .iter()
-                        .fold(&mut languages, |langs, input| {
-                            if let Some(script_ref) = &input.output.script_ref() {
-                                if let Some(lang) = script_ref.language() {
-                                    langs.insert(lang);
-                                }
+                    self.inputs.iter().fold(&mut languages, |langs, input| {
+                        if let Some(script_ref) = &input.output.script_ref() {
+                            if let Some(lang) = script_ref.language() {
+                                langs.insert(lang);
                             }
-                            langs
-                        });
+                        }
+                        langs
+                    });
                     calc_script_data_hash(
                         &redeemers,
                         &self
@@ -1475,7 +1481,13 @@ impl TransactionBuilder {
 
     /// Returns object the body of the new transaction
     fn build_body(&self) -> Result<TransactionBody, TxBuilderError> {
-        let (body, full_tx_size) = self.build_and_size()?;
+        let fee = self.fee.ok_or(TxBuilderError::FeeNotSpecified)?;
+        self.build_body_with_fee(fee)
+    }
+
+    /// Like `build_body`, but with `fee` in place of the builder's fee
+    fn build_body_with_fee(&self, fee: Coin) -> Result<TransactionBody, TxBuilderError> {
+        let (body, full_tx_size) = self.build_and_size_with_fee(fee)?;
         if full_tx_size > self.config.max_tx_size as usize {
             Err(TxBuilderError::MaxTxSizeExceeded(
                 self.config.max_tx_size,
@@ -1529,7 +1541,7 @@ impl TransactionBuilder {
 
     /// used to override the exunit values initially provided when adding inputs
     pub fn set_exunits(&mut self, redeemer: RedeemerWitnessKey, ex_units: ExUnits) {
-        self.witness_builders
+        Arc::make_mut(&mut self.witness_builders)
             .redeemer_set_builder
             .update_ex_units(redeemer, ex_units);
     }
@@ -1539,13 +1551,9 @@ impl TransactionBuilder {
     /// this is done to simplify the library code, but can be fixed later
     pub fn min_fee(&self, script_calulation: bool) -> Result<Coin, TxBuilderError> {
         if !script_calulation {
-            let mut self_copy = self.clone();
-            self_copy.fee = Some(u64::MAX);
-            min_fee(&self_copy)
+            min_fee(self, u64::MAX)
         } else {
-            let mut self_copy = self.clone();
-            self_copy.fee = Some(u64::MAX);
-            min_fee_with_exunits(&self_copy)
+            min_fee_with_exunits(self, u64::MAX)
         }
     }
 }
@@ -1553,7 +1561,7 @@ impl TransactionBuilder {
 #[derive(Debug, Clone)]
 pub struct TxRedeemerBuilder {
     draft_body: TransactionBody,
-    witness_builders: WitnessBuilders,
+    witness_builders: Arc<WitnessBuilders>,
     auxiliary_data: Option<AuxiliaryData>,
 }
 
@@ -1567,7 +1575,7 @@ impl TxRedeemerBuilder {
 
     /// used to override the exunit values initially provided when adding inputs
     pub fn set_exunits(&mut self, redeemer: RedeemerWitnessKey, ex_units: ExUnits) {
-        self.witness_builders
+        Arc::make_mut(&mut self.witness_builders)
             .redeemer_set_builder
             .update_ex_units(redeemer, ex_units);
     }
@@ -2282,12 +2290,12 @@ mod tests {
             output_with_ref_script(&address, other_script),
         );
 
-        tx_builder.inputs.push(spent_ref_script_utxo.clone());
-        tx_builder.reference_inputs = Some(vec![
+        Arc::make_mut(&mut tx_builder.inputs).push(spent_ref_script_utxo.clone());
+        tx_builder.reference_inputs = Some(Arc::new(vec![
             spent_ref_script_utxo,
             repeated_script_ref_input,
             other_ref_input,
-        ]);
+        ]));
 
         assert_eq!(total_ref_script_size_for_fee(&tx_builder).unwrap(), 11);
     }
@@ -3916,13 +3924,13 @@ mod tests {
                     .unwrap(),
             )
             .unwrap();
-        tx_builder.utxos.push(make_input(0u8, Value::from(1500)));
-        tx_builder.utxos.push(make_input(1u8, Value::from(2000)));
-        tx_builder.utxos.push(make_input(2u8, Value::from(8000)));
-        tx_builder.utxos.push(make_input(3u8, Value::from(4000)));
-        tx_builder.utxos.push(make_input(4u8, Value::from(1000)));
-        tx_builder.utxos.push(make_input(5u8, Value::from(2000)));
-        tx_builder.utxos.push(make_input(6u8, Value::from(1500)));
+        tx_builder.add_utxo(make_input(0u8, Value::from(1500)));
+        tx_builder.add_utxo(make_input(1u8, Value::from(2000)));
+        tx_builder.add_utxo(make_input(2u8, Value::from(8000)));
+        tx_builder.add_utxo(make_input(3u8, Value::from(4000)));
+        tx_builder.add_utxo(make_input(4u8, Value::from(1000)));
+        tx_builder.add_utxo(make_input(5u8, Value::from(2000)));
+        tx_builder.add_utxo(make_input(6u8, Value::from(1500)));
         let add_inputs_res = tx_builder.select_utxos(CoinSelectionStrategyCIP2::RandomImprove);
         assert!(add_inputs_res.is_ok(), "{:?}", add_inputs_res.err());
         let change_addr = ByronAddress::from_base58(
