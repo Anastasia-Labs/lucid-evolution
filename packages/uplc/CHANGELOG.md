@@ -1,5 +1,29 @@
 # @lucid-evolution/uplc
 
+## 0.3.0
+
+### Minor Changes
+
+- [#742](https://github.com/Anastasia-Labs/lucid-evolution/pull/742) [`c3e264f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/c3e264fe17c058ef9a8a7b3296ce16fc6b3c74c0) Thanks [@colll78](https://github.com/colll78)! - Ship speed-optimized (`-O3`) and size-optimized (`-Oz`) builds of the evaluator wasm. `@lucid-evolution/uplc` resolves to the speed build on Node, Bun and Deno, where script evaluation is about 25-30% faster, and to the size build (944 KB, unchanged) in browser bundles and edge runtimes. Import `@lucid-evolution/uplc/speed` or `@lucid-evolution/uplc/size` to choose one explicitly. Results, ex-units and errors are identical across builds.
+
+  Lucid exports `makeAikenEvaluator(uplcModule)` so an instance can use a specific build, e.g. `Lucid(provider, network, { evaluator: makeAikenEvaluator(UPLCSize) })`.
+
+### Patch Changes
+
+- [#751](https://github.com/Anastasia-Labs/lucid-evolution/pull/751) [`d89f7e4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d89f7e4bb46bee3a3f782d39ba167b1622dfee62) Thanks [@colll78](https://github.com/colll78)! - Update the Aiken evaluator to unreleased Aiken `main` after 1.1.24, plus aiken-lang/aiken#1456. Evaluation is faster in five ways:
+
+  - The CEK machine itself is faster.
+  - Each transaction's script context is built, and its spent inputs are resolved, once per transaction instead of once per redeemer.
+  - Recently decoded scripts are kept across calls in a bounded cache. It holds up to 64 scripts and 256 KiB of serialised scripts, about 64 MB at most once decoded.
+  - `Data` values are shared between script contexts and builtins instead of copied.
+  - Builtins with constant cost no longer measure the size of their arguments. Scripts that pass large `Data` values to builtins such as `chooseData`, `unConstrData` or `sndPair` evaluate much faster.
+
+  On 108 real Midgard transactions, `eval_phase_two_raw` is about 2.3x faster than the previous unreleased build. Results and ex-units are unchanged.
+
+  If an earlier call trapped while the script cache was in use, later calls skip the cache instead of failing.
+
+  One error message changes: evaluating a Plutus V1 script without a V1 cost model now names `PlutusV1` instead of `PlutusV2`.
+
 ## 0.2.24
 
 ### Patch Changes

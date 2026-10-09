@@ -1,5 +1,14 @@
 # @lucid-evolution/plutus
 
+## 0.1.37
+
+### Patch Changes
+
+- [#749](https://github.com/Anastasia-Labs/lucid-evolution/pull/749) [`66b728b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/66b728b6222d90b2da76b275d77bb3d5e9eb3b2b) Thanks [@colll78](https://github.com/colll78)! - `Data.to` and `Data.from` encode and decode Plutus data in JavaScript instead of building a CML object per node, which was quadratic in nesting depth. They are 8 to 60 times faster and return byte-identical CBOR and identical values, in both node and canonical formats, including CML's map key ordering and deduplication. Input the JavaScript codec does not reproduce exactly (malformed values, unusual CBOR, maps with repeated keys) still goes through CML, so results and error messages are unchanged.
+
+- Updated dependencies [[`b95feb8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/b95feb819f9860e7bf8da61118e52db738f4c8e0), [`636661e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/636661ec7fd9c42d9f9f5be393f961cb1ebf080f)]:
+  - @lucid-evolution/core-types@0.4.0
+
 ## 0.1.36
 
 ### Patch Changes

@@ -1,5 +1,20 @@
 # @lucid-evolution/utils
 
+## 0.1.76
+
+### Patch Changes
+
+- [#749](https://github.com/Anastasia-Labs/lucid-evolution/pull/749) [`9e2a10a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/9e2a10af3ba1570af3a7890b154cb12646cac705) Thanks [@colll78](https://github.com/colll78)! - Stop deserializing and hashing the same script over and over. `validatorToScriptHash` (and with it `mintingPolicyToId`, `validatorToAddress` and `validatorToRewardAddress`), `toScriptRef` and `applyDoubleCborEncoding` remember their results for up to 4096 distinct scripts (64 MiB at most), so `readFrom` with reference scripts, `attach.*` and the actions that delayed completion replays reuse one hash and one decoded copy of each script instead of decoding it from hex on every call. `applyDoubleCborEncoding` now reads the CBOR headers to tell raw, single and double encoded scripts apart rather than trial-decoding the whole script with cbor-x, and returns byte-identical results. A `complete()` that reads six 10 KB PlutusV3 reference scripts and spends one input locked by each is about 35% faster, and about 30% faster when a RedeemerBuilder makes completion replay the actions.
+
+  The new `scriptCborBytes(script)` returns the CBOR bytes CML reads for a script, and `ScriptCache` is the bounded table behind these caches. The emulator uses it for its reference script hashes, which used to be an unbounded `Map` keyed by script text: V8 hashes strings longer than 16383 characters by their length only, so a lookup among many same-length scripts compared each of them in full.
+
+- [#749](https://github.com/Anastasia-Labs/lucid-evolution/pull/749) [`5ca7f92`](https://github.com/Anastasia-Labs/lucid-evolution/commit/5ca7f925136d9c8054fe2986b612a8a269f77fa5) Thanks [@colll78](https://github.com/colll78)! - `getAddressDetails` parses an address once and dispatches on its kind instead of trying each address type in turn and catching the failures, and it memoizes up to 10,000 results. A first lookup of a bech32 address is several times faster, and a repeat lookup is about 900 times faster. Each call still returns a fresh object, and the output is unchanged for every address type.
+
+- Updated dependencies [[`c3e264f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/c3e264fe17c058ef9a8a7b3296ce16fc6b3c74c0), [`66b728b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/66b728b6222d90b2da76b275d77bb3d5e9eb3b2b), [`b95feb8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/b95feb819f9860e7bf8da61118e52db738f4c8e0), [`d89f7e4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d89f7e4bb46bee3a3f782d39ba167b1622dfee62), [`636661e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/636661ec7fd9c42d9f9f5be393f961cb1ebf080f)]:
+  - @lucid-evolution/uplc@0.3.0
+  - @lucid-evolution/plutus@0.1.37
+  - @lucid-evolution/core-types@0.4.0
+
 ## 0.1.75
 
 ### Patch Changes

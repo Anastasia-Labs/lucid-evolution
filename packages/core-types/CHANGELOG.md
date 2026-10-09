@@ -1,5 +1,17 @@
 # @lucid-evolution/core-types
 
+## 0.4.0
+
+### Minor Changes
+
+- [#744](https://github.com/Anastasia-Labs/lucid-evolution/pull/744) [`636661e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/636661ec7fd9c42d9f9f5be393f961cb1ebf080f) Thanks [@colll78](https://github.com/colll78)! - Add an optional `getCollateral(amount?)` to `Wallet`, and prefer the wallet's own collateral when completing script transactions. A wallet created with `selectWallet.fromAPI` provides it when the CIP-30 wallet implements `getCollateral`, passing the required amount and returning only candidates in the UTxO override when one is set. Candidates are also limited to `presetWalletInputs` when given. If the wallet returns nothing, its candidates cannot cover the collateral, or the call fails, collateral is selected from the wallet's UTxOs as before. A candidate holding exactly the collateral amount in ADA is used without a collateral return.
+
+### Patch Changes
+
+- [#750](https://github.com/Anastasia-Labs/lucid-evolution/pull/750) [`b95feb8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/b95feb819f9860e7bf8da61118e52db738f4c8e0) Thanks [@colll78](https://github.com/colll78)! - Add an optional `EvaluatorAdapter.evaluateBytes`, the same evaluation as `evaluate` with the transaction as CBOR bytes. Lucid calls it when an adapter has it, skipping the hex round trip. The built-in Aiken evaluator now exposes its bytes path this way instead of through a private symbol.
+
+  The Scalus evaluator implements `evaluateBytes`, keeps the Scalus `Utxo` of each resolved UTxO of its latest request, and returns its last successful result again when the next request is the same, as the built-in evaluator does. A delayed-redeemer completion no longer runs Scalus twice on its repeated final request.
+
 ## 0.3.0
 
 ### Minor Changes

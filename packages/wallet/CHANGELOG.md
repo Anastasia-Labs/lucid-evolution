@@ -1,5 +1,20 @@
 # @lucid-evolution/wallet
 
+## 0.3.0
+
+### Minor Changes
+
+- [#744](https://github.com/Anastasia-Labs/lucid-evolution/pull/744) [`636661e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/636661ec7fd9c42d9f9f5be393f961cb1ebf080f) Thanks [@colll78](https://github.com/colll78)! - Add an optional `getCollateral(amount?)` to `Wallet`, and prefer the wallet's own collateral when completing script transactions. A wallet created with `selectWallet.fromAPI` provides it when the CIP-30 wallet implements `getCollateral`, passing the required amount and returning only candidates in the UTxO override when one is set. Candidates are also limited to `presetWalletInputs` when given. If the wallet returns nothing, its candidates cannot cover the collateral, or the call fails, collateral is selected from the wallet's UTxOs as before. A candidate holding exactly the collateral amount in ADA is used without a collateral return.
+
+### Patch Changes
+
+- [#749](https://github.com/Anastasia-Labs/lucid-evolution/pull/749) [`7583d72`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7583d72107446cbca8b977cca661758e42d035ec) Thanks [@colll78](https://github.com/colll78)! - Seed wallets find the keys a transaction needs by looking inputs and collateral up in an index of the wallet's UTxOs instead of scanning every UTxO for every input, and `readFrom` checks for already-read UTxOs the same way. With 5000 wallet UTxOs and 200 inputs, finding the signing keys drops from about 6.3 ms to 1.4 ms.
+
+- Updated dependencies [[`9e2a10a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/9e2a10af3ba1570af3a7890b154cb12646cac705), [`5ca7f92`](https://github.com/Anastasia-Labs/lucid-evolution/commit/5ca7f925136d9c8054fe2986b612a8a269f77fa5), [`b95feb8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/b95feb819f9860e7bf8da61118e52db738f4c8e0), [`636661e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/636661ec7fd9c42d9f9f5be393f961cb1ebf080f)]:
+  - @lucid-evolution/utils@0.1.76
+  - @lucid-evolution/core-types@0.4.0
+  - @lucid-evolution/sign_data@0.1.33
+
 ## 0.2.3
 
 ### Patch Changes
