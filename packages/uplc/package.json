@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/uplc",
-  "version": "0.2.24",
+  "version": "0.3.0",
   "main": "./dist/speed/node/uplc_tx.js",
   "browser": "./dist/size/browser/uplc_tx.js",
   "types": "./dist/speed/node/uplc_tx.d.ts",

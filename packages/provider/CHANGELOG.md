@@ -1,5 +1,32 @@
 # @lucid-evolution/provider
 
+## 0.3.0
+
+### Minor Changes
+
+- [#747](https://github.com/Anastasia-Labs/lucid-evolution/pull/747) [`1068b3a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/1068b3a1004af7d4a4670e7216b479ed526f37dd) Thanks [@colll78](https://github.com/colll78)! - Remove Maestro provider (Maestro has shut down its Cardano API).
+
+  The `Maestro` class and its `MaestroConfig` / `MaestroSupportedNetworks` types are no longer exported from `@lucid-evolution/provider` or re-exported from `@lucid-evolution/lucid`. Use Blockfrost, Koios, Kupmios or a custom `Provider` instead.
+
+### Patch Changes
+
+- [#749](https://github.com/Anastasia-Labs/lucid-evolution/pull/749) [`a05edf1`](https://github.com/Anastasia-Labs/lucid-evolution/commit/a05edf18182eb9ab3bcb383ccbdc71ab36488a61) Thanks [@colll78](https://github.com/colll78)! - The emulator now rejects under-collateralised transactions as the ledger does. A transaction with redeemers must have collateral inputs (at most `maxCollateralInputs`), its collateral inputs minus the collateral return must hold only ADA and cover `collateralPercentage` of the fee, `total_collateral`, when present, must equal that balance, and a collateral return must hold at least its minimum ADA (`NoCollateralInputs`, `TooManyCollateralInputs`, `CollateralContainsNonADA`, `InsufficientCollateral`, `IncorrectTotalCollateralField`, `BabbageOutputTooSmallUTxO`). Lucid's completion now fails with a clear error on insufficient collateral rather than producing such a transaction.
+
+- [#749](https://github.com/Anastasia-Labs/lucid-evolution/pull/749) [`53a7061`](https://github.com/Anastasia-Labs/lucid-evolution/commit/53a706182cf6355ec8345a3f9be01bb128260b62) Thanks [@colll78](https://github.com/colll78)! - Make every emulator query and block agree with a scan of `emulator.ledger` again, however the ledger is edited. `ledger` and `transactionHistory` are plain own enumerable records once more, so `structuredClone`, spreading the emulator, `Object.defineProperty`, assigning `undefined` to an entry and sharing one record between emulators behave as they did before the indexed ledger. Editing a UTxO in place (its address, its assets, or swapping `utxo`) is seen by the next query, and a `pending` entry written into `transactionHistory` by hand is confirmed by the next block. Queries stay fast while only the emulator writes to the ledger; after a caller reads or replaces `emulator.ledger`, queries and blocks scan the record as they used to.
+
+- [#749](https://github.com/Anastasia-Labs/lucid-evolution/pull/749) [`be630b1`](https://github.com/Anastasia-Labs/lucid-evolution/commit/be630b1be2eaafebf8802aaf12e2e8f9988a5c2c) Thanks [@colll78](https://github.com/colll78)! - Speed up the emulator. UTxO queries no longer enumerate the ledger record or parse every address, and keep returning results in ledger order. Blocks no longer enumerate the ledger or the transaction history. Reference script hashes are computed once per script. `submitTx` frees every CML object it creates, uses sets for its witness checks, and no longer reads a freed key list when it verifies a native script supplied through a script reference, which used to fail with "null pointer passed to rust". Direct edits to `emulator.ledger` (adding, replacing or deleting entries, setting `spent`, or assigning a new record) are still honoured.
+
+- [#745](https://github.com/Anastasia-Labs/lucid-evolution/pull/745) [`53b85ee`](https://github.com/Anastasia-Labs/lucid-evolution/commit/53b85eef8b82397bc7918faff53cfc01fb3ae81b) Thanks [@colll78](https://github.com/colll78)! - Add `KupmiosOptions.fetchImpl`, the `fetch` a `Kupmios` instance uses for its Kupo and Ogmios requests. It receives the provider's abort signal. Without it, requests use the global `fetch` as before.
+
+- [#749](https://github.com/Anastasia-Labs/lucid-evolution/pull/749) [`9e2a10a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/9e2a10af3ba1570af3a7890b154cb12646cac705) Thanks [@colll78](https://github.com/colll78)! - Stop deserializing and hashing the same script over and over. `validatorToScriptHash` (and with it `mintingPolicyToId`, `validatorToAddress` and `validatorToRewardAddress`), `toScriptRef` and `applyDoubleCborEncoding` remember their results for up to 4096 distinct scripts (64 MiB at most), so `readFrom` with reference scripts, `attach.*` and the actions that delayed completion replays reuse one hash and one decoded copy of each script instead of decoding it from hex on every call. `applyDoubleCborEncoding` now reads the CBOR headers to tell raw, single and double encoded scripts apart rather than trial-decoding the whole script with cbor-x, and returns byte-identical results. A `complete()` that reads six 10 KB PlutusV3 reference scripts and spends one input locked by each is about 35% faster, and about 30% faster when a RedeemerBuilder makes completion replay the actions.
+
+  The new `scriptCborBytes(script)` returns the CBOR bytes CML reads for a script, and `ScriptCache` is the bounded table behind these caches. The emulator uses it for its reference script hashes, which used to be an unbounded `Map` keyed by script text: V8 hashes strings longer than 16383 characters by their length only, so a lookup among many same-length scripts compared each of them in full.
+
+- Updated dependencies [[`7583d72`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7583d72107446cbca8b977cca661758e42d035ec), [`9e2a10a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/9e2a10af3ba1570af3a7890b154cb12646cac705), [`5ca7f92`](https://github.com/Anastasia-Labs/lucid-evolution/commit/5ca7f925136d9c8054fe2986b612a8a269f77fa5), [`b95feb8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/b95feb819f9860e7bf8da61118e52db738f4c8e0), [`636661e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/636661ec7fd9c42d9f9f5be393f961cb1ebf080f)]:
+  - @lucid-evolution/wallet@0.3.0
+  - @lucid-evolution/utils@0.1.76
+  - @lucid-evolution/core-types@0.4.0
+
 ## 0.2.6
 
 ### Patch Changes
