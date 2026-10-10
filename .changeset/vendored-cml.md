@@ -12,4 +12,4 @@
 "@lucid-evolution/wallet": minor
 ---
 
-Vendor cardano-multiplatform-lib as `@lucid-evolution/cml` and depend on it instead of `@anastasia-labs/cardano-multiplatform-lib-nodejs` and `-browser`. The API is unchanged, and the wasm shadow stack is raised to 16 MiB so deeply nested Plutus data decodes. Import CML from `@lucid-evolution/lucid` (or `@lucid-evolution/cml`): objects created by a separately installed `@anastasia-labs` CML belong to another wasm instance and cannot be passed to Lucid.
+Vendor cardano-multiplatform-lib as `@lucid-evolution/cml` and depend on it instead of `@anastasia-labs/cardano-multiplatform-lib-nodejs` and `-browser`. The API is unchanged. The Node build's wasm shadow stack is raised to 16 MiB so deeply nested Plutus data decodes; the browser build keeps the 1 MiB stack. Import CML from `@lucid-evolution/lucid` (or `@lucid-evolution/cml`): objects created by a separately installed `@anastasia-labs` CML belong to another wasm instance and cannot be passed to Lucid.

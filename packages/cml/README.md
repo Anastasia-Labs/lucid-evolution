@@ -27,6 +27,8 @@ pnpm build
 
 The browser build keeps the workspace's `opt-level = "z"`, as upstream does, so bundles stay small (2.9 MB, 0.9 MB gzipped). The Node build is compiled with `opt-level = 3` instead: it is 4.7 MB, and it decodes and encodes Plutus data 2–4× faster.
 
+The Node build also links a 16 MiB wasm shadow stack, so it decodes Plutus data nested 4,000 deep, about as deep as a transaction can carry. The browser build keeps the default 1 MiB stack, as the `@anastasia-labs` packages did, which traps with "memory access out of bounds" past about 2,000 nested constructors; the larger stack would add 15 MiB of memory to every instance. V8 runs wasm on the machine stack, so Node needs `--stack-size=1400` or more to reach the full depth.
+
 ## License
 
 MIT. See `LICENSE`, `LICENSE-EMURGO` and `LICENSE-IOHK`.
