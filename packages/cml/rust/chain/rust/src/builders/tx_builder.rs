@@ -24,7 +24,7 @@ use crate::crypto::{BootstrapWitness, Vkeywitness};
 use crate::deposit::{internal_get_deposit, internal_get_implicit_input};
 use crate::fees::LinearFee;
 use crate::governance::{ProposalProcedure, VotingProcedures};
-use crate::min_ada::min_ada_required;
+use crate::min_ada::{min_ada_required, min_ada_required_for_size};
 use crate::plutus::{CostModels, ExUnits, Language};
 use crate::plutus::{PlutusData, Redeemers};
 use crate::transaction::{
@@ -222,9 +222,10 @@ pub enum TxBuilderError {
 }
 
 fn min_fee(tx_builder: &TransactionBuilder, fee: Coin) -> Result<Coin, TxBuilderError> {
-    let full_tx = fake_full_tx(tx_builder, tx_builder.build_body_with_fee(fee)?)?;
+    let (_, full_tx_size) = tx_builder.fake_full_tx_within_max_size(fee)?;
     // we can't know the of scripts yet as they can't be calculated until we build the tx
-    crate::fees::min_no_script_fee(&full_tx, &tx_builder.config.fee_algo).map_err(Into::into)
+    crate::fees::min_no_script_fee_for_size(full_tx_size, &tx_builder.config.fee_algo)
+        .map_err(Into::into)
 }
 
 fn ref_script_orig_size(script_ref: &ScriptRef) -> u64 {
@@ -262,13 +263,14 @@ fn min_fee_with_exunits(
     tx_builder: &TransactionBuilder,
     fee: Coin,
 ) -> Result<Coin, TxBuilderError> {
-    let full_tx = fake_full_tx(tx_builder, tx_builder.build_body_with_fee(fee)?)?;
+    let (full_tx, full_tx_size) = tx_builder.fake_full_tx_within_max_size(fee)?;
     // we can't know the of scripts yet as they can't be calculated until we build the tx
 
     let total_ref_script_size = total_ref_script_size_for_fee(tx_builder)?;
 
-    crate::fees::min_fee(
+    crate::fees::min_fee_for_size(
         &full_tx,
+        full_tx_size,
         &tx_builder.config.fee_algo,
         &tx_builder.config.ex_unit_prices,
         total_ref_script_size,
@@ -867,6 +869,18 @@ impl TransactionBuilder {
         builder_result: SingleOutputBuilderResult,
     ) -> Result<(), TxBuilderError> {
         let output = builder_result.output;
+        self.check_output(&output)?;
+        if let Some(datum) = builder_result.communication_datum {
+            Arc::make_mut(&mut self.witness_builders)
+                .witness_set_builder
+                .add_plutus_datum(datum);
+        }
+        self.outputs.push(output);
+        Ok(())
+    }
+
+    /// The checks `add_output` makes before it adds an output
+    fn check_output(&self, output: &TransactionOutput) -> Result<(), TxBuilderError> {
         let value_size = output.amount().to_cbor_bytes().len();
         if value_size > self.config.max_value_size as usize {
             return Err(TxBuilderError::MaxValueSizeExceeded(
@@ -874,19 +888,13 @@ impl TransactionBuilder {
                 value_size,
             ));
         }
-        let min_ada = min_ada_required(&output, self.config.coins_per_utxo_byte)?;
+        let min_ada = min_ada_required(output, self.config.coins_per_utxo_byte)?;
         if output.amount().coin < min_ada {
             Err(TxBuilderError::ValueBelowMinUTXOValue(
                 output.amount().coin,
                 min_ada,
             ))
         } else {
-            if let Some(datum) = builder_result.communication_datum {
-                Arc::make_mut(&mut self.witness_builders)
-                    .witness_set_builder
-                    .add_plutus_datum(datum);
-            }
-            self.outputs.push(output);
             Ok(())
         }
     }
@@ -896,9 +904,36 @@ impl TransactionBuilder {
         &self,
         builder: &SingleOutputBuilderResult,
     ) -> Result<Coin, TxBuilderError> {
+        // A communication datum also goes in the witness set
+        if builder.communication_datum.is_some() {
+            return self.fee_for_output_by_copying(builder);
+        }
         // we need some value for these for it to be a a valid transaction
         // but since we're only calculating the different between the fee of two transactions
         // it doesn't matter what these are set as, since it cancels out
+        let (_, size_before) = self.fake_full_tx_within_max_size(0)?;
+        let fee_before =
+            crate::fees::min_no_script_fee_for_size(size_before, &self.config.fee_algo)?;
+
+        self.check_output(&builder.output)?;
+        // The output only adds its own bytes to the transaction, and maybe a
+        // longer head to the list of outputs, which has no encoding details
+        let output_count = self.outputs.len() as u64;
+        let size_after =
+            size_before + builder.output.to_cbor_bytes().len() + cbor_head_size(output_count + 1)
+                - cbor_head_size(output_count);
+        self.check_tx_size(size_after)?;
+        let fee_after = crate::fees::min_no_script_fee_for_size(size_after, &self.config.fee_algo)?;
+        fee_after
+            .checked_sub(fee_before)
+            .ok_or_else(|| ArithmeticError::IntegerOverflow.into())
+    }
+
+    /// `fee_for_output` by building the transaction with and without the output
+    fn fee_for_output_by_copying(
+        &self,
+        builder: &SingleOutputBuilderResult,
+    ) -> Result<Coin, TxBuilderError> {
         let fee_before = min_fee(self, 0)?;
 
         let mut self_copy = self.clone();
@@ -1331,6 +1366,16 @@ impl TransactionBuilder {
         &self,
         fee: Coin,
     ) -> Result<(TransactionBody, usize), TxBuilderError> {
+        self.fake_full_tx_and_size_with_fee(fee)
+            .map(|(full_tx, full_tx_size)| (full_tx.body, full_tx_size))
+    }
+
+    /// The transaction with fake witnesses that `build_and_size_with_fee`
+    /// measures, and its size
+    fn fake_full_tx_and_size_with_fee(
+        &self,
+        fee: Coin,
+    ) -> Result<(Transaction, usize), TxBuilderError> {
         let redeemers = self.witness_builders.redeemer_set_builder.build(true)?;
         let has_dummy_exunit = redeemers
             .clone()
@@ -1465,7 +1510,7 @@ impl TransactionBuilder {
         // we must build a tx with fake data (of correct size) to check the final Transaction size
         let full_tx = fake_full_tx(self, built)?;
         let full_tx_size = full_tx.to_cbor_bytes().len();
-        Ok((full_tx.body, full_tx_size))
+        Ok((full_tx, full_tx_size))
     }
 
     pub fn full_size(&self) -> Result<usize, TxBuilderError> {
@@ -1487,14 +1532,28 @@ impl TransactionBuilder {
 
     /// Like `build_body`, but with `fee` in place of the builder's fee
     fn build_body_with_fee(&self, fee: Coin) -> Result<TransactionBody, TxBuilderError> {
-        let (body, full_tx_size) = self.build_and_size_with_fee(fee)?;
+        self.fake_full_tx_within_max_size(fee)
+            .map(|(full_tx, _)| full_tx.body)
+    }
+
+    /// `fake_full_tx_and_size_with_fee`, or an error if the transaction is too large
+    fn fake_full_tx_within_max_size(
+        &self,
+        fee: Coin,
+    ) -> Result<(Transaction, usize), TxBuilderError> {
+        let (full_tx, full_tx_size) = self.fake_full_tx_and_size_with_fee(fee)?;
+        self.check_tx_size(full_tx_size)?;
+        Ok((full_tx, full_tx_size))
+    }
+
+    fn check_tx_size(&self, full_tx_size: usize) -> Result<(), TxBuilderError> {
         if full_tx_size > self.config.max_tx_size as usize {
             Err(TxBuilderError::MaxTxSizeExceeded(
                 self.config.max_tx_size,
                 full_tx_size,
             ))
         } else {
-            Ok(body)
+            Ok(())
         }
     }
 
@@ -1732,6 +1791,80 @@ pub fn choose_change_selection_algo(
     }
 }
 
+// Serialised sizes of the parts of a `Value` that has no encoding details,
+// as `Value::serialize` writes them.
+fn cbor_head_size(n: u64) -> usize {
+    1 + cbor_event::Sz::canonical(n).bytes_following()
+}
+
+fn policy_head_size(policy: &PolicyId, asset_count: usize) -> usize {
+    let policy_len = policy.to_raw_bytes().len();
+    cbor_head_size(policy_len as u64) + policy_len + cbor_head_size(asset_count as u64)
+}
+
+fn asset_entry_size(asset_name: &AssetName, value: u64) -> usize {
+    asset_name.to_cbor_bytes().len() + cbor_head_size(value)
+}
+
+/// The output being packed, measured once so that each asset
+/// can be checked without copying the output.
+struct PackedOutput {
+    /// the output's size without its amount
+    size_without_amount: usize,
+    /// how many policies its amount has
+    policy_count: usize,
+    /// the size of those policies' entries
+    policies_size: usize,
+}
+
+impl PackedOutput {
+    fn measure(output: &TransactionOutput) -> Self {
+        let amount = output.amount();
+        Self {
+            size_without_amount: output.to_cbor_bytes().len() - amount.to_cbor_bytes().len(),
+            policy_count: amount.multiasset.len(),
+            policies_size: amount
+                .multiasset
+                .iter()
+                .map(|(policy, assets)| {
+                    policy_head_size(policy, assets.len())
+                        + assets
+                            .iter()
+                            .map(|(name, value)| asset_entry_size(name, *value))
+                            .sum::<usize>()
+                })
+                .sum(),
+        }
+    }
+
+    /// The size of the output's value after adding a policy with `asset_count`
+    /// assets whose entries take `assets_size` bytes.
+    ///
+    /// The value is measured with its coin set to the minimum ADA of an
+    /// output that holds only the new policy and no coin.
+    fn value_size_with_policy(
+        &self,
+        policy: &PolicyId,
+        asset_count: usize,
+        assets_size: usize,
+        coins_per_utxo_byte: Coin,
+    ) -> usize {
+        let policy_size = policy_head_size(policy, asset_count) + assets_size;
+        // [0, {policy: assets}]: the array head, the zero coin and the map head
+        let policy_only_value_size = 1 + 1 + cbor_head_size(1) + policy_size;
+        let min_ada = min_ada_required_for_size(
+            self.size_without_amount + policy_only_value_size,
+            1,
+            coins_per_utxo_byte,
+        )
+        .unwrap();
+        1 + cbor_head_size(min_ada)
+            + cbor_head_size(self.policy_count as u64 + 1)
+            + self.policies_size
+            + policy_size
+    }
+}
+
 /// Warning: this function will mutate the /fee/ field
 /// Make sure to call this function last after setting all other tx-body properties
 /// Editing inputs, outputs, mint, etc. after change been calculated
@@ -1771,30 +1904,6 @@ pub fn add_change_if_needed(
         Some(Ordering::Greater) => {
             let change_estimator = input_total.checked_sub(&output_total)?;
             if change_estimator.has_multiassets() {
-                fn will_adding_asset_make_output_overflow(
-                    output: &TransactionOutput,
-                    current_assets: &OrderedHashMap<AssetName, u64>,
-                    asset_to_add: (PolicyId, AssetName, u64),
-                    max_value_size: u32,
-                    coins_per_utxo_byte: Coin,
-                ) -> bool {
-                    let (policy, asset_name, value) = asset_to_add;
-                    let mut current_assets_clone = current_assets.clone();
-                    current_assets_clone.insert(asset_name, value);
-                    let mut amount_clone = output.amount().clone();
-                    let mut val = Value::from(Coin::zero());
-                    val.multiasset.insert(policy, current_assets_clone);
-                    amount_clone = amount_clone.checked_add(&val).unwrap();
-
-                    let mut output_clone = output.clone();
-                    output_clone.set_amount(val);
-
-                    // calculate minADA for more precise max value size
-                    let min_ada = min_ada_required(&output_clone, coins_per_utxo_byte).unwrap();
-                    amount_clone.coin = min_ada;
-
-                    amount_clone.to_cbor_bytes().len() > max_value_size as usize
-                }
                 fn pack_nfts_for_change(
                     max_value_size: u32,
                     coins_per_utxo_byte: Coin,
@@ -1843,15 +1952,19 @@ pub fn add_change_if_needed(
                         let mut val = Value::from(Coin::zero());
                         let mut next_nft = MultiAsset::default();
 
+                        // `output` never holds `policy` yet, and asset names are unique
+                        let mut packed = PackedOutput::measure(&output);
                         let mut rebuilt_assets = OrderedHashMap::new();
+                        let mut rebuilt_size = 0;
                         for (asset_name, value) in assets.iter() {
-                            if will_adding_asset_make_output_overflow(
-                                &output,
-                                &rebuilt_assets,
-                                (*policy, asset_name.clone(), *value),
-                                max_value_size,
+                            let entry_size = asset_entry_size(asset_name, *value);
+                            if packed.value_size_with_policy(
+                                policy,
+                                rebuilt_assets.len() + 1,
+                                rebuilt_size + entry_size,
                                 coins_per_utxo_byte,
-                            ) {
+                            ) > max_value_size as usize
+                            {
                                 // if we got here, this means we will run into a overflow error,
                                 // so we want to split into multiple outputs, for that we...
 
@@ -1876,9 +1989,12 @@ pub fn add_change_if_needed(
                                 next_nft = MultiAsset::default();
 
                                 rebuilt_assets = OrderedHashMap::new();
+                                rebuilt_size = 0;
+                                packed = PackedOutput::measure(&output);
                             }
 
                             rebuilt_assets.insert(asset_name.clone(), *value);
+                            rebuilt_size += entry_size;
                         }
 
                         next_nft.insert(*policy, rebuilt_assets);
@@ -6039,5 +6155,244 @@ mod tests {
             assert_eq!(tx_builder.utxo_output(&utxo.input), Some(&utxo.utxo_info));
         }
         assert_eq!(tx_builder.utxo_output(&available.input), None);
+    }
+
+    /// The check `pack_nfts_for_change` made for each asset before it kept
+    /// the sizes of the output it packs: the size of the output's value after
+    /// adding the asset.
+    fn value_size_with_asset_by_copying(
+        output: &TransactionOutput,
+        current_assets: &OrderedHashMap<AssetName, u64>,
+        asset_to_add: (PolicyId, AssetName, u64),
+        coins_per_utxo_byte: Coin,
+    ) -> usize {
+        let (policy, asset_name, value) = asset_to_add;
+        let mut current_assets_clone = current_assets.clone();
+        current_assets_clone.insert(asset_name, value);
+        let mut amount_clone = output.amount().clone();
+        let mut val = Value::from(Coin::zero());
+        val.multiasset.insert(policy, current_assets_clone);
+        amount_clone = amount_clone.checked_add(&val).unwrap();
+
+        let mut output_clone = output.clone();
+        output_clone.set_amount(val);
+
+        let min_ada = min_ada_required(&output_clone, coins_per_utxo_byte).unwrap();
+        amount_clone.coin = min_ada;
+
+        amount_clone.to_cbor_bytes().len()
+    }
+
+    #[test]
+    fn packed_output_sizes_match_copying_the_output() {
+        // xorshift, so that the cases are the same on every run
+        let mut state = 0x2545_f491_4f6c_dd1du64;
+        let mut next = move |bound: u64| {
+            state ^= state << 13;
+            state ^= state >> 7;
+            state ^= state << 17;
+            state % bound
+        };
+        let amounts = [
+            0,
+            1,
+            23,
+            24,
+            255,
+            256,
+            65_535,
+            65_536,
+            u32::MAX as u64,
+            u32::MAX as u64 + 1,
+            u64::MAX,
+        ];
+        let asset_name = |next: &mut dyn FnMut(u64) -> u64| -> AssetName {
+            let len = next(33) as usize;
+            let bytes: Vec<u8> = (0..len).map(|_| next(256) as u8).collect();
+            let cbor = match next(3) {
+                // a definite length with a longer head than it needs
+                0 => [vec![0x59, 0, len as u8], bytes].concat(),
+                // two indefinite-length chunks
+                1 => {
+                    let split = len / 2;
+                    [
+                        vec![0x5f, 0x40 + split as u8],
+                        bytes[..split].to_vec(),
+                        vec![0x58, (len - split) as u8],
+                        bytes[split..].to_vec(),
+                        vec![0xff],
+                    ]
+                    .concat()
+                }
+                _ => return AssetName::new(bytes).unwrap(),
+            };
+            AssetName::from_cbor_bytes(&cbor).unwrap()
+        };
+        let addresses = [
+            BaseAddress::new(
+                NetworkInfo::testnet().network_id(),
+                StakeCredential::new_pub_key(fake_key_hash(1)),
+                StakeCredential::new_pub_key(fake_key_hash(2)),
+            )
+            .to_address(),
+            EnterpriseAddress::new(
+                NetworkInfo::mainnet().network_id(),
+                StakeCredential::new_pub_key(fake_key_hash(3)),
+            )
+            .to_address(),
+        ];
+        let datums = [
+            None,
+            Some(DatumOption::new_hash(
+                DatumHash::from_raw_bytes(&[7; 32]).unwrap(),
+            )),
+            Some(DatumOption::new_datum(PlutusData::new_bytes(vec![9; 40]))),
+        ];
+        let mut checked = 0;
+        for case in 0..300 {
+            let address = &addresses[case % addresses.len()];
+            let datum = datums[(case / 2) % datums.len()].clone();
+            let coins_per_utxo_byte = [1, 4310, 1_000_000][case % 3];
+            let mut amount = Value::from([0, 1_000_000, 50_000_000_000][(case / 3) % 3]);
+            for policy in 0..next(3) {
+                let mut assets = OrderedHashMap::new();
+                for _ in 0..next(30) {
+                    assets.insert(asset_name(&mut next), amounts[next(11) as usize]);
+                }
+                amount
+                    .multiasset
+                    .insert(PolicyId::from([policy as u8; 28]), assets);
+            }
+            let output = TransactionOutput::new(address.clone(), amount, datum, None);
+            let packed = PackedOutput::measure(&output);
+            let policy = PolicyId::from([0xee; 28]);
+            let mut assets = OrderedHashMap::new();
+            let mut assets_size = 0;
+            // past 23 and 255 assets, where the map head grows
+            for _ in 0..[30, 300][case % 2] {
+                let name = asset_name(&mut next);
+                if assets.contains_key(&name) {
+                    continue;
+                }
+                let value = amounts[next(11) as usize];
+                let entry_size = asset_entry_size(&name, value);
+                assert_eq!(
+                    packed.value_size_with_policy(
+                        &policy,
+                        assets.len() + 1,
+                        assets_size + entry_size,
+                        coins_per_utxo_byte,
+                    ),
+                    value_size_with_asset_by_copying(
+                        &output,
+                        &assets,
+                        (policy, name.clone(), value),
+                        coins_per_utxo_byte,
+                    ),
+                    "case {case} at asset {}",
+                    assets.len()
+                );
+                assets.insert(name, value);
+                assets_size += entry_size;
+                checked += 1;
+            }
+        }
+        assert!(checked > 20_000);
+    }
+
+    #[test]
+    fn fee_for_output_matches_building_with_the_output() {
+        let cfg = |max_tx_size| {
+            TransactionBuilderConfigBuilder::default()
+                .fee_algo(create_linear_fee(44, 155381))
+                .pool_deposit(500000000)
+                .key_deposit(2000000)
+                .max_value_size(MAX_VALUE_SIZE)
+                .max_tx_size(max_tx_size)
+                .coins_per_utxo_byte(COINS_PER_UTXO_BYTE)
+                .ex_unit_prices(ExUnitPrices::new(
+                    SubCoin::new(577, 10000),
+                    SubCoin::new(721, 10000000),
+                ))
+                .collateral_percentage(150)
+                .max_collateral_inputs(3)
+                .cost_models(plutus_alonzo_cost_models())
+                .build()
+                .unwrap()
+        };
+        let (_, _, address) = create_account();
+        let mut tokens = MultiAsset::new();
+        for i in 0..40u8 {
+            tokens.set(
+                PolicyId::from([i % 3; 28]),
+                AssetName::new(vec![i; 1 + i as usize % 32]).unwrap(),
+                1 << (i % 40),
+            );
+        }
+        let mut too_many_tokens = MultiAsset::new();
+        for i in 0..200u8 {
+            too_many_tokens.set(
+                PolicyId::from([i; 28]),
+                AssetName::new(vec![i; 32]).unwrap(),
+                1,
+            );
+        }
+        let output = |amount: Value, datum: Option<DatumOption>| {
+            SingleOutputBuilderResult::new(TransactionOutput::new(
+                address.clone(),
+                amount,
+                datum,
+                None,
+            ))
+        };
+        let candidates = [
+            output(Value::from(2_000_000), None),
+            output(Value::from(u64::MAX), None),
+            output(Value::new(5_000_000, tokens), None),
+            output(
+                Value::from(3_000_000),
+                Some(DatumOption::new_hash(
+                    DatumHash::from_raw_bytes(&[3; 32]).unwrap(),
+                )),
+            ),
+            output(
+                Value::from(3_000_000),
+                Some(DatumOption::new_datum(PlutusData::new_bytes(vec![4; 64]))),
+            ),
+            // below the minimum ADA
+            output(Value::from(1), None),
+            // above the maximum value size
+            output(Value::new(1_000_000_000, too_many_tokens), None),
+        ];
+        // past 23 and 255 outputs, where the head of the list of outputs grows,
+        // and past the maximum transaction size of the smaller builder
+        for max_tx_size in [MAX_TX_SIZE, 100_000] {
+            let mut tx_builder = TransactionBuilder::new(cfg(max_tx_size));
+            tx_builder
+                .add_input(
+                    SingleInputBuilder::new(
+                        TransactionInput::new(genesis_id(), 0),
+                        TransactionOutput::new(
+                            address.clone(),
+                            Value::from(u64::MAX / 2),
+                            None,
+                            None,
+                        ),
+                    )
+                    .payment_key()
+                    .unwrap(),
+                )
+                .unwrap();
+            for outputs in 0..300 {
+                for candidate in candidates.iter() {
+                    assert_eq!(
+                        format!("{:?}", tx_builder.fee_for_output(candidate)),
+                        format!("{:?}", tx_builder.fee_for_output_by_copying(candidate)),
+                        "with {outputs} outputs"
+                    );
+                }
+                tx_builder.outputs.push(candidates[0].output.clone());
+            }
+        }
     }
 }
