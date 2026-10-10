@@ -1605,6 +1605,12 @@ impl TransactionBuilder {
             .update_ex_units(redeemer, ex_units);
     }
 
+    /// Whether the transaction has any redeemer, so that its witness set
+    /// will hold redeemers.
+    pub fn has_redeemers(&self) -> bool {
+        self.witness_builders.redeemer_set_builder.has_redeemers()
+    }
+
     /// warning: sum of all parts of a transaction must equal 0. You cannot just set the fee to the min value and forget about it
     /// warning: min_fee may be slightly larger than the actual minimum fee (ex: a few lovelaces)
     /// this is done to simplify the library code, but can be fixed later
@@ -5592,6 +5598,7 @@ mod tests {
     #[test]
     fn test_contract_dummy_exunit() {
         let mut tx_builder = create_realistic_tx_builder();
+        assert!(!tx_builder.has_redeemers());
 
         let mut spacebudz_asset = MultiAsset::new();
         spacebudz_asset.set(
@@ -5724,6 +5731,7 @@ mod tests {
         }
 
         tx_builder.set_fee(897753);
+        assert!(tx_builder.has_redeemers());
 
         let mut tx_redeemer_builder = tx_builder
             .build_for_evaluation(
@@ -5733,6 +5741,12 @@ mod tests {
             )
             .unwrap();
 
+        assert!(tx_redeemer_builder
+            .draft_tx()
+            .unwrap()
+            .witness_set
+            .redeemers
+            .is_some());
         let fake_script_hash = tx_redeemer_builder.draft_body().script_data_hash.unwrap();
         assert_eq!(
             fake_script_hash.to_hex(),

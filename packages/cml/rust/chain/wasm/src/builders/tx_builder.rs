@@ -373,6 +373,12 @@ impl TransactionBuilder {
             .set_exunits((*redeemer).into(), ex_units.clone().into())
     }
 
+    /// Whether the transaction has any redeemer, so that its witness set
+    /// will hold redeemers.
+    pub fn has_redeemers(&self) -> bool {
+        self.0.has_redeemers()
+    }
+
     /// warning: sum of all parts of a transaction must equal 0. You cannot just set the fee to the min value and forget about it
     /// warning: min_fee may be slightly larger than the actual minimum fee (ex: a few lovelaces)
     /// this is done to simplify the library code, but can be fixed later

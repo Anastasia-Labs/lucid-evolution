@@ -27913,6 +27913,15 @@ export class TransactionBuilder {
         return ret === 0 ? undefined : MapRewardAccountToCoin.__wrap(ret);
     }
     /**
+     * Whether the transaction has any redeemer, so that its witness set
+     * will hold redeemers.
+     * @returns {boolean}
+     */
+    has_redeemers() {
+        const ret = wasm.transactionbuilder_has_redeemers(this.__wbg_ptr);
+        return ret !== 0;
+    }
+    /**
      * warning: sum of all parts of a transaction must equal 0. You cannot just set the fee to the min value and forget about it
      * warning: min_fee may be slightly larger than the actual minimum fee (ex: a few lovelaces)
      * this is done to simplify the library code, but can be fixed later

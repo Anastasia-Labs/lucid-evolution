@@ -116,6 +116,19 @@ impl RedeemerSetBuilder {
             && self.cert.is_empty()
     }
 
+    /// Whether any entry has a redeemer. Spends of inputs locked by keys are
+    /// entries without one.
+    pub fn has_redeemers(&self) -> bool {
+        self.spend
+            .values()
+            .chain(self.mint.values())
+            .chain(self.reward.values())
+            .chain(self.cert.iter())
+            .chain(self.proposals.iter())
+            .chain(self.votes.iter())
+            .any(Option::is_some)
+    }
+
     /// note: will override existing value if called twice with the same key
     pub fn update_ex_units(&mut self, key: RedeemerWitnessKey, ex_units: ExUnits) {
         match key.tag {
