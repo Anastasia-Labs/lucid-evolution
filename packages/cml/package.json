@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/cml",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "license": "MIT",
   "description": "cardano-multiplatform-lib WebAssembly build used by Lucid Evolution",
   "homepage": "https://anastasia-labs.github.io/lucid-evolution",
