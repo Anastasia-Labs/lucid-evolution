@@ -2040,19 +2040,14 @@ const buildEvaluationCandidate = (
       script_calculation,
       forceExplicitFee,
     );
-    const candidate = yield* buildEvaluationDraft(config, changeAddress);
-    const hasRedeemers = withCMLScope(
-      (own) => own(own(candidate.witness_set()).redeemers()) !== undefined,
-    );
-    if (forceExplicitFee || !hasRedeemers) {
-      return candidate;
-    }
-    candidate.free();
-    if (config.minFee === undefined) {
-      // The builder is unchanged since `fee` was computed.
-      config.txBuilder.set_fee(fee);
-    } else {
-      yield* applyEffectiveFee(config, script_calculation, true);
+    // A draft with redeemers is evaluated with an explicit fee.
+    if (!forceExplicitFee && config.txBuilder.has_redeemers()) {
+      if (config.minFee === undefined) {
+        // The builder is unchanged since `fee` was computed.
+        config.txBuilder.set_fee(fee);
+      } else {
+        yield* applyEffectiveFee(config, script_calculation, true);
+      }
     }
     return yield* buildEvaluationDraft(config, changeAddress);
   });
