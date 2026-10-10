@@ -1772,10 +1772,11 @@ const topUpCollateral = (
       leftoverLovelace < 0n ? { lovelace: -leftoverLovelace } : {};
     const externalAssets: Assets =
       leftoverLovelace < 0n ? { ...leftover, lovelace: 0n } : leftover;
-    const error = completeTxError(
-      `Your wallet does not have enough funds to cover the required ${required} Lovelace collateral. Or it contains UTxOs with reference scripts; which
+    const error = () =>
+      completeTxError(
+        `Your wallet does not have enough funds to cover the required ${required} Lovelace collateral. Or it contains UTxOs with reference scripts; which
       are excluded from collateral selection.`,
-    );
+      );
     // CML cannot remove collateral inputs, so a failure here asks for one
     // replay that selects the whole collateral up front.
     const replay = (cause: TxBuilderError) =>
@@ -1911,10 +1912,11 @@ const findCollateral = (
     // For example:
     // A UTXO with 5.5 ADA will result in an error message such as `BabbageOutputTooSmallUTxO`, since only 0.5 ADA would be returned to the collateral return address.
     const collateralLovelace: Assets = { lovelace: setCollateral };
-    const error = completeTxError(
-      `Your wallet does not have enough funds to cover the required ${setCollateral} Lovelace collateral. Or it contains UTxOs with reference scripts; which
+    const error = () =>
+      completeTxError(
+        `Your wallet does not have enough funds to cover the required ${setCollateral} Lovelace collateral. Or it contains UTxOs with reference scripts; which
       are excluded from collateral selection.`,
-    );
+      );
     const { selected } = yield* recursive(
       sortUTxOs(inputs),
       collateralLovelace,
@@ -2388,11 +2390,24 @@ type EncodedUTxO = Readonly<{
   output: Uint8Array;
 }>;
 
+/**
+ * The CBOR of a UTxO's output when the caller already has it, so the
+ * evaluator need not convert the UTxO again.
+ */
+type KnownOutput = (
+  input: CML.TransactionInput,
+  utxo: UTxO,
+) => Uint8Array | undefined;
+
 type BytesEvaluator = (
   txBytes: Uint8Array,
   additionalUTxOs: UTxO[],
   context: EvaluationContext,
+  knownOutput?: KnownOutput,
 ) => Promise<EvalRedeemer[]>;
+
+/** The evaluators `makeAikenEvaluator` created, by adapter. */
+const aikenEvaluators = new WeakMap<EvaluatorAdapter, BytesEvaluator>();
 
 /**
  * The subset of `@lucid-evolution/uplc` used by the Aiken evaluator.
@@ -2426,21 +2441,29 @@ export const makeAikenEvaluator = (
   let encodedUTxOs = new Map<string, EncodedUTxO>();
 
   // The cached arrays are private to this evaluator and never modified.
-  const encodeUTxO = (utxo: UTxO): EncodedUTxO => {
+  const encodeUTxO = (utxo: UTxO, knownOutput?: KnownOutput): EncodedUTxO => {
     const key = `${utxo.txHash}#${utxo.outputIndex}`;
     const cached = encodedUTxOs.get(key);
     if (cached !== undefined && sameTxOutput(cached.utxo, utxo)) return cached;
-    return withCMLScope((own) => ({
-      utxo: cloneUTxO(utxo),
-      input: own(utxoToTransactionInput(utxo)).to_cbor_bytes(),
-      output: own(utxoToTransactionOutput(utxo)).to_cbor_bytes(),
-    }));
+    return withCMLScope((own) => {
+      const input = own(utxoToTransactionInput(utxo));
+      return {
+        utxo: cloneUTxO(utxo),
+        input: input.to_cbor_bytes(),
+        output:
+          knownOutput?.(input, utxo) ??
+          own(utxoToTransactionOutput(utxo)).to_cbor_bytes(),
+      };
+    });
   };
 
-  const encodeUTxOs = (utxos: ReadonlyArray<UTxO>): EncodedUTxO[] => {
+  const encodeUTxOs = (
+    utxos: ReadonlyArray<UTxO>,
+    knownOutput: KnownOutput | undefined,
+  ): EncodedUTxO[] => {
     const used = new Map<string, EncodedUTxO>();
     const encoded = utxos.map((utxo) => {
-      const result = encodeUTxO(utxo);
+      const result = encodeUTxO(utxo, knownOutput);
       used.set(`${utxo.txHash}#${utxo.outputIndex}`, result);
       return result;
     });
@@ -2459,8 +2482,9 @@ export const makeAikenEvaluator = (
     txBytes,
     additionalUTxOs,
     context,
+    knownOutput,
   ) => {
-    const encoded = encodeUTxOs(additionalUTxOs);
+    const encoded = encodeUTxOs(additionalUTxOs, knownOutput);
     const request: AikenEvaluationRequest = {
       txBytes,
       inputBytes: encoded.map(({ input }) => input),
@@ -2519,6 +2543,7 @@ export const makeAikenEvaluator = (
     value: ({ tx, additionalUTxOs, context }: EvaluationBytesInput) =>
       evaluate(tx, additionalUTxOs, context),
   });
+  aikenEvaluators.set(adapter, evaluate);
   return adapter;
 };
 
@@ -2605,7 +2630,16 @@ const evaluateTransaction = (
     ).pipe(Effect.tapError(() => Effect.sync(release)));
     const context = makeEvaluationContext(config);
     let run: () => Promise<EvalRedeemer[]>;
-    if (adapter.evaluateBytes) {
+    const aikenEvaluator = aikenEvaluators.get(adapter);
+    if (aikenEvaluator) {
+      const txBytes = txEvaluation.to_cbor_bytes();
+      // The builder holds every UTxO the draft spends or references. Outputs
+      // with a datum hash are left to the evaluator, which sees them without
+      // their datum (`normalizeEvalUTxO`).
+      const knownOutput: KnownOutput = (input, utxo) =>
+        utxo.datumHash ? undefined : config.txBuilder.utxo_output_cbor(input);
+      run = () => aikenEvaluator(txBytes, txUtxos, context, knownOutput);
+    } else if (adapter.evaluateBytes) {
       const txBytes = txEvaluation.to_cbor_bytes();
       run = () =>
         adapter.evaluateBytes!({
@@ -2727,7 +2761,8 @@ const calculateExtraLovelace = (
  * @param requiredAssets
  * @param coinsPerUtxoByte
  * @param externalAssets
- * @param error
+ * @param error the error when the inputs cannot cover `requiredAssets`,
+ * built only on failure
  * @returns
  */
 export const recursive = (
@@ -2736,17 +2771,19 @@ export const recursive = (
   coinsPerUtxoByte: bigint,
   externalAssets: Assets = {},
   includeLeftoverLovelaceAsFee?: boolean,
-  error?: TxBuilderError,
+  error?: () => TxBuilderError,
 ): Effect.Effect<CoinSelectionResult, TxBuilderError> =>
   Effect.gen(function* () {
     let selected: UTxO[] = [];
-    error ??= completeTxError(
-      `Your wallet does not have enough funds to cover the required assets: ${stringify(requiredAssets)}
-      Or it contains UTxOs with reference scripts; which are excluded from coin selection.`,
-    );
     if (!Record.isEmptyRecord(requiredAssets)) {
       selected = selectUTxOs(inputs, requiredAssets, true);
-      if (_Array.isEmptyArray(selected)) yield* error;
+      if (_Array.isEmptyArray(selected)) {
+        yield* error?.() ??
+          completeTxError(
+            `Your wallet does not have enough funds to cover the required assets: ${stringify(requiredAssets)}
+      Or it contains UTxOs with reference scripts; which are excluded from coin selection.`,
+          );
+      }
     }
 
     const selectedAssets: Assets = sumAssetsFromInputs(selected);

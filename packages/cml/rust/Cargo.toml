@@ -1,0 +1,24 @@
+# cardano-multiplatform-lib, vendored from
+# https://github.com/Anastasia-Labs/cardano-multiplatform-lib (develop) at
+# 7950a78, the source of the 6.2.0-1 npm release. Only the crates behind the
+# `cml/wasm` package are kept; the JSON schema generators are dropped because
+# the published typings never included their output.
+[workspace]
+resolver = "1"
+members = [
+    "chain/rust",
+    "chain/wasm",
+    "cip25/rust",
+    "cip25/wasm",
+    "cip36/rust",
+    "cip36/wasm",
+    "cml/wasm",
+    "core/rust",
+    "core/wasm",
+    "crypto/rust",
+    "crypto/wasm",
+]
+
+[profile.release]
+lto = true
+opt-level = "z"

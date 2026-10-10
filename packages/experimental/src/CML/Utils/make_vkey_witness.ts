@@ -2,7 +2,7 @@
  * @since 2.0.0
  */
 import { Data, Effect } from "effect";
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import * as CML from "@lucid-evolution/cml";
 
 /**
  * Error class for make_vkey_witness function

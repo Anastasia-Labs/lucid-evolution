@@ -1,4 +1,4 @@
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import * as CML from "@lucid-evolution/cml";
 
 export type Slot = number;
 

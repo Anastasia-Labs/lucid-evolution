@@ -50,14 +50,10 @@
     "build": "pnpm build:deps && tsup src/index.ts --format esm,cjs --dts --clean",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
-  "browser": {
-    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "@anastasia-labs/cardano-multiplatform-lib-browser"
-  },
   "dependencies": {
-    "@anastasia-labs/cardano-multiplatform-lib-browser": "6.2.0-1",
-    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.2.0-1",
     "@effect/schema": "^0.66.16",
     "@emurgo/cardano-message-signing-nodejs": "^1.1.0",
+    "@lucid-evolution/cml": "workspace:*",
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
     "@lucid-evolution/plutus": "workspace:*",

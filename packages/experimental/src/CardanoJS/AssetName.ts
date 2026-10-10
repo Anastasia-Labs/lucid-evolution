@@ -1,4 +1,4 @@
-import { AssetName } from "@anastasia-labs/cardano-multiplatform-lib-nodejs"; // browser
+import { AssetName } from "@lucid-evolution/cml"; // browser
 import { Data, Effect } from "effect";
 import * as FormatError from "../FormatError.js";
 

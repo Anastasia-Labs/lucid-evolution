@@ -2,7 +2,7 @@
  * @since 2.0.0
  */
 import { Data, Effect } from "effect";
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import * as CML from "@lucid-evolution/cml";
 
 /**
  * Error class for decode_metadatum_to_json_str function

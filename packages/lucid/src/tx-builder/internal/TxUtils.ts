@@ -1,4 +1,4 @@
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import * as CML from "@lucid-evolution/cml";
 import { CBORHex } from "../types.js";
 import { Effect, pipe } from "effect";
 import {

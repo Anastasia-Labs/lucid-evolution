@@ -1,5 +1,5 @@
 import { fromHex, toHex, withCMLScope } from "@lucid-evolution/core-utils";
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import * as CML from "@lucid-evolution/cml";
 import { Constr } from "./constr.js";
 import type { Data } from "./data.js";
 

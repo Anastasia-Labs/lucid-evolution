@@ -1,0 +1,22 @@
+[package]
+name = "cml-core-wasm"
+version = "6.2.0"
+edition = "2018"
+keywords = ["cardano"]
+license = "MIT"
+description = "Multiplatform WASM SDK for core Cardano blockchain functionality"
+documentation = "https://github.com/dcSpark/cardano-multiplatform-lib/docs"
+repository = "https://github.com/dcSpark/cardano-multiplatform-lib"
+readme = "../../README.md"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+cml-core = { path = "../rust", version = "6.2.0" }
+cbor_event = "2.2.0"
+hex = "0.4.0"
+wasm-bindgen = { version = "0.2.87" }
+linked-hash-map = "0.5.3"
+serde_json = "1.0.57"
+serde-wasm-bindgen = "0.4.5"

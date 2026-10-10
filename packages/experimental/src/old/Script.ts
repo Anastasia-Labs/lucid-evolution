@@ -1,4 +1,4 @@
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import * as CML from "@lucid-evolution/cml";
 import * as Data from "../Data.js";
 import * as UPLC from "@harmoniclabs/uplc";
 import * as Bytes from "../Bytes.js";

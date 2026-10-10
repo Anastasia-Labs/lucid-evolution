@@ -1,0 +1,46 @@
+{
+  "name": "@lucid-evolution/cml",
+  "version": "0.0.0",
+  "license": "MIT",
+  "description": "cardano-multiplatform-lib WebAssembly build used by Lucid Evolution",
+  "homepage": "https://anastasia-labs.github.io/lucid-evolution",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Anastasia-Labs/lucid-evolution.git",
+    "directory": "packages/cml"
+  },
+  "bugs": {
+    "url": "https://github.com/Anastasia-Labs/lucid-evolution/issues"
+  },
+  "keywords": [
+    "cardano"
+  ],
+  "main": "./dist/node/cardano_multiplatform_lib.js",
+  "browser": "./dist/browser/cardano_multiplatform_lib.js",
+  "types": "./dist/node/cardano_multiplatform_lib.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/node/cardano_multiplatform_lib.d.ts",
+      "workerd": "./dist/browser/cardano_multiplatform_lib.js",
+      "edge-light": "./dist/browser/cardano_multiplatform_lib.js",
+      "worker": "./dist/browser/cardano_multiplatform_lib.js",
+      "browser": "./dist/browser/cardano_multiplatform_lib.js",
+      "default": "./dist/node/cardano_multiplatform_lib.js"
+    },
+    "./dist/*": "./dist/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "LICENSE*"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build-local": "rm -rf dist && cd rust/cml/wasm && WASM_BINDGEN_WEAKREF=1 wasm-pack build --target bundler --out-dir ../../../src/browser && WASM_BINDGEN_WEAKREF=1 CARGO_PROFILE_RELEASE_OPT_LEVEL=3 CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_RUSTFLAGS='-C link-arg=-zstack-size=16777216' wasm-pack build --target nodejs --out-dir ../../../src/node && cd ../../.. && pnpm clean-garbage",
+    "build": "rm -rf dist && cp -r src dist",
+    "clean-garbage": "for d in browser node; do rm -f src/$d/.gitignore src/$d/package.json; done",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  }
+}
