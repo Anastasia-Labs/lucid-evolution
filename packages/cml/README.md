@@ -14,12 +14,14 @@ Node resolves the `nodejs` build in `dist/node`; bundlers, browsers and edge run
 
 ## Building
 
-`src/` holds the committed wasm-pack output; CI does not rebuild it. After changing the Rust code, regenerate it with wasm-pack and a Rust toolchain that has the `wasm32-unknown-unknown` target:
+`src/` holds the committed wasm-pack output; CI does not rebuild it. After changing the Rust code, regenerate it:
 
 ```bash
 pnpm build-local
 pnpm build
 ```
+
+`rust-toolchain.toml` pins the Rust toolchain and its `wasm32-unknown-unknown` target. The committed output was built with wasm-pack 0.15.0 and binaryen's `wasm-opt` 130 on `PATH`, which wasm-pack uses instead of downloading its own. Other versions of either may produce different wasm.
 
 `build-local` runs wasm-pack with `WASM_BINDGEN_WEAKREF=1`, so CML objects are freed by a `FinalizationRegistry` as well as by `.free()`, matching the published `@anastasia-labs` packages.
 
