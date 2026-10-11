@@ -433,47 +433,83 @@ const randomTransaction = (g: FastCheck.GeneratorValue): Item => {
 // ---------------------------------------------------------------------------
 // What canonicalTransaction keeps from the original.
 
+/** The major type, additional info, argument and size of the head at `at`. */
+const readHead = (cbor: Uint8Array, at: number) => {
+  const major = cbor[at] >> 5;
+  const info = cbor[at] & 31;
+  if (info < 24 || info === 31) {
+    return { major, info, value: BigInt(info), size: 1 };
+  }
+  const bytes = 2 ** (info - 24);
+  let value = 0n;
+  for (let i = 1; i <= bytes; i++) value = (value << 8n) | BigInt(cbor[at + i]);
+  return { major, info, value, size: 1 + bytes };
+};
+
+/**
+ * Walks the CBOR item at `at` and returns where it ends. Its bytes, but for
+ * every tag 258, go to `out`.
+ */
+const walk = (cbor: Uint8Array, at: number, out: number[] = []): number => {
+  const { major, info, value, size } = readHead(cbor, at);
+  if (major === 6 && value === 258n) return walk(cbor, at + size, out);
+  out.push(...cbor.subarray(at, at + size));
+  at += size;
+  if (info === 31) {
+    // An indefinite-length item, up to its break.
+    while (cbor[at] !== 0xff) at = walk(cbor, at, out);
+    out.push(cbor[at]);
+    return at + 1;
+  }
+  if (major === 2 || major === 3) {
+    out.push(...cbor.subarray(at, at + Number(value)));
+    return at + Number(value);
+  }
+  if (major === 4 || major === 5) {
+    const items = major === 4 ? value : 2n * value;
+    for (let i = 0n; i < items; i++) at = walk(cbor, at, out);
+  } else if (major === 6) {
+    at = walk(cbor, at, out);
+  }
+  return at;
+};
+
 /**
  * The CBOR with every tag 258 dropped. The result tags its ledger sets
  * whether or not the original did, which is the one change to the value.
  */
 const withoutSetTags = (cbor: Uint8Array): string => {
   const out: number[] = [];
-  let at = 0;
-  const argument = (info: number): bigint => {
-    if (info < 24) return BigInt(info);
-    let value = 0n;
-    for (let i = 0; i < 2 ** (info - 24); i++) {
-      value = (value << 8n) | BigInt(cbor[at++]);
-    }
-    return value;
-  };
-  const item = (): void => {
-    const start = at;
-    const major = cbor[at] >> 5;
-    const info = cbor[at++] & 31;
-    if (info === 31) {
-      // An indefinite-length item, up to its break.
-      out.push(cbor[start]);
-      while (cbor[at] !== 0xff) item();
-      out.push(cbor[at++]);
-      return;
-    }
-    const value = argument(info);
-    if (major === 6 && value === 258n) return item();
-    out.push(...cbor.subarray(start, at));
-    if (major === 2 || major === 3) {
-      out.push(...cbor.subarray(at, at + Number(value)));
-      at += Number(value);
-    } else if (major === 4 || major === 5) {
-      const items = major === 4 ? value : 2n * value;
-      for (let i = 0n; i < items; i++) item();
-    } else if (major === 6) {
-      item();
-    }
-  };
-  item();
+  walk(cbor, 0, out);
   return toHex(Uint8Array.from(out));
+};
+
+/**
+ * Body fields that are ledger sets: inputs, certificates, collateral inputs,
+ * required signers, reference inputs and proposal procedures.
+ */
+const BODY_SETS = new Set([0n, 4n, 13n, 14n, 18n, 20n]);
+const WITNESS_DATUMS = new Set([4n]);
+
+/** For each ledger set in a transaction, whether it has tag 258. */
+const ledgerSetTags = (cbor: Uint8Array): boolean[] => {
+  const tagged: boolean[] = [];
+  const fields = (at: number, sets: Set<bigint>): number => {
+    const map = readHead(cbor, at);
+    at += map.size;
+    for (let i = 0n; map.info === 31 ? cbor[at] !== 0xff : i < map.value; i++) {
+      const key = readHead(cbor, at);
+      at = walk(cbor, at);
+      if (sets.has(key.value)) {
+        const value = readHead(cbor, at);
+        tagged.push(value.major === 6 && value.value === 258n);
+      }
+      at = walk(cbor, at);
+    }
+    return map.info === 31 ? at + 1 : at;
+  };
+  fields(fields(readHead(cbor, 0).size, BODY_SETS), WITNESS_DATUMS);
+  return tagged;
 };
 
 /** Datums of Conway-format outputs and collateral return, which keep theirs. */
@@ -554,6 +590,7 @@ describe("canonicalTransaction", () => {
   test("keeps Plutus data and canonicalises everything else", () => {
     let withRedeemers = 0;
     let changed = 0;
+    let untagged = 0;
     FastCheck.assert(
       FastCheck.property(FastCheck.gen(), (g) =>
         withCMLScope((own) => {
@@ -567,10 +604,12 @@ describe("canonicalTransaction", () => {
           }
           const result = own(canonicalTransaction(tx));
 
-          // The same transaction, but for tag 258 on sets.
+          // The same transaction, but for tag 258 on sets, which every
+          // ledger set has.
           expect(withoutSetTags(result.to_canonical_cbor_bytes())).toBe(
             withoutSetTags(tx.to_canonical_cbor_bytes()),
           );
+          expect(ledgerSetTags(result.to_cbor_bytes())).not.toContain(false);
           // Plutus data keeps its encoding: datums always, and redeemers
           // whose value canonical encoding would change.
           expect(outputDatums(own, result)).toEqual(outputDatums(own, tx));
@@ -593,14 +632,16 @@ describe("canonicalTransaction", () => {
           );
 
           if (own(own(tx.witness_set()).redeemers())) withRedeemers++;
+          if (ledgerSetTags(tx.to_cbor_bytes()).includes(false)) untagged++;
           if (result.to_cbor_hex() !== tx.to_cbor_hex()) changed++;
         }),
       ),
       { numRuns: 3000 },
     );
-    // Most random transactions have redeemers, and canonical encoding
-    // changes them.
+    // Most random transactions have redeemers and a set without tag 258,
+    // and canonical encoding changes them.
     expect(withRedeemers).toBeGreaterThan(1500);
+    expect(untagged).toBeGreaterThan(2000);
     expect(changed).toBeGreaterThan(2400);
   });
 });

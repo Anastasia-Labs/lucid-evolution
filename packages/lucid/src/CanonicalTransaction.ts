@@ -14,10 +14,33 @@ import { CML } from "./core.js";
  *
  * The work happens in CML in one call, so no intermediate CML objects are
  * created or freed in JavaScript. The caller owns the returned transaction.
+ *
+ * @example
+ * import { CML } from "./core.js";
+ * import { canonicalTransaction } from "./CanonicalTransaction.js";
+ *
+ * const tx = CML.Transaction.from_cbor_hex(txCbor);
+ * const canonical = canonicalTransaction(tx);
+ * canonical.to_cbor_hex(); // canonical CBOR, with the original Plutus data
+ * canonical.free();
+ *
+ * @since 0.7.0
+ * @category Transactions
  */
 export const canonicalTransaction = (tx: CML.Transaction): CML.Transaction =>
   tx.to_canonical_keeping_plutus_data();
 
-/** Canonical CBOR hex of `tx`; see {@link canonicalTransaction}. */
+/**
+ * Canonical CBOR hex of `tx`; see {@link canonicalTransaction}.
+ *
+ * @example
+ * import { CML } from "./core.js";
+ * import { canonicalTransactionHex } from "./CanonicalTransaction.js";
+ *
+ * canonicalTransactionHex(CML.Transaction.from_cbor_hex(txCbor));
+ *
+ * @since 0.7.0
+ * @category Transactions
+ */
 export const canonicalTransactionHex = (tx: CML.Transaction): string =>
   withCMLScope((own) => own(canonicalTransaction(tx)).to_cbor_hex());

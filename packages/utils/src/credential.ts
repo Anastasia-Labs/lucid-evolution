@@ -93,6 +93,15 @@ export function stakeCredentialOf(rewardAddress: RewardAddress): Credential {
  * applies, without loading that package. A CIP-129 header must name a DRep
  * (`0x2_`) and a key hash (`0x22`) or script hash (`0x23`), which
  * `@cardano-sdk/core` does not check.
+ *
+ * @example
+ * import { drepIDToCredential } from "@lucid-evolution/utils";
+ *
+ * drepIDToCredential("drep1y2sm9s75uhmqwxpf8f94cmt737g2rvkr6njlvpcc9yaykhq23nmjy");
+ * // { type: "Key", hash: "a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c" }
+ *
+ * @since 0.1.65
+ * @category Credentials
  */
 export const drepIDToCredential = (drepID: string): Credential => {
   const decoded = bech32.decodeUnsafe(drepID, 1023);

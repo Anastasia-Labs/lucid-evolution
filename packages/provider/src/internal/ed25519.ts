@@ -23,8 +23,8 @@ const SPKI_PREFIX = [
  * leaves that to CML.
  *
  * @example
- * import { CML } from "./core.js";
- * import { nativeVerifyEd25519 } from "./internal/ed25519.js";
+ * import { CML } from "../core.js";
+ * import { nativeVerifyEd25519 } from "./ed25519.js";
  *
  * const privateKey = CML.PrivateKey.generate_ed25519();
  * const message = new TextEncoder().encode("hello");
@@ -72,8 +72,8 @@ export const nativeVerifyEd25519 = (
  * `node:crypto`, is decided by CML.
  *
  * @example
- * import { CML } from "./core.js";
- * import { verifyEd25519 } from "./internal/ed25519.js";
+ * import { CML } from "../core.js";
+ * import { verifyEd25519 } from "./ed25519.js";
  *
  * const privateKey = CML.PrivateKey.generate_ed25519();
  * const message = new TextEncoder().encode("hello");
