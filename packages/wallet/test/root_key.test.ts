@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { expect, test, vi } from "vitest";
 import { toHex } from "@lucid-evolution/core-utils";
 import { CML } from "../src/core.js";
 import { bip32RootKeyFromEntropy } from "../src/root_key.js";
@@ -24,10 +24,36 @@ test("root key matches CML from_bip39_entropy", () => {
     const password = bytes(passwordLengths[next() % passwordLengths.length]);
     const expected = CML.Bip32PrivateKey.from_bip39_entropy(entropy, password);
     const actual = bip32RootKeyFromEntropy(entropy, password);
-    expect(toHex(actual.to_raw_bytes())).toBe(
-      toHex(expected.to_raw_bytes()),
-    );
+    expect(toHex(actual.to_raw_bytes())).toBe(toHex(expected.to_raw_bytes()));
     expected.free();
     actual.free();
+  }
+});
+
+// Without this, a missing native PBKDF2 would leave the test above comparing
+// CML with itself.
+test("root key uses Node's native PBKDF2", async () => {
+  const crypto = process.getBuiltinModule("node:crypto");
+  const pbkdf2Sync = vi.fn(crypto.pbkdf2Sync);
+  const getBuiltinModule = vi
+    .spyOn(process, "getBuiltinModule")
+    .mockImplementation(((id: string) =>
+      id === "node:crypto" ? { ...crypto, pbkdf2Sync } : undefined) as never);
+  try {
+    vi.resetModules();
+    const { bip32RootKeyFromEntropy: rootKey } = await import(
+      "../src/root_key.js"
+    );
+    const entropy = bytes(32);
+    const password = bytes(8);
+    const expected = CML.Bip32PrivateKey.from_bip39_entropy(entropy, password);
+    const actual = rootKey(entropy, password);
+    expect(pbkdf2Sync).toHaveBeenCalledOnce();
+    expect(toHex(actual.to_raw_bytes())).toBe(toHex(expected.to_raw_bytes()));
+    expected.free();
+    actual.free();
+  } finally {
+    getBuiltinModule.mockRestore();
+    vi.resetModules();
   }
 });
