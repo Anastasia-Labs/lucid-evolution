@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, test, vi } from "vitest";
 import { fromHex, toHex } from "../src/core-utils";
 
 /*
@@ -69,6 +69,22 @@ const INVALID = ["g", "G", " ", "\0", "-", "x", "İ", "š", "Á", "０", "\ud83d
 const LENGTHS = [0, 2, 56, 64, 66, 130, 1000, 16_000];
 
 describe("hex", () => {
+  // Without this, a load-time check that rejected Node's codec would leave
+  // the tests below comparing the loops with themselves.
+  test("uses Node's codec on long inputs", () => {
+    const write = vi.spyOn(Buffer.prototype, "write");
+    const toString = vi.spyOn(Buffer.prototype, "toString");
+    try {
+      const hex = "0aff".repeat(40);
+      expect(toHex(fromHex(hex))).toBe(hex);
+      expect(write).toHaveBeenCalledWith(hex, "hex");
+      expect(toString).toHaveBeenCalledWith("hex");
+    } finally {
+      write.mockRestore();
+      toString.mockRestore();
+    }
+  });
+
   test("fromHex matches the loop on valid and invalid hex", () => {
     for (let i = 0; i < 4000; i++) {
       const length = LENGTHS[int(LENGTHS.length)] + (i % 50 === 0 ? 1 : 0);
