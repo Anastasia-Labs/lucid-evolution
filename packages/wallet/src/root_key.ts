@@ -1,26 +1,11 @@
 import { CML } from "./core.js";
 
-type Pbkdf2Sync = (
-  password: Uint8Array,
-  salt: Uint8Array,
-  iterations: number,
-  keylen: number,
-  digest: string,
-) => Uint8Array;
-
 // Node's native PBKDF2 is about three times faster than CML's wasm one, and
 // `getBuiltinModule` loads it synchronously without a static import, so
 // bundles for other runtimes are unaffected (Node >= 20.16 or 22.3).
-const nodePbkdf2Sync = ((): Pbkdf2Sync | undefined => {
+const nodePbkdf2Sync = (() => {
   try {
-    const process = (
-      globalThis as {
-        process?: {
-          getBuiltinModule?: (id: string) => { pbkdf2Sync?: Pbkdf2Sync };
-        };
-      }
-    ).process;
-    return process?.getBuiltinModule?.("node:crypto")?.pbkdf2Sync;
+    return globalThis.process?.getBuiltinModule?.("node:crypto")?.pbkdf2Sync;
   } catch {
     return undefined;
   }

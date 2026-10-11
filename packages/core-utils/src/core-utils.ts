@@ -34,18 +34,6 @@ const hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) =>
   i.toString(16).padStart(2, "0"),
 );
 
-type NodeBuffer = {
-  from(
-    buffer: ArrayBufferLike,
-    byteOffset: number,
-    length: number,
-  ): {
-    write(string: string, encoding: "hex"): number;
-    toString(encoding: "hex"): string;
-  };
-  byteLength(string: string, encoding: "utf8"): number;
-};
-
 /**
  * Node's native hex codec, several times faster than the loops below on all
  * but the shortest inputs. `getBuiltinModule` loads it without a static
@@ -53,16 +41,10 @@ type NodeBuffer = {
  * it encodes like `hexes` and stops at an invalid digit in either position,
  * which some `Buffer` polyfills do not.
  */
-const nodeBuffer = ((): NodeBuffer | undefined => {
+const nodeBuffer = (() => {
   try {
-    const process = (
-      globalThis as {
-        process?: {
-          getBuiltinModule?: (id: string) => { Buffer?: NodeBuffer };
-        };
-      }
-    ).process;
-    const buffer = process?.getBuiltinModule?.("node:buffer")?.Buffer;
+    const buffer =
+      globalThis.process?.getBuiltinModule?.("node:buffer")?.Buffer;
     if (!buffer) return undefined;
     const bytes = Uint8Array.from(hexes, (_, i) => i);
     const view = buffer.from(bytes.buffer, 0, bytes.length);

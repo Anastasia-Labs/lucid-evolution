@@ -1,33 +1,11 @@
 import { CML } from "../core.js";
 
-type NodeCrypto = {
-  createPublicKey: (options: {
-    key: Uint8Array;
-    format: "der";
-    type: "spki";
-  }) => unknown;
-  verify: (
-    algorithm: null,
-    data: Uint8Array,
-    key: unknown,
-    signature: Uint8Array,
-  ) => boolean;
-};
-
 // Node's native Ed25519 verification is about three times faster than CML's
 // wasm one. `getBuiltinModule` loads it synchronously without a static
 // import, so bundles for other runtimes are unaffected (Node >= 20.16 or 22.3).
-const nodeCrypto = ((): NodeCrypto | undefined => {
+const nodeCrypto = (() => {
   try {
-    const process = (
-      globalThis as {
-        process?: { getBuiltinModule?: (id: string) => Partial<NodeCrypto> };
-      }
-    ).process;
-    const crypto = process?.getBuiltinModule?.("node:crypto");
-    return crypto?.createPublicKey && crypto.verify
-      ? (crypto as NodeCrypto)
-      : undefined;
+    return globalThis.process?.getBuiltinModule?.("node:crypto");
   } catch {
     return undefined;
   }
@@ -51,7 +29,7 @@ export const nativeVerifyEd25519 = (
   // does not.
   if (publicKey.every((byte) => byte === 0)) return false;
   try {
-    const spki = new Uint8Array(SPKI_PREFIX.length + 32);
+    const spki = Buffer.alloc(SPKI_PREFIX.length + 32);
     spki.set(SPKI_PREFIX);
     spki.set(publicKey, SPKI_PREFIX.length);
     const key = nodeCrypto.createPublicKey({
