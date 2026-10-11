@@ -105,7 +105,8 @@ export function fromHex(hex: string): Uint8Array {
  */
 export function toHex(bytes: Uint8Array): string {
   assert_bytes(bytes);
-  if (nodeBuffer && bytes instanceof Uint8Array) {
+  // Below about 20 bytes the loop is faster than a call into Node.
+  if (nodeBuffer && bytes.length > 20 && bytes instanceof Uint8Array) {
     return nodeBuffer
       .from(bytes.buffer, bytes.byteOffset, bytes.length)
       .toString("hex");
