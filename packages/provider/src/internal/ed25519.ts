@@ -16,7 +16,27 @@ const SPKI_PREFIX = [
   0x30, 0x2a, 0x30, 0x05, 0x06, 0x03, 0x2b, 0x65, 0x70, 0x03, 0x21, 0x00,
 ];
 
-/** OpenSSL's answer, or `false` where it is not available. */
+/**
+ * OpenSSL's answer to whether `signature` is a valid Ed25519 signature of
+ * `message` by `publicKey` (32 raw bytes), or `false` where `node:crypto` is
+ * not available. A `false` is not a rejection: use `verifyEd25519`, which
+ * leaves that to CML.
+ *
+ * @example
+ * import { CML } from "./core.js";
+ * import { nativeVerifyEd25519 } from "./internal/ed25519.js";
+ *
+ * const privateKey = CML.PrivateKey.generate_ed25519();
+ * const message = new TextEncoder().encode("hello");
+ * nativeVerifyEd25519(
+ *   privateKey.to_public().to_raw_bytes(),
+ *   message,
+ *   privateKey.sign(message).to_raw_bytes(),
+ * ); // true on Node, false elsewhere
+ *
+ * @since 0.4.1
+ * @category Signatures
+ */
 export const nativeVerifyEd25519 = (
   publicKey: Uint8Array,
   message: Uint8Array,
@@ -50,6 +70,17 @@ export const nativeVerifyEd25519 = (
  * `s < L`, so a signature OpenSSL accepts is one CML accepts as well. Only
  * that answer is taken from OpenSSL: a rejection, or a runtime without
  * `node:crypto`, is decided by CML.
+ *
+ * @example
+ * import { CML } from "./core.js";
+ * import { verifyEd25519 } from "./internal/ed25519.js";
+ *
+ * const privateKey = CML.PrivateKey.generate_ed25519();
+ * const message = new TextEncoder().encode("hello");
+ * verifyEd25519(privateKey.to_public(), message, privateKey.sign(message)); // true
+ *
+ * @since 0.4.1
+ * @category Signatures
  */
 export const verifyEd25519 = (
   publicKey: CML.PublicKey,

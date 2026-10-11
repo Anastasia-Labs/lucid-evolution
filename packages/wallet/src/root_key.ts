@@ -15,6 +15,22 @@ const nodePbkdf2Sync = (() => {
  * The Icarus root key (CIP-3): PBKDF2-HMAC-SHA512 keyed by the password over
  * the entropy, 4096 iterations, 96 bytes, with the scalar clamped as
  * `Bip32PrivateKey.from_bip39_entropy` does.
+ *
+ * @example
+ * import { fromHex } from "@lucid-evolution/core-utils";
+ * import { mnemonicToEntropy } from "bip39";
+ * import { bip32RootKeyFromEntropy } from "./root_key.js";
+ *
+ * const seed =
+ *   "test test test test test test test test test test test junk";
+ * const rootKey = bip32RootKeyFromEntropy(
+ *   fromHex(mnemonicToEntropy(seed)),
+ *   new TextEncoder().encode("password"),
+ * );
+ * rootKey.to_public().to_bech32(); // "xpub1..."
+ *
+ * @since 0.4.1
+ * @category Keys
  */
 export const bip32RootKeyFromEntropy = (
   entropy: Uint8Array,
