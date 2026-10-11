@@ -1,5 +1,7 @@
 import { createHash } from "node:crypto";
 import { describe, expect, test } from "vitest";
+import { FastCheck } from "effect";
+import { fromHex, toHex } from "@lucid-evolution/core-utils";
 import { CML } from "../src/core.js";
 import { nativeVerifyEd25519, verifyEd25519 } from "../src/internal/ed25519.js";
 
@@ -72,7 +74,12 @@ const decode = (bytes: Uint8Array): Point | undefined => {
   if ((x & 1n) !== BigInt(bytes[31] >> 7)) x = mod(-x);
   return point(x, y);
 };
-const BASE = decode(Uint8Array.from(Buffer.from("58".padEnd(64, "6"), "hex")))!;
+const decodeValid = (bytes: Uint8Array): Point => {
+  const decoded = decode(bytes);
+  if (!decoded) throw new Error(`Not a curve point: ${toHex(bytes)}`);
+  return decoded;
+};
+const BASE = decodeValid(fromHex("58".padEnd(64, "6")));
 const hashScalar = (...parts: Uint8Array[]) => {
   const hash = createHash("sha512");
   parts.forEach((part) => hash.update(part));
@@ -85,27 +92,19 @@ const concat = (a: Uint8Array, b: Uint8Array) => {
   return out;
 };
 
-// Deterministic randomness, so failures reproduce.
-let seed = 0x2545f491;
-const nextByte = () => {
-  seed ^= seed << 13;
-  seed ^= seed >>> 17;
-  seed ^= seed << 5;
-  return seed & 0xff;
-};
-const randomBytes = (length: number) =>
-  Uint8Array.from({ length }, () => nextByte());
-const randomScalar = () => mod(leInt(randomBytes(32)), L);
+const scalar = FastCheck.bigInt({ min: 0n, max: L - 1n });
+const nonZeroScalar = FastCheck.bigInt({ min: 1n, max: L - 1n });
+const bytes = (length: number) =>
+  FastCheck.uint8Array({ minLength: length, maxLength: length });
+
+/** The message with an attempt counter appended, so retries reproduce. */
+const attemptMessage = (message: Uint8Array, attempt: number) =>
+  concat(message, leBytes(BigInt(attempt)).subarray(0, 4));
 
 const TORSION = (() => {
-  const order8 = decode(
-    Uint8Array.from(
-      Buffer.from(
-        "26e8958fc2b227b045c3f489f2ef98f0d5dfac05d3c63339b13802886d53fc05",
-        "hex",
-      ),
-    ),
-  )!;
+  const order8 = decodeValid(
+    fromHex("26e8958fc2b227b045c3f489f2ef98f0d5dfac05d3c63339b13802886d53fc05"),
+  );
   return Array.from({ length: 8 }, (_, k) => mul(order8, BigInt(k)));
 })();
 
@@ -114,13 +113,18 @@ const TORSION = (() => {
  * key `A = [a]B + T` with `T` in the torsion subgroup: `R = [r]B - [h]T`,
  * where `h mod 8` is guessed and checked.
  */
-const forge = (a: bigint, torsion: Point, encodedKey: Uint8Array) => {
-  const key = decode(encodedKey)!;
-  for (;;) {
-    const r = randomScalar();
-    const guess = BigInt(nextByte() & 7);
+const forge = (
+  a: bigint,
+  torsion: Point,
+  encodedKey: Uint8Array,
+  r: bigint,
+  baseMessage: Uint8Array,
+) => {
+  const key = decodeValid(encodedKey);
+  for (let attempt = 0; ; attempt++) {
+    const guess = BigInt(attempt & 7);
     const encodedR = encode(add(mul(BASE, r), neg(mul(torsion, guess))));
-    const message = randomBytes(32);
+    const message = attemptMessage(baseMessage, attempt);
     const h = hashScalar(encodedR, encodedKey, message);
     if (h % 8n !== guess) continue;
     const s = mod(r + h * a, L);
@@ -170,94 +174,103 @@ const withKey = (a: bigint, torsion = ZERO, flipSign = false) => {
   return key;
 };
 
+const flip = (bytes: Uint8Array, bit: number) => {
+  const out = bytes.slice();
+  out[bit >> 3] ^= 1 << (bit & 7);
+  return out;
+};
+
 describe("verifyEd25519", () => {
   test("agrees with CML on ordinary signatures", () => {
-    const cases: Case[] = [];
-    for (let i = 0; i < 200; i++) {
-      const privateKey = CML.PrivateKey.from_normal_bytes(randomBytes(32));
-      const publicKey = privateKey.to_public();
-      const message = randomBytes(i % 3 === 0 ? 32 : i % 97);
-      const signature = privateKey.sign(message).to_raw_bytes();
-      const key = publicKey.to_raw_bytes();
-      privateKey.free();
-      publicKey.free();
-      cases.push({ name: `valid ${i}`, key, message, signature });
-
-      const flip = (bytes: Uint8Array, bit: number) => {
-        const out = bytes.slice();
-        out[bit >> 3] ^= 1 << (bit & 7);
-        return out;
-      };
-      const bit = (nextByte() << 1) | (nextByte() & 1);
-      cases.push(
-        {
-          name: `signature bit ${bit} ${i}`,
-          key,
-          message,
-          signature: flip(signature, bit),
+    FastCheck.assert(
+      FastCheck.property(
+        bytes(32),
+        FastCheck.uint8Array({ maxLength: 96 }),
+        FastCheck.nat(511),
+        (secret, message, bit) => {
+          const privateKey = CML.PrivateKey.from_normal_bytes(secret);
+          const publicKey = privateKey.to_public();
+          const signature = privateKey.sign(message).to_raw_bytes();
+          const key = publicKey.to_raw_bytes();
+          privateKey.free();
+          publicKey.free();
+          // The same equation holds for s + L, which both must reject.
+          const sPlusL = leBytes(leInt(signature.subarray(32)) + L);
+          const [valid, ...tampered] = expectAgreement([
+            { name: "valid", key, message, signature },
+            {
+              name: `signature bit ${bit}`,
+              key,
+              message,
+              signature: flip(signature, bit),
+            },
+            {
+              name: `key bit ${bit & 255}`,
+              key: flip(key, bit & 255),
+              message,
+              signature,
+            },
+            {
+              name: "message",
+              key,
+              message: message.length ? flip(message, 0) : Uint8Array.of(0),
+              signature,
+            },
+            {
+              name: "s + L",
+              key,
+              message,
+              signature: concat(signature.subarray(0, 32), sPlusL),
+            },
+          ]);
+          expect(valid.cml && valid.native).toBe(true);
+          for (const outcome of tampered) {
+            expect(outcome.cml, outcome.name).toBe(false);
+          }
         },
-        {
-          name: `key bit ${bit & 255} ${i}`,
-          key: flip(key, bit & 255),
-          message,
-          signature,
-        },
-        {
-          name: `message ${i}`,
-          key,
-          message: message.length ? flip(message, 0) : Uint8Array.of(0),
-          signature,
-        },
-      );
-      // The same equation holds for s + L, which both must reject.
-      const s = leInt(signature.subarray(32)) + L;
-      cases.push({
-        name: `s + L ${i}`,
-        key,
-        message,
-        signature: concat(signature.subarray(0, 32), leBytes(s)),
-      });
-    }
-    const outcomes = expectAgreement(cases);
-    const valid = outcomes.filter((o) => o.name.startsWith("valid"));
-    expect(valid.every((o) => o.cml && o.native)).toBe(true);
-    expect(outcomes.filter((o) => !o.cml).length).toBeGreaterThan(700);
+      ),
+      { numRuns: 200 },
+    );
   });
 
   test("agrees with CML on small-order and mixed-order keys", () => {
-    const cases: Case[] = [];
+    let mixedAccepted = 0;
     TORSION.forEach((torsion, k) => {
-      for (const a of [0n, randomScalar()]) {
+      for (const mixed of [false, true]) {
         for (const flipSign of [false, true]) {
-          const key = withKey(a, torsion, flipSign);
-          if (!decode(key)) continue;
-          // Flipping the sign bit negates the point, unless its x is 0.
-          const negated =
-            flipSign && affine(add(mul(BASE, a), torsion)).x !== 0n;
-          const [scalar, component] = negated
-            ? [mod(-a, L), neg(torsion)]
-            : [a, torsion];
-          for (let i = 0; i < 8; i++) {
-            const { message, signature } = forge(scalar, component, key);
-            cases.push({
-              name: `torsion ${k} a=${a === 0n ? 0 : "random"} sign=${flipSign} ${i}`,
-              key,
-              message,
-              signature,
-            });
-          }
+          FastCheck.assert(
+            FastCheck.property(
+              mixed ? nonZeroScalar : FastCheck.constant(0n),
+              scalar,
+              bytes(32),
+              (a, r, message) => {
+                const key = withKey(a, torsion, flipSign);
+                // Flipping the sign bit negates the point, unless its x is 0.
+                const negated =
+                  flipSign && affine(add(mul(BASE, a), torsion)).x !== 0n;
+                const [secret, component] = negated
+                  ? [mod(-a, L), neg(torsion)]
+                  : [a, torsion];
+                const [outcome] = expectAgreement([
+                  {
+                    name: `torsion ${k} mixed=${mixed} sign=${flipSign}`,
+                    key,
+                    ...forge(secret, component, key, r, message),
+                  },
+                ]);
+                if (mixed && outcome.native) mixedAccepted++;
+              },
+            ),
+            { numRuns: 8 },
+          );
         }
       }
     });
-    const outcomes = expectAgreement(cases);
     // Mixed-order keys verify under both.
-    expect(
-      outcomes.filter((o) => o.name.includes("random") && o.native).length,
-    ).toBeGreaterThan(0);
+    expect(mixedAccepted).toBeGreaterThan(0);
   });
 
   test("agrees with CML on non-canonical encodings", () => {
-    const cases: Case[] = [];
     // y >= p: the 19 non-canonical values, with either sign bit.
     for (let y = P; y < 2n ** 255n; y++) {
       for (const sign of [0, 0x80]) {
@@ -268,23 +281,43 @@ describe("verifyEd25519", () => {
         const torsion = TORSION.find(
           (t) => encode(t).join() === encode(decoded).join(),
         );
-        for (let i = 0; i < 4; i++) {
-          const forged = torsion
-            ? forge(0n, torsion, key)
-            : { message: randomBytes(32), signature: randomBytes(64) };
-          cases.push({ name: `key y=${y - P}+p sign=${sign}`, key, ...forged });
-        }
+        FastCheck.assert(
+          FastCheck.property(
+            scalar,
+            bytes(32),
+            bytes(64),
+            (r, message, signature) => {
+              expectAgreement([
+                {
+                  name: `key y=${y - P}+p sign=${sign}`,
+                  key,
+                  ...(torsion
+                    ? forge(0n, torsion, key, r, message)
+                    : { message, signature }),
+                },
+              ]);
+            },
+          ),
+          { numRuns: 4 },
+        );
       }
     }
+
     // The all-zero key, which CML rejects outright.
     const zero = new Uint8Array(32);
-    for (let i = 0; i < 8; i++) {
-      cases.push({
-        name: `zero key ${i}`,
-        key: zero,
-        ...forge(0n, decode(zero)!, zero),
-      });
-    }
+    FastCheck.assert(
+      FastCheck.property(scalar, bytes(32), (r, message) => {
+        expectAgreement([
+          {
+            name: "zero key",
+            key: zero,
+            ...forge(0n, decodeValid(zero), zero, r, message),
+          },
+        ]);
+      }),
+      { numRuns: 8 },
+    );
+
     // A non-canonical R (y + p): only points with y < 19 have one, which no
     // honest signature hits, so R is a small-order point with y < 19 (the
     // identity, y = 1, and the two of order 4, y = 0) and the key's torsion
@@ -295,30 +328,33 @@ describe("verifyEd25519", () => {
     });
     expect(smallY.length).toBe(3);
     for (const { j, x, y } of smallY) {
-      for (let i = 0; i < 4; i++) {
-        const a = randomScalar();
-        const key = withKey(a, TORSION[1]);
-        const r = leBytes(y + P);
-        r[31] |= Number(x & 1n) << 7;
-        // [s]B - [h]A = -[h]T1 with s = h * a, so h = -j (mod 8) hits T_j.
-        for (;;) {
-          const message = randomBytes(32);
-          const h = hashScalar(r, key, message);
-          if (mod(-h, 8n) !== BigInt(j)) continue;
-          const s = mod(h * a, L);
-          // Sanity check: R decodes leniently to [s]B - [h]A.
-          const check = add(mul(BASE, s), neg(mul(decode(key)!, h)));
-          expect(encode(check)).toEqual(encode(decode(r)!));
-          cases.push({
-            name: `non-canonical R y=${y}+p sign=${x & 1n} ${i}`,
-            key,
-            message,
-            signature: concat(r, leBytes(s)),
-          });
-          break;
-        }
-      }
+      const r = leBytes(y + P);
+      r[31] |= Number(x & 1n) << 7;
+      FastCheck.assert(
+        FastCheck.property(nonZeroScalar, bytes(32), (a, baseMessage) => {
+          const key = withKey(a, TORSION[1]);
+          // [s]B - [h]A = -[h]T1 with s = h * a, so h = -j (mod 8) hits T_j.
+          for (let attempt = 0; ; attempt++) {
+            const message = attemptMessage(baseMessage, attempt);
+            const h = hashScalar(r, key, message);
+            if (mod(-h, 8n) !== BigInt(j)) continue;
+            const s = mod(h * a, L);
+            // Sanity check: R decodes leniently to [s]B - [h]A.
+            const check = add(mul(BASE, s), neg(mul(decodeValid(key), h)));
+            expect(encode(check)).toEqual(encode(decodeValid(r)));
+            expectAgreement([
+              {
+                name: `non-canonical R y=${y}+p sign=${x & 1n}`,
+                key,
+                message,
+                signature: concat(r, leBytes(s)),
+              },
+            ]);
+            return;
+          }
+        }),
+        { numRuns: 4 },
+      );
     }
-    expectAgreement(cases);
   });
 });

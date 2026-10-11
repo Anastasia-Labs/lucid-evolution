@@ -1,4 +1,5 @@
 import { describe, expect, test, vi } from "vitest";
+import { FastCheck } from "effect";
 import { fromHex, toHex } from "../src/core-utils";
 
 /*
@@ -49,24 +50,29 @@ const outcome = (run: () => unknown) => {
   try {
     return { value: run() };
   } catch (error) {
-    return { error: (error as Error).message };
+    return { error: error instanceof Error ? error.message : String(error) };
   }
 };
 
-let seed = 0x9e3779b9;
-const random = () => {
-  seed ^= seed << 13;
-  seed ^= seed >>> 17;
-  seed ^= seed << 5;
-  return (seed >>> 0) / 2 ** 32;
-};
-const int = (n: number) => Math.floor(random() * n);
-
-const DIGITS = "0123456789abcdefABCDEF";
+const DIGITS = [..."0123456789abcdefABCDEF"];
 // Invalid characters, including two-byte ones whose low byte is a digit
 // ("İ" is U+0130), Latin-1 ones and a lone surrogate.
 const INVALID = ["g", "G", " ", "\0", "-", "x", "İ", "š", "Á", "０", "\ud83d"];
-const LENGTHS = [0, 2, 56, 64, 66, 130, 1000, 16_000];
+
+// Short and long strings, either side of the 64-character cut-over, of
+// either parity.
+const hexString = FastCheck.oneof(
+  FastCheck.array(FastCheck.constantFrom(...DIGITS), { maxLength: 80 }),
+  FastCheck.array(FastCheck.constantFrom(...DIGITS), { maxLength: 2000 }),
+).map((chars) => chars.join(""));
+const corruptedHexString = FastCheck.tuple(
+  hexString.filter((hex) => hex.length > 0),
+  FastCheck.nat(),
+  FastCheck.constantFrom(...INVALID),
+).map(([hex, at, char]) => {
+  const i = at % hex.length;
+  return hex.slice(0, i) + char + hex.slice(i + 1);
+});
 
 describe("hex", () => {
   // Without this, a load-time check that rejected Node's codec would leave
@@ -86,18 +92,17 @@ describe("hex", () => {
   });
 
   test("fromHex matches the loop on valid and invalid hex", () => {
-    for (let i = 0; i < 4000; i++) {
-      const length = LENGTHS[int(LENGTHS.length)] + (i % 50 === 0 ? 1 : 0);
-      const chars = Array.from({ length }, () => DIGITS[int(DIGITS.length)]);
-      if (length && i % 3 === 0) {
-        chars[int(length)] = INVALID[int(INVALID.length)];
-      }
-      const hex = chars.join("");
-      expect(
-        outcome(() => fromHex(hex)),
-        hex.slice(0, 80),
-      ).toEqual(outcome(() => referenceFromHex(hex)));
-    }
+    FastCheck.assert(
+      FastCheck.property(
+        FastCheck.oneof(hexString, corruptedHexString),
+        (hex) => {
+          expect(outcome(() => fromHex(hex))).toEqual(
+            outcome(() => referenceFromHex(hex)),
+          );
+        },
+      ),
+      { numRuns: 2000 },
+    );
   });
 
   test("fromHex rejects every non-digit code unit in a long string", () => {
@@ -117,13 +122,21 @@ describe("hex", () => {
   });
 
   test("toHex matches the loop, including views into larger buffers", () => {
-    for (let i = 0; i < 2000; i++) {
-      const length = LENGTHS[int(LENGTHS.length)];
-      const buffer = new Uint8Array(length + 16).map(() => int(256));
-      const offset = int(8);
-      const bytes = buffer.subarray(offset, offset + length);
-      expect(toHex(bytes)).toBe(referenceToHex(bytes));
-    }
+    FastCheck.assert(
+      FastCheck.property(
+        FastCheck.oneof(
+          FastCheck.uint8Array({ maxLength: 40 }),
+          FastCheck.uint8Array({ maxLength: 2000 }),
+        ),
+        FastCheck.nat(8),
+        FastCheck.nat(8),
+        (buffer, start, end) => {
+          const bytes = buffer.subarray(start, buffer.length - end);
+          expect(toHex(bytes)).toBe(referenceToHex(bytes));
+        },
+      ),
+      { numRuns: 2000 },
+    );
     expect(toHex(Buffer.from("0aff", "hex"))).toBe("0aff");
   });
 });
