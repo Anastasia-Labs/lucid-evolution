@@ -90,15 +90,13 @@ export function stakeCredentialOf(rewardAddress: RewardAddress): Credential {
 /**
  * Accepts CIP-105 IDs (`drep` or `drep_script` and the bare hash) and CIP-129
  * IDs (`drep`, a header byte and the hash), with the checks `@cardano-sdk/core`
- * applies, without loading that package.
+ * applies, without loading that package. A CIP-129 header must name a DRep
+ * (`0x2_`) and a key hash (`0x22`) or script hash (`0x23`), which
+ * `@cardano-sdk/core` does not check.
  */
 export const drepIDToCredential = (drepID: string): Credential => {
-  let decoded: { prefix: string; words: number[] };
-  try {
-    decoded = bech32.decode(drepID as `${string}1${string}`, 1023);
-  } catch {
-    throw new Error(`Invalid DRep ID: ${drepID}`);
-  }
+  const decoded = bech32.decodeUnsafe(drepID, 1023);
+  if (!decoded) throw new Error(`Invalid DRep ID: ${drepID}`);
   const { prefix, words } = decoded;
   const isValid =
     (prefix === "drep" && (words.length === 47 || words.length === 45)) ||
@@ -113,11 +111,13 @@ export const drepIDToCredential = (drepID: string): Credential => {
     };
   }
   const header = payload[0];
-  if ((header & 0x20) !== 0x20) {
-    throw new Error("Invalid governance credential type");
+  if (header !== 0x22 && header !== 0x23) {
+    throw new Error(
+      `Invalid DRep ID: ${drepID}, header 0x${header.toString(16).padStart(2, "0")} is neither a DRep key hash (0x22) nor a script hash (0x23)`,
+    );
   }
   return {
-    type: (header & 0x03) === 0x03 ? "Script" : "Key",
+    type: header === 0x23 ? "Script" : "Key",
     hash: toHex(payload.subarray(1)),
   };
 };
