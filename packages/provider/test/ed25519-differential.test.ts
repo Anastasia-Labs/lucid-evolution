@@ -285,25 +285,39 @@ describe("verifyEd25519", () => {
         ...forge(0n, decode(zero)!, zero),
       });
     }
-    // A non-canonical R (y + p) for a valid signature.
-    for (let i = 0; i < 8; i++) {
-      const privateKey = CML.PrivateKey.from_normal_bytes(randomBytes(32));
-      const publicKey = privateKey.to_public();
-      const message = randomBytes(32);
-      const signature = privateKey.sign(message).to_raw_bytes();
-      const ry = leInt(signature.subarray(0, 32)) & (2n ** 255n - 1n);
-      if (ry + P < 2n ** 255n) {
-        const r = leBytes(ry + P);
-        r[31] |= signature[31] & 0x80;
-        cases.push({
-          name: `non-canonical R ${i}`,
-          key: publicKey.to_raw_bytes(),
-          message,
-          signature: concat(r, signature.subarray(32)),
-        });
+    // A non-canonical R (y + p): only points with y < 19 have one, which no
+    // honest signature hits, so R is a small-order point with y < 19 (the
+    // identity, y = 1, and the two of order 4, y = 0) and the key's torsion
+    // part makes [s]B - [h]A land on it.
+    const smallY = TORSION.flatMap((t, j) => {
+      const { x, y } = affine(t);
+      return y < 19n ? [{ j, x, y }] : [];
+    });
+    expect(smallY.length).toBe(3);
+    for (const { j, x, y } of smallY) {
+      for (let i = 0; i < 4; i++) {
+        const a = randomScalar();
+        const key = withKey(a, TORSION[1]);
+        const r = leBytes(y + P);
+        r[31] |= Number(x & 1n) << 7;
+        // [s]B - [h]A = -[h]T1 with s = h * a, so h = -j (mod 8) hits T_j.
+        for (;;) {
+          const message = randomBytes(32);
+          const h = hashScalar(r, key, message);
+          if (mod(-h, 8n) !== BigInt(j)) continue;
+          const s = mod(h * a, L);
+          // Sanity check: R decodes leniently to [s]B - [h]A.
+          const check = add(mul(BASE, s), neg(mul(decode(key)!, h)));
+          expect(encode(check)).toEqual(encode(decode(r)!));
+          cases.push({
+            name: `non-canonical R y=${y}+p sign=${x & 1n} ${i}`,
+            key,
+            message,
+            signature: concat(r, leBytes(s)),
+          });
+          break;
+        }
       }
-      privateKey.free();
-      publicKey.free();
     }
     expectAgreement(cases);
   });
