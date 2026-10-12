@@ -1,6 +1,6 @@
-import { Schema as S } from "effect";
+import * as S from "effect/Schema";
 import { applySingleCborEncoding, fromUnit } from "@lucid-evolution/utils";
-import { Record } from "effect";
+import * as Record from "effect/Record";
 import * as CoreType from "@lucid-evolution/core-types";
 import {
   KupmiosError,

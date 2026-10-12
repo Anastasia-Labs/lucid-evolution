@@ -1,5 +1,5 @@
 import { Network } from "@lucid-evolution/core-types";
-import { Data } from "effect";
+import * as Data from "effect/Data";
 
 export const ERROR_MESSAGE = {
   MULTIPLE_POLICIES:

@@ -3,7 +3,7 @@ import {
   type Data as PlutusData,
   slotToBeginUnixTime,
 } from "@lucid-evolution/plutus";
-import { Effect } from "effect";
+import * as Effect from "effect/Effect";
 import type { Credential, SlotConfig, UTxO } from "@lucid-evolution/core-types";
 import {
   fromScriptRef,

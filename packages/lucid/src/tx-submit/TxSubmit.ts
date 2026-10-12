@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import * as Effect from "effect/Effect";
 import * as S from "@effect/schema/Schema";
 import { CML, makeReturn } from "../core.js";
 import { Wallet } from "@lucid-evolution/core-types";

@@ -105,7 +105,15 @@ pub fn min_no_script_fee(
     tx: &Transaction,
     linear_fee: &LinearFee,
 ) -> Result<Coin, ArithmeticError> {
-    (tx.to_cbor_bytes().len() as u64)
+    min_no_script_fee_for_size(tx.to_cbor_bytes().len(), linear_fee)
+}
+
+/// `min_no_script_fee` of a transaction that serialises to `tx_size` bytes
+pub(crate) fn min_no_script_fee_for_size(
+    tx_size: usize,
+    linear_fee: &LinearFee,
+) -> Result<Coin, ArithmeticError> {
+    (tx_size as u64)
         .checked_mul(linear_fee.coefficient)
         .and_then(|x| x.checked_add(linear_fee.constant))
         .ok_or(ArithmeticError::IntegerOverflow)
@@ -117,8 +125,25 @@ pub fn min_fee(
     ex_unit_prices: &ExUnitPrices,
     total_ref_script_size: u64,
 ) -> Result<Coin, ArithmeticError> {
+    min_fee_for_size(
+        tx,
+        tx.to_cbor_bytes().len(),
+        linear_fee,
+        ex_unit_prices,
+        total_ref_script_size,
+    )
+}
+
+/// `min_fee` of `tx`, which serialises to `tx_size` bytes
+pub(crate) fn min_fee_for_size(
+    tx: &Transaction,
+    tx_size: usize,
+    linear_fee: &LinearFee,
+    ex_unit_prices: &ExUnitPrices,
+    total_ref_script_size: u64,
+) -> Result<Coin, ArithmeticError> {
     // TODO: the fee should be 0 if all inputs are genesis redeem addresses
-    let base_fee = min_no_script_fee(tx, linear_fee)?;
+    let base_fee = min_no_script_fee_for_size(tx_size, linear_fee)?;
     let script_fee = min_script_fee(tx, ex_unit_prices)?;
     let ref_scripts_fee = min_ref_script_fee(linear_fee, total_ref_script_size)?;
     base_fee

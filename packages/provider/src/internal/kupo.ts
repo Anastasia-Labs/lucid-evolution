@@ -1,4 +1,4 @@
-import { Schema as S } from "effect";
+import * as S from "effect/Schema";
 
 const QuantitySchema = S.Union(
   S.Number.pipe(S.filter(Number.isSafeInteger)),

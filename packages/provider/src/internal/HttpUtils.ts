@@ -1,10 +1,10 @@
-import {
-  HttpClient,
-  HttpClientError,
-  HttpClientRequest,
-  HttpClientResponse,
-} from "@effect/platform";
-import { Effect, identity, pipe, Schema } from "effect";
+import * as HttpClient from "@effect/platform/HttpClient";
+import * as HttpClientError from "@effect/platform/HttpClientError";
+import * as HttpClientRequest from "@effect/platform/HttpClientRequest";
+import * as HttpClientResponse from "@effect/platform/HttpClientResponse";
+import * as Effect from "effect/Effect";
+import * as Schema from "effect/Schema";
+import { identity, pipe } from "effect/Function";
 
 export const filterStatusOk = (
   self: HttpClientResponse.HttpClientResponse,

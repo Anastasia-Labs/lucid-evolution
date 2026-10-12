@@ -11,11 +11,6 @@ pub fn min_ada_required(
 ) -> Result<Coin, ArithmeticError> {
     use cml_core::serialization::fit_sz;
 
-    let output_size = output.to_cbor_bytes().len();
-
-    // constant from figure 5 in Babbage spec meant to represent the size the input in a UTXO
-    let constant_overhead = 160_u64;
-
     // how many bytes the Coin part of the Value will take. can vary based on encoding used.
     let old_coin_size = 1 + fit_sz(
         output.amount().coin,
@@ -27,6 +22,25 @@ pub fn min_ada_required(
         false,
     )
     .bytes_following();
+
+    min_ada_required_for_size(
+        output.to_cbor_bytes().len(),
+        old_coin_size,
+        coins_per_utxo_byte,
+    )
+}
+
+/// The minimum ADA of an output that serialises to `output_size` bytes, of
+/// which `old_coin_size` bytes encode its coin.
+pub(crate) fn min_ada_required_for_size(
+    output_size: usize,
+    old_coin_size: usize,
+    coins_per_utxo_byte: Coin,
+) -> Result<Coin, ArithmeticError> {
+    use cml_core::serialization::fit_sz;
+
+    // constant from figure 5 in Babbage spec meant to represent the size the input in a UTXO
+    let constant_overhead = 160_u64;
 
     // most recent estimate of the size in bytes to include the minimum ADA value
     let mut latest_size = old_coin_size;

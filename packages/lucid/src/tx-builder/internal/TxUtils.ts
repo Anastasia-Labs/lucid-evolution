@@ -1,6 +1,7 @@
 import * as CML from "@lucid-evolution/cml";
 import { CBORHex } from "../types.js";
-import { Effect, pipe } from "effect";
+import * as Effect from "effect/Effect";
+import { pipe } from "effect/Function";
 import {
   applyDoubleCborEncoding,
   getAddressDetails,

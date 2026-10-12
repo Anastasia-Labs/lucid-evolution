@@ -10,7 +10,18 @@ Node resolves the `nodejs` build in `dist/node`; bundlers, browsers and edge run
 
 ## Source
 
-`rust/` holds the CML crates behind the `cardano-multiplatform-lib` wasm package (`core`, `crypto`, `chain`, `cip25`, `cip36` and `cml/wasm`), taken from [Anastasia-Labs/cardano-multiplatform-lib](https://github.com/Anastasia-Labs/cardano-multiplatform-lib) at `7950a78`, the source of `@anastasia-labs/cardano-multiplatform-lib-*@6.2.0-1`. The JSON schema generators are left out because the published typings never included their output. Changes made here since then are in the git history of `packages/cml`.
+`rust/` holds the CML crates behind the `cardano-multiplatform-lib` wasm package (`core`, `crypto`, `chain`, `cip25`, `cip36` and `cml/wasm`), taken from [Anastasia-Labs/cardano-multiplatform-lib](https://github.com/Anastasia-Labs/cardano-multiplatform-lib) at `7950a78`, the source of `@anastasia-labs/cardano-multiplatform-lib-*@6.2.0-1`. The JSON schema generators are left out because the published typings never included their output.
+
+## Changes from upstream
+
+Each change is described in full in the git history of `packages/cml`.
+
+- `Transaction.to_canonical_keeping_plutus_data` returns the transaction in canonical CBOR, with its ledger sets tagged 258, except for Plutus data: datums keep their encoding, and a redeemer keeps its own unless canonical encoding leaves its value unchanged (`chain/rust/src/transaction/canonical.rs`).
+- `TransactionBuilder.utxo_output_cbor` returns the output of a UTxO the builder spends, references or holds as collateral.
+- `TransactionBuilder.has_redeemers` tells whether the built witness set will hold redeemers, without building a draft.
+- Fee estimates no longer deep-copy the transaction builder, and packed change and output fees are sized by adding up serialised sizes instead of rebuilding the transaction (`fees.rs`, `min_ada.rs`, `builders/tx_builder.rs`). Outputs with a communication datum still take the copying path.
+- `OrderedHashMap` hashes its keys with foldhash instead of SipHash. Insertion order and encodings are unchanged; in Rust the map's hasher type, and so its `Deref` target and the type `take()` returns, differ from upstream.
+- The Node build is compiled with `opt-level = 3` and a 16 MiB shadow stack (see [Building](#building)).
 
 ## Building
 

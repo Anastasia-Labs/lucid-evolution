@@ -45,7 +45,9 @@ import * as CompleteTxBuilder from "./internal/CompleteTxBuilder.js";
 import * as TxSignBuilder from "../tx-sign-builder/TxSignBuilder.js";
 import { TransactionError } from "../Errors.js";
 import { Either } from "effect/Either";
-import { Effect, Layer, pipe } from "effect";
+import * as Effect from "effect/Effect";
+import * as Layer from "effect/Layer";
+import { pipe } from "effect/Function";
 import {
   handleRedeemerBuilder,
   validateAddressDetails,

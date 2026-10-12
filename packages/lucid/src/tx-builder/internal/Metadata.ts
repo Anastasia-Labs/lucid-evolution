@@ -1,5 +1,5 @@
 import { Label } from "@lucid-evolution/core-types";
-import { Effect } from "effect";
+import * as Effect from "effect/Effect";
 import { CML } from "../../core.js";
 import * as S from "@effect/schema/Schema";
 import { toHex } from "@lucid-evolution/core-utils";

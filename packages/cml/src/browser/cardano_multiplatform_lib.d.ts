@@ -7332,6 +7332,13 @@ export class Transaction {
      */
     to_canonical_cbor_hex(): string;
     /**
+     * A copy of this transaction whose ledger containers use canonical CBOR
+     * while its Plutus data keeps the original encoding. Inline and witness
+     * datums are kept as they are, and a redeemer keeps its canonical
+     * encoding only when its Plutus value is unchanged.
+     */
+    to_canonical_keeping_plutus_data(): Transaction;
+    /**
      *
      *             * Serialize this type to CBOR bytes
      *             * This type type supports encoding preservation so this will preserve round-trip CBOR formats.
@@ -7527,6 +7534,11 @@ export class TransactionBuilder {
      */
     get_total_output(): Value;
     get_withdrawals(): MapRewardAccountToCoin | undefined;
+    /**
+     * Whether the transaction has any redeemer, so that its witness set
+     * will hold redeemers.
+     */
+    has_redeemers(): boolean;
     /**
      * warning: sum of all parts of a transaction must equal 0. You cannot just set the fee to the min value and forget about it
      * warning: min_fee may be slightly larger than the actual minimum fee (ex: a few lovelaces)

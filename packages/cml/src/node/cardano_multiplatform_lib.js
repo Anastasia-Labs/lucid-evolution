@@ -27272,6 +27272,20 @@ class Transaction {
         }
     }
     /**
+     * A copy of this transaction whose ledger containers use canonical CBOR
+     * while its Plutus data keeps the original encoding. Inline and witness
+     * datums are kept as they are, and a redeemer keeps its canonical
+     * encoding only when its Plutus value is unchanged.
+     * @returns {Transaction}
+     */
+    to_canonical_keeping_plutus_data() {
+        const ret = wasm.transaction_to_canonical_keeping_plutus_data(this.__wbg_ptr);
+        if (ret[2]) {
+            throw takeFromExternrefTable0(ret[1]);
+        }
+        return Transaction.__wrap(ret[0]);
+    }
+    /**
      *
      *             * Serialize this type to CBOR bytes
      *             * This type type supports encoding preservation so this will preserve round-trip CBOR formats.
@@ -28119,6 +28133,15 @@ class TransactionBuilder {
     get_withdrawals() {
         const ret = wasm.transactionbuilder_get_withdrawals(this.__wbg_ptr);
         return ret === 0 ? undefined : MapRewardAccountToCoin.__wrap(ret);
+    }
+    /**
+     * Whether the transaction has any redeemer, so that its witness set
+     * will hold redeemers.
+     * @returns {boolean}
+     */
+    has_redeemers() {
+        const ret = wasm.transactionbuilder_has_redeemers(this.__wbg_ptr);
+        return ret !== 0;
     }
     /**
      * warning: sum of all parts of a transaction must equal 0. You cannot just set the fee to the min value and forget about it

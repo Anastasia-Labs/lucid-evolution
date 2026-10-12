@@ -1,14 +1,12 @@
-import {
-  Effect,
-  pipe,
-  Record,
-  Array as _Array,
-  BigInt as _BigInt,
-  Tuple,
-  Option,
-  Layer,
-  Either,
-} from "effect";
+import * as Effect from "effect/Effect";
+import * as Record from "effect/Record";
+import * as _Array from "effect/Array";
+import * as _BigInt from "effect/BigInt";
+import * as Tuple from "effect/Tuple";
+import * as Option from "effect/Option";
+import * as Layer from "effect/Layer";
+import * as Either from "effect/Either";
+import { pipe } from "effect/Function";
 import {
   Address,
   Assets,
@@ -2042,19 +2040,14 @@ const buildEvaluationCandidate = (
       script_calculation,
       forceExplicitFee,
     );
-    const candidate = yield* buildEvaluationDraft(config, changeAddress);
-    const hasRedeemers = withCMLScope(
-      (own) => own(own(candidate.witness_set()).redeemers()) !== undefined,
-    );
-    if (forceExplicitFee || !hasRedeemers) {
-      return candidate;
-    }
-    candidate.free();
-    if (config.minFee === undefined) {
-      // The builder is unchanged since `fee` was computed.
-      config.txBuilder.set_fee(fee);
-    } else {
-      yield* applyEffectiveFee(config, script_calculation, true);
+    // A draft with redeemers is evaluated with an explicit fee.
+    if (!forceExplicitFee && config.txBuilder.has_redeemers()) {
+      if (config.minFee === undefined) {
+        // The builder is unchanged since `fee` was computed.
+        config.txBuilder.set_fee(fee);
+      } else {
+        yield* applyEffectiveFee(config, script_calculation, true);
+      }
     }
     return yield* buildEvaluationDraft(config, changeAddress);
   });

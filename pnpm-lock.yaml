@@ -166,6 +166,9 @@ importers:
       '@types/node':
         specifier: ^20.12.8
         version: 20.17.58
+      effect:
+        specifier: '>=3.20.0'
+        version: 3.21.1
       tsup:
         specifier: ^8.0.2
         version: 8.5.0(@microsoft/api-extractor@7.52.8(@types/node@20.17.58))(postcss@8.5.10)(tsx@4.19.4)(typescript@5.8.3)(yaml@2.8.3)
@@ -537,9 +540,6 @@ importers:
 
   packages/utils:
     dependencies:
-      '@cardano-sdk/core':
-        specifier: ^0.46.10
-        version: 0.46.10
       '@effect/schema':
         specifier: ^0.68.16
         version: 0.68.27(effect@3.21.1)
@@ -567,6 +567,9 @@ importers:
       '@lucid-evolution/uplc':
         specifier: workspace:*
         version: link:../uplc
+      '@scure/base':
+        specifier: ^1.2.6
+        version: 1.2.6
       bip39:
         specifier: ^3.1.0
         version: 3.1.0
@@ -577,6 +580,9 @@ importers:
         specifier: '>=3.20.0'
         version: 3.21.1
     devDependencies:
+      '@cardano-sdk/core':
+        specifier: ^0.46.10
+        version: 0.46.10
       '@types/node':
         specifier: ^20.12.8
         version: 20.17.58
@@ -614,6 +620,9 @@ importers:
       '@types/node':
         specifier: ^20.12.8
         version: 20.17.58
+      effect:
+        specifier: '>=3.20.0'
+        version: 3.21.1
       tsup:
         specifier: ^8.0.2
         version: 8.5.0(@microsoft/api-extractor@7.52.8(@types/node@20.17.58))(postcss@8.5.10)(tsx@4.19.4)(typescript@5.8.3)(yaml@2.8.3)

@@ -10,7 +10,7 @@ import {
 } from "@lucid-evolution/core-types";
 import * as CML from "@lucid-evolution/cml";
 import { TxBuilderError } from "../../Errors.js";
-import { Effect } from "effect";
+import * as Effect from "effect/Effect";
 import {
   processCertificate,
   validateAndGetStakeCredential,

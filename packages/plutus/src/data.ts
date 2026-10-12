@@ -31,6 +31,13 @@ export type Data =
   | Map<Data, Data> // AssocList
   | Constr<Data>;
 
+// TypeBox's Object, Array, Tuple and Union constructors deep-clone every
+// nested schema, and replaceProperties then deletes everything they built but
+// the Kind symbol. Building that symbol alone gives the same schema without
+// copying the subtree at every level of nesting.
+const schemaOfKind = <T extends TypeBox.TSchema>(kind: string): T =>
+  ({ [TypeBox.Kind]: kind }) as unknown as T;
+
 export const Data = {
   // Types
   // Note: Recursive types are not supported (yet)
@@ -86,7 +93,7 @@ export const Data = {
     items: T,
     options?: { minItems?: number; maxItems?: number; uniqueItems?: boolean },
   ) {
-    const array = TypeBox.Type.Array(items);
+    const array = schemaOfKind<TypeBox.TArray<T>>("Array");
     replaceProperties(array, { dataType: "list", items });
     if (options) {
       Object.entries(options).forEach(([key, value]) => {
@@ -120,7 +127,7 @@ export const Data = {
     properties: T,
     options?: { hasConstr?: boolean },
   ) {
-    const object = TypeBox.Type.Object(properties);
+    const object = schemaOfKind<TypeBox.TObject<T>>("Object");
     replaceProperties(object, {
       anyOf: [
         {
@@ -138,7 +145,12 @@ export const Data = {
     return object;
   },
   Enum: function <T extends TypeBox.TSchema>(items: T[]) {
-    const union = TypeBox.Type.Union(items);
+    // A union of fewer than two items is TypeBox's Never or a clone of the
+    // item, whose symbols are kept.
+    const union =
+      items.length < 2
+        ? TypeBox.Type.Union(items)
+        : schemaOfKind<TypeBox.TUnion<T[]>>("Union");
     replaceProperties(union, {
       anyOf: items.map((item, index) =>
         item.anyOf[0].fields.length === 0
@@ -177,7 +189,7 @@ export const Data = {
     items: [...T],
     options?: { hasConstr?: boolean },
   ) {
-    const tuple = TypeBox.Type.Tuple(items);
+    const tuple = schemaOfKind<TypeBox.TTuple<T>>("Tuple");
     replaceProperties(tuple, {
       dataType: "list",
       items,

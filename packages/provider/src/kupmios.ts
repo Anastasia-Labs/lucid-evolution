@@ -21,20 +21,19 @@ import {
   UTxO,
 } from "@lucid-evolution/core-types";
 import { applyDoubleCborEncoding, fromUnit } from "@lucid-evolution/utils";
-import { Schema as S } from "effect";
-import {
-  Cause,
-  Effect,
-  Exit,
-  Layer,
-  pipe,
-  Array as _Array,
-  Schedule,
-} from "effect";
+import * as S from "effect/Schema";
+import * as Cause from "effect/Cause";
+import * as Effect from "effect/Effect";
+import * as Exit from "effect/Exit";
+import * as Layer from "effect/Layer";
+import * as _Array from "effect/Array";
+import * as Schedule from "effect/Schedule";
+import { pipe } from "effect/Function";
 import * as Ogmios from "./internal/ogmios.js";
 import * as Kupo from "./internal/kupo.js";
 import * as HttpUtils from "./internal/HttpUtils.js";
-import { FetchHttpClient, HttpClient } from "@effect/platform";
+import * as FetchHttpClient from "@effect/platform/FetchHttpClient";
+import * as HttpClient from "@effect/platform/HttpClient";
 import { KupmiosError, toKupmiosError } from "./errors.js";
 
 export { KupmiosError } from "./errors.js";

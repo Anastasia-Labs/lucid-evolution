@@ -35,6 +35,31 @@ const hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) =>
 );
 
 /**
+ * Node's native hex codec, several times faster than the loops below on all
+ * but the shortest inputs. `getBuiltinModule` loads it without a static
+ * import, so bundles for other runtimes are unaffected. It is used only if
+ * it encodes like `hexes` and stops at an invalid digit in either position,
+ * which some `Buffer` polyfills do not.
+ */
+const nodeBuffer = (() => {
+  try {
+    const buffer =
+      globalThis.process?.getBuiltinModule?.("node:buffer")?.Buffer;
+    if (!buffer) return undefined;
+    const bytes = Uint8Array.from(hexes, (_, i) => i);
+    const view = buffer.from(bytes.buffer, 0, bytes.length);
+    if (view.toString("hex") !== hexes.join("")) return undefined;
+    const probe = new Uint8Array(2);
+    const writes = ["0g", "g0", "1g00", "0f0G"].map((hex) =>
+      buffer.from(probe.buffer, 0, hex.length / 2).write(hex, "hex"),
+    );
+    return writes.join() === "0,0,0,1" ? buffer : undefined;
+  } catch {
+    return undefined;
+  }
+})();
+
+/**
  * @example fromHex('cafe0123') -> Uint8Array.from([0xca, 0xfe, 0x01, 0x23])
  */
 export function fromHex(hex: string): Uint8Array {
@@ -47,6 +72,17 @@ export function fromHex(hex: string): Uint8Array {
       "padded hex string expected, got unpadded hex of length " + hl,
     );
   const array = new Uint8Array(al);
+  // Node's decoder stops at the first invalid digit, so a short write falls
+  // through to the loop, which reports it. Two-byte characters are excluded
+  // first: Node reads only their low byte.
+  if (
+    nodeBuffer &&
+    hl > 64 &&
+    nodeBuffer.byteLength(hex, "utf8") === hl &&
+    nodeBuffer.from(array.buffer, 0, al).write(hex, "hex") === al
+  ) {
+    return array;
+  }
   for (let ai = 0, hi = 0; ai < al; ai++, hi += 2) {
     const n1 = asciiToBase16(hex.charCodeAt(hi));
     const n2 = asciiToBase16(hex.charCodeAt(hi + 1));
@@ -69,6 +105,12 @@ export function fromHex(hex: string): Uint8Array {
  */
 export function toHex(bytes: Uint8Array): string {
   assert_bytes(bytes);
+  // Below about 20 bytes the loop is faster than a call into Node.
+  if (nodeBuffer && bytes.length > 20 && bytes instanceof Uint8Array) {
+    return nodeBuffer
+      .from(bytes.buffer, bytes.byteOffset, bytes.length)
+      .toString("hex");
+  }
   // pre-caching improves the speed 6x
   let hex = "";
   for (let i = 0; i < bytes.length; i++) {

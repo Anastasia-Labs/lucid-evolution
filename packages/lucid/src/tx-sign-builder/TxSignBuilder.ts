@@ -1,7 +1,7 @@
 import { CML, makeReturn } from "../core.js";
 import { withCMLScope } from "@lucid-evolution/core-utils";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
-import { Effect } from "effect";
+import * as Effect from "effect/Effect";
 import * as S from "@effect/schema/Schema";
 //TODO: move to commont utils
 import {

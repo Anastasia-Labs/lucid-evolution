@@ -1,10 +1,15 @@
 use core::hash::{Hash, Hasher};
 use std::iter::FromIterator;
 
+/// Keys are mostly asset names and policy ids, which SipHash, the standard
+/// hasher, is slow to hash. On wasm the standard hasher has no random keys
+/// either. The map's order is its insertion order, whichever the hasher.
+type Inner<K, V> = linked_hash_map::LinkedHashMap<K, V, foldhash::fast::RandomState>;
+
 // allowing this since PartialEq equality here still implies hash equality
 #[allow(clippy::derived_hash_with_manual_eq)]
 #[derive(Clone, Debug, Ord, Eq, PartialEq, PartialOrd)]
-pub struct OrderedHashMap<K, V>(linked_hash_map::LinkedHashMap<K, V>)
+pub struct OrderedHashMap<K, V>(Inner<K, V>)
 where
     K: Hash + Eq + Ord;
 
@@ -21,7 +26,7 @@ impl<K, V> std::ops::Deref for OrderedHashMap<K, V>
 where
     K: Hash + Eq + Ord,
 {
-    type Target = linked_hash_map::LinkedHashMap<K, V>;
+    type Target = Inner<K, V>;
 
     fn deref(&self) -> &Self::Target {
         &self.0
@@ -42,10 +47,10 @@ where
     K: Hash + Eq + Ord,
 {
     pub fn new() -> Self {
-        Self(linked_hash_map::LinkedHashMap::new())
+        Self(Inner::with_hasher(Default::default()))
     }
 
-    pub fn take(self) -> linked_hash_map::LinkedHashMap<K, V> {
+    pub fn take(self) -> Inner<K, V> {
         self.0
     }
 }
@@ -112,6 +117,6 @@ where
     K: Hash + Eq + Ord,
 {
     fn from_iter<T: IntoIterator<Item = (K, V)>>(iter: T) -> Self {
-        Self(linked_hash_map::LinkedHashMap::from_iter(iter))
+        Self(Inner::from_iter(iter))
     }
 }

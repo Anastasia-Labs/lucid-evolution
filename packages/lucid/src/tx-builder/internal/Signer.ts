@@ -5,7 +5,8 @@ import {
   StakeKeyHash,
 } from "@lucid-evolution/core-types";
 import * as TxBuilder from "../TxBuilder.js";
-import { Effect, pipe } from "effect";
+import * as Effect from "effect/Effect";
+import { pipe } from "effect/Function";
 import * as CML from "@lucid-evolution/cml";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import { validateAddressDetails } from "./TxUtils.js";
