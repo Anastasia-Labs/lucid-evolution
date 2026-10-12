@@ -389,7 +389,12 @@ const completeCurrentConfig = (
         ? finalEvaluation.settled !== true
         : config.minFee !== undefined
     ) {
-      yield* applyEffectiveFee(config, true, evaluatedScriptBody);
+      yield* applyEffectiveFee(
+        config,
+        true,
+        changeAddress,
+        evaluatedScriptBody,
+      );
       // Cover the fee just applied, re-applying it while a top-up grows it.
       for (let topUps = 0; finalEvaluation.collateral; topUps++) {
         const fee = yield* estimateFee(config, true);
@@ -398,7 +403,12 @@ const completeCurrentConfig = (
         if (topUps >= MAX_EVALUATION_ATTEMPTS) {
           return yield* collateralConvergenceError();
         }
-        yield* applyEffectiveFee(config, true, evaluatedScriptBody);
+        yield* applyEffectiveFee(
+          config,
+          true,
+          changeAddress,
+          evaluatedScriptBody,
+        );
       }
     }
     withCMLScope((own) =>
@@ -1999,16 +2009,75 @@ const estimateFee = (
 const applyEffectiveFee = (
   config: TxBuilder.TxBuilderConfig,
   script_calculation: boolean,
+  changeAddress: string,
   forceExplicitFee: boolean = false,
 ): Effect.Effect<bigint, TxBuilderError, never> =>
   Effect.gen(function* () {
-    const effectiveFee = yield* estimateFee(config, script_calculation);
+    const minFee = config.txBuilder.min_fee(script_calculation);
+    const customMinFee = config.minFee;
+    if (customMinFee !== undefined && customMinFee > minFee) {
+      return yield* applyCustomMinFee(
+        config,
+        minFee,
+        customMinFee,
+        changeAddress,
+      );
+    }
     // Keep ordinary transactions on CML's computed-fee path. When setMinFee is
     // active or scripts were evaluated, overwrite the explicit fee every pass
     // so the fee floor never gets stale.
-    if (forceExplicitFee || config.minFee !== undefined)
-      config.txBuilder.set_fee(effectiveFee);
-    return effectiveFee;
+    if (forceExplicitFee || customMinFee !== undefined)
+      config.txBuilder.set_fee(minFee);
+    return minFee;
+  });
+
+/**
+ * Make `customMinFee` the final fee, or the ledger fee if that is larger.
+ *
+ * CML takes an explicit fee as the fee without change and adds each change
+ * output's fee on top. So the explicit fee leaves room for the change outputs'
+ * fee, which a draft measures, and the change pays for the rest. It never goes
+ * below `minFee`, the ledger fee without change.
+ */
+const applyCustomMinFee = (
+  config: TxBuilder.TxBuilderConfig,
+  minFee: bigint,
+  customMinFee: bigint,
+  changeAddress: string,
+): Effect.Effect<bigint, TxBuilderError, never> =>
+  Effect.gen(function* () {
+    let explicitFee = customMinFee;
+    for (let attempt = 0; attempt < MAX_EVALUATION_ATTEMPTS; attempt++) {
+      config.txBuilder.set_fee(explicitFee);
+      const changeFee = (yield* draftFee(config, changeAddress)) - explicitFee;
+      const nextFee =
+        customMinFee - changeFee > minFee ? customMinFee - changeFee : minFee;
+      if (nextFee === explicitFee) return explicitFee;
+      explicitFee = nextFee;
+    }
+    // The change outputs' fee did not settle. Charging it on top of the
+    // custom minimum still keeps the fee at or above it.
+    config.txBuilder.set_fee(customMinFee);
+    return customMinFee;
+  });
+
+const draftFee = (
+  config: TxBuilder.TxBuilderConfig,
+  changeAddress: string,
+): Effect.Effect<bigint, TxBuilderError> =>
+  Effect.try({
+    try: () =>
+      withCMLScope((own) =>
+        own(
+          own(
+            config.txBuilder.build_for_evaluation(
+              0,
+              own(CML.Address.from_bech32(changeAddress)),
+            ),
+          ).draft_body(),
+        ).fee(),
+      ),
+    catch: (error) => completeTxError(error),
   });
 
 const buildEvaluationDraft = (
@@ -2038,6 +2107,7 @@ const buildEvaluationCandidate = (
     const fee = yield* applyEffectiveFee(
       config,
       script_calculation,
+      changeAddress,
       forceExplicitFee,
     );
     // A draft with redeemers is evaluated with an explicit fee.
@@ -2046,7 +2116,12 @@ const buildEvaluationCandidate = (
         // The builder is unchanged since `fee` was computed.
         config.txBuilder.set_fee(fee);
       } else {
-        yield* applyEffectiveFee(config, script_calculation, true);
+        yield* applyEffectiveFee(
+          config,
+          script_calculation,
+          changeAddress,
+          true,
+        );
       }
     }
     return yield* buildEvaluationDraft(config, changeAddress);
