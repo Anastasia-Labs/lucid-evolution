@@ -1,5 +1,21 @@
 # @lucid-evolution/utils
 
+## 0.2.1
+
+### Patch Changes
+
+- [#755](https://github.com/Anastasia-Labs/lucid-evolution/pull/755) [`bd0591b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/bd0591b0d3ae5424464f5f3082c7ab7d5b45614b) Thanks [@colll78](https://github.com/colll78)! - `drepIDToCredential` rejects CIP-129 DRep IDs whose header byte is not `0x22` (key hash) or `0x23` (script hash). It used to check only the DRep bit and the low two bits, so headers such as `0x20`, `0x32` and `0xa3` were accepted. The error names the ID and the header byte.
+
+- [#755](https://github.com/Anastasia-Labs/lucid-evolution/pull/755) [`ebb5f33`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ebb5f3391335e0c91e2d46b4978738eb333293bc) Thanks [@colll78](https://github.com/colll78)! - Speed up importing Lucid, building transactions and running the emulator without changing the transactions built. Effect modules are imported by path, and DRep ids are parsed without loading `@cardano-sdk/core`, so importing Lucid takes about 430 ms instead of about 515 ms. Canonicalising a transaction is a single CML call (`Transaction.to_canonical_keeping_plutus_data`), about four times faster. Plutus schemas are built without cloning nested schemas. On Node, the emulator verifies vkey witnesses with the native Ed25519 (about three times faster), seed wallets derive their root key with the native PBKDF2, and hex is encoded and decoded with the native codec; other runtimes keep the existing code. In a benchmark of 24 transaction shapes, the geometric mean time to build a transaction fell by about a quarter (2.9 to 2.1 ms). Most of that is for wallets that hold many tokens, which take about 39% less time, and where simple payments and mints build about twice as fast; for an ada-only wallet the gain is about 12%. CML sizes packed change and output fees without rebuilding the transaction, hashes the keys of its maps (policy ids, asset names and the like) with foldhash instead of SipHash, and has a new `TransactionBuilder.has_redeemers`, so Lucid no longer builds a draft just to check for redeemers.
+
+  `@lucid-evolution/utils` now depends on `@scure/base` for bech32, and `@cardano-sdk/core` is only a development dependency, used by its tests.
+
+- Updated dependencies [[`ebb5f33`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ebb5f3391335e0c91e2d46b4978738eb333293bc)]:
+  - @lucid-evolution/cml@0.1.1
+  - @lucid-evolution/core-utils@0.2.1
+  - @lucid-evolution/plutus@0.2.1
+  - @lucid-evolution/core-types@0.5.1
+
 ## 0.2.0
 
 ### Minor Changes

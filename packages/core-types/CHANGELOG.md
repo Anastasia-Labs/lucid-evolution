@@ -1,5 +1,12 @@
 # @lucid-evolution/core-types
 
+## 0.5.1
+
+### Patch Changes
+
+- Updated dependencies [[`ebb5f33`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ebb5f3391335e0c91e2d46b4978738eb333293bc)]:
+  - @lucid-evolution/cml@0.1.1
+
 ## 0.5.0
 
 ### Minor Changes

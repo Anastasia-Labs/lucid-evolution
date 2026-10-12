@@ -1,5 +1,26 @@
 # @lucid-evolution/lucid
 
+## 0.8.1
+
+### Patch Changes
+
+- [#757](https://github.com/Anastasia-Labs/lucid-evolution/pull/757) [`e6ccf1e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/e6ccf1e95597c9c4c2fb59623791346dfcb6432b) Thanks [@colll78](https://github.com/colll78)! - `setMinFee(fee)` now sets the fee to exactly `fee` when completion adds a change output, as long as `fee` is at least the ledger fee; the change output pays the difference. Before, the change output's own fee (about 2,860 lovelace for an ada-only change output) was added on top, so the fee came out higher than requested. Scripts that check the transaction fee see the same fee during evaluation. When `fee` is below the ledger fee, the ledger fee is charged, as before.
+
+- [#755](https://github.com/Anastasia-Labs/lucid-evolution/pull/755) [`ebb5f33`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ebb5f3391335e0c91e2d46b4978738eb333293bc) Thanks [@colll78](https://github.com/colll78)! - Speed up importing Lucid, building transactions and running the emulator without changing the transactions built. Effect modules are imported by path, and DRep ids are parsed without loading `@cardano-sdk/core`, so importing Lucid takes about 430 ms instead of about 515 ms. Canonicalising a transaction is a single CML call (`Transaction.to_canonical_keeping_plutus_data`), about four times faster. Plutus schemas are built without cloning nested schemas. On Node, the emulator verifies vkey witnesses with the native Ed25519 (about three times faster), seed wallets derive their root key with the native PBKDF2, and hex is encoded and decoded with the native codec; other runtimes keep the existing code. In a benchmark of 24 transaction shapes, the geometric mean time to build a transaction fell by about a quarter (2.9 to 2.1 ms). Most of that is for wallets that hold many tokens, which take about 39% less time, and where simple payments and mints build about twice as fast; for an ada-only wallet the gain is about 12%. CML sizes packed change and output fees without rebuilding the transaction, hashes the keys of its maps (policy ids, asset names and the like) with foldhash instead of SipHash, and has a new `TransactionBuilder.has_redeemers`, so Lucid no longer builds a draft just to check for redeemers.
+
+  `@lucid-evolution/utils` now depends on `@scure/base` for bech32, and `@cardano-sdk/core` is only a development dependency, used by its tests.
+
+- Updated dependencies [[`bd0591b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/bd0591b0d3ae5424464f5f3082c7ab7d5b45614b), [`ebb5f33`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ebb5f3391335e0c91e2d46b4978738eb333293bc)]:
+  - @lucid-evolution/utils@0.2.1
+  - @lucid-evolution/cml@0.1.1
+  - @lucid-evolution/core-utils@0.2.1
+  - @lucid-evolution/plutus@0.2.1
+  - @lucid-evolution/provider@0.4.1
+  - @lucid-evolution/wallet@0.4.1
+  - @lucid-evolution/tx-graph@0.1.1
+  - @lucid-evolution/core-types@0.5.1
+  - @lucid-evolution/sign_data@0.2.1
+
 ## 0.8.0
 
 ### Minor Changes

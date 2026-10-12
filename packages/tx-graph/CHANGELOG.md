@@ -1,5 +1,15 @@
 # @lucid-evolution/tx-graph
 
+## 0.1.1
+
+### Patch Changes
+
+- Updated dependencies [[`bd0591b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/bd0591b0d3ae5424464f5f3082c7ab7d5b45614b), [`ebb5f33`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ebb5f3391335e0c91e2d46b4978738eb333293bc)]:
+  - @lucid-evolution/utils@0.2.1
+  - @lucid-evolution/cml@0.1.1
+  - @lucid-evolution/core-utils@0.2.1
+  - @lucid-evolution/core-types@0.5.1
+
 ## 0.1.0
 
 ### Minor Changes
