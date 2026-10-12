@@ -1,5 +1,13 @@
 # @lucid-evolution/scalus-uplc
 
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependencies [[`ebb5f33`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ebb5f3391335e0c91e2d46b4978738eb333293bc)]:
+  - @lucid-evolution/core-utils@0.2.1
+  - @lucid-evolution/core-types@0.5.1
+
 ## 0.2.2
 
 ### Patch Changes
