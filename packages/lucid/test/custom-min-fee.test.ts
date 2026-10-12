@@ -1,4 +1,4 @@
-import { expect, test } from "vitest";
+import { describe, expect, test } from "vitest";
 import {
   Data,
   EvalRedeemer,
@@ -10,6 +10,7 @@ import {
   PROTOCOL_PARAMETERS_DEFAULT,
   Script,
   TxBuilder,
+  UTxO,
   applyDoubleCborEncoding,
   fromText,
   toScriptRef,
@@ -86,6 +87,120 @@ test("setMinFee keeps change for token-bearing selected inputs", async () => {
   expect(outputAssets.lovelace + tx.body().fee()).toBe(
     tokenUtxo.assets.lovelace,
   );
+});
+
+const feeWithMinFee = async (
+  lucid: LucidEvolution,
+  walletInput: UTxO,
+  minFee: bigint | undefined,
+): Promise<CML.TransactionBody> => {
+  const address = await lucid.wallet().address();
+  const tx = lucid.newTx().pay.ToAddress(address, { lovelace: 10_000_000n });
+  const signBuilder = await Effect.runPromise(
+    (minFee === undefined ? tx : tx.setMinFee(minFee)).completeProgram({
+      presetWalletInputs: [walletInput],
+    }),
+  );
+  return signBuilder.toTransaction().body();
+};
+
+const totalOutputAssets = (body: CML.TransactionBody): Assets => {
+  let total: Assets = {};
+  const outputs = body.outputs();
+  for (let index = 0; index < outputs.len(); index++) {
+    total = sumAssets(total, valueToAssets(outputs.get(index).amount()));
+  }
+  return total;
+};
+
+describe("setMinFee with a change output", () => {
+  const unit = "0".repeat(56) + fromText("Change");
+  const walletInputs = {
+    "ADA-only change": { lovelace: 50_000_000n },
+    "token-bearing change": { lovelace: 50_000_000n, [unit]: 7n },
+  };
+
+  test.each(Object.entries(walletInputs))(
+    "the fee is the larger of the minimum and the ledger fee (%s)",
+    async (_, assets) => {
+      const account = generateEmulatorAccount({ lovelace: 100_000_000n });
+      const emulator = new Emulator([account], PROTOCOL_PARAMETERS_DEFAULT);
+      const lucid = await Lucid(emulator, "Custom");
+      lucid.selectWallet.fromSeed(account.seedPhrase);
+      const walletInput: UTxO = {
+        txHash: "3".repeat(64),
+        outputIndex: 0,
+        address: await lucid.wallet().address(),
+        assets,
+      };
+
+      const ledgerFee = (
+        await feeWithMinFee(lucid, walletInput, undefined)
+      ).fee();
+      for (const minFee of [
+        1n,
+        ledgerFee - 1n,
+        ledgerFee,
+        ledgerFee + 1n,
+        1_000_000n,
+        3_456_789n,
+      ]) {
+        const body = await feeWithMinFee(lucid, walletInput, minFee);
+        const outputAssets = totalOutputAssets(body);
+
+        expect(body.fee()).toBe(minFee > ledgerFee ? minFee : ledgerFee);
+        expect(body.outputs().len()).toBe(2);
+        expect(outputAssets.lovelace + body.fee()).toBe(assets.lovelace);
+        expect(outputAssets[unit]).toBe(assets[unit]);
+      }
+    },
+  );
+
+  test("phase-two evaluation sees the exact fee", async () => {
+    const account = generateEmulatorAccount({ lovelace: 100_000_000n });
+    const emulator = new Emulator([account], PROTOCOL_PARAMETERS_DEFAULT);
+    const lucid = await Lucid(emulator, "Custom");
+    lucid.selectWallet.fromSeed(account.seedPhrase);
+    const scriptAddress = validatorToAddress(
+      lucid.config().network!,
+      alwaysSucceedV3Script,
+    );
+    await submitTx(
+      lucid,
+      lucid.newTx().pay.ToAddress(scriptAddress, { lovelace: 10_000_000n }),
+    );
+    const [scriptUtxo] = await lucid.utxosAt(scriptAddress);
+
+    const evaluatedFees: bigint[] = [];
+    const evaluator: EvaluatorAdapter = {
+      name: "fee-recorder",
+      evaluate: async ({ tx }) => {
+        evaluatedFees.push(CML.Transaction.from_cbor_hex(tx).body().fee());
+        return [
+          {
+            redeemer_tag: "spend",
+            redeemer_index: 0,
+            ex_units: { mem: 1_000_000, steps: 400_000_000 },
+          } satisfies EvalRedeemer,
+        ];
+      },
+    };
+    const signBuilder = await lucid
+      .newTx()
+      .attach.Script(alwaysSucceedV3Script)
+      .collectFrom([scriptUtxo], Data.void())
+      .setMinFee(2_000_000n)
+      .complete({ evaluator });
+    const body = signBuilder.toTransaction().body();
+
+    expect(body.fee()).toBe(2_000_000n);
+    expect(body.outputs().len()).toBe(1);
+    expect(evaluatedFees.at(-1)).toBe(2_000_000n);
+    await signBuilder.sign
+      .withWallet()
+      .complete()
+      .then((tx) => tx.submit());
+  });
 });
 
 test("selected reference-script inputs include the Conway reference-script fee", async () => {
