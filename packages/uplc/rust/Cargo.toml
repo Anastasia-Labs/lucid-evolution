@@ -12,7 +12,7 @@ crate-type = ["cdylib"]
 # shared Data and ScriptCache) plus protocol version 11 support
 # (colll78/aiken feat/uplc-pv11). Switch back to a crates.io version once one
 # is published.
-uplc = { git = "https://github.com/colll78/aiken.git", rev = "6c48aa2a14fc4c0a48b696e65b098d7135119bae" }
+uplc = { git = "https://github.com/colll78/aiken.git", rev = "d9deba0b062460122435a654d298a7331be81d9d" }
 wasm-bindgen = "0.2.93"
 js-sys = "0.3.70"
 hex = "0.4"

@@ -382,5 +382,85 @@
     "errorKind": 3,
     "cpu": 96100,
     "mem": 700
+  },
+  {
+    "name": "free var under a lambda in a constr field",
+    "flat": "010100298009001a4931",
+    "args": ["d87980"],
+    "errorKind": 0,
+    "cpu": 128100,
+    "mem": 900
+  },
+  {
+    "name": "free var as a constr field",
+    "flat": "01010029800801249301",
+    "args": ["d87980"],
+    "errorKind": 2,
+    "cpu": 100,
+    "mem": 100
+  },
+  {
+    "name": "free var in an untaken case branch",
+    "flat": "010100298005268011",
+    "args": ["d87980"],
+    "errorKind": 0,
+    "cpu": 96100,
+    "mem": 700
+  },
+  {
+    "name": "free var in the taken case branch",
+    "flat": "010100298015268011",
+    "args": ["d87980"],
+    "errorKind": 2,
+    "cpu": 100,
+    "mem": 100
+  },
+  {
+    "name": "free var as the case scrutinee",
+    "flat": "01010029002a4c01",
+    "args": ["d87980"],
+    "errorKind": 2,
+    "cpu": 100,
+    "mem": 100
+  },
+  {
+    "name": "index 2^32 in an untaken case branch",
+    "flat": "01010029800526840404040081",
+    "args": ["d87980"],
+    "errorKind": 0,
+    "cpu": 96100,
+    "mem": 700
+  },
+  {
+    "name": "index 2^64-1 in an untaken case branch",
+    "flat": "0101002980052687fffffffffffffffff809",
+    "args": ["d87980"],
+    "errorKind": 0,
+    "cpu": 96100,
+    "mem": 700
+  },
+  {
+    "name": "index 0 in an untaken case branch",
+    "flat": "010100298005268001",
+    "args": ["d87980"],
+    "errorKind": 0,
+    "cpu": 96100,
+    "mem": 700
+  },
+  {
+    "name": "free var in a constr under an unapplied lambda",
+    "flat": "010100232498a00200a1",
+    "args": ["d87980"],
+    "errorKind": 0,
+    "cpu": 112100,
+    "mem": 800
+  },
+  {
+    "name": "free var under a delay outside constr and case",
+    "flat": "0101002324984009",
+    "args": ["d87980"],
+    "errorKind": 2,
+    "cpu": 0,
+    "mem": 0
   }
 ]
