@@ -15,13 +15,15 @@ const costModel = BigInt64Array.from(
 );
 
 // Programs applied to CBOR Data arguments, with their outcome and cost under
-// Plutus V3 and protocol version 11 as given by the Haskell evaluator
-// (`uplc evaluate -S E -t`, plutus 1b03c165): the bounds builtins put on their
-// arguments, and their arguments unlifted before the builtin is costed.
+// Plutus V3 and protocol version 11, or the protocol version a program gives,
+// as given by the Haskell evaluator (plutus 1b03c165): the bounds builtins put
+// on their arguments, their arguments unlifted before the builtin is costed,
+// and Data handled as Plutus handles it.
 const programs: {
   name: string;
   flat: string;
   args: string[];
+  protocol?: number;
   errorKind: number;
   cpu: number;
   mem: number;
@@ -41,27 +43,30 @@ for (const [build, uplc] of Object.entries({ speed, size })) {
       expect(info.costModelLengths.PlutusV3).toBe(costModel.length);
     });
 
-    test.each(programs)("$name", ({ flat, args, errorKind, cpu, mem }) => {
-      const result = uplc.eval_program_raw(
-        Buffer.from(flat, "hex"),
-        args.map((arg) => Buffer.from(arg, "hex")),
-        PLUTUS_V3,
-        VAN_ROSSEM,
-        costModel,
-        BUDGET.cpu,
-        BUDGET.mem,
-        // Budget like the ledger and the Haskell evaluator, which never charge
-        // the steps a failing program took since the budget was last checked.
-        false,
-      );
+    test.each(programs)(
+      "$name",
+      ({ flat, args, protocol, errorKind, cpu, mem }) => {
+        const result = uplc.eval_program_raw(
+          Buffer.from(flat, "hex"),
+          args.map((arg) => Buffer.from(arg, "hex")),
+          PLUTUS_V3,
+          protocol ?? VAN_ROSSEM,
+          costModel,
+          BUDGET.cpu,
+          BUDGET.mem,
+          // Budget like the ledger and the Haskell evaluator, which never charge
+          // the steps a failing program took since the budget was last checked.
+          false,
+        );
 
-      expect({
-        ok: result.ok,
-        errorKind: result.error_kind,
-        cpu: Number(result.cpu),
-        mem: Number(result.mem),
-      }).toEqual({ ok: errorKind === 0, errorKind, cpu, mem });
-    });
+        expect({
+          ok: result.ok,
+          errorKind: result.error_kind,
+          cpu: Number(result.cpu),
+          mem: Number(result.mem),
+        }).toEqual({ ok: errorKind === 0, errorKind, cpu, mem });
+      },
+    );
 
     test("stops a program that goes over budget", () => {
       const { flat, args } = programs.find(

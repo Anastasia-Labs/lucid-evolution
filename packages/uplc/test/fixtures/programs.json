@@ -304,6 +304,81 @@
     "mem": 100
   },
   {
+    "name": "serialiseData constrData 2^64 at PV10",
+    "flat": "0101005333573466e3cdd999ba5482020202020202020200112f5c09110fd86682c2490100000000000000008000149859",
+    "args": [],
+    "protocol": 10,
+    "errorKind": 0,
+    "cpu": 2255959,
+    "mem": 2142
+  },
+  {
+    "name": "serialiseData constrData -2^64 at PV10",
+    "flat": "0101005333573466e3cdd999ba5483fffffffffffffffffc0d2f5c09110dd866823bffffffffffffffff8000149859",
+    "args": [],
+    "protocol": 10,
+    "errorKind": 0,
+    "cpu": 2255959,
+    "mem": 2142
+  },
+  {
+    "name": "unConstrData constrData -1 at PV10",
+    "flat": "0101005333573466e1cd55ce9baa3374a9000a5eb8120011498581",
+    "args": [],
+    "protocol": 10,
+    "errorKind": 0,
+    "cpu": 701116,
+    "mem": 2598
+  },
+  {
+    "name": "serialiseData 102-form constr 0",
+    "flat": "0101005333573466e3cdd9a60105d86682008000488103d8798000149859",
+    "args": [],
+    "errorKind": 0,
+    "cpu": 2169733,
+    "mem": 1710
+  },
+  {
+    "name": "serialiseData bignum 1",
+    "flat": "0101005333573466e3cdd9a60103c24101004881010100149859",
+    "args": [],
+    "errorKind": 0,
+    "cpu": 2383045,
+    "mem": 1712
+  },
+  {
+    "name": "serialiseData bignum -1 without bytes",
+    "flat": "0101005333573466e3cdd9a60102c340004881012000149859",
+    "args": [],
+    "errorKind": 0,
+    "cpu": 2383045,
+    "mem": 1712
+  },
+  {
+    "name": "serialiseData bignum 2^64 with a leading zero",
+    "flat": "0101005333573466e3cdd9a6010cc24a000100000000000000000048810bc24901000000000000000000149859",
+    "args": [],
+    "errorKind": 0,
+    "cpu": 2596432,
+    "mem": 1714
+  },
+  {
+    "name": "equalsData bignum -1 and integer -1",
+    "flat": "0101005333573466ebd30103c34100004c01012000149859",
+    "args": [],
+    "errorKind": 0,
+    "cpu": 1334692,
+    "mem": 1502
+  },
+  {
+    "name": "equalsData bignum -6 and integer -5",
+    "flat": "0101005333573466ebd30103c34105004c01012400161499",
+    "args": [],
+    "errorKind": 0,
+    "cpu": 1334692,
+    "mem": 1502
+  },
+  {
     "name": "replicateByte 1 256",
     "flat": "010100337a290012410009",
     "args": [],
