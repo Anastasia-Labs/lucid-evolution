@@ -25,7 +25,7 @@ export function apply_params_to_script(
  * - `args_cbor`: the arguments, each one CBOR-encoded Data, applied in order.
  * - `language`: the Plutus version to evaluate as, 1, 2 or 3.
  * - `protocol_major_version`: the protocol version whose semantics to use,
- *   from 5 (Alonzo) to 11 (van Rossem).
+ *   from 5 (Alonzo) to 12 (Dijkstra).
  * - `cost_model`: the cost model parameters, every one the evaluator knows
  *   for this Plutus version (350 for Plutus V3), in the ledger's order.
  * - `budget_cpu`, `budget_mem`: the budget.

@@ -6,8 +6,10 @@ use uplc::{
     ast::{FakeNamedDeBruijn, NamedDeBruijn, Program},
     machine::{
         cost_model::{initialize_cost_model_with_protocol, CostModel, ExBudget, ParamName},
-        runtime::{ALONZO_PROTOCOL_VERSION, VAN_ROSSEM_PROTOCOL_VERSION},
         Error, Machine,
+    },
+    protocol::{
+        self, ALONZO_PROTOCOL_VERSION, DIJKSTRA_PROTOCOL_VERSION, VAN_ROSSEM_PROTOCOL_VERSION,
     },
     tx::{self, ScriptCache},
     Language, PlutusData,
@@ -129,7 +131,7 @@ pub const EVAL_NOT_UNIT: u8 = 3;
 /// - `args_cbor`: the arguments, each one CBOR-encoded Data, applied in order.
 /// - `language`: the Plutus version to evaluate as, 1, 2 or 3.
 /// - `protocol_major_version`: the protocol version whose semantics to use,
-///   from 5 (Alonzo) to 11 (van Rossem).
+///   from 5 (Alonzo) to 12 (Dijkstra).
 /// - `cost_model`: the cost model parameters, every one the evaluator knows
 ///   for this Plutus version (350 for Plutus V3), in the ledger's order.
 /// - `budget_cpu`, `budget_mem`: the budget.
@@ -212,7 +214,7 @@ fn eval_program(
         _ => return Err(format!("Unsupported Plutus version {language}")),
     };
 
-    if !(ALONZO_PROTOCOL_VERSION..=VAN_ROSSEM_PROTOCOL_VERSION).contains(&protocol_major_version) {
+    if !(ALONZO_PROTOCOL_VERSION..=DIJKSTRA_PROTOCOL_VERSION).contains(&protocol_major_version) {
         return Err("Unsupported protocol major version".to_string());
     }
 
@@ -237,6 +239,13 @@ fn eval_program(
         .collect::<Result<Vec<PlutusData>, _>>()?;
 
     let program = with_program_cache(|cache| cache.program(program_flat))?;
+
+    if !protocol::is_uplc_version_available(&language, protocol_major_version, program.version) {
+        let (major, minor, patch) = program.version;
+        return Err(format!(
+            "UPLC {major}.{minor}.{patch} is not available to {language:?} at protocol version {protocol_major_version}"
+        ));
+    }
 
     let program = args
         .into_iter()
@@ -270,7 +279,7 @@ fn run(
         slippage,
     );
 
-    let result = machine.run(program.term);
+    let result = machine.run_program(program);
 
     let used = budget - machine.ex_budget;
 
@@ -460,7 +469,7 @@ fn self_test() -> (String, Vec<&'static str>) {
             LEDGER_SLIPPAGE,
         );
 
-        let result = machine.run(program.term).ok().map(|term| term.to_pretty());
+        let result = machine.run_program(program).ok().map(|term| term.to_pretty());
         let used = ExBudget::max() - machine.ex_budget;
 
         if result.as_deref() != *expected {
@@ -634,12 +643,21 @@ mod tests {
         assert!(eval(&program, UNIT, 0, 11, &costs, 1000).is_err());
         assert!(eval(&program, UNIT, 4, 11, &costs, 1000).is_err());
         assert!(eval(&program, UNIT, 3, 4, &costs, 1000).is_err());
-        assert!(eval(&program, UNIT, 3, 12, &costs, 1000).is_err());
+        assert!(eval(&program, UNIT, 3, 12, &costs, 1000).is_ok());
+        assert!(eval(&program, UNIT, 3, 13, &costs, 1000).is_err());
         assert!(eval(&program, UNIT, 3, 11, &costs[..349], 1000).is_err());
         assert!(eval(&program, UNIT, 3, 11, &[&costs[..], &[0]].concat(), 1000).is_err());
         assert!(eval(&program, UNIT, 3, 11, &costs, u64::MAX).is_err());
         assert!(eval(&program, &[0xd8, 0x79], 3, 11, &costs, 1000).is_err());
         assert!(eval(&program[..2], UNIT, 3, 11, &costs, 1000).is_err());
+
+        // UPLC versions become available as the ledger allows them.
+        let v1_costs = vec![0; ParamName::V1.len()];
+        assert!(eval(&program, UNIT, 1, 10, &v1_costs, 1000).is_err());
+        assert!(eval(&program, UNIT, 1, 11, &v1_costs, 1000).is_ok());
+        let program = flat("(program 1.2.0 (lam ctx (con unit ())))");
+        assert!(eval(&program, UNIT, 3, 11, &costs, 1000).is_err());
+        assert!(eval(&program, UNIT, 3, 12, &costs, 1000).is_ok());
     }
 
     #[test]
