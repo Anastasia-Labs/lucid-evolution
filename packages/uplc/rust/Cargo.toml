@@ -10,9 +10,9 @@ crate-type = ["cdylib"]
 [dependencies]
 # Unreleased aiken: main after v1.1.24 (per-transaction script context,
 # shared Data and ScriptCache) plus protocol version 11 and 12 support
-# (colll78/aiken feat/uplc-pv11). Switch back to a crates.io version once one
+# (colll78/aiken main). Switch back to a crates.io version once one
 # is published.
-uplc = { git = "https://github.com/colll78/aiken.git", rev = "cfe16666e299f3e35495c3f43b66e9e1f4dca7b6" }
+uplc = { git = "https://github.com/colll78/aiken.git", rev = "28e42883b9192d123406d9c8fb79cb2817e98b9c" }
 wasm-bindgen = "0.2.93"
 js-sys = "0.3.70"
 hex = "0.4"
