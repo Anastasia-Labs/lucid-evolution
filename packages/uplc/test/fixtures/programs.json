@@ -264,6 +264,46 @@
     "mem": 100
   },
   {
+    "name": "constrData -1",
+    "flat": "0101003374a9000a5eb801",
+    "args": [],
+    "errorKind": 2,
+    "cpu": 100,
+    "mem": 100
+  },
+  {
+    "name": "constrData 2^128",
+    "flat": "0101003374a904040404040404040404040404040404040400425eb801",
+    "args": [],
+    "errorKind": 2,
+    "cpu": 100,
+    "mem": 100
+  },
+  {
+    "name": "constrData computed 2^64",
+    "flat": "0101003374a66e0120feffffffffffffffff03480092f5c1",
+    "args": [],
+    "errorKind": 2,
+    "cpu": 101308,
+    "mem": 102
+  },
+  {
+    "name": "constrData applied 2^64",
+    "flat": "010100323374a00297ae048202020202020202020011",
+    "args": [],
+    "errorKind": 2,
+    "cpu": 100,
+    "mem": 100
+  },
+  {
+    "name": "case integer 2^64",
+    "flat": "0101009482020202020202020200129301",
+    "args": [],
+    "errorKind": 2,
+    "cpu": 100,
+    "mem": 100
+  },
+  {
     "name": "replicateByte 1 256",
     "flat": "010100337a290012410009",
     "args": [],
