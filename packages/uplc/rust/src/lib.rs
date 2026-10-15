@@ -1,6 +1,5 @@
 use std::{cell::RefCell, collections::HashMap};
 
-use js_sys;
 use pallas_crypto::hash::{Hash, Hasher};
 use uplc::{
     ast::{FakeNamedDeBruijn, NamedDeBruijn, Program},
@@ -38,6 +37,7 @@ thread_local! {
 }
 
 #[wasm_bindgen]
+#[allow(clippy::too_many_arguments)]
 pub fn eval_phase_two_raw(
     tx_bytes: &[u8],
     utxos_bytes_x: Vec<js_sys::Uint8Array>,
@@ -57,7 +57,7 @@ pub fn eval_phase_two_raw(
     }
     let utxos_bytes = utxos_bytes_x
         .into_iter()
-        .zip(utxos_bytes_y.into_iter())
+        .zip(utxos_bytes_y)
         .map(|(x, y)| (x.to_vec(), y.to_vec()))
         .collect::<Vec<(Vec<u8>, Vec<u8>)>>();
     let eval = |script_cache: &mut ScriptCache| {
@@ -76,13 +76,22 @@ pub fn eval_phase_two_raw(
     // A trap during an earlier call (wasm aborts without unwinding) leaves the
     // cache borrowed for good; evaluate with a fresh cache instead of panicking
     // on every later call.
-    return SCRIPT_CACHE
-        .try_with(|cache| cache.try_borrow_mut().ok().map(|mut cache| eval(&mut cache)))
+    SCRIPT_CACHE
+        .try_with(|cache| {
+            cache
+                .try_borrow_mut()
+                .ok()
+                .map(|mut cache| eval(&mut cache))
+        })
         .ok()
         .flatten()
         .unwrap_or_else(|| eval(&mut ScriptCache::default()))
-        .map(|r| r.iter().map(|i| js_sys::Uint8Array::from(&i.0[..])).collect())
-        .map_err(|e| e.to_string().into());
+        .map(|r| {
+            r.iter()
+                .map(|i| js_sys::Uint8Array::from(&i.0[..]))
+                .collect()
+        })
+        .map_err(|e| e.to_string().into())
 }
 
 #[wasm_bindgen]
@@ -90,8 +99,7 @@ pub fn apply_params_to_script(
     params_bytes: &[u8],
     plutus_script_bytes: &[u8],
 ) -> Result<Vec<u8>, JsValue> {
-    return tx::apply_params_to_script(params_bytes, plutus_script_bytes)
-        .map_err(|e| e.to_string().into());
+    tx::apply_params_to_script(params_bytes, plutus_script_bytes).map_err(|e| e.to_string().into())
 }
 
 /// The outcome of [`eval_program_raw`].
@@ -469,7 +477,10 @@ fn self_test() -> (String, Vec<&'static str>) {
             LEDGER_SLIPPAGE,
         );
 
-        let result = machine.run_program(program).ok().map(|term| term.to_pretty());
+        let result = machine
+            .run_program(program)
+            .ok()
+            .map(|term| term.to_pretty());
         let used = ExBudget::max() - machine.ex_budget;
 
         if result.as_deref() != *expected {
