@@ -52,6 +52,10 @@
     "build-local": "rm -rf dist && cd rust && wasm-pack build --target bundler --out-dir ../src/speed/browser && wasm-pack build --target nodejs --out-dir ../src/speed/node && wasm-pack build --profile release-size --target bundler --out-dir ../src/size/browser && wasm-pack build --profile release-size --target nodejs --out-dir ../src/size/node && cd .. && pnpm clean-garbage",
     "build": "cp -r src dist",
     "clean-garbage": "for d in speed/browser speed/node size/browser size/node; do rm -f src/$d/.gitignore src/$d/package.json; done",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.8"
   }
 }
