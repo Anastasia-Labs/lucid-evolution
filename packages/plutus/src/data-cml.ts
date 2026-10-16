@@ -3,105 +3,194 @@ import * as CML from "@lucid-evolution/cml";
 import { Constr } from "./constr.js";
 import type { Data } from "./data.js";
 
-/*
-  The CML-based Plutus data codec that Data.to and Data.from used before the
-  JavaScript codec in data-cbor.ts. Data.to and Data.from still fall back to
-  it for any input the JavaScript codec does not handle itself, which keeps
-  their results and error messages unchanged for malformed input. Not
-  exported from the package.
-*/
+// Independent CML conversion for inputs the JavaScript codec leaves to CML.
+// Only pending values are owned: parent copies and consumed children are freed
+// at each step, so live native allocations do not grow with depth squared.
+
+type EncodeTask =
+  | { kind: "visit"; data: Data; depth: number }
+  | {
+      kind: "finish";
+      data: Constr<Data> | Data[] | Map<Data, Data>;
+      start: number;
+      depth: number;
+    };
 
 /** Encodes `data` as CBOR hex, in cardano-node format unless `canonical`. */
 export function cmlDataToCbor(data: Data, canonical: boolean): string {
-  // CML containers clone what is added to them, so every intermediate
-  // PlutusData is freed as soon as it has been copied into its parent.
-  function serialize(data: Data): CML.PlutusData {
-    try {
-      return withCMLScope((own) => {
-        if (typeof data === "bigint") {
-          return CML.PlutusData.new_integer(
-            own(CML.BigInteger.from_str(data.toString())),
-          );
-        } else if (typeof data === "string") {
-          return CML.PlutusData.new_bytes(fromHex(data));
-        } else if (data instanceof Constr) {
-          const { index, fields } = data;
-          const plutusList = own(CML.PlutusDataList.new());
-
-          fields.forEach((field) => plutusList.add(own(serialize(field))));
-
-          const alternative = own(CML.BigInteger.from_str(index.toString()));
-          return CML.PlutusData.new_constr_plutus_data(
-            own(CML.ConstrPlutusData.new(alternative.as_u64()!, plutusList)),
-          );
-        } else if (data instanceof Array) {
-          const plutusList = own(CML.PlutusDataList.new());
-
-          data.forEach((arg) => plutusList.add(own(serialize(arg))));
-
-          return CML.PlutusData.new_list(plutusList);
-        } else if (data instanceof Map) {
-          const plutusMap = own(CML.PlutusMap.new());
-
-          for (const [key, value] of data.entries()) {
-            plutusMap.set(own(serialize(key)), own(serialize(value)));
+  const tasks: EncodeTask[] = [{ kind: "visit", data, depth: 0 }];
+  const values: CML.PlutusData[] = [];
+  const owned = new Set<CML.PlutusData>();
+  const active = new WeakSet<object>();
+  const keep = (value: CML.PlutusData) => {
+    owned.add(value);
+    return value;
+  };
+  try {
+    while (tasks.length > 0) {
+      const task = tasks.pop()!;
+      try {
+        const data = task.data;
+        if (task.kind === "visit") {
+          if (typeof data === "bigint") {
+            values.push(
+              keep(
+                withCMLScope((own) =>
+                  CML.PlutusData.new_integer(
+                    own(CML.BigInteger.from_str(data.toString())),
+                  ),
+                ),
+              ),
+            );
+            continue;
           }
-
-          return CML.PlutusData.new_map(plutusMap);
+          if (typeof data === "string") {
+            values.push(keep(CML.PlutusData.new_bytes(fromHex(data))));
+            continue;
+          }
+          const children: Data[] = [];
+          if (data instanceof Constr)
+            data.fields.forEach((field) => children.push(field));
+          else if (data instanceof Array)
+            data.forEach((item) => children.push(item));
+          else if (data instanceof Map)
+            for (const [key, value] of data.entries())
+              children.push(key, value);
+          else throw new Error("Unsupported type");
+          if (active.has(data)) throw new Error("Circular data");
+          active.add(data);
+          tasks.push({
+            kind: "finish",
+            data,
+            start: values.length,
+            depth: task.depth,
+          });
+          for (let i = children.length - 1; i >= 0; i--)
+            tasks.push({
+              kind: "visit",
+              data: children[i],
+              depth: task.depth + 1,
+            });
+          continue;
         }
-        throw new Error("Unsupported type");
-      });
-    } catch (error) {
-      throw new Error("Could not serialize the data: " + error);
+        const children = values.splice(task.start);
+        const result = withCMLScope((own) => {
+          if (data instanceof Map) {
+            const map = own(CML.PlutusMap.new());
+            for (let i = 0; i < children.length; i += 2)
+              map.set(children[i], children[i + 1]);
+            return CML.PlutusData.new_map(map);
+          }
+          const list = own(CML.PlutusDataList.new());
+          for (const child of children) list.add(child);
+          if (data instanceof Constr) {
+            const alternative = own(
+              CML.BigInteger.from_str(data.index.toString()),
+            );
+            return CML.PlutusData.new_constr_plutus_data(
+              own(CML.ConstrPlutusData.new(alternative.as_u64()!, list)),
+            );
+          }
+          return CML.PlutusData.new_list(list);
+        });
+        values.push(keep(result));
+        active.delete(task.data);
+        for (const child of children) {
+          owned.delete(child);
+          child.free();
+        }
+      } catch (error) {
+        // Retain the existing context for invalid values without recursively
+        // catching and rebuilding an error at each ancestor.
+        throw new Error(
+          "Could not serialize the data: " +
+            "Error: Could not serialize the data: ".repeat(task.depth) +
+            error,
+        );
+      }
     }
-  }
-  return withCMLScope((own) => {
-    const serialized = own(serialize(data));
+    const serialized = values[0];
     return canonical
       ? serialized.to_canonical_cbor_hex()
-      : own(serialized.to_cardano_node_format()).to_cbor_hex();
-  });
+      : withCMLScope((own) =>
+          own(serialized.to_cardano_node_format()).to_cbor_hex(),
+        );
+  } finally {
+    for (const value of owned) value.free();
+  }
 }
 
-/** Decodes CBOR hex into Data. */
+type DecodeTask =
+  | { kind: "visit"; data: CML.PlutusData }
+  | { kind: "list"; start: number }
+  | { kind: "constr"; start: number; index: number }
+  | { kind: "map"; start: number };
+
+/** Decodes CBOR hex into Data, including CML's duplicate map-key semantics. */
 export function cmlDataFromCbor(raw: string): Data {
-  // `data` is borrowed from the caller; every accessor result is a fresh CML
-  // copy and is freed once it has been converted.
-  function deserialize(data: CML.PlutusData): Data {
-    return withCMLScope((own) => {
-      if (data.kind() === 0) {
-        const constr = own(data.as_constr_plutus_data()!);
-        const l = own(constr.fields());
-        const desL = [];
-        for (let i = 0; i < l.len(); i++) {
-          desL.push(deserialize(own(l.get(i))));
+  const owned = new Set<CML.PlutusData>();
+  const keep = (value: CML.PlutusData) => {
+    owned.add(value);
+    return value;
+  };
+  const tasks: DecodeTask[] = [
+    { kind: "visit", data: keep(CML.PlutusData.from_cbor_hex(raw)) },
+  ];
+  const values: Data[] = [];
+  try {
+    while (tasks.length > 0) {
+      const task = tasks.pop()!;
+      if (task.kind !== "visit") {
+        const children = values.splice(task.start);
+        if (task.kind === "list") values.push(children);
+        else if (task.kind === "constr")
+          values.push(new Constr(task.index, children));
+        else {
+          const map = new Map<Data, Data>();
+          for (let i = 0; i < children.length; i += 2)
+            map.set(children[i], children[i + 1]);
+          values.push(map);
         }
-        return new Constr(parseInt(constr.alternative().toString()), desL);
-      } else if (data.kind() === 1) {
-        const m = own(data.as_map()!);
-        const desM: Map<Data, Data> = new Map();
-        const keys = own(m.keys());
-        for (let i = 0; i < keys.len(); i++) {
-          const key = own(keys.get(i));
-          desM.set(deserialize(key), deserialize(own(m.get(key)!)));
-        }
-        return desM;
-      } else if (data.kind() === 2) {
-        const l = own(data.as_list()!);
-        const desL = [];
-        for (let i = 0; i < l.len(); i++) {
-          desL.push(deserialize(own(l.get(i))));
-        }
-        return desL;
-      } else if (data.kind() === 3) {
-        return BigInt(own(data.as_integer()!).to_str());
-      } else if (data.kind() === 4) {
-        return toHex(data.as_bytes()!);
+        continue;
       }
-      throw new Error("Unsupported type");
-    });
+      const data = task.data;
+      owned.delete(data);
+      withCMLScope((own) => {
+        own(data);
+        const children: CML.PlutusData[] = [];
+        const kind = data.kind();
+        if (kind === 0) {
+          const constr = own(data.as_constr_plutus_data()!);
+          const fields = own(constr.fields());
+          tasks.push({
+            kind: "constr",
+            start: values.length,
+            index: parseInt(constr.alternative().toString()),
+          });
+          for (let i = 0; i < fields.len(); i++)
+            children.push(keep(fields.get(i)));
+        } else if (kind === 1) {
+          const map = own(data.as_map()!);
+          const keys = own(map.keys());
+          tasks.push({ kind: "map", start: values.length });
+          for (let i = 0; i < keys.len(); i++) {
+            const key = keep(keys.get(i));
+            children.push(key, keep(map.get(key)!));
+          }
+        } else if (kind === 2) {
+          const list = own(data.as_list()!);
+          tasks.push({ kind: "list", start: values.length });
+          for (let i = 0; i < list.len(); i++) children.push(keep(list.get(i)));
+        } else if (kind === 3)
+          values.push(BigInt(own(data.as_integer()!).to_str()));
+        else if (kind === 4) values.push(toHex(data.as_bytes()!));
+        else throw new Error("Unsupported type");
+        for (let i = children.length - 1; i >= 0; i--)
+          tasks.push({ kind: "visit", data: children[i] });
+      });
+    }
+    return values[0];
+  } finally {
+    for (const value of owned) value.free();
   }
-  return withCMLScope((own) =>
-    deserialize(own(CML.PlutusData.from_cbor_hex(raw))),
-  );
 }

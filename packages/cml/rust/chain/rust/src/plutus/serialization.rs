@@ -10,9 +10,6 @@ use cml_core::serialization::*;
 use std::collections::BTreeMap;
 use std::io::{BufRead, Seek, SeekFrom, Write};
 
-// PlutusData::Bytes uses this specific encoding:
-use crate::utils::{read_bounded_bytes, write_bounded_bytes};
-
 impl Serialize for CostModels {
     fn serialize<'se, W: Write>(
         &self,
@@ -562,97 +559,17 @@ impl Serialize for PlutusData {
         serializer: &'se mut Serializer<W>,
         force_canonical: bool,
     ) -> cbor_event::Result<&'se mut Serializer<W>> {
-        match self {
-            PlutusData::ConstrPlutusData(constr_plutus_data) => {
-                constr_plutus_data.serialize(serializer, force_canonical)
-            }
-            PlutusData::Map(map) => map.serialize(serializer, force_canonical),
-            PlutusData::List {
-                list,
-                list_encoding,
-            } => {
-                serializer
-                    .write_array_sz(list_encoding.to_len_sz(list.len() as u64, force_canonical))?;
-                for element in list.iter() {
-                    element.serialize(serializer, force_canonical)?;
-                }
-                list_encoding.end(serializer, force_canonical)
-            }
-            PlutusData::Integer(big_int) => big_int.serialize(serializer, force_canonical),
-            // hand-written
-            PlutusData::Bytes {
-                bytes,
-                bytes_encoding,
-            } => write_bounded_bytes(serializer, bytes, bytes_encoding, force_canonical),
-        }
+        super::codec::serialize(
+            super::codec::WriteTask::Data(self),
+            serializer,
+            force_canonical,
+        )
     }
 }
 
 impl Deserialize for PlutusData {
     fn deserialize<R: BufRead + Seek>(raw: &mut Deserializer<R>) -> Result<Self, DeserializeError> {
-        (|| -> Result<_, DeserializeError> {
-            // hand-coded based on generated code
-            // 1) we use bounded bytes not
-            // 2) to give better errors / direct branch on cbor_type()?
-            match raw.cbor_type()? {
-                cbor_event::Type::Tag => {
-                    // could be large BigInteger or ConstrPlutusData so check tag to see which it is
-                    let initial_position = raw.as_mut_ref().stream_position().unwrap();
-                    let tag = raw.tag()?;
-                    raw.as_mut_ref()
-                        .seek(SeekFrom::Start(initial_position))
-                        .unwrap();
-                    if tag == 2 || tag == 3 {
-                        BigInteger::deserialize(raw)
-                            .map(Self::Integer)
-                            .map_err(|e| e.annotate("Integer"))
-                    } else {
-                        ConstrPlutusData::deserialize(raw)
-                            .map(Self::ConstrPlutusData)
-                            .map_err(|e| e.annotate("ConstrPlutusData"))
-                    }
-                }
-                cbor_event::Type::Map => PlutusMap::deserialize(raw)
-                    .map(Self::Map)
-                    .map_err(|e| e.annotate("Map")),
-                cbor_event::Type::Array => {
-                    (|raw: &mut Deserializer<_>| -> Result<_, DeserializeError> {
-                        let mut list_arr = Vec::new();
-                        let len = raw.array_sz()?;
-                        let list_encoding = len.into();
-                        while match len {
-                            cbor_event::LenSz::Len(n, _) => (list_arr.len() as u64) < n,
-                            cbor_event::LenSz::Indefinite => true,
-                        } {
-                            if raw.cbor_type()? == cbor_event::Type::Special {
-                                assert_eq!(raw.special()?, cbor_event::Special::Break);
-                                break;
-                            }
-                            list_arr.push(PlutusData::deserialize(raw)?);
-                        }
-                        Ok(Self::List {
-                            list: list_arr,
-                            list_encoding,
-                        })
-                    })(raw)
-                    .map_err(|e| e.annotate("List"))
-                }
-                cbor_event::Type::UnsignedInteger | cbor_event::Type::NegativeInteger => {
-                    BigInteger::deserialize(raw)
-                        .map(Self::Integer)
-                        .map_err(|e| e.annotate("Integer"))
-                }
-                // hand-written 100% since the format is not just arbitrary CBOR bytes
-                cbor_event::Type::Bytes => read_bounded_bytes(raw)
-                    .map(|(bytes, bytes_encoding)| Self::Bytes {
-                        bytes,
-                        bytes_encoding,
-                    })
-                    .map_err(|e| e.annotate("Bytes")),
-                _ => Err(DeserializeFailure::NoVariantMatched.into()),
-            }
-        })()
-        .map_err(|e| e.annotate("PlutusData"))
+        super::codec::deserialize(raw).map_err(|e| e.annotate("PlutusData"))
     }
 }
 
