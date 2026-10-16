@@ -1,5 +1,16 @@
 # @lucid-evolution/lucid
 
+## 0.8.2
+
+### Patch Changes
+
+- Updated dependencies [[`ae71a45`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ae71a459717eef04d148648f49500523f927702a)]:
+  - @lucid-evolution/uplc@0.4.0
+  - @lucid-evolution/utils@0.2.2
+  - @lucid-evolution/provider@0.4.2
+  - @lucid-evolution/tx-graph@0.1.2
+  - @lucid-evolution/wallet@0.4.2
+
 ## 0.8.1
 
 ### Patch Changes
