@@ -1,5 +1,16 @@
 # @lucid-evolution/plutus
 
+## 0.2.2
+
+### Patch Changes
+
+- [#761](https://github.com/Anastasia-Labs/lucid-evolution/pull/761) [`b1c15de`](https://github.com/Anastasia-Labs/lucid-evolution/commit/b1c15dea1c18e45ba2c6a10d4f3117552d6671e5) Thanks [@colll78](https://github.com/colll78)! - Handle deeply nested Plutus data with iterative CBOR and ownership operations in the Node and browser CML builds and in Data.from/Data.to. Shallow data keeps a recursive fast path, and Data.from/Data.to now decode and encode common datums without crossing into WASM. Preserve encoding choices, map ordering and duplicate-key behavior, with public API coverage at depth 10,000.
+
+- Updated dependencies [[`b1c15de`](https://github.com/Anastasia-Labs/lucid-evolution/commit/b1c15dea1c18e45ba2c6a10d4f3117552d6671e5)]:
+  - @lucid-evolution/cml@0.1.2
+  - @lucid-evolution/core-types@0.5.2
+  - @lucid-evolution/core-utils@0.2.2
+
 ## 0.2.1
 
 ### Patch Changes

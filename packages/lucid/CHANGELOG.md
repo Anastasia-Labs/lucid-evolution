@@ -1,5 +1,20 @@
 # @lucid-evolution/lucid
 
+## 0.8.3
+
+### Patch Changes
+
+- Updated dependencies [[`b1c15de`](https://github.com/Anastasia-Labs/lucid-evolution/commit/b1c15dea1c18e45ba2c6a10d4f3117552d6671e5)]:
+  - @lucid-evolution/cml@0.1.2
+  - @lucid-evolution/plutus@0.2.2
+  - @lucid-evolution/core-types@0.5.2
+  - @lucid-evolution/core-utils@0.2.2
+  - @lucid-evolution/provider@0.4.3
+  - @lucid-evolution/sign_data@0.2.2
+  - @lucid-evolution/tx-graph@0.1.3
+  - @lucid-evolution/utils@0.2.3
+  - @lucid-evolution/wallet@0.4.3
+
 ## 0.8.2
 
 ### Patch Changes
