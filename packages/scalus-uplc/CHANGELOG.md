@@ -1,5 +1,13 @@
 # @lucid-evolution/scalus-uplc
 
+## 0.2.4
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @lucid-evolution/core-types@0.5.2
+  - @lucid-evolution/core-utils@0.2.2
+
 ## 0.2.3
 
 ### Patch Changes
