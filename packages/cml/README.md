@@ -21,6 +21,7 @@ Each change is described in full in the git history of `packages/cml`.
 - `TransactionBuilder.has_redeemers` tells whether the built witness set will hold redeemers, without building a draft.
 - Fee estimates no longer deep-copy the transaction builder, and packed change and output fees are sized by adding up serialised sizes instead of rebuilding the transaction (`fees.rs`, `min_ada.rs`, `builders/tx_builder.rs`). Outputs with a communication datum still take the copying path.
 - `OrderedHashMap` hashes its keys with foldhash instead of SipHash. Insertion order and encodings are unchanged; in Rust the map's hasher type, and so its `Deref` target and the type `take()` returns, differ from upstream.
+- Plutus data CBOR reading/writing, cloning, release, comparison, hashing and node-format conversion use explicit work stacks (`chain/rust/src/plutus/{codec,traversal}.rs`). Encoding choices and stored map entries are preserved.
 - The Node build is compiled with `opt-level = 3` and a 16 MiB shadow stack (see [Building](#building)).
 
 ## Building
@@ -38,7 +39,16 @@ pnpm build
 
 The browser build keeps the workspace's `opt-level = "z"`, as upstream does, so bundles stay small (2.9 MB, 0.9 MB gzipped). The Node build is compiled with `opt-level = 3` instead: it is 4.7 MB, and it decodes and encodes Plutus data 2–4× faster.
 
-The Node build also links a 16 MiB wasm shadow stack, so it decodes Plutus data nested 4,000 deep, about as deep as a transaction can carry. The browser build keeps the default 1 MiB stack, as the `@anastasia-labs` packages did, which traps with "memory access out of bounds" past about 2,000 nested constructors; the larger stack would add 15 MiB of memory to every instance. V8 runs wasm on the machine stack, so Node needs `--stack-size=1400` or more to reach the full depth.
+The Node build retains its 16 MiB wasm shadow stack. Plutus data nesting is handled by explicit work stacks in both builds: the public API tests cover 10,000 nested constructors, lists and maps, byte strings inside lists, copied values, canonical map-key ordering and incomplete inputs, using Node's default call-stack size.
+
+Run the public API checks against the generated outputs after rebuilding:
+
+```bash
+pnpm build
+pnpm test
+```
+
+The browser checks load the unchanged bundler output through Node's experimental WebAssembly module loader. Native public API checks, including a 256 KiB thread stack, run with `cargo test -p cml-chain --test plutus_depth` from `rust/`.
 
 ## License
 

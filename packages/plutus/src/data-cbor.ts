@@ -1,319 +1,56 @@
 import { Constr } from "./constr.js";
 import type { Data } from "./data.js";
+export { encodePlutusData } from "./data-cbor-encode.js";
 
-/*
-  A JavaScript CBOR codec for Plutus data that reproduces CML byte for byte.
-
-  Encoding follows CML's cardano-node format (or CML's canonical format):
-    - integers within 64 bits use major types 0 and 1; larger ones use
-      bignum tags 2 and 3;
-    - byte strings longer than 64 bytes, including bignum payloads, become
-      indefinite byte strings of 64-byte chunks;
-    - constructors 0-6 use tags 121-127, 7-127 use tags 1280-1400, and
-      larger ones use tag 102 with an [index, fields] array;
-    - non-empty lists, constructor fields, maps and tag 102 arrays are
-      indefinite-length in node format and definite in canonical format;
-      empty ones are always definite;
-    - maps follow CML's PlutusMap. Setting a key that is already present
-      removes the old entry and appends the new one, where keys are equal
-      when they are structurally equal (maps compared entry by entry in
-      that stored order). Encoding then stably sorts the entries by key: in
-      node format by PlutusData order (constructor < map < list < integer <
-      bytes, then by contents, maps by their sorted entries), in canonical
-      format by encoded key (shorter first, then bytewise).
-
-  Both directions return `undefined` instead of guessing whenever the input
-  is outside what they reproduce exactly (malformed values, unusual CBOR,
-  duplicate map keys on decode, ...). Callers then use the CML codec, which
-  yields the same result or error as before.
-*/
-
-const U64_MAX = 0xffff_ffff_ffff_ffffn;
 const MAX_CHUNK_BYTES = 64;
-const HEX_PATTERN = /^[0-9a-fA-F]*$/;
-const HEX_BYTE = Array.from({ length: 256 }, (_, i) =>
-  i.toString(16).padStart(2, "0"),
-);
-
-/** Thrown internally when an input is left to the CML codec. */
+const MAX_SAFE_INDEX = BigInt(Number.MAX_SAFE_INTEGER);
 class Decline {}
 const DECLINE = new Decline();
 
 // ---------------------------------------------------------------------------
-// Encoding
-
-const head = (major: number, value: number | bigint): string => {
-  const initial = major << 5;
-  if (typeof value === "number" && value <= 0xffff_ffff) {
-    if (value < 24) return HEX_BYTE[initial | value];
-    if (value < 0x100) return HEX_BYTE[initial | 24] + HEX_BYTE[value];
-    if (value < 0x10000) {
-      return HEX_BYTE[initial | 25] + value.toString(16).padStart(4, "0");
-    }
-    return HEX_BYTE[initial | 26] + value.toString(16).padStart(8, "0");
-  }
-  const big = BigInt(value);
-  if (big <= 0xffff_ffffn) return head(major, Number(big));
-  return HEX_BYTE[initial | 27] + big.toString(16).padStart(16, "0");
-};
-
-/** Encodes lowercase, even-length hex as a CBOR byte string. */
-const encodeBytesHex = (hex: string): string => {
-  const length = hex.length / 2;
-  if (length <= MAX_CHUNK_BYTES) return head(2, length) + hex;
-  let out = "5f";
-  for (let i = 0; i < hex.length; i += MAX_CHUNK_BYTES * 2) {
-    const chunk = hex.slice(i, i + MAX_CHUNK_BYTES * 2);
-    out += head(2, chunk.length / 2) + chunk;
-  }
-  return out + "ff";
-};
-
-const encodeInteger = (value: bigint): string => {
-  if (value >= 0n) {
-    if (value <= U64_MAX) return head(0, value);
-    return "c2" + encodeBytesHex(evenHex(value));
-  }
-  const magnitude = -1n - value;
-  if (magnitude <= U64_MAX) return head(1, magnitude);
-  return "c3" + encodeBytesHex(evenHex(magnitude));
-};
-
-const evenHex = (value: bigint): string => {
-  const hex = value.toString(16);
-  return hex.length % 2 === 0 ? hex : "0" + hex;
-};
-
-const bytesHex = (data: string): string => {
-  if (data.length % 2 !== 0 || !HEX_PATTERN.test(data)) throw DECLINE;
-  return data.toLowerCase();
-};
-
-/**
- * The constructor index as CML reads it, which is from the index's string
- * form: integral numbers below 1e21 and bigints within 64 bits.
- */
-const constrAlternative = (constr: Constr<unknown>): bigint => {
-  const { index } = constr;
-  if (typeof index !== "number" && typeof index !== "bigint") throw DECLINE;
-  const text = String(index);
-  if (!/^\d+$/.test(text)) throw DECLINE;
-  const alternative = BigInt(text);
-  if (alternative > U64_MAX) throw DECLINE;
-  return alternative;
-};
-
-/** The items `forEach` visits, which skips holes as CML's encoder did. */
-const listItems = (list: unknown): Data[] => {
-  if (!(list instanceof Array)) throw DECLINE;
-  const items: Data[] = [];
-  list.forEach((item) => items.push(item));
-  return items;
-};
-
-const kindRank = (data: Data): number => {
-  if (typeof data === "bigint") return 3;
-  if (typeof data === "string") return 4;
-  if (data instanceof Constr) return 0;
-  if (data instanceof Array) return 2;
-  if (data instanceof Map) return 1;
-  throw DECLINE;
-};
-
-const compareSequences = <T>(
-  a: T[],
-  b: T[],
-  compare: (x: T, y: T) => number,
-): number => {
-  const length = Math.min(a.length, b.length);
-  for (let i = 0; i < length; i++) {
-    const order = compare(a[i], b[i]);
-    if (order !== 0) return order;
-  }
-  return a.length - b.length;
-};
-
-/** PlutusData order, as CML's PlutusMap sorts its keys. */
-const compareData = (a: Data, b: Data): number => {
-  const rankA = kindRank(a);
-  const rankB = kindRank(b);
-  if (rankA !== rankB) return rankA - rankB;
-  switch (rankA) {
-    case 3:
-      return (a as bigint) < (b as bigint)
-        ? -1
-        : (a as bigint) > (b as bigint)
-          ? 1
-          : 0;
-    case 4: {
-      const x = bytesHex(a as string);
-      const y = bytesHex(b as string);
-      return x < y ? -1 : x > y ? 1 : 0;
-    }
-    case 0: {
-      const x = constrAlternative(a as Constr<Data>);
-      const y = constrAlternative(b as Constr<Data>);
-      if (x !== y) return x < y ? -1 : 1;
-      return compareSequences(
-        listItems((a as Constr<Data>).fields),
-        listItems((b as Constr<Data>).fields),
-        compareData,
-      );
-    }
-    case 2:
-      return compareSequences(listItems(a), listItems(b), compareData);
-    default:
-      return compareSequences(
-        sortedEntries(a as Map<Data, Data>),
-        sortedEntries(b as Map<Data, Data>),
-        (x, y) => compareData(x[0], y[0]) || compareData(x[1], y[1]),
-      );
-  }
-};
-
-/** Structural identity: equal for exactly the values CML treats as equal. */
-const identity = (data: Data): string => {
-  if (typeof data === "bigint") return "i" + data;
-  if (typeof data === "string") return "b" + bytesHex(data);
-  if (data instanceof Constr) {
-    return (
-      "c" +
-      constrAlternative(data) +
-      "(" +
-      listItems(data.fields).map(identity).join(",") +
-      ")"
-    );
-  }
-  if (data instanceof Array) {
-    return "l(" + listItems(data).map(identity).join(",") + ")";
-  }
-  if (data instanceof Map) {
-    return (
-      "m(" +
-      storedEntries(data)
-        .map(([key, value]) => identity(key) + ":" + identity(value))
-        .join(",") +
-      ")"
-    );
-  }
-  throw DECLINE;
-};
-
-const isPrimitive = (data: Data) =>
-  typeof data === "bigint" || typeof data === "string";
-
-/**
- * The entries a CML PlutusMap holds after setting each entry in turn: a
- * repeated key drops its earlier entry and is appended again.
- */
-const storedEntries = (map: Map<Data, Data>): [Data, Data][] => {
-  const entries = [...map.entries()];
-  // A JavaScript Map already merges equal bigints; only bytes that differ
-  // in letter case and non-primitive keys can repeat.
-  const lowercase = (key: Data) =>
-    typeof key !== "string" || bytesHex(key) === key;
-  if (entries.every(([key]) => isPrimitive(key) && lowercase(key))) {
-    return entries;
-  }
-  const latest = new Map<string, number>();
-  entries.forEach(([key], i) => latest.set(identity(key), i));
-  return entries.filter(([key], i) => latest.get(identity(key)) === i);
-};
-
-/** Stored entries, stably sorted by key in PlutusData order. */
-const sortedEntries = (map: Map<Data, Data>): [Data, Data][] =>
-  storedEntries(map).sort((x, y) => compareData(x[0], y[0]));
-
-const encodeList = (items: Data[], canonical: boolean): string => {
-  if (items.length === 0) return "80";
-  let body = "";
-  for (const item of items) body += encode(item, canonical);
-  return canonical ? head(4, items.length) + body : "9f" + body + "ff";
-};
-
-const encodeMap = (map: Map<Data, Data>, canonical: boolean): string => {
-  if (map.size === 0) return "a0";
-  if (!canonical) {
-    let body = "";
-    for (const [key, value] of sortedEntries(map)) {
-      body += encode(key, false) + encode(value, false);
-    }
-    return "bf" + body + "ff";
-  }
-  // Canonical CBOR orders keys by encoding: shorter first, then bytewise,
-  // which for hex strings is the same as comparing the strings.
-  const encoded = storedEntries(map).map(
-    ([key, value]) => [encode(key, true), value] as const,
-  );
-  encoded.sort(([x], [y]) =>
-    x.length !== y.length ? x.length - y.length : x < y ? -1 : x > y ? 1 : 0,
-  );
-  let body = "";
-  for (const [key, value] of encoded) body += key + encode(value, true);
-  return head(5, encoded.length) + body;
-};
-
-const encode = (data: Data, canonical: boolean): string => {
-  if (typeof data === "bigint") return encodeInteger(data);
-  if (typeof data === "string") return encodeBytesHex(bytesHex(data));
-  if (data instanceof Constr) {
-    const alternative = constrAlternative(data);
-    const fields = encodeList(listItems(data.fields), canonical);
-    if (alternative <= 6n) return head(6, 121 + Number(alternative)) + fields;
-    if (alternative <= 127n) {
-      return head(6, 1280 + Number(alternative) - 7) + fields;
-    }
-    return canonical
-      ? "d86682" + head(0, alternative) + fields
-      : "d8669f" + head(0, alternative) + fields + "ff";
-  }
-  if (data instanceof Array) return encodeList(listItems(data), canonical);
-  if (data instanceof Map) return encodeMap(data, canonical);
-  throw DECLINE;
-};
-
-/**
- * Encodes Plutus data as CBOR hex exactly as CML does, or returns
- * `undefined` for input it leaves to CML.
- */
-export const encodePlutusData = (
-  data: Data,
-  canonical: boolean,
-): string | undefined => {
-  try {
-    return encode(data, canonical);
-  } catch (_e) {
-    return undefined;
-  }
-};
-
-// ---------------------------------------------------------------------------
 // Decoding
 
-type Cursor = { bytes: Uint8Array; hex: string; pos: number };
-
-const nibble = (code: number): number =>
-  code >= 48 && code <= 57 ? code - 48 : code - 87; // 0-9, a-f
-
-/** Parses lowercase hex; anything else is declined. */
-const hexToBytes = (hex: string): Uint8Array => {
-  if (hex.length % 2 !== 0 || !HEX_PATTERN.test(hex)) throw DECLINE;
-  const bytes = new Uint8Array(hex.length / 2);
-  for (let i = 0, j = 0; i < bytes.length; i++, j += 2) {
-    bytes[i] = (nibble(hex.charCodeAt(j)) << 4) | nibble(hex.charCodeAt(j + 1));
-  }
-  return bytes;
+/** Reads CBOR from validated lowercase hex, a byte at a time. */
+type Cursor = {
+  hex: string;
+  /** The input length, in bytes. */
+  length: number;
+  pos: number;
+  identities?: Identities;
 };
 
+const LOWER_HEX_PATTERN = /^[0-9a-f]*$/;
+const HEX_PATTERN = /^[0-9a-fA-F]*$/;
+
+/** Hex digit values by character code. */
+const NIBBLES = new Uint8Array(103);
+for (let i = 0; i < 16; i++) NIBBLES["0123456789abcdef".charCodeAt(i)] = i;
+
+/** A cursor over hex in either case; anything else is declined. */
+const hexCursor = (raw: string): Cursor => {
+  if (raw.length % 2 !== 0) throw DECLINE;
+  let hex = raw;
+  if (!LOWER_HEX_PATTERN.test(hex)) {
+    if (!HEX_PATTERN.test(hex)) throw DECLINE;
+    hex = hex.toLowerCase();
+  }
+  return { hex, length: hex.length / 2, pos: 0 };
+};
+
+const byteAt = (hex: string, pos: number): number =>
+  (NIBBLES[hex.charCodeAt(2 * pos)] << 4) |
+  NIBBLES[hex.charCodeAt(2 * pos + 1)];
+
+const SMALL_INTEGERS = Array.from({ length: 24 }, (_, i) => BigInt(i));
+
 const readByte = (cursor: Cursor): number => {
-  if (cursor.pos >= cursor.bytes.length) throw DECLINE;
-  return cursor.bytes[cursor.pos++];
+  if (cursor.pos >= cursor.length) throw DECLINE;
+  return byteAt(cursor.hex, cursor.pos++);
 };
 
 /** Reads a head argument; additional info 31 (indefinite) is the caller's. */
 const readArgument = (cursor: Cursor, info: number): bigint => {
-  if (info < 24) return BigInt(info);
-  const size = info === 24 ? 1 : info === 25 ? 2 : info === 26 ? 4 : 0;
+  if (info < 24) return SMALL_INTEGERS[info];
   if (info === 27) {
     let value = 0n;
     for (let i = 0; i < 8; i++) {
@@ -321,6 +58,7 @@ const readArgument = (cursor: Cursor, info: number): bigint => {
     }
     return value;
   }
+  const size = info === 24 ? 1 : info === 25 ? 2 : info === 26 ? 4 : 0;
   if (size === 0) throw DECLINE;
   let value = 0;
   for (let i = 0; i < size; i++) value = value * 256 + readByte(cursor);
@@ -329,13 +67,13 @@ const readArgument = (cursor: Cursor, info: number): bigint => {
 
 const readLength = (cursor: Cursor, info: number): number => {
   const length = readArgument(cursor, info);
-  if (length > BigInt(cursor.bytes.length)) throw DECLINE;
+  if (length > BigInt(cursor.length)) throw DECLINE;
   return Number(length);
 };
 
 const isBreak = (cursor: Cursor): boolean => {
-  if (cursor.pos >= cursor.bytes.length) throw DECLINE;
-  if (cursor.bytes[cursor.pos] !== 0xff) return false;
+  if (cursor.pos >= cursor.length) throw DECLINE;
+  if (byteAt(cursor.hex, cursor.pos) !== 0xff) return false;
   cursor.pos++;
   return true;
 };
@@ -344,7 +82,7 @@ const readChunk = (cursor: Cursor, length: number): string => {
   if (length > MAX_CHUNK_BYTES) throw DECLINE;
   const start = cursor.pos;
   const end = start + length;
-  if (end > cursor.bytes.length) throw DECLINE;
+  if (end > cursor.length) throw DECLINE;
   cursor.pos = end;
   return cursor.hex.slice(start * 2, end * 2);
 };
@@ -361,112 +99,417 @@ const readBytes = (cursor: Cursor, info: number): string => {
   return hex;
 };
 
-/** Reads an array of data items, definite or indefinite. */
-const readList = (cursor: Cursor): Data[] => {
-  const initial = readByte(cursor);
-  if (initial >> 5 !== 4) throw DECLINE;
-  return readListBody(cursor, initial & 31);
+/** CML returns an independent value for each repeated-key lookup. */
+const copyData = (root: Data): Data => {
+  type Task =
+    | { kind: "copy"; data: Data; assign: (value: Data) => void }
+    | { kind: "entry"; target: Map<Data, Data>; pair: Data[] };
+  let result: Data = 0n;
+  const tasks: Task[] = [
+    {
+      kind: "copy",
+      data: root,
+      assign: (value) => {
+        result = value;
+      },
+    },
+  ];
+  while (tasks.length > 0) {
+    const task = tasks.pop()!;
+    if (task.kind === "entry") {
+      task.target.set(task.pair[0], task.pair[1]);
+      continue;
+    }
+    const { data, assign } = task;
+    if (typeof data === "bigint" || typeof data === "string") {
+      assign(data);
+      continue;
+    }
+    if (data instanceof Map) {
+      const target = new Map<Data, Data>();
+      assign(target);
+      const entries = [...data.entries()];
+      for (let i = entries.length - 1; i >= 0; i--) {
+        const pair: Data[] = [];
+        tasks.push({ kind: "entry", target, pair });
+        tasks.push({
+          kind: "copy",
+          data: entries[i][1],
+          assign: (value) => {
+            pair[1] = value;
+          },
+        });
+        tasks.push({
+          kind: "copy",
+          data: entries[i][0],
+          assign: (value) => {
+            pair[0] = value;
+          },
+        });
+      }
+    } else {
+      const source = data instanceof Constr ? data.fields : data;
+      const target: Data[] = [];
+      assign(data instanceof Constr ? new Constr(data.index, target) : target);
+      for (let i = source.length - 1; i >= 0; i--)
+        tasks.push({
+          kind: "copy",
+          data: source[i],
+          assign: (value) => {
+            target[i] = value;
+          },
+        });
+    }
+  }
+  return result;
 };
 
-const readListBody = (cursor: Cursor, info: number): Data[] => {
+/** A map's keys and values, alternating. */
+const flatten = (map: Map<Data, Data>): Data[] => {
   const items: Data[] = [];
-  if (info === 31) {
-    while (!isBreak(cursor)) items.push(decode(cursor));
-  } else {
-    const length = readLength(cursor, info);
-    for (let i = 0; i < length; i++) items.push(decode(cursor));
-  }
+  for (const [key, value] of map) items.push(key, value);
   return items;
 };
 
-/** Structural identity, under which CML could treat two keys as one. */
-const keyIdentity = (key: Data): string => {
-  if (typeof key === "bigint") return "i" + key;
-  if (typeof key === "string") return "b" + key;
-  if (key instanceof Constr) {
-    return "c" + key.index + "(" + key.fields.map(keyIdentity).join(",") + ")";
+/**
+ * Structural identities of decoded map keys, under which CML treats two keys
+ * as one. They are computed only for keys other than integers and bytes. A
+ * container's identity names its children, and a key nested in another key
+ * by an interned number, so a deep key needs no string of its whole subtree
+ * at every level. The tables live for one decoding.
+ */
+class Identities {
+  private readonly ids = new Map<string, number>();
+  /** Interned identities of keys inside other keys. */
+  private readonly known = new Map<object, string>();
+  /** Every entry of decoded maps that repeated a key, as CML holds them. */
+  readonly rawEntries = new Map<Map<Data, Data>, Data[]>();
+  /** Constructor indices that a JavaScript number does not hold exactly. */
+  readonly rawIndex = new Map<Constr<Data>, bigint>();
+
+  /** The identity of an integer, bytes or a known key, as a part of another. */
+  private part(data: Data): string | undefined {
+    if (typeof data === "bigint") return "i" + data;
+    if (typeof data === "string") return "b" + data;
+    return this.known.get(data);
   }
-  if (key instanceof Array) return "l(" + key.map(keyIdentity).join(",") + ")";
-  return (
-    "m(" +
-    [...(key as Map<Data, Data>).entries()]
-      .map(([k, v]) => keyIdentity(k) + ":" + keyIdentity(v))
-      .join(",") +
-    ")"
-  );
+
+  private intern(text: string): string {
+    let id = this.ids.get(text);
+    if (id === undefined) {
+      id = this.ids.size;
+      this.ids.set(text, id);
+    }
+    return "#" + id;
+  }
+
+  private children(node: object): Data[] {
+    if (node instanceof Map) return this.rawEntries.get(node) ?? flatten(node);
+    return node instanceof Constr ? node.fields : (node as Data[]);
+  }
+
+  private text(node: object, parts: string[]): string {
+    return (
+      (node instanceof Map
+        ? "m("
+        : node instanceof Constr
+          ? `c${node.index > Number.MAX_SAFE_INTEGER ? this.rawIndex.get(node) : node.index}(`
+          : "l(") +
+      parts.join(",") +
+      ")"
+    );
+  }
+
+  /**
+   * The identity of a key. Keys inside another key, which later names them,
+   * are `nested`; other identities are not interned.
+   */
+  of(key: Data, nested: boolean): string {
+    if (typeof key !== "object") return this.part(key)!;
+    // Most composite keys hold only integers and bytes.
+    const children = this.children(key);
+    const parts: string[] = [];
+    for (const child of children) {
+      const part = this.part(child);
+      if (part === undefined) break;
+      parts.push(part);
+    }
+    const text =
+      parts.length === children.length
+        ? this.text(key, parts)
+        : this.composite(key);
+    if (!nested) return text;
+    // The identity of the key around this one names it.
+    const interned = this.intern(text);
+    this.known.set(key, interned);
+    return interned;
+  }
+
+  private composite(key: object): string {
+    type Frame = { node: object; children: Data[]; parts: string[] };
+    const frames: Frame[] = [];
+    let node = key;
+    for (;;) {
+      let frame: Frame | undefined = {
+        node,
+        children: this.children(node),
+        parts: [],
+      };
+      frames.push(frame);
+      while (frame !== undefined) {
+        const { parts, children } = frame;
+        while (parts.length < children.length) {
+          const part = this.part(children[parts.length]);
+          if (part === undefined) break;
+          parts.push(part);
+        }
+        if (parts.length < children.length) {
+          node = children[parts.length] as object;
+          break;
+        }
+        frames.pop();
+        const text = this.text(frame.node, parts);
+        frame = frames[frames.length - 1];
+        if (frame === undefined) return text;
+        frame.parts.push(this.intern(text));
+      }
+    }
+  }
+}
+
+const LIST = 0;
+const CONSTR = 1;
+const MAP = 2;
+/** The `remaining` count of an indefinite-length container. */
+const INDEFINITE = -1;
+
+/** Duplicate-key bookkeeping, only for maps that need it. */
+type KeyState = {
+  /** First value of each composite key's identity. */
+  firstValues: Map<string, Data> | null;
+  /** All entries once a key repeated, which the map no longer shows. */
+  raw: Data[] | null;
 };
 
-const readMapBody = (cursor: Cursor, info: number): Map<Data, Data> => {
-  const map = new Map<Data, Data>();
-  const seen = new Set<string>();
-  const readEntry = () => {
-    const key = decode(cursor);
-    const value = decode(cursor);
-    // CML keeps repeated keys and looks values up by key; leave that to it.
-    const identity = keyIdentity(key);
-    if (seen.has(identity)) throw DECLINE;
-    seen.add(identity);
-    map.set(key, value);
-  };
-  if (info === 31) {
-    while (!isBreak(cursor)) readEntry();
+/** A container being decoded. One shape for all kinds keeps access fast. */
+class Frame {
+  readonly items: Data[] | null;
+  readonly map: Map<Data, Data> | null;
+  key: Data | undefined = undefined;
+  hasKey = false;
+  keyState: KeyState | null = null;
+  /** Whether the container is inside a map key. */
+  readonly nested: boolean;
+  constructor(
+    readonly kind: number,
+    public remaining: number,
+    readonly parent: Frame | undefined,
+    items: Data[] | null,
+    readonly index: bigint,
+    readonly outerBreak: boolean,
+  ) {
+    this.items = items;
+    this.map = kind === MAP ? new Map() : null;
+    this.nested =
+      parent !== undefined &&
+      (parent.nested || (parent.kind === MAP && !parent.hasKey));
+  }
+}
+
+const readContainerLength = (cursor: Cursor, info: number): number =>
+  info === 31 ? INDEFINITE : readLength(cursor, info);
+
+const identitiesOf = (cursor: Cursor): Identities =>
+  (cursor.identities ??= new Identities());
+
+const finish = (cursor: Cursor, frame: Frame): Data => {
+  if (frame.kind === MAP) {
+    const raw = frame.keyState?.raw;
+    if (raw) identitiesOf(cursor).rawEntries.set(frame.map!, raw);
+    return frame.map!;
+  }
+  if (frame.kind === LIST) return frame.items!;
+  return constr(cursor, frame.index, frame.items!, frame.outerBreak);
+};
+
+const constr = (
+  cursor: Cursor,
+  index: bigint,
+  fields: Data[],
+  outerBreak: boolean,
+): Constr<Data> => {
+  if (outerBreak && !isBreak(cursor)) throw DECLINE;
+  const data = new Constr(Number(index), fields);
+  if (index > MAX_SAFE_INDEX) identitiesOf(cursor).rawIndex.set(data, index);
+  return data;
+};
+
+/**
+ * Reads the leading integers and byte strings of a list in place, so a list
+ * of only those needs no frame. Returns whether the list ended, or leaves
+ * the cursor at the first item that is a container.
+ */
+const readPlainItems = (
+  cursor: Cursor,
+  items: Data[],
+  length: number,
+): boolean => {
+  const { hex } = cursor;
+  while (length === INDEFINITE || items.length < length) {
+    if (cursor.pos >= cursor.length) throw DECLINE;
+    const initial = byteAt(hex, cursor.pos);
+    const major = initial >> 5;
+    if (major === 0) {
+      cursor.pos++;
+      items.push(readArgument(cursor, initial & 31));
+    } else if (major === 2) {
+      cursor.pos++;
+      items.push(readBytes(cursor, initial & 31));
+    } else if (major === 1) {
+      cursor.pos++;
+      items.push(-1n - readArgument(cursor, initial & 31));
+    } else if (initial === 0xff) {
+      // CML also accepts a break before a definite length.
+      cursor.pos++;
+      return true;
+    } else return false;
+  }
+  return true;
+};
+
+const remainingAfter = (length: number, items: Data[]): number =>
+  length === INDEFINITE ? INDEFINITE : length - items.length;
+
+/** Adds a map entry as CML reads it, keeping its duplicate-key semantics. */
+const addEntry = (cursor: Cursor, frame: Frame, key: Data, value: Data) => {
+  const map = frame.map!;
+  // Lookup uses the first value for each structurally equal *raw* key,
+  // and CML accessors return an independent copy for each repeated key.
+  let first: Data | undefined;
+  if (typeof key === "object") {
+    // A first key repeats nothing; its identity waits for a composite key
+    // to compare with.
+    if (map.size === 0) {
+      map.set(key, value);
+      return;
+    }
+    const identities = identitiesOf(cursor);
+    const state = (frame.keyState ??= { firstValues: null, raw: null });
+    let firstValues = state.firstValues;
+    if (firstValues === null) {
+      firstValues = state.firstValues = new Map();
+      // Only the first key can be composite and without an identity yet.
+      const [earlier, earlierValue] = map.entries().next().value!;
+      if (typeof earlier === "object")
+        firstValues.set(identities.of(earlier, frame.nested), earlierValue);
+    }
+    const identity = identities.of(key, frame.nested);
+    first = firstValues.get(identity);
+    if (first === undefined) firstValues.set(identity, value);
   } else {
-    const length = readLength(cursor, info);
-    for (let i = 0; i < length; i++) readEntry();
+    first = map.get(key);
+    if (first === undefined && frame.keyState === null) {
+      map.set(key, value);
+      return;
+    }
   }
-  return map;
-};
-
-/** Tag 102: a two-item array of an unsigned index and the fields. */
-const readGeneralConstr = (cursor: Cursor): Constr<Data> => {
-  const initial = readByte(cursor);
-  if (initial !== 0x82 && initial !== 0x9f) throw DECLINE;
-  const indexInitial = readByte(cursor);
-  if (indexInitial >> 5 !== 0 || (indexInitial & 31) === 31) throw DECLINE;
-  const index = readArgument(cursor, indexInitial & 31);
-  const fields = readList(cursor);
-  if (initial === 0x9f && !isBreak(cursor)) throw DECLINE;
-  return new Constr(Number(index), fields);
+  const state = (frame.keyState ??= { firstValues: null, raw: null });
+  if (first !== undefined && state.raw === null) state.raw = flatten(map);
+  state.raw?.push(key, value);
+  map.set(key, first === undefined ? value : copyData(first));
 };
 
 const decode = (cursor: Cursor): Data => {
-  const initial = readByte(cursor);
-  const major = initial >> 5;
-  const info = initial & 31;
-  switch (major) {
-    case 0:
-      if (info === 31) throw DECLINE;
-      return readArgument(cursor, info);
-    case 1:
-      if (info === 31) throw DECLINE;
-      return -1n - readArgument(cursor, info);
-    case 2:
-      return readBytes(cursor, info);
-    case 4:
-      return readListBody(cursor, info);
-    case 5:
-      return readMapBody(cursor, info);
-    case 6: {
-      if (info === 31) throw DECLINE;
-      const tag = readArgument(cursor, info);
-      if (tag === 2n || tag === 3n) {
-        const payloadInitial = readByte(cursor);
-        if (payloadInitial >> 5 !== 2) throw DECLINE;
-        const hex = readBytes(cursor, payloadInitial & 31);
-        const magnitude = hex.length === 0 ? 0n : BigInt("0x" + hex);
-        return tag === 2n ? magnitude : -1n - magnitude;
-      }
-      if (tag >= 121n && tag <= 127n) {
-        return new Constr(Number(tag) - 121, readList(cursor));
-      }
-      if (tag >= 1280n && tag <= 1400n) {
-        return new Constr(Number(tag) - 1280 + 7, readList(cursor));
-      }
-      if (tag === 102n) return readGeneralConstr(cursor);
-      throw DECLINE;
+  const { hex } = cursor;
+  let frame: Frame | undefined;
+  for (;;) {
+    let data: Data;
+    // CML accepts a break before the declared length of a definite container,
+    // too. A map value is never an ending break.
+    if (frame !== undefined && !frame.hasKey && frame.remaining === 0) {
+      data = finish(cursor, frame);
+      frame = frame.parent;
+    } else {
+      if (cursor.pos >= cursor.length) throw DECLINE;
+      const initial = byteAt(hex, cursor.pos++);
+      const major = initial >> 5;
+      const info = initial & 31;
+      if (major === 0) data = readArgument(cursor, info);
+      else if (major === 2) data = readBytes(cursor, info);
+      else if (major === 4) {
+        const length = readContainerLength(cursor, info);
+        const items: Data[] = [];
+        if (readPlainItems(cursor, items, length)) data = items;
+        else {
+          const remaining = remainingAfter(length, items);
+          frame = new Frame(LIST, remaining, frame, items, 0n, false);
+          continue;
+        }
+      } else if (major === 6) {
+        const tag = readArgument(cursor, info);
+        if (tag === 2n || tag === 3n) {
+          const payload = readByte(cursor);
+          if (payload >> 5 !== 2) throw DECLINE;
+          const digits = readBytes(cursor, payload & 31);
+          const magnitude = digits.length === 0 ? 0n : BigInt("0x" + digits);
+          data = tag === 2n ? magnitude : -1n - magnitude;
+        } else {
+          let index: bigint;
+          let outerBreak = false;
+          if (tag >= 121n && tag <= 127n) index = tag - 121n;
+          else if (tag >= 1280n && tag <= 1400n) index = tag - 1280n + 7n;
+          else if (tag === 102n) {
+            const array = readByte(cursor);
+            if (array >> 5 !== 4) throw DECLINE;
+            const count = readContainerLength(cursor, array & 31);
+            if (count !== INDEFINITE && count < 2) throw DECLINE;
+            outerBreak = count === INDEFINITE;
+            const initialIndex = readByte(cursor);
+            if (initialIndex >> 5 !== 0) throw DECLINE;
+            index = readArgument(cursor, initialIndex & 31);
+          } else throw DECLINE;
+          const fields = readByte(cursor);
+          if (fields >> 5 !== 4) throw DECLINE;
+          const length = readContainerLength(cursor, fields & 31);
+          const items: Data[] = [];
+          if (readPlainItems(cursor, items, length))
+            data = constr(cursor, index, items, outerBreak);
+          else {
+            const remaining = remainingAfter(length, items);
+            frame = new Frame(
+              CONSTR,
+              remaining,
+              frame,
+              items,
+              index,
+              outerBreak,
+            );
+            continue;
+          }
+        }
+      } else if (major === 5) {
+        const length = readContainerLength(cursor, info);
+        frame = new Frame(MAP, length, frame, null, 0n, false);
+        continue;
+      } else if (major === 1) data = -1n - readArgument(cursor, info);
+      else if (initial === 0xff && frame !== undefined && !frame.hasKey) {
+        data = finish(cursor, frame);
+        frame = frame.parent;
+      } else throw DECLINE;
     }
-    default:
-      throw DECLINE;
+    if (frame === undefined) return data;
+    if (frame.kind === MAP) {
+      if (frame.hasKey) {
+        addEntry(cursor, frame, frame.key!, data);
+        frame.key = undefined;
+        frame.hasKey = false;
+      } else {
+        frame.key = data;
+        frame.hasKey = true;
+        continue;
+      }
+    } else frame.items!.push(data);
+    if (frame.remaining !== INDEFINITE) frame.remaining--;
   }
 };
 
@@ -478,9 +521,8 @@ const decode = (cursor: Cursor): Data => {
 export const decodePlutusData = (raw: string): Data | undefined => {
   try {
     if (typeof raw !== "string") return undefined;
-    const hex = raw.toLowerCase();
-    return decode({ bytes: hexToBytes(hex), hex, pos: 0 });
-  } catch (_e) {
+    return decode(hexCursor(raw));
+  } catch (_error) {
     return undefined;
   }
 };

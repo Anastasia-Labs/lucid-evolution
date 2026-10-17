@@ -2,7 +2,9 @@
 // https://github.com/dcSpark/cddl-codegen
 
 pub mod cbor_encodings;
+mod codec;
 pub mod serialization;
+mod traversal;
 pub mod utils;
 
 #[cfg(not(feature = "used_from_wasm"))]
@@ -169,36 +171,17 @@ impl LegacyRedeemer {
     }
 }
 
-#[derive(Clone, Debug, derivative::Derivative)]
-#[derivative(
-    Eq,
-    PartialEq,
-    Ord = "feature_allow_slow_enum",
-    PartialOrd = "feature_allow_slow_enum",
-    Hash
-)]
+#[derive(Debug)]
 pub enum PlutusData {
     ConstrPlutusData(ConstrPlutusData),
     Map(PlutusMap),
     List {
         list: Vec<PlutusData>,
-        #[derivative(
-            PartialEq = "ignore",
-            Ord = "ignore",
-            PartialOrd = "ignore",
-            Hash = "ignore"
-        )]
         list_encoding: LenEncoding,
     },
     Integer(BigInteger),
     Bytes {
         bytes: Vec<u8>,
-        #[derivative(
-            PartialEq = "ignore",
-            Ord = "ignore",
-            PartialOrd = "ignore",
-            Hash = "ignore"
-        )]
         bytes_encoding: StringEncoding,
     },
 }

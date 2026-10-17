@@ -5,7 +5,6 @@ use crate::json::plutus_datums::{
     decode_plutus_datum_to_json_value, encode_json_value_to_plutus_datum,
     CardanoNodePlutusDatumSchema,
 };
-use crate::utils::BigInteger;
 use cbor_event::de::Deserializer;
 use cbor_event::se::Serializer;
 use cml_core::error::*;
@@ -82,60 +81,7 @@ impl PlutusData {
      *  This is also the format that CSL and Lucid use
      */
     pub fn to_cardano_node_format(&self) -> Self {
-        match self {
-            Self::ConstrPlutusData(c) => Self::ConstrPlutusData(ConstrPlutusData {
-                alternative: c.alternative,
-                fields: c
-                    .fields
-                    .iter()
-                    .map(|datum| datum.to_cardano_node_format())
-                    .collect(),
-                encodings: Some(ConstrPlutusDataEncoding {
-                    len_encoding: LenEncoding::Indefinite,
-                    tag_encoding: None,
-                    alternative_encoding: None,
-                    fields_encoding: if c.fields.is_empty() {
-                        LenEncoding::Canonical
-                    } else {
-                        LenEncoding::Indefinite
-                    },
-                    prefer_compact: true,
-                }),
-            }),
-            Self::Bytes { bytes, .. } => Self::Bytes {
-                bytes: bytes.clone(),
-                bytes_encoding: StringEncoding::Canonical,
-            },
-            // canonical
-            Self::Integer(bigint) => Self::Integer(BigInteger::from(bigint.num.clone())),
-            Self::List { list, .. } => Self::List {
-                list: list
-                    .iter()
-                    .map(|datum| datum.to_cardano_node_format())
-                    .collect(),
-                list_encoding: if list.is_empty() {
-                    LenEncoding::Canonical
-                } else {
-                    LenEncoding::Indefinite
-                },
-            },
-            Self::Map(map) => Self::Map(PlutusMap {
-                entries: {
-                    let mut sorted_entries: Vec<_> = map
-                        .entries
-                        .iter()
-                        .map(|(k, v)| (k.to_cardano_node_format(), v.to_cardano_node_format()))
-                        .collect();
-                    sorted_entries.sort_by(|(a, _), (b, _)| a.cmp(b));
-                    sorted_entries
-                },
-                encoding: if map.entries.is_empty() {
-                    LenEncoding::Canonical
-                } else {
-                    LenEncoding::Indefinite
-                },
-            }),
-        }
+        super::traversal::copy(self, true)
     }
 }
 
@@ -163,10 +109,10 @@ impl ConstrPlutusData {
     // - Alternatives 7-127 -> tags 1280-1400, followed by the arguments in a list
     // - Any alternatives, including those that don't fit in the above -> tag 102 followed by a list containing
     //   an unsigned integer for the actual alternative, and then the arguments in a (nested!) list.
-    const GENERAL_FORM_TAG: u64 = 102;
+    pub(super) const GENERAL_FORM_TAG: u64 = 102;
 
     // None -> needs general tag serialization, not compact
-    fn alternative_to_compact_cbor_tag(alt: u64) -> Option<u64> {
+    pub(super) fn alternative_to_compact_cbor_tag(alt: u64) -> Option<u64> {
         if alt <= 6 {
             Some(121 + alt)
         } else if (7..=127).contains(&alt) {
@@ -177,7 +123,7 @@ impl ConstrPlutusData {
     }
 
     // None -> General tag(=102) OR Invalid CBOR tag for this scheme
-    fn compact_cbor_tag_to_alternative(cbor_tag: u64) -> Option<u64> {
+    pub(super) fn compact_cbor_tag_to_alternative(cbor_tag: u64) -> Option<u64> {
         if (121..=127).contains(&cbor_tag) {
             Some(cbor_tag - 121)
         } else if (1280..=1400).contains(&cbor_tag) {
@@ -211,192 +157,24 @@ impl Serialize for ConstrPlutusData {
         serializer: &'se mut Serializer<W>,
         force_canonical: bool,
     ) -> cbor_event::Result<&'se mut Serializer<W>> {
-        match Self::alternative_to_compact_cbor_tag(self.alternative) {
-            Some(compact_tag)
-                if self
-                    .encodings
-                    .as_ref()
-                    .map(|encs| encs.prefer_compact)
-                    .unwrap_or(true) =>
-            {
-                // compact form
-                serializer.write_tag_sz(
-                    compact_tag,
-                    fit_sz(
-                        compact_tag,
-                        self.encodings
-                            .as_ref()
-                            .map(|encs| encs.tag_encoding)
-                            .unwrap_or_default(),
-                        force_canonical,
-                    ),
-                )?;
-                serializer.write_array_sz(
-                    self.encodings
-                        .as_ref()
-                        .map(|encs| encs.fields_encoding)
-                        .unwrap_or_default()
-                        .to_len_sz(self.fields.len() as u64, force_canonical),
-                )?;
-                for element in self.fields.iter() {
-                    element.serialize(serializer, force_canonical)?;
-                }
-                self.encodings
-                    .as_ref()
-                    .map(|encs| encs.fields_encoding)
-                    .unwrap_or_default()
-                    .end(serializer, force_canonical)
-            }
-            _ => {
-                // general form
-                serializer.write_tag_sz(
-                    Self::GENERAL_FORM_TAG,
-                    fit_sz(
-                        Self::GENERAL_FORM_TAG,
-                        self.encodings
-                            .as_ref()
-                            .map(|encs| encs.tag_encoding)
-                            .unwrap_or_default(),
-                        force_canonical,
-                    ),
-                )?;
-                serializer.write_array_sz(
-                    self.encodings
-                        .as_ref()
-                        .map(|encs| encs.len_encoding)
-                        .unwrap_or_default()
-                        .to_len_sz(2, force_canonical),
-                )?;
-                serializer.write_unsigned_integer_sz(
-                    self.alternative,
-                    fit_sz(
-                        self.alternative,
-                        self.encodings
-                            .as_ref()
-                            .map(|encs| encs.alternative_encoding)
-                            .unwrap_or_default(),
-                        force_canonical,
-                    ),
-                )?;
-                serializer.write_array_sz(
-                    self.encodings
-                        .as_ref()
-                        .map(|encs| encs.fields_encoding)
-                        .unwrap_or_default()
-                        .to_len_sz(self.fields.len() as u64, force_canonical),
-                )?;
-                for element in self.fields.iter() {
-                    element.serialize(serializer, force_canonical)?;
-                }
-                self.encodings
-                    .as_ref()
-                    .map(|encs| encs.fields_encoding)
-                    .unwrap_or_default()
-                    .end(serializer, force_canonical)?;
-                self.encodings
-                    .as_ref()
-                    .map(|encs| encs.len_encoding)
-                    .unwrap_or_default()
-                    .end(serializer, force_canonical)
-            }
-        }
+        super::codec::serialize(
+            super::codec::WriteTask::Constr(self),
+            serializer,
+            force_canonical,
+        )
     }
 }
 
 impl Deserialize for ConstrPlutusData {
     fn deserialize<R: BufRead + Seek>(raw: &mut Deserializer<R>) -> Result<Self, DeserializeError> {
-        (|| -> Result<_, DeserializeError> {
-            let (tag, tag_encoding) = raw.tag_sz()?;
-            match tag {
-                // general form
-                Self::GENERAL_FORM_TAG => {
-                    let len = raw.array_sz()?;
-                    let len_encoding: LenEncoding = len.into();
-                    let mut read_len = CBORReadLen::new(len);
-                    read_len.read_elems(2)?;
-                    let (alternative, alternative_encoding) = raw
-                        .unsigned_integer_sz()
-                        .map(|(x, enc)| (x, Some(enc)))
-                        .map_err(Into::<DeserializeError>::into)
-                        .map_err(|e: DeserializeError| e.annotate("alternative"))?;
-                    let (fields, fields_encoding) = (|| -> Result<_, DeserializeError> {
-                        let mut fields_arr = Vec::new();
-                        let len = raw.array_sz()?;
-                        let fields_encoding = len.into();
-                        while match len {
-                            cbor_event::LenSz::Len(n, _) => (fields_arr.len() as u64) < n,
-                            cbor_event::LenSz::Indefinite => true,
-                        } {
-                            if raw.cbor_type()? == cbor_event::Type::Special {
-                                assert_eq!(raw.special()?, cbor_event::Special::Break);
-                                break;
-                            }
-                            fields_arr.push(PlutusData::deserialize(raw)?);
-                        }
-                        Ok((fields_arr, fields_encoding))
-                    })()
-                    .map_err(|e| e.annotate("fields"))?;
-                    match len {
-                        cbor_event::LenSz::Len(_, _) => (),
-                        cbor_event::LenSz::Indefinite => match raw.special()? {
-                            cbor_event::Special::Break => (),
-                            _ => return Err(DeserializeFailure::EndingBreakMissing.into()),
-                        },
-                    }
-                    Ok(ConstrPlutusData {
-                        alternative,
-                        fields,
-                        encodings: Some(ConstrPlutusDataEncoding {
-                            len_encoding,
-                            tag_encoding: Some(tag_encoding),
-                            alternative_encoding,
-                            fields_encoding,
-                            prefer_compact: false,
-                        }),
-                    })
-                }
-                // concise form
-                tag => {
-                    if let Some(alternative) = Self::compact_cbor_tag_to_alternative(tag) {
-                        let (fields, fields_encoding) = (|| -> Result<_, DeserializeError> {
-                            let mut fields_arr = Vec::new();
-                            let len = raw.array_sz()?;
-                            let fields_encoding = len.into();
-                            while match len {
-                                cbor_event::LenSz::Len(n, _) => (fields_arr.len() as u64) < n,
-                                cbor_event::LenSz::Indefinite => true,
-                            } {
-                                if raw.cbor_type()? == cbor_event::Type::Special {
-                                    assert_eq!(raw.special()?, cbor_event::Special::Break);
-                                    break;
-                                }
-                                fields_arr.push(PlutusData::deserialize(raw)?);
-                            }
-                            Ok((fields_arr, fields_encoding))
-                        })()
-                        .map_err(|e| e.annotate("fields"))?;
-                        Ok(ConstrPlutusData {
-                            alternative,
-                            fields,
-                            encodings: Some(ConstrPlutusDataEncoding {
-                                len_encoding: LenEncoding::default(),
-                                tag_encoding: Some(tag_encoding),
-                                alternative_encoding: None,
-                                fields_encoding,
-                                prefer_compact: true,
-                            }),
-                        })
-                    } else {
-                        Err(DeserializeFailure::TagMismatch {
-                            found: tag,
-                            expected: Self::GENERAL_FORM_TAG,
-                        }
-                        .into())
-                    }
-                }
-            }
-        })()
-        .map_err(|e| e.annotate("ConstrPlutusData"))
+        match &mut super::codec::deserialize(raw)? {
+            PlutusData::ConstrPlutusData(constr) => Ok(Self {
+                alternative: constr.alternative,
+                fields: std::mem::take(&mut constr.fields),
+                encodings: constr.encodings.take(),
+            }),
+            _ => Err(DeserializeFailure::NoVariantMatched.into()),
+        }
     }
 }
 
@@ -692,56 +470,20 @@ impl Serialize for PlutusMap {
         serializer: &'se mut Serializer<W>,
         force_canonical: bool,
     ) -> cbor_event::Result<&'se mut Serializer<W>> {
-        serializer.write_map_sz(
-            self.encoding
-                .to_len_sz(self.entries.len() as u64, force_canonical),
-        )?;
-        let mut key_order = self
-            .entries
-            .iter()
-            .map(|(k, v)| {
-                let mut buf = cbor_event::se::Serializer::new_vec();
-                k.serialize(&mut buf, force_canonical)?;
-                Ok((buf.finalize(), k, v))
-            })
-            .collect::<Result<Vec<(Vec<u8>, &_, &_)>, cbor_event::Error>>()?;
-        if force_canonical {
-            key_order.sort_by(|(lhs_bytes, _, _), (rhs_bytes, _, _)| {
-                match lhs_bytes.len().cmp(&rhs_bytes.len()) {
-                    std::cmp::Ordering::Equal => lhs_bytes.cmp(rhs_bytes),
-                    diff_ord => diff_ord,
-                }
-            });
-        }
-        for (key_bytes, _key, value) in key_order {
-            serializer.write_raw_bytes(&key_bytes)?;
-            value.serialize(serializer, force_canonical)?;
-        }
-        self.encoding.end(serializer, force_canonical)
+        super::codec::serialize(
+            super::codec::WriteTask::Map(self),
+            serializer,
+            force_canonical,
+        )
     }
 }
 
 impl Deserialize for PlutusMap {
     fn deserialize<R: BufRead + Seek>(raw: &mut Deserializer<R>) -> Result<Self, DeserializeError> {
-        (|| -> Result<_, DeserializeError> {
-            let mut entries = Vec::new();
-            let map_len = raw.map_sz()?;
-            let encoding = map_len.into();
-            while match map_len {
-                cbor_event::LenSz::Len(n, _) => (entries.len() as u64) < n,
-                cbor_event::LenSz::Indefinite => true,
-            } {
-                if raw.cbor_type()? == cbor_event::Type::Special {
-                    assert_eq!(raw.special()?, cbor_event::Special::Break);
-                    break;
-                }
-                let map_key = PlutusData::deserialize(raw)?;
-                let map_value = PlutusData::deserialize(raw)?;
-                entries.push((map_key, map_value));
-            }
-            Ok(Self { entries, encoding })
-        })()
-        .map_err(|e| e.annotate("PlutusMap"))
+        match &mut super::codec::deserialize(raw)? {
+            PlutusData::Map(map) => Ok(std::mem::take(map)),
+            _ => Err(DeserializeFailure::NoVariantMatched.into()),
+        }
     }
 }
 
