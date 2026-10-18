@@ -7,7 +7,9 @@
       "cache": false
     },
     "clean": {},
-    "test": {},
+    "test": {
+      "dependsOn": ["^build"]
+    },
     "lint": {
       "dependsOn": ["^build", "^lint"]
     },
@@ -16,7 +18,7 @@
       "persistent": true
     },
     "@lucid-evolution/lucid#test": {
-      "dependsOn": ["@lucid-evolution/provider#test"]
+      "dependsOn": ["^build", "@lucid-evolution/provider#test"]
     }
   }
 }
