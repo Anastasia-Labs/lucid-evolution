@@ -1963,6 +1963,7 @@ const doCoinSelection = (
     const assetsDelta: Assets = pipe(
       config.totalOutputAssets,
       Record.union(estimatedFee, _BigInt.sum),
+      Record.union(yield* netImplicitLovelace(config), _BigInt.sum),
       Record.union(negatedCollectedAssets, _BigInt.sum),
       Record.union(negatedMintedAssets, _BigInt.sum),
     );
@@ -1973,11 +1974,26 @@ const doCoinSelection = (
     );
     // Filter and obtain assets that are present in the inputs and mints but are not required by the outputs
     // Negate these assets to get their positive amounts
-    const notRequiredAssets = pipe(
+    let notRequiredAssets = pipe(
       assetsDelta,
       Record.filter((amount) => amount < 0n),
       negateAssets,
     );
+
+    // Refunds and withdrawals can cover the whole transaction, but it must
+    // still spend an input. Requiring one lovelace, and counting it back as
+    // available, selects one without changing the change-output check.
+    if (
+      _Array.isEmptyArray(config.collectedInputs) &&
+      Record.isEmptyRecord(requiredAssets)
+    ) {
+      requiredAssets = { lovelace: 1n };
+      notRequiredAssets = Record.union(
+        notRequiredAssets,
+        { lovelace: 1n },
+        _BigInt.sum,
+      );
+    }
 
     // Note: We are not done with coin selection even if "requiredAssets" is empty.
     // Because "notRequiredAssets" may not contain enough ADA to cover for minimum Ada requirement
@@ -1989,6 +2005,25 @@ const doCoinSelection = (
       notRequiredAssets,
       includeLeftoverLovelaceAsFee,
     );
+  });
+
+/**
+ * The lovelace the transaction's certificates, proposals and withdrawals take
+ * from its inputs: deposits, less deposit refunds and withdrawals. Read from
+ * the CML.TransactionBuilder, which counts the same amounts when it balances
+ * the transaction.
+ */
+const netImplicitLovelace = (
+  config: TxBuilder.TxBuilderConfig,
+): Effect.Effect<Assets, TxBuilderError> =>
+  Effect.try({
+    try: () =>
+      withCMLScope((own) => ({
+        lovelace:
+          config.txBuilder.get_deposit() -
+          own(config.txBuilder.get_implicit_input()).coin(),
+      })),
+    catch: (error) => completeTxError(error),
   });
 
 /**
