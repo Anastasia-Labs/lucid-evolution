@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.8.4
+
+### Patch Changes
+
+- [#763](https://github.com/Anastasia-Labs/lucid-evolution/pull/763) [`19249ec`](https://github.com/Anastasia-Labs/lucid-evolution/commit/19249eccd99216e338781d8ed68e401949844333) Thanks [@colll78](https://github.com/colll78)! - Coin selection in `complete()` now counts certificate and proposal deposits (stake registration, combined registration and delegation, DRep registration, pool registration, governance proposals) and credits deposit refunds and reward withdrawals. Before, it selected inputs for the outputs and the fee only, so a registration whose deposit was larger than the selected inputs failed with `UTxO Balance Insufficient` even when the wallet held enough, and a deregistration or withdrawal selected more inputs than it needed. A transaction whose refunds or withdrawals cover everything still spends one wallet input.
+
 ## 0.8.3
 
 ### Patch Changes
