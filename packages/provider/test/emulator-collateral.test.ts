@@ -10,6 +10,7 @@ import {
   Emulator,
   generateEmulatorAccountFromPrivateKey,
 } from "../src/index.js";
+import { addUtxo } from "./add-utxo.js";
 
 /*
   The ledger's collateral rules for a transaction with redeemers (feesOK):
@@ -47,23 +48,17 @@ const setup = (collateralUTxOs: Assets[]) => {
   });
   const emulator = new Emulator([account], PROTOCOL_PARAMETERS_DEFAULT);
   const scriptOutRef: OutRef = { txHash: SCRIPT_UTXO_HASH, outputIndex: 0 };
-  emulator.ledger[scriptOutRef.txHash + scriptOutRef.outputIndex] = {
-    utxo: {
-      ...scriptOutRef,
-      address: validatorToAddress("Custom", SCRIPT),
-      assets: { lovelace: 10_000_000n },
-      datumHash: undefined,
-      datum: undefined,
-      scriptRef: SCRIPT,
-    },
-    spent: false,
-  };
+  addUtxo(emulator, {
+    ...scriptOutRef,
+    address: validatorToAddress("Custom", SCRIPT),
+    assets: { lovelace: 10_000_000n },
+    datumHash: undefined,
+    datum: undefined,
+    scriptRef: SCRIPT,
+  });
   const collateral = collateralUTxOs.map((assets, outputIndex) => {
     const outRef = { txHash: COLLATERAL_HASH, outputIndex };
-    emulator.ledger[outRef.txHash + outRef.outputIndex] = {
-      utxo: { ...outRef, address: account.address, assets },
-      spent: false,
-    };
+    addUtxo(emulator, { ...outRef, address: account.address, assets });
     return outRef;
   });
   return { account, emulator, scriptOutRef, collateral };

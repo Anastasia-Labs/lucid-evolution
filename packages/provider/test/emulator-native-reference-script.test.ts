@@ -9,6 +9,7 @@ import {
   Emulator,
   generateEmulatorAccountFromPrivateKey,
 } from "../src/index.js";
+import { addUtxo } from "./add-utxo.js";
 
 // Spends a UTxO locked by a native script that the transaction only carries
 // in a reference input, so the emulator must verify the reference script.
@@ -42,30 +43,24 @@ const setup = () => {
   });
   const emulator = new Emulator([owner, other], PROTOCOL_PARAMETERS_DEFAULT);
   const script = requireSignature(keyHashOf(owner.privateKey));
-  emulator.ledger[SCRIPT_UTXO_HASH + 0] = {
-    utxo: {
-      txHash: SCRIPT_UTXO_HASH,
-      outputIndex: 0,
-      address: validatorToAddress("Custom", script),
-      assets: { lovelace: 10_000_000n },
-      datumHash: undefined,
-      datum: undefined,
-      scriptRef: undefined,
-    },
-    spent: false,
-  };
-  emulator.ledger[REFERENCE_UTXO_HASH + 0] = {
-    utxo: {
-      txHash: REFERENCE_UTXO_HASH,
-      outputIndex: 0,
-      address: owner.address,
-      assets: { lovelace: 5_000_000n },
-      datumHash: undefined,
-      datum: undefined,
-      scriptRef: script,
-    },
-    spent: false,
-  };
+  addUtxo(emulator, {
+    txHash: SCRIPT_UTXO_HASH,
+    outputIndex: 0,
+    address: validatorToAddress("Custom", script),
+    assets: { lovelace: 10_000_000n },
+    datumHash: undefined,
+    datum: undefined,
+    scriptRef: undefined,
+  });
+  addUtxo(emulator, {
+    txHash: REFERENCE_UTXO_HASH,
+    outputIndex: 0,
+    address: owner.address,
+    assets: { lovelace: 5_000_000n },
+    datumHash: undefined,
+    datum: undefined,
+    scriptRef: script,
+  });
   return { emulator, owner, other };
 };
 

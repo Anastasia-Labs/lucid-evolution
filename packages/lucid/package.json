@@ -45,6 +45,7 @@
   ],
   "scripts": {
     "test": "vitest run",
+    "test:scalus-emulator": "vitest run --config vitest.scalus-emulator.config.ts",
     "build:deps": "pnpm --filter @lucid-evolution/core-types build",
     "lint": "pnpm build:deps && tsc --noEmit",
     "build": "pnpm build:deps && tsup src/index.ts --format esm,cjs --dts --clean",

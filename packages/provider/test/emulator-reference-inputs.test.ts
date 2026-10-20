@@ -9,6 +9,7 @@ import {
   Emulator,
   generateEmulatorAccountFromPrivateKey,
 } from "../src/index.js";
+import { addUtxo } from "./add-utxo.js";
 
 /*
   The ledger requires a transaction's reference inputs to be disjoint from
@@ -115,17 +116,14 @@ const setup = (protocolMajorVersion: number | undefined) => {
   const accountOutRef: OutRef = { txHash: GENESIS_HASH, outputIndex: 0 };
   const scriptOutRef: OutRef = { txHash: SCRIPT_UTXO_HASH, outputIndex: 0 };
   const lockAt = (script: Script) => {
-    emulator.ledger[scriptOutRef.txHash + scriptOutRef.outputIndex] = {
-      utxo: {
-        ...scriptOutRef,
-        address: validatorToAddress("Custom", script),
-        assets: { lovelace: 10_000_000n },
-        datumHash: undefined,
-        datum: undefined,
-        scriptRef: script,
-      },
-      spent: false,
-    };
+    addUtxo(emulator, {
+      ...scriptOutRef,
+      address: validatorToAddress("Custom", script),
+      assets: { lovelace: 10_000_000n },
+      datumHash: undefined,
+      datum: undefined,
+      scriptRef: script,
+    });
   };
   return { account, emulator, accountOutRef, scriptOutRef, lockAt };
 };
