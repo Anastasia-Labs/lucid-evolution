@@ -2,7 +2,7 @@ use std::{cell::RefCell, collections::HashMap};
 
 use pallas_crypto::hash::{Hash, Hasher};
 use uplc::{
-    ast::{FakeNamedDeBruijn, NamedDeBruijn, Program},
+    ast::{Data, FakeNamedDeBruijn, NamedDeBruijn, Program},
     machine::{
         cost_model::{initialize_cost_model_with_protocol, CostModel, ExBudget, ParamName},
         Error, Machine,
@@ -11,7 +11,7 @@ use uplc::{
         self, ALONZO_PROTOCOL_VERSION, DIJKSTRA_PROTOCOL_VERSION, VAN_ROSSEM_PROTOCOL_VERSION,
     },
     tx::{self, ScriptCache},
-    Language, PlutusData,
+    Fragment, Language,
 };
 use wasm_bindgen::prelude::*;
 
@@ -241,10 +241,13 @@ fn eval_program(
         mem: i64::try_from(budget_mem).map_err(|_| "Memory budget out of range")?,
     };
 
+    // Decoded straight into the evaluator's own Data, which decodes, converts
+    // and drops without recursing, so the depth of an argument is not limited
+    // by the stack.
     let args = args_cbor
         .iter()
-        .map(|arg| uplc::plutus_data(arg).map_err(|e| format!("Invalid Data argument: {e}")))
-        .collect::<Result<Vec<PlutusData>, _>>()?;
+        .map(|arg| Data::decode_fragment(arg).map_err(|e| format!("Invalid Data argument: {e}")))
+        .collect::<Result<Vec<Data>, _>>()?;
 
     let program = with_program_cache(|cache| cache.program(program_flat))?;
 
@@ -559,6 +562,61 @@ mod tests {
         assert!(result.cpu > 0 && result.mem > 0);
     }
 
+    /// Deeply nested Data in each shape, as given and in the encoding the
+    /// Cardano node uses, nested `depth` times around a leaf.
+    fn deep_data(depth: usize) -> Vec<(&'static str, Vec<u8>)> {
+        [
+            ("constr", "d87981", "00", "", "d8799f", "ff"),
+            (
+                "general constr",
+                "d86682188081",
+                "00",
+                "",
+                "d8669f18809f",
+                "ffff",
+            ),
+            ("list", "81", "00", "", "9f", "ff"),
+            ("map value", "a100", "00", "", "bf00", "ff"),
+            ("map key", "a1", "00", "00", "bf", "00ff"),
+            ("bytes in list", "81", "4100", "", "9f", "ff"),
+        ]
+        .into_iter()
+        .flat_map(|(name, prefix, leaf, suffix, node_prefix, node_suffix)| {
+            [(name, prefix, suffix), (name, node_prefix, node_suffix)].map(
+                |(name, prefix, suffix)| {
+                    let hex = prefix.repeat(depth) + leaf + &suffix.repeat(depth);
+                    (name, hex::decode(hex).unwrap())
+                },
+            )
+        })
+        .collect()
+    }
+
+    #[test]
+    fn evaluates_deeply_nested_data_arguments() {
+        // Compares its two arguments and serialises the first, which walks
+        // every node of both.
+        let program = flat(
+            "(program 1.1.0 (lam a (lam b (force [(force (builtin ifThenElse)) [[(builtin equalsData) a] b] (delay [(lam r (con unit ())) [(builtin serialiseData) a]]) (delay (error))]))))",
+        );
+
+        for (name, data) in deep_data(100_000) {
+            let result = eval_program(
+                &program,
+                &[data.clone(), data],
+                3,
+                VAN_ROSSEM_PROTOCOL_VERSION,
+                &cost_model(),
+                u64::MAX >> 1,
+                u64::MAX >> 1,
+                false,
+            )
+            .unwrap();
+
+            assert_eq!((name, result.error_kind), (name, EVAL_OK));
+        }
+    }
+
     #[test]
     fn tells_why_a_program_did_not_succeed() {
         let returns_true = flat("(program 1.1.0 (lam ctx (con bool True)))");
@@ -660,6 +718,11 @@ mod tests {
         assert!(eval(&program, UNIT, 3, 11, &[&costs[..], &[0]].concat(), 1000).is_err());
         assert!(eval(&program, UNIT, 3, 11, &costs, u64::MAX).is_err());
         assert!(eval(&program, &[0xd8, 0x79], 3, 11, &costs, 1000).is_err());
+        // Arguments decode as Plutus decodes Data: a byte string in a single
+        // chunk of more than 64 bytes is not Data.
+        let bytes = |n: u8| [&[0x58, n][..], &vec![0; n.into()]].concat();
+        assert!(eval(&program, &bytes(64), 3, 11, &costs, 1000).is_ok());
+        assert!(eval(&program, &bytes(65), 3, 11, &costs, 1000).is_err());
         assert!(eval(&program[..2], UNIT, 3, 11, &costs, 1000).is_err());
 
         // UPLC versions become available as the ledger allows them.
