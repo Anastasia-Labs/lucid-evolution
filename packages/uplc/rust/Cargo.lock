@@ -891,7 +891,7 @@ checksum = "b4ac048d71ede7ee76d585517add45da530660ef4390e49b098733c6e897f254"
 [[package]]
 name = "uplc"
 version = "1.1.24"
-source = "git+https://github.com/colll78/aiken.git?rev=28e42883b9192d123406d9c8fb79cb2817e98b9c#28e42883b9192d123406d9c8fb79cb2817e98b9c"
+source = "git+https://github.com/colll78/aiken.git?rev=2b206fb3e5361648ccc6904f32854a8c7d5df140#2b206fb3e5361648ccc6904f32854a8c7d5df140"
 dependencies = [
  "bitvec",
  "blst",
