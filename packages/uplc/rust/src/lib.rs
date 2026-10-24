@@ -15,6 +15,8 @@ use uplc::{
 };
 use wasm_bindgen::prelude::*;
 
+mod builtin;
+
 /// Upper bound on the scripts kept decoded across calls.
 const SCRIPT_CACHE_MAX_SCRIPTS: usize = 64;
 /// Upper bound on the serialised size of the scripts kept decoded across calls.

@@ -57,6 +57,84 @@ export function eval_program_raw(
  */
 export function uplc_build_info(): string;
 /**
+ * Evaluates the builtin `tag` applied to `args` as a Plutus V3 script
+ * evaluates it at a protocol version, without any program around it: the
+ * result, or how it fails, is what the machine gives for the saturated
+ * application.
+ *
+ * - `tag`: the builtin's flat tag (0 for addInteger to 100 for scaleValue).
+ *   The Miller-loop builtins (68 to 70) are not supported, since their
+ *   results cannot be returned.
+ * - `args`: exactly the builtin's arguments, in order, each encoded as the
+ *   matching entry of `arg_kinds` says: 0 for a flat-encoded
+ *   `(program 1.1.0 (con …))`, 1 for a compressed G1 point, 2 for a
+ *   compressed G2 point, 3 for a list of G1 points and 4 for a list of G2
+ *   points, each list as the compressed points one after the other. Flat
+ *   cannot encode BLS12-381 points, so they cross as their compressed bytes.
+ * - `protocol_major_version`: from 9 (Chang, which introduced Plutus V3) to
+ *   12 (Dijkstra). It decides which builtins are available and the semantics
+ *   they have.
+ *
+ * The result's `cpu` and `mem` are what the machine charges for the
+ * application under Plutus' default Plutus V3 cost model, not the ledger's
+ * protocol parameters.
+ *
+ * Fails only when the inputs are malformed or unsupported: an unknown or
+ * Miller-loop tag, a number of arguments other than the builtin's arity, an
+ * argument that does not decode as its kind says or is not a constant, an
+ * invalid compressed point, a protocol version out of range, or a result that
+ * none of the kinds can encode. A builtin that fails is an
+ * [`EvalBuiltinResult`] that is not `ok`.
+ */
+export function eval_builtin_raw(
+  tag: number,
+  args: Uint8Array[],
+  arg_kinds: Uint8Array,
+  protocol_major_version: number,
+): EvalBuiltinResult;
+/**
+ * The outcome of [`eval_builtin_raw`].
+ */
+export class EvalBuiltinResult {
+  private constructor();
+  free(): void;
+  /**
+   * Whether the builtin returned a value.
+   */
+  ok: boolean;
+  /**
+   * Why the builtin did not return a value: 0 when it did, 1 when it is
+   * not available to Plutus V3 at the protocol version, 2 when it did not
+   * accept its arguments (so the machine fails before costing it) and 3 when
+   * it failed after being costed.
+   */
+  error_kind: number;
+  /**
+   * How `result` encodes the value, with the same codes as the arguments
+   * of [`eval_builtin_raw`]; 0 when there is no value.
+   */
+  result_kind: number;
+  /**
+   * The value the builtin returned; empty when there is none.
+   */
+  result: Uint8Array;
+  /**
+   * The CPU the machine charges for this application, under Plutus' default
+   * cost model for Plutus V3 at the protocol version; 0 when the builtin was
+   * not costed (error kinds 1 and 2).
+   */
+  cpu: bigint;
+  /**
+   * The memory the machine charges for this application; see `cpu`.
+   */
+  mem: bigint;
+  /**
+   * The evaluator's description of why the builtin did not return a value;
+   * empty when it did.
+   */
+  error: string;
+}
+/**
  * The outcome of [`eval_program_raw`].
  */
 export class EvalProgramResult {
