@@ -29,6 +29,40 @@ const programs: {
   mem: number;
 }[] = fixture("programs.json");
 
+// Deeply nested Data in each shape, as given and in the encoding the Cardano
+// node uses, nested `depth` times around a leaf.
+const DEPTH = 100_000;
+const deepData = [
+  ["constr", "d87981", "00", "", "d8799f", "ff"],
+  ["general constr", "d86682188081", "00", "", "d8669f18809f", "ffff"],
+  ["list", "81", "00", "", "9f", "ff"],
+  ["map value", "a100", "00", "", "bf00", "ff"],
+  ["map key", "a1", "00", "00", "bf", "00ff"],
+  ["bytes in list", "81", "4100", "", "9f", "ff"],
+].flatMap(([name, prefix, leaf, suffix, nodePrefix, nodeSuffix]) =>
+  [
+    [prefix, suffix],
+    [nodePrefix, nodeSuffix],
+  ].map(([prefix, suffix]) => ({
+    name,
+    cbor: Buffer.from(
+      prefix.repeat(DEPTH) + leaf + suffix.repeat(DEPTH),
+      "hex",
+    ),
+  })),
+);
+
+// Compares its two arguments and serialises the first, which walks every node
+// of both:
+// (program 1.1.0 (lam a (lam b (force [(force (builtin ifThenElse))
+//   [[(builtin equalsData) a] b]
+//   (delay [(lam r (con unit ())) [(builtin serialiseData) a]])
+//   (delay (error))]))))
+const COMPARE_AND_SERIALISE = Buffer.from(
+  "010100225333573466ebc0080044c92637660042c1",
+  "hex",
+);
+
 const PLUTUS_V3 = 3;
 const VAN_ROSSEM = 11;
 const BUDGET = { cpu: 10_000_000_000n, mem: 14_000_000n };
@@ -86,6 +120,42 @@ for (const [build, uplc] of Object.entries({ speed, size })) {
       expect(result.ok).toBe(false);
       expect(result.error_kind).toBe(1);
     });
+
+    test.each(deepData)(
+      `evaluates $name Data nested ${DEPTH} deep`,
+      ({ cbor }) => {
+        const result = uplc.eval_program_raw(
+          COMPARE_AND_SERIALISE,
+          [cbor, cbor],
+          PLUTUS_V3,
+          VAN_ROSSEM,
+          costModel,
+          2n ** 62n,
+          2n ** 62n,
+          false,
+        );
+
+        expect(result.error_kind).toBe(0);
+
+        // The evaluator still evaluates as before afterwards.
+        const { flat, args, errorKind, cpu, mem } = programs[0];
+        const next = uplc.eval_program_raw(
+          Buffer.from(flat, "hex"),
+          args.map((arg) => Buffer.from(arg, "hex")),
+          PLUTUS_V3,
+          VAN_ROSSEM,
+          costModel,
+          BUDGET.cpu,
+          BUDGET.mem,
+          false,
+        );
+        expect([next.error_kind, Number(next.cpu), Number(next.mem)]).toEqual([
+          errorKind,
+          cpu,
+          mem,
+        ]);
+      },
+    );
 
     test("rejects an unknown Plutus version", () => {
       expect(() =>

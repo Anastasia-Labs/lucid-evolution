@@ -2,7 +2,7 @@ use std::{cell::RefCell, collections::HashMap};
 
 use pallas_crypto::hash::{Hash, Hasher};
 use uplc::{
-    ast::{FakeNamedDeBruijn, NamedDeBruijn, Program},
+    ast::{Data, FakeNamedDeBruijn, NamedDeBruijn, Program},
     machine::{
         cost_model::{initialize_cost_model_with_protocol, CostModel, ExBudget, ParamName},
         Error, Machine,
@@ -11,7 +11,7 @@ use uplc::{
         self, ALONZO_PROTOCOL_VERSION, DIJKSTRA_PROTOCOL_VERSION, VAN_ROSSEM_PROTOCOL_VERSION,
     },
     tx::{self, ScriptCache},
-    Language, PlutusData,
+    Fragment, Language,
 };
 use wasm_bindgen::prelude::*;
 
@@ -243,10 +243,13 @@ fn eval_program(
         mem: i64::try_from(budget_mem).map_err(|_| "Memory budget out of range")?,
     };
 
+    // Decoded straight into the evaluator's own Data, which decodes, converts
+    // and drops without recursing, so the depth of an argument is not limited
+    // by the stack.
     let args = args_cbor
         .iter()
-        .map(|arg| uplc::plutus_data(arg).map_err(|e| format!("Invalid Data argument: {e}")))
-        .collect::<Result<Vec<PlutusData>, _>>()?;
+        .map(|arg| Data::decode_fragment(arg).map_err(|e| format!("Invalid Data argument: {e}")))
+        .collect::<Result<Vec<Data>, _>>()?;
 
     let program = with_program_cache(|cache| cache.program(program_flat))?;
 
@@ -561,6 +564,87 @@ mod tests {
         assert!(result.cpu > 0 && result.mem > 0);
     }
 
+    /// Deeply nested Data in each shape, as given and in the encoding the
+    /// Cardano node uses, nested `depth` times around a leaf.
+    fn deep_data(depth: usize) -> Vec<(&'static str, Vec<u8>)> {
+        [
+            ("constr", "d87981", "00", "", "d8799f", "ff"),
+            (
+                "general constr",
+                "d86682188081",
+                "00",
+                "",
+                "d8669f18809f",
+                "ffff",
+            ),
+            ("list", "81", "00", "", "9f", "ff"),
+            ("map value", "a100", "00", "", "bf00", "ff"),
+            ("map key", "a1", "00", "00", "bf", "00ff"),
+            ("bytes in list", "81", "4100", "", "9f", "ff"),
+        ]
+        .into_iter()
+        .flat_map(|(name, prefix, leaf, suffix, node_prefix, node_suffix)| {
+            [(name, prefix, suffix), (name, node_prefix, node_suffix)].map(
+                |(name, prefix, suffix)| {
+                    let hex = prefix.repeat(depth) + leaf + &suffix.repeat(depth);
+                    (name, hex::decode(hex).unwrap())
+                },
+            )
+        })
+        .collect()
+    }
+
+    /// Compares its two arguments and serialises the first, which walks every
+    /// node of both. It fails unless they are equal.
+    const COMPARE_AND_SERIALISE: &str = "(program 1.1.0 (lam a (lam b (force [(force (builtin ifThenElse)) [[(builtin equalsData) a] b] (delay [(lam r (con unit ())) [(builtin serialiseData) a]]) (delay (error))]))))";
+
+    #[test]
+    fn evaluates_deeply_nested_data_arguments() {
+        let program = flat(COMPARE_AND_SERIALISE);
+
+        for (name, data) in deep_data(100_000) {
+            let result = eval_program(
+                &program,
+                &[data.clone(), data],
+                3,
+                VAN_ROSSEM_PROTOCOL_VERSION,
+                &cost_model(),
+                u64::MAX >> 1,
+                u64::MAX >> 1,
+                false,
+            )
+            .unwrap();
+
+            assert_eq!((name, result.error_kind), (name, EVAL_OK));
+        }
+    }
+
+    #[test]
+    fn decodes_arguments_as_plutus_does() {
+        let compare = |a: &str, b: &str| {
+            eval_program(
+                &flat(COMPARE_AND_SERIALISE),
+                &[hex::decode(a).unwrap(), hex::decode(b).unwrap()],
+                3,
+                VAN_ROSSEM_PROTOCOL_VERSION,
+                &cost_model(),
+                u64::MAX >> 1,
+                u64::MAX >> 1,
+                false,
+            )
+        };
+
+        // A tag 102 constructor in an indefinite array ends at its own break,
+        // not at the break of the list holding it: both are [Constr 0 [], 1].
+        let result = compare("9fd8669f0080ff01ff", "9fd8798001ff").unwrap();
+        assert_eq!(result.error_kind, EVAL_OK);
+
+        // A big integer tag outside its head byte, and a tag 102 constructor
+        // that is not an (index, fields) pair, are not Data.
+        assert!(compare("d8024101", "01").is_err());
+        assert!(compare("d86683008000", "d87980").is_err());
+    }
+
     #[test]
     fn tells_why_a_program_did_not_succeed() {
         let returns_true = flat("(program 1.1.0 (lam ctx (con bool True)))");
@@ -662,6 +746,11 @@ mod tests {
         assert!(eval(&program, UNIT, 3, 11, &[&costs[..], &[0]].concat(), 1000).is_err());
         assert!(eval(&program, UNIT, 3, 11, &costs, u64::MAX).is_err());
         assert!(eval(&program, &[0xd8, 0x79], 3, 11, &costs, 1000).is_err());
+        // Arguments decode as Plutus decodes Data: a byte string in a single
+        // chunk of more than 64 bytes is not Data.
+        let bytes = |n: u8| [&[0x58, n][..], &vec![0; n.into()]].concat();
+        assert!(eval(&program, &bytes(64), 3, 11, &costs, 1000).is_ok());
+        assert!(eval(&program, &bytes(65), 3, 11, &costs, 1000).is_err());
         assert!(eval(&program[..2], UNIT, 3, 11, &costs, 1000).is_err());
 
         // UPLC versions become available as the ledger allows them.
