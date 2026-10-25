@@ -16,6 +16,8 @@ Before continuing, please note that this step is not part of the CI process. You
 pnpm build-local
 ```
 
+The browser builds are made with wasm-pack. The Node.js builds need wasm-bindgen's `--experimental-reset-state-function`, which wasm-pack cannot pass, so `scripts/build-node.sh` runs cargo, the `wasm-bindgen` CLI and `wasm-opt` itself: both must be on the `PATH`, with the `wasm-bindgen` CLI at the version of `wasm-bindgen` in `rust/Cargo.lock` (`cargo install wasm-bindgen-cli --version <version>`).
+
 ## 3. Build the UPLC Package
 
 Once you've completed the previous step, you can build the UPLC package by running:
@@ -32,6 +34,12 @@ The package ships two builds of the evaluator:
 - **size** (`-Oz`, ~1.03 MB wasm): smaller download.
 
 `@lucid-evolution/uplc` resolves to the speed build on Node, Bun and Deno, and to the size build in browser bundles and edge runtimes (`browser`, `worker`, `workerd` and `edge-light` export conditions). To pick a variant explicitly, import `@lucid-evolution/uplc/speed` or `@lucid-evolution/uplc/size`.
+
+## Recovering from a wasm trap
+
+On Node.js (the `default` export condition), the bindings recover from a wasm trap. A trap or a stack overflow inside wasm leaves the instance unable to run anything after it, so after any binding throws, the next call first replaces the instance with a fresh one, and the error itself is rethrown unchanged. A result returned before the replacement throws when read afterwards, and freeing it, explicitly or by garbage collection, does not touch the new instance.
+
+The browser, worker, workerd and edge-light builds do not recover: a bundler instantiates their wasm once, and wasm-bindgen cannot replace that instance. After a trap there, load the package again (for example in a new worker).
 
 ## Evaluating a program
 

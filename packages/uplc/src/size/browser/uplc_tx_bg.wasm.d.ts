@@ -95,7 +95,6 @@ export const __wbg_get_evalprogramresult_mem: (a: number) => bigint;
 export const __wbg_set_evalprogramresult_mem: (a: number, b: bigint) => void;
 export const __wbg_set_evalprogramresult_cpu: (a: number, b: bigint) => void;
 export const __wbg_get_evalprogramresult_cpu: (a: number) => bigint;
-export const __wbindgen_export_0: WebAssembly.Table;
 export const __wbindgen_malloc: (a: number, b: number) => number;
 export const __wbindgen_realloc: (
   a: number,
@@ -103,8 +102,9 @@ export const __wbindgen_realloc: (
   c: number,
   d: number,
 ) => number;
-export const __externref_table_alloc: () => number;
+export const __wbindgen_externrefs: WebAssembly.Table;
 export const __externref_table_dealloc: (a: number) => void;
-export const __externref_drop_slice: (a: number, b: number) => void;
 export const __wbindgen_free: (a: number, b: number, c: number) => void;
+export const __externref_table_alloc: () => number;
+export const __externref_drop_slice: (a: number, b: number) => void;
 export const __wbindgen_start: () => void;
