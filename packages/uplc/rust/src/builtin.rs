@@ -1,7 +1,7 @@
 //! Evaluates one saturated builtin application with the evaluator's own
 //! semantics and costs, for callers that step through UPLC programs themselves.
 
-use std::{cell::RefCell, collections::HashMap, rc::Rc};
+use std::{cell::OnceCell, rc::Rc};
 
 use uplc::{
     ast::{Constant, DeBruijn, Program, Term, Type},
@@ -20,29 +20,62 @@ use wasm_bindgen::prelude::*;
 #[cfg(test)]
 mod tests;
 
-/// A value given as a flat-encoded program whose body is a constant,
-/// `(program 1.1.0 (con …))`. A result in this form is always version 1.1.0.
-pub const VALUE_FLAT: u8 = 0;
-/// A BLS12-381 G1 point, as its 48-byte compressed encoding.
-pub const VALUE_G1: u8 = 1;
-/// A BLS12-381 G2 point, as its 96-byte compressed encoding.
-pub const VALUE_G2: u8 = 2;
-/// A list of BLS12-381 G1 points, as their compressed encodings one after the
-/// other.
-pub const VALUE_G1_LIST: u8 = 3;
-/// A list of BLS12-381 G2 points, as their compressed encodings one after the
-/// other.
-pub const VALUE_G2_LIST: u8 = 4;
+/// How a value of [`eval_builtin_raw`] is encoded: the codes of its
+/// `arg_kinds` and of the result's `result_kind`.
+#[wasm_bindgen]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum BuiltinValueKind {
+    /// A flat-encoded program whose body is a constant,
+    /// `(program 1.1.0 (con …))`. A result in this form is always version
+    /// 1.1.0.
+    Flat = 0,
+    /// A BLS12-381 G1 point, as its 48-byte compressed encoding.
+    G1 = 1,
+    /// A BLS12-381 G2 point, as its 96-byte compressed encoding.
+    G2 = 2,
+    /// A list of BLS12-381 G1 points, as their compressed encodings one after
+    /// the other.
+    G1List = 3,
+    /// A list of BLS12-381 G2 points, as their compressed encodings one after
+    /// the other.
+    G2List = 4,
+    /// An array of BLS12-381 G1 points, as their compressed encodings one after
+    /// the other.
+    G1Array = 5,
+    /// An array of BLS12-381 G2 points, as their compressed encodings one after
+    /// the other.
+    G2Array = 6,
+}
 
-/// The builtin returned a value.
-pub const BUILTIN_OK: u8 = 0;
-/// The builtin is not available to Plutus V3 at the protocol version.
-pub const BUILTIN_NOT_AVAILABLE: u8 = 1;
-/// The builtin did not accept its arguments, which fails the application before
-/// it is costed.
-pub const BUILTIN_REJECTED_ARGUMENTS: u8 = 2;
-/// The builtin failed after it was costed.
-pub const BUILTIN_FAILED: u8 = 3;
+/// Why the builtin given to [`eval_builtin_raw`] did not return a value: the
+/// codes of the result's `error_kind`.
+#[wasm_bindgen]
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum BuiltinErrorKind {
+    /// The builtin returned a value.
+    Ok = 0,
+    /// The builtin is not available to Plutus V3 at the protocol version.
+    NotAvailable = 1,
+    /// The builtin did not accept its arguments, which fails the application
+    /// before it is costed.
+    RejectedArguments = 2,
+    /// The builtin failed after it was costed.
+    Failed = 3,
+}
+
+// The same codes as bytes, to match on.
+pub const VALUE_FLAT: u8 = BuiltinValueKind::Flat as u8;
+pub const VALUE_G1: u8 = BuiltinValueKind::G1 as u8;
+pub const VALUE_G2: u8 = BuiltinValueKind::G2 as u8;
+pub const VALUE_G1_LIST: u8 = BuiltinValueKind::G1List as u8;
+pub const VALUE_G2_LIST: u8 = BuiltinValueKind::G2List as u8;
+pub const VALUE_G1_ARRAY: u8 = BuiltinValueKind::G1Array as u8;
+pub const VALUE_G2_ARRAY: u8 = BuiltinValueKind::G2Array as u8;
+
+pub const BUILTIN_OK: u8 = BuiltinErrorKind::Ok as u8;
+pub const BUILTIN_NOT_AVAILABLE: u8 = BuiltinErrorKind::NotAvailable as u8;
+pub const BUILTIN_REJECTED_ARGUMENTS: u8 = BuiltinErrorKind::RejectedArguments as u8;
+pub const BUILTIN_FAILED: u8 = BuiltinErrorKind::Failed as u8;
 
 const G1_COMPRESSED_SIZE: usize = 48;
 const G2_COMPRESSED_SIZE: usize = 96;
@@ -53,21 +86,24 @@ const G2_COMPRESSED_SIZE: usize = 96;
 pub struct EvalBuiltinResult {
     /// Whether the builtin returned a value.
     pub ok: bool,
-    /// Why the builtin did not return a value: 0 when it did, 1 when it is
-    /// not available to Plutus V3 at the protocol version, 2 when it did not
-    /// accept its arguments (so the machine fails before costing it) and 3 when
-    /// it failed after being costed.
+    /// Why the builtin did not return a value, a [`BuiltinErrorKind`]: 0 when
+    /// it did, 1 when it is not available to Plutus V3 at the protocol version,
+    /// 2 when it did not accept its arguments (so the machine fails before
+    /// costing it) and 3 when it failed after being costed.
     pub error_kind: u8,
-    /// How `result` encodes the value, with the same codes as the arguments
-    /// of [`eval_builtin_raw`]; 0 when there is no value.
+    /// How `result` encodes the value, a [`BuiltinValueKind`] as for the
+    /// arguments of [`eval_builtin_raw`]; 0 when there is no value.
     pub result_kind: u8,
     /// The value the builtin returned; empty when there is none.
     pub result: Vec<u8>,
-    /// The CPU the machine charges for this application, under Plutus' default
-    /// cost model for Plutus V3 at the protocol version; 0 when the builtin was
-    /// not costed (error kinds 1 and 2).
+    /// The CPU the builtin's cost model charges for this application, under
+    /// Plutus' default cost model for Plutus V3 at the protocol version; 0
+    /// when the builtin was not costed (error kinds 1 and 2). It leaves out the
+    /// machine's own step costs for evaluating the application (the builtin,
+    /// each force and each apply).
     pub cpu: u64,
-    /// The memory the machine charges for this application; see `cpu`.
+    /// The memory the builtin's cost model charges for this application; see
+    /// `cpu`.
     pub mem: u64,
     /// The evaluator's description of why the builtin did not return a value;
     /// empty when it did.
@@ -83,18 +119,19 @@ pub struct EvalBuiltinResult {
 ///   The Miller-loop builtins (68 to 70) are not supported, since their
 ///   results cannot be returned.
 /// - `args`: exactly the builtin's arguments, in order, each encoded as the
-///   matching entry of `arg_kinds` says: 0 for a flat-encoded
-///   `(program 1.1.0 (con …))`, 1 for a compressed G1 point, 2 for a
-///   compressed G2 point, 3 for a list of G1 points and 4 for a list of G2
-///   points, each list as the compressed points one after the other. Flat
-///   cannot encode BLS12-381 points, so they cross as their compressed bytes.
+///   matching entry of `arg_kinds` says, a [`BuiltinValueKind`]: 0 for a
+///   flat-encoded `(program 1.1.0 (con …))`, 1 for a compressed G1 point, 2
+///   for a compressed G2 point, 3 for a list of G1 points, 4 for a list of G2
+///   points, 5 for an array of G1 points and 6 for an array of G2 points, each
+///   list or array as the compressed points one after the other. Flat cannot
+///   encode BLS12-381 points, so they cross as their compressed bytes.
 /// - `protocol_major_version`: from 9 (Chang, which introduced Plutus V3) to
 ///   12 (Dijkstra). It decides which builtins are available and the semantics
 ///   they have.
 ///
-/// The result's `cpu` and `mem` are what the machine charges for the
-/// application under Plutus' default Plutus V3 cost model, not the ledger's
-/// protocol parameters.
+/// The result's `cpu` and `mem` are the builtin's charge for the application
+/// under Plutus' default Plutus V3 cost model (not the ledger's protocol
+/// parameters), excluding the machine's per-step costs.
 ///
 /// Fails only when the inputs are malformed or unsupported: an unknown or
 /// Miller-loop tag, a number of arguments other than the builtin's arity, an
@@ -188,8 +225,9 @@ pub(crate) fn eval_builtin(
         return Ok(failure(BUILTIN_REJECTED_ARGUMENTS, uncosted, error));
     }
 
-    let cost = match runtime.to_ex_budget(&default_builtin_costs(protocol_major_version), semantics)
-    {
+    let cost = match with_default_builtin_costs(protocol_major_version, |costs| {
+        runtime.to_ex_budget(costs, semantics)
+    }) {
         Ok(cost) => cost,
         Err(error) => return Ok(failure(BUILTIN_REJECTED_ARGUMENTS, uncosted, error)),
     };
@@ -244,17 +282,19 @@ pub(crate) fn decode_value(
         }
         VALUE_G1 => uncompress(DefaultFunction::Bls12_381_G1_Uncompress, bytes, semantics),
         VALUE_G2 => uncompress(DefaultFunction::Bls12_381_G2_Uncompress, bytes, semantics),
-        VALUE_G1_LIST => uncompress_list(
+        VALUE_G1_LIST | VALUE_G1_ARRAY => uncompress_all(
             DefaultFunction::Bls12_381_G1_Uncompress,
             Type::Bls12_381G1Element,
             G1_COMPRESSED_SIZE,
+            kind == VALUE_G1_ARRAY,
             bytes,
             semantics,
         ),
-        VALUE_G2_LIST => uncompress_list(
+        VALUE_G2_LIST | VALUE_G2_ARRAY => uncompress_all(
             DefaultFunction::Bls12_381_G2_Uncompress,
             Type::Bls12_381G2Element,
             G2_COMPRESSED_SIZE,
+            kind == VALUE_G2_ARRAY,
             bytes,
             semantics,
         ),
@@ -282,6 +322,14 @@ pub(crate) fn encode_value(
         )),
         Constant::ProtoList(Type::Bls12_381G2Element, items) => Ok((
             VALUE_G2_LIST,
+            compress_all(DefaultFunction::Bls12_381_G2_Compress, items, semantics)?,
+        )),
+        Constant::ProtoArray(Type::Bls12_381G1Element, items) => Ok((
+            VALUE_G1_ARRAY,
+            compress_all(DefaultFunction::Bls12_381_G1_Compress, items, semantics)?,
+        )),
+        Constant::ProtoArray(Type::Bls12_381G2Element, items) => Ok((
+            VALUE_G2_ARRAY,
             compress_all(DefaultFunction::Bls12_381_G2_Compress, items, semantics)?,
         )),
         _ => Program {
@@ -322,16 +370,18 @@ fn uncompress(
         .map_err(|e| format!("Invalid compressed point: {e}"))
 }
 
-fn uncompress_list(
+/// Uncompresses a list, or an array, of points.
+fn uncompress_all(
     fun: DefaultFunction,
     typ: Type,
     size: usize,
+    array: bool,
     bytes: &[u8],
     semantics: BuiltinSemantics,
 ) -> Result<Rc<Constant>, String> {
     if !bytes.len().is_multiple_of(size) {
         return Err(format!(
-            "A list of compressed points is {} bytes long, not a multiple of {size}",
+            "A list or array of compressed points is {} bytes long, not a multiple of {size}",
             bytes.len()
         ));
     }
@@ -341,7 +391,11 @@ fn uncompress_list(
         .map(|point| uncompress(fun, point, semantics))
         .collect::<Result<Vec<_>, _>>()?;
 
-    Ok(Rc::new(Constant::ProtoList(typ, items.into())))
+    Ok(Rc::new(if array {
+        Constant::ProtoArray(typ, items.into())
+    } else {
+        Constant::ProtoList(typ, items.into())
+    }))
 }
 
 fn compress(
@@ -367,41 +421,27 @@ fn compress_all(
 }
 
 thread_local! {
-    /// Plutus' default Plutus V3 builtin costs, by protocol version.
-    static DEFAULT_BUILTIN_COSTS: RefCell<HashMap<u16, Rc<BuiltinCosts>>> =
-        RefCell::new(HashMap::new());
+    /// Plutus' default Plutus V3 builtin costs, for each protocol version from
+    /// 9 to 12.
+    static DEFAULT_BUILTIN_COSTS: [OnceCell<BuiltinCosts>; 4] = Default::default();
 }
 
-/// Plutus' default builtin costs for Plutus V3 at a protocol version
-/// (`CostModel::default_for_language_and_protocol`), built once per version.
-fn default_builtin_costs(protocol_major_version: u16) -> Rc<BuiltinCosts> {
-    // As with the caches in lib.rs, a trap during an earlier call can leave
-    // the cache borrowed; build the costs afresh instead of panicking.
-    let cached = DEFAULT_BUILTIN_COSTS
-        .try_with(|cache| {
-            cache
-                .try_borrow()
-                .ok()
-                .and_then(|cache| cache.get(&protocol_major_version).cloned())
-        })
-        .ok()
-        .flatten();
+/// Applies `f` to Plutus' default builtin costs for Plutus V3 at a protocol
+/// version from 9 to 12 (`CostModel::default_for_language_and_protocol`),
+/// built once per version.
+fn with_default_builtin_costs<T>(
+    protocol_major_version: u16,
+    f: impl FnOnce(&BuiltinCosts) -> T,
+) -> T {
+    let index = usize::from(protocol_major_version - CHANG_PROTOCOL_VERSION);
 
-    cached.unwrap_or_else(|| {
-        let costs = Rc::new(
+    DEFAULT_BUILTIN_COSTS.with(|costs| {
+        f(costs[index].get_or_init(|| {
             CostModel::default_for_language_and_protocol(
                 &Language::PlutusV3,
                 protocol_major_version,
             )
-            .builtin_costs,
-        );
-
-        let _ = DEFAULT_BUILTIN_COSTS.try_with(|cache| {
-            if let Ok(mut cache) = cache.try_borrow_mut() {
-                cache.insert(protocol_major_version, costs.clone());
-            }
-        });
-
-        costs
+            .builtin_costs
+        }))
     })
 }

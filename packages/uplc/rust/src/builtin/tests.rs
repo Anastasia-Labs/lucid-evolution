@@ -110,6 +110,8 @@ fn cases() -> Vec<Case> {
     let g2_bytes = format!("(con bytestring #{G2})");
     let g1_list = format!("(con (list bls12_381_G1_element) [0x{G1}, 0x{G1}])");
     let g2_list = format!("(con (list bls12_381_G2_element) [0x{G2}, 0x{G2}])");
+    let g1_array = format!("(con (array bls12_381_G1_element) [0x{G1}, 0x{G1}])");
+    let g2_array = format!("(con (array bls12_381_G2_element) [0x{G2}, 0x{G2}])");
     let long_dst = format!("(con bytestring #{})", "00".repeat(256));
     let value_1 = "(con value [(#aa, [(#bb, 1)])])";
     let value_2 = "(con value [(#aa, [(#bb, 2)])])";
@@ -155,6 +157,18 @@ fn cases() -> Vec<Case> {
             "(con integer -4)",
         ),
         fails("divideInteger", "by zero", &[INT_1, "(con integer 0)"]),
+        // Plutus' default cost model for protocol versions 9 and 10 charges
+        // divisions, and equalsByteString below, differently from the one for
+        // protocol versions 11 and 12.
+        at(
+            CHANG_PROTOCOL_VERSION,
+            returns(
+                "divideInteger",
+                "-7 2",
+                &["(con integer -7)", INT_2],
+                "(con integer -4)",
+            ),
+        ),
         returns(
             "quotientInteger",
             "-7 2",
@@ -240,6 +254,15 @@ fn cases() -> Vec<Case> {
             "equalsByteString",
             "integer",
             &[INT_1, "(con bytestring #01)"],
+        ),
+        at(
+            PLOMIN_PROTOCOL_VERSION,
+            returns(
+                "equalsByteString",
+                "#01 #01",
+                &["(con bytestring #01)", "(con bytestring #01)"],
+                TRUE,
+            ),
         ),
         returns(
             "lessThanByteString",
@@ -835,6 +858,13 @@ fn cases() -> Vec<Case> {
             "out of bounds",
             &["(con (array integer) [1, 2, 3])", "(con integer 3)"],
         ),
+        // Arrays of BLS12-381 points cross as their compressed points.
+        returns("listToArray", "[G1, G1]", &[&g1_list], &g1_array),
+        returns("listToArray", "[G2, G2]", &[&g2_list], &g2_array),
+        returns("lengthOfArray", "[G1, G1]", &[&g1_array], INT_2),
+        returns("lengthOfArray", "[G2, G2]", &[&g2_array], INT_2),
+        returns("indexArray", "[G1, G1] 1", &[&g1_array, INT_1], &g1_gen),
+        returns("indexArray", "[G2, G2] 1", &[&g2_array, INT_1], &g2_gen),
         // Values
         returns(
             "insertCoin",
@@ -1267,7 +1297,7 @@ fn rejects_malformed_or_unsupported_inputs() {
     // Kinds that do not match the arguments.
     let args = [flat(INT_1), flat(INT_1)];
     assert!(eval_builtin(0, &args, &[VALUE_FLAT], VAN_ROSSEM_PROTOCOL_VERSION).is_err());
-    assert!(eval_builtin(0, &args, &[VALUE_FLAT, 5], VAN_ROSSEM_PROTOCOL_VERSION).is_err());
+    assert!(eval_builtin(0, &args, &[VALUE_FLAT, 7], VAN_ROSSEM_PROTOCOL_VERSION).is_err());
 
     // Protocol versions without Plutus V3, or beyond the latest.
     for (protocol, supported) in [(8, false), (9, true), (12, true), (13, false)] {
@@ -1313,5 +1343,11 @@ fn rejects_malformed_or_unsupported_inputs() {
         &[(VALUE_G1_LIST, g1[..47].to_vec())]
     )
     .is_err());
-    assert!(eval(DefaultFunction::NullList, &[(VALUE_G2_LIST, g1)]).is_err());
+    assert!(eval(DefaultFunction::NullList, &[(VALUE_G2_LIST, g1.clone())]).is_err());
+    assert!(eval(
+        DefaultFunction::LengthOfArray,
+        &[(VALUE_G1_ARRAY, g1[..47].to_vec())]
+    )
+    .is_err());
+    assert!(eval(DefaultFunction::LengthOfArray, &[(VALUE_G2_ARRAY, g1)]).is_err());
 }

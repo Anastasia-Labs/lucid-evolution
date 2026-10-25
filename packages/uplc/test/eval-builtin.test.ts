@@ -28,10 +28,6 @@ const cases: {
 const hex = (bytes: string) => Uint8Array.from(Buffer.from(bytes, "hex"));
 
 const VAN_ROSSEM = 11;
-const FLAT = 0;
-const G1 = 1;
-const G2 = 2;
-const G1_LIST = 3;
 
 // The compressed BLS12-381 G1 and G2 generators.
 const G1_GENERATOR = hex(
@@ -47,6 +43,8 @@ const HEAD_LIST = 33;
 const TAIL_LIST = 34;
 const G1_NEG = 55;
 const G2_NEG = 62;
+const LIST_TO_ARRAY = 90;
+const INDEX_ARRAY = 91;
 
 // (program 1.1.0 (con integer 1)), (program 1.1.0 (con bool True)) and
 // (program 1.1.0 (lam x x)), flat-encoded.
@@ -60,6 +58,15 @@ const IDENTITY = hex("010100200101");
 
 for (const [build, uplc] of Object.entries({ speed, size })) {
   describe(`${build} build: eval_builtin_raw`, () => {
+    const {
+      Flat: FLAT,
+      G1,
+      G2,
+      G1List: G1_LIST,
+      G1Array: G1_ARRAY,
+    } = uplc.BuiltinValueKind;
+    const { Ok: OK, RejectedArguments: REJECTED } = uplc.BuiltinErrorKind;
+
     test.each(cases)(
       "$name",
       ({ tag, protocol, argKinds, argBytes, ...expected }) => {
@@ -130,6 +137,36 @@ for (const [build, uplc] of Object.entries({ speed, size })) {
         VAN_ROSSEM,
       );
       expect([tail.result_kind, tail.result]).toEqual([G1_LIST, G1_GENERATOR]);
+
+      const array = uplc.eval_builtin_raw(
+        LIST_TO_ARRAY,
+        [list],
+        Uint8Array.of(G1_LIST),
+        VAN_ROSSEM,
+      );
+      expect([array.error_kind, array.result_kind, array.result]).toEqual([
+        OK,
+        G1_ARRAY,
+        list,
+      ]);
+
+      const index = uplc.eval_builtin_raw(
+        INDEX_ARRAY,
+        [array.result, ONE],
+        Uint8Array.of(G1_ARRAY, FLAT),
+        VAN_ROSSEM,
+      );
+      expect([index.result_kind, index.result]).toEqual([G1, G1_GENERATOR]);
+    });
+
+    test("names its error kinds", () => {
+      const rejected = uplc.eval_builtin_raw(
+        ADD_INTEGER,
+        [ONE, TRUE],
+        Uint8Array.of(FLAT, FLAT),
+        VAN_ROSSEM,
+      );
+      expect([rejected.ok, rejected.error_kind]).toEqual([false, REJECTED]);
     });
 
     test("rejects malformed or unsupported inputs", () => {
@@ -156,8 +193,8 @@ for (const [build, uplc] of Object.entries({ speed, size })) {
         "addInteger takes 2 arguments but got 1",
       );
       expect(eval_(ADD_INTEGER, [ONE, ONE], [FLAT])).toThrow();
-      expect(eval_(ADD_INTEGER, [ONE, ONE], [FLAT, 5])).toThrow(
-        "Unknown argument kind 5",
+      expect(eval_(ADD_INTEGER, [ONE, ONE], [FLAT, 7])).toThrow(
+        "Unknown argument kind 7",
       );
 
       // Protocol versions without Plutus V3, or beyond the latest.
@@ -186,6 +223,9 @@ for (const [build, uplc] of Object.entries({ speed, size })) {
       expect(eval_(HEAD_LIST, [G1_GENERATOR.slice(1)], [G1_LIST])).toThrow(
         "not a multiple of 48",
       );
+      expect(
+        eval_(INDEX_ARRAY, [G1_GENERATOR.slice(1), ONE], [G1_ARRAY, FLAT]),
+      ).toThrow("not a multiple of 48");
     });
   });
 }
