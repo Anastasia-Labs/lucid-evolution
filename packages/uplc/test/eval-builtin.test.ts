@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
-import * as speed from "../src/speed/node/uplc_tx.js";
-import * as size from "../src/size/node/uplc_tx.js";
+import * as speed from "../src/speed/node.js";
+import * as size from "../src/size/node.js";
 
 // Applications of every builtin, at least one that returns a value and one
 // that fails, with the outcome and cost the machine gives for them under

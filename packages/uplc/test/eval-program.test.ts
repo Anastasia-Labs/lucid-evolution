@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
-import * as speed from "../src/speed/node/uplc_tx.js";
-import * as size from "../src/size/node/uplc_tx.js";
+import * as speed from "../src/speed/node.js";
+import * as size from "../src/size/node.js";
 
 const fixture = (name: string) =>
   JSON.parse(
