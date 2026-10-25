@@ -592,13 +592,13 @@ mod tests {
         .collect()
     }
 
+    /// Compares its two arguments and serialises the first, which walks every
+    /// node of both. It fails unless they are equal.
+    const COMPARE_AND_SERIALISE: &str = "(program 1.1.0 (lam a (lam b (force [(force (builtin ifThenElse)) [[(builtin equalsData) a] b] (delay [(lam r (con unit ())) [(builtin serialiseData) a]]) (delay (error))]))))";
+
     #[test]
     fn evaluates_deeply_nested_data_arguments() {
-        // Compares its two arguments and serialises the first, which walks
-        // every node of both.
-        let program = flat(
-            "(program 1.1.0 (lam a (lam b (force [(force (builtin ifThenElse)) [[(builtin equalsData) a] b] (delay [(lam r (con unit ())) [(builtin serialiseData) a]]) (delay (error))]))))",
-        );
+        let program = flat(COMPARE_AND_SERIALISE);
 
         for (name, data) in deep_data(100_000) {
             let result = eval_program(
@@ -615,6 +615,32 @@ mod tests {
 
             assert_eq!((name, result.error_kind), (name, EVAL_OK));
         }
+    }
+
+    #[test]
+    fn decodes_arguments_as_plutus_does() {
+        let compare = |a: &str, b: &str| {
+            eval_program(
+                &flat(COMPARE_AND_SERIALISE),
+                &[hex::decode(a).unwrap(), hex::decode(b).unwrap()],
+                3,
+                VAN_ROSSEM_PROTOCOL_VERSION,
+                &cost_model(),
+                u64::MAX >> 1,
+                u64::MAX >> 1,
+                false,
+            )
+        };
+
+        // A tag 102 constructor in an indefinite array ends at its own break,
+        // not at the break of the list holding it: both are [Constr 0 [], 1].
+        let result = compare("9fd8669f0080ff01ff", "9fd8798001ff").unwrap();
+        assert_eq!(result.error_kind, EVAL_OK);
+
+        // A big integer tag outside its head byte, and a tag 102 constructor
+        // that is not an (index, fields) pair, are not Data.
+        assert!(compare("d8024101", "01").is_err());
+        assert!(compare("d86683008000", "d87980").is_err());
     }
 
     #[test]
