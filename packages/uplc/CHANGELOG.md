@@ -1,5 +1,17 @@
 # @lucid-evolution/uplc
 
+## 0.5.0
+
+### Minor Changes
+
+- [#768](https://github.com/Anastasia-Labs/lucid-evolution/pull/768) [`9bee0d5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/9bee0d54036b8cb8a765c2ea3bb5c44b3a9ed4a2) Thanks [@colll78](https://github.com/colll78)! - Add `eval_builtin_raw`, which evaluates one builtin applied to constant arguments exactly as the pinned evaluator does for a Plutus V3 script at a given protocol version (9 to 12). Arguments and the result cross as flat-encoded constants, and BLS12-381 points (and lists and arrays of them) as their compressed bytes. The result says whether the builtin returned a value, how it failed (not available at that protocol version, arguments rejected before costing, or failed after costing), and the builtin's charge under Plutus' default Plutus V3 cost model, excluding the machine's per-step costs. `BuiltinValueKind` and `BuiltinErrorKind` name the codes of the argument and result kinds and of the error kind. `eval_program_raw` and `uplc_build_info` are unchanged.
+
+### Patch Changes
+
+- [#766](https://github.com/Anastasia-Labs/lucid-evolution/pull/766) [`863dc73`](https://github.com/Anastasia-Labs/lucid-evolution/commit/863dc73c66fa0297c1d6b3a15dfaa6d8f89f360d) Thanks [@colll78](https://github.com/colll78)! - `eval_program_raw` evaluates deeply nested `Data` arguments without exhausting the stack. Arguments are decoded straight into the evaluator's own `Data`, whose decoding, comparison, serialisation and release never recurse, instead of through pallas' recursive `PlutusData`, so an argument nested 100,000 levels deep evaluates like any other, in both the speed and size builds. Arguments are now decoded exactly as Plutus' `decodeData` decodes them. A byte string or big integer with a chunk of more than 64 bytes, a big integer tag outside the head of its own byte, or a tag 102 constructor that is not a pair of an index and fields is refused as an invalid argument, as it can never be Data on chain. A big integer in indefinite-length chunks and a tag 102 in a longer head, which pallas refused, are accepted. A tag 102 constructor in an indefinite-length array inside a list or map, which pallas closed one break too early and so decoded to different Data, now decodes to the Data Plutus decodes. Every other argument decodes to the same Data as before, with the same results and ex-units.
+
+- [#767](https://github.com/Anastasia-Labs/lucid-evolution/pull/767) [`05bcd09`](https://github.com/Anastasia-Labs/lucid-evolution/commit/05bcd092ad9da63939a37eabc2bd7204ac85401c) Thanks [@colll78](https://github.com/colll78)! - `rotateByteString` now runs in time linear in the length of its argument for every rotation amount. Before, rotating by a small negative amount took time quadratic in the length: about 16 s for a 128 KiB byte string. Results, ex-units and errors are unchanged.
+
 ## 0.4.0
 
 ### Minor Changes
