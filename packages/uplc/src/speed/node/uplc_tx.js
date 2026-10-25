@@ -265,6 +265,289 @@ module.exports.uplc_build_info = function() {
     }
 };
 
+/**
+ * Evaluates the builtin `tag` applied to `args` as a Plutus V3 script
+ * evaluates it at a protocol version, without any program around it: the
+ * result, or how it fails, is what the machine gives for the saturated
+ * application.
+ *
+ * - `tag`: the builtin's flat tag (0 for addInteger to 100 for scaleValue).
+ *   The Miller-loop builtins (68 to 70) are not supported, since their
+ *   results cannot be returned.
+ * - `args`: exactly the builtin's arguments, in order, each encoded as the
+ *   matching entry of `arg_kinds` says, a [`BuiltinValueKind`]: 0 for a
+ *   flat-encoded `(program 1.1.0 (con …))`, 1 for a compressed G1 point, 2
+ *   for a compressed G2 point, 3 for a list of G1 points, 4 for a list of G2
+ *   points, 5 for an array of G1 points and 6 for an array of G2 points, each
+ *   list or array as the compressed points one after the other. Flat cannot
+ *   encode BLS12-381 points, so they cross as their compressed bytes.
+ * - `protocol_major_version`: from 9 (Chang, which introduced Plutus V3) to
+ *   12 (Dijkstra). It decides which builtins are available and the semantics
+ *   they have.
+ *
+ * The result's `cpu` and `mem` are the builtin's charge for the application
+ * under Plutus' default Plutus V3 cost model (not the ledger's protocol
+ * parameters), excluding the machine's per-step costs.
+ *
+ * Fails only when the inputs are malformed or unsupported: an unknown or
+ * Miller-loop tag, a number of arguments other than the builtin's arity, an
+ * argument that does not decode as its kind says or is not a constant, an
+ * invalid compressed point, a protocol version out of range, or a result that
+ * none of the kinds can encode. A builtin that fails is an
+ * [`EvalBuiltinResult`] that is not `ok`.
+ * @param {number} tag
+ * @param {Uint8Array[]} args
+ * @param {Uint8Array} arg_kinds
+ * @param {number} protocol_major_version
+ * @returns {EvalBuiltinResult}
+ */
+module.exports.eval_builtin_raw = function(tag, args, arg_kinds, protocol_major_version) {
+    const ptr0 = passArrayJsValueToWasm0(args, wasm.__wbindgen_malloc);
+    const len0 = WASM_VECTOR_LEN;
+    const ptr1 = passArray8ToWasm0(arg_kinds, wasm.__wbindgen_malloc);
+    const len1 = WASM_VECTOR_LEN;
+    const ret = wasm.eval_builtin_raw(tag, ptr0, len0, ptr1, len1, protocol_major_version);
+    if (ret[2]) {
+        throw takeFromExternrefTable0(ret[1]);
+    }
+    return EvalBuiltinResult.__wrap(ret[0]);
+};
+
+/**
+ * Why the builtin given to [`eval_builtin_raw`] did not return a value: the
+ * codes of the result's `error_kind`.
+ * @enum {0 | 1 | 2 | 3}
+ */
+module.exports.BuiltinErrorKind = Object.freeze({
+    /**
+     * The builtin returned a value.
+     */
+    Ok: 0, "0": "Ok",
+    /**
+     * The builtin is not available to Plutus V3 at the protocol version.
+     */
+    NotAvailable: 1, "1": "NotAvailable",
+    /**
+     * The builtin did not accept its arguments, which fails the application
+     * before it is costed.
+     */
+    RejectedArguments: 2, "2": "RejectedArguments",
+    /**
+     * The builtin failed after it was costed.
+     */
+    Failed: 3, "3": "Failed",
+});
+/**
+ * How a value of [`eval_builtin_raw`] is encoded: the codes of its
+ * `arg_kinds` and of the result's `result_kind`.
+ * @enum {0 | 1 | 2 | 3 | 4 | 5 | 6}
+ */
+module.exports.BuiltinValueKind = Object.freeze({
+    /**
+     * A flat-encoded program whose body is a constant,
+     * `(program 1.1.0 (con …))`. A result in this form is always version
+     * 1.1.0.
+     */
+    Flat: 0, "0": "Flat",
+    /**
+     * A BLS12-381 G1 point, as its 48-byte compressed encoding.
+     */
+    G1: 1, "1": "G1",
+    /**
+     * A BLS12-381 G2 point, as its 96-byte compressed encoding.
+     */
+    G2: 2, "2": "G2",
+    /**
+     * A list of BLS12-381 G1 points, as their compressed encodings one after
+     * the other.
+     */
+    G1List: 3, "3": "G1List",
+    /**
+     * A list of BLS12-381 G2 points, as their compressed encodings one after
+     * the other.
+     */
+    G2List: 4, "4": "G2List",
+    /**
+     * An array of BLS12-381 G1 points, as their compressed encodings one after
+     * the other.
+     */
+    G1Array: 5, "5": "G1Array",
+    /**
+     * An array of BLS12-381 G2 points, as their compressed encodings one after
+     * the other.
+     */
+    G2Array: 6, "6": "G2Array",
+});
+
+const EvalBuiltinResultFinalization = (typeof FinalizationRegistry === 'undefined')
+    ? { register: () => {}, unregister: () => {} }
+    : new FinalizationRegistry(ptr => wasm.__wbg_evalbuiltinresult_free(ptr >>> 0, 1));
+/**
+ * The outcome of [`eval_builtin_raw`].
+ */
+class EvalBuiltinResult {
+
+    static __wrap(ptr) {
+        ptr = ptr >>> 0;
+        const obj = Object.create(EvalBuiltinResult.prototype);
+        obj.__wbg_ptr = ptr;
+        EvalBuiltinResultFinalization.register(obj, obj.__wbg_ptr, obj);
+        return obj;
+    }
+
+    __destroy_into_raw() {
+        const ptr = this.__wbg_ptr;
+        this.__wbg_ptr = 0;
+        EvalBuiltinResultFinalization.unregister(this);
+        return ptr;
+    }
+
+    free() {
+        const ptr = this.__destroy_into_raw();
+        wasm.__wbg_evalbuiltinresult_free(ptr, 0);
+    }
+    /**
+     * Whether the builtin returned a value.
+     * @returns {boolean}
+     */
+    get ok() {
+        const ret = wasm.__wbg_get_evalbuiltinresult_ok(this.__wbg_ptr);
+        return ret !== 0;
+    }
+    /**
+     * Whether the builtin returned a value.
+     * @param {boolean} arg0
+     */
+    set ok(arg0) {
+        wasm.__wbg_set_evalbuiltinresult_ok(this.__wbg_ptr, arg0);
+    }
+    /**
+     * Why the builtin did not return a value, a [`BuiltinErrorKind`]: 0 when
+     * it did, 1 when it is not available to Plutus V3 at the protocol version,
+     * 2 when it did not accept its arguments (so the machine fails before
+     * costing it) and 3 when it failed after being costed.
+     * @returns {number}
+     */
+    get error_kind() {
+        const ret = wasm.__wbg_get_evalbuiltinresult_error_kind(this.__wbg_ptr);
+        return ret;
+    }
+    /**
+     * Why the builtin did not return a value, a [`BuiltinErrorKind`]: 0 when
+     * it did, 1 when it is not available to Plutus V3 at the protocol version,
+     * 2 when it did not accept its arguments (so the machine fails before
+     * costing it) and 3 when it failed after being costed.
+     * @param {number} arg0
+     */
+    set error_kind(arg0) {
+        wasm.__wbg_set_evalbuiltinresult_error_kind(this.__wbg_ptr, arg0);
+    }
+    /**
+     * How `result` encodes the value, a [`BuiltinValueKind`] as for the
+     * arguments of [`eval_builtin_raw`]; 0 when there is no value.
+     * @returns {number}
+     */
+    get result_kind() {
+        const ret = wasm.__wbg_get_evalbuiltinresult_result_kind(this.__wbg_ptr);
+        return ret;
+    }
+    /**
+     * How `result` encodes the value, a [`BuiltinValueKind`] as for the
+     * arguments of [`eval_builtin_raw`]; 0 when there is no value.
+     * @param {number} arg0
+     */
+    set result_kind(arg0) {
+        wasm.__wbg_set_evalbuiltinresult_result_kind(this.__wbg_ptr, arg0);
+    }
+    /**
+     * The value the builtin returned; empty when there is none.
+     * @returns {Uint8Array}
+     */
+    get result() {
+        const ret = wasm.__wbg_get_evalbuiltinresult_result(this.__wbg_ptr);
+        var v1 = getArrayU8FromWasm0(ret[0], ret[1]).slice();
+        wasm.__wbindgen_free(ret[0], ret[1] * 1, 1);
+        return v1;
+    }
+    /**
+     * The value the builtin returned; empty when there is none.
+     * @param {Uint8Array} arg0
+     */
+    set result(arg0) {
+        const ptr0 = passArray8ToWasm0(arg0, wasm.__wbindgen_malloc);
+        const len0 = WASM_VECTOR_LEN;
+        wasm.__wbg_set_evalbuiltinresult_result(this.__wbg_ptr, ptr0, len0);
+    }
+    /**
+     * The CPU the builtin's cost model charges for this application, under
+     * Plutus' default cost model for Plutus V3 at the protocol version; 0
+     * when the builtin was not costed (error kinds 1 and 2). It leaves out the
+     * machine's own step costs for evaluating the application (the builtin,
+     * each force and each apply).
+     * @returns {bigint}
+     */
+    get cpu() {
+        const ret = wasm.__wbg_get_evalbuiltinresult_cpu(this.__wbg_ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+     * The CPU the builtin's cost model charges for this application, under
+     * Plutus' default cost model for Plutus V3 at the protocol version; 0
+     * when the builtin was not costed (error kinds 1 and 2). It leaves out the
+     * machine's own step costs for evaluating the application (the builtin,
+     * each force and each apply).
+     * @param {bigint} arg0
+     */
+    set cpu(arg0) {
+        wasm.__wbg_set_evalbuiltinresult_cpu(this.__wbg_ptr, arg0);
+    }
+    /**
+     * The memory the builtin's cost model charges for this application; see
+     * `cpu`.
+     * @returns {bigint}
+     */
+    get mem() {
+        const ret = wasm.__wbg_get_evalbuiltinresult_mem(this.__wbg_ptr);
+        return BigInt.asUintN(64, ret);
+    }
+    /**
+     * The memory the builtin's cost model charges for this application; see
+     * `cpu`.
+     * @param {bigint} arg0
+     */
+    set mem(arg0) {
+        wasm.__wbg_set_evalbuiltinresult_mem(this.__wbg_ptr, arg0);
+    }
+    /**
+     * The evaluator's description of why the builtin did not return a value;
+     * empty when it did.
+     * @returns {string}
+     */
+    get error() {
+        let deferred1_0;
+        let deferred1_1;
+        try {
+            const ret = wasm.__wbg_get_evalbuiltinresult_error(this.__wbg_ptr);
+            deferred1_0 = ret[0];
+            deferred1_1 = ret[1];
+            return getStringFromWasm0(ret[0], ret[1]);
+        } finally {
+            wasm.__wbindgen_free(deferred1_0, deferred1_1, 1);
+        }
+    }
+    /**
+     * The evaluator's description of why the builtin did not return a value;
+     * empty when it did.
+     * @param {string} arg0
+     */
+    set error(arg0) {
+        const ptr0 = passStringToWasm0(arg0, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        const len0 = WASM_VECTOR_LEN;
+        wasm.__wbg_set_evalbuiltinresult_error(this.__wbg_ptr, ptr0, len0);
+    }
+}
+module.exports.EvalBuiltinResult = EvalBuiltinResult;
+
 const EvalProgramResultFinalization = (typeof FinalizationRegistry === 'undefined')
     ? { register: () => {}, unregister: () => {} }
     : new FinalizationRegistry(ptr => wasm.__wbg_evalprogramresult_free(ptr >>> 0, 1));
@@ -315,7 +598,7 @@ class EvalProgramResult {
      * @returns {bigint}
      */
     get cpu() {
-        const ret = wasm.__wbg_get_evalprogramresult_cpu(this.__wbg_ptr);
+        const ret = wasm.__wbg_get_evalbuiltinresult_cpu(this.__wbg_ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
@@ -324,14 +607,14 @@ class EvalProgramResult {
      * @param {bigint} arg0
      */
     set cpu(arg0) {
-        wasm.__wbg_set_evalprogramresult_cpu(this.__wbg_ptr, arg0);
+        wasm.__wbg_set_evalbuiltinresult_cpu(this.__wbg_ptr, arg0);
     }
     /**
      * The memory the program used.
      * @returns {bigint}
      */
     get mem() {
-        const ret = wasm.__wbg_get_evalprogramresult_mem(this.__wbg_ptr);
+        const ret = wasm.__wbg_get_evalbuiltinresult_mem(this.__wbg_ptr);
         return BigInt.asUintN(64, ret);
     }
     /**
@@ -339,7 +622,7 @@ class EvalProgramResult {
      * @param {bigint} arg0
      */
     set mem(arg0) {
-        wasm.__wbg_set_evalprogramresult_mem(this.__wbg_ptr, arg0);
+        wasm.__wbg_set_evalbuiltinresult_mem(this.__wbg_ptr, arg0);
     }
     /**
      * Why the program did not succeed: 0 when it did, 1 when it went over
