@@ -22,6 +22,12 @@ pallas-crypto = "0.35.0"
 # required for wasm usage of getrandom
 getrandom = { version = "0.2", features = ["js"] }
 
+# Flat big words in linear time (colll78/pallas midgard/codec-linear-big-word,
+# pallas-codec 0.35.1 plus txpipe/pallas#839). Remove once uplc depends on a
+# pallas-codec release that includes it.
+[patch.crates-io]
+pallas-codec = { git = "https://github.com/colll78/pallas", rev = "5a798c20653ab99fc377fbbb2a2aeb88b4e1c616" }
+
 [profile.release]
 codegen-units = 1
 opt-level = 3

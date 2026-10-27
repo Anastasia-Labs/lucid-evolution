@@ -536,8 +536,7 @@ dependencies = [
 [[package]]
 name = "pallas-codec"
 version = "0.35.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "afff0c114bc5ff0e5bf95b6b151a664da57c259ab266bcff6587faad91a064d2"
+source = "git+https://github.com/colll78/pallas?rev=5a798c20653ab99fc377fbbb2a2aeb88b4e1c616#5a798c20653ab99fc377fbbb2a2aeb88b4e1c616"
 dependencies = [
  "hex",
  "minicbor",
