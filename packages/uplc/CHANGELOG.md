@@ -1,5 +1,11 @@
 # @lucid-evolution/uplc
 
+## 0.5.2
+
+### Patch Changes
+
+- [#772](https://github.com/Anastasia-Labs/lucid-evolution/pull/772) [`f2c178c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f2c178c9ec345f64b94dcb48e4f72d8e44f28f70) Thanks [@colll78](https://github.com/colll78)! - Flat-encoding and decoding a large integer constant now takes time linear in its size. Before, both were quadratic: about 0.3 s to encode and 0.4 s to decode a 64 KiB integer, against about 2 ms and 1 ms now. This applies to programs, script parameters and `eval_builtin_raw` arguments and results. Results, ex-units and errors are unchanged. The fix is in `pallas-codec`, patched to `colll78/pallas` until a release includes it (txpipe/pallas#839).
+
 ## 0.5.1
 
 ### Patch Changes
