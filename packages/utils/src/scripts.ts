@@ -15,16 +15,10 @@ import { networkToId } from "./network.js";
 import { applyDoubleCborEncoding } from "./cbor.js";
 import { ScriptCache } from "./script-cache.js";
 import { Data } from "@lucid-evolution/plutus";
-import {
-  Application,
-  encodeUPLC,
-  parseUPLC,
-  UPLCConst,
-  UPLCProgram,
-} from "@harmoniclabs/uplc";
+import * as UPLC from "@lucid-evolution/uplc";
 import { fromHex, toHex, withCMLScope } from "@lucid-evolution/core-utils";
 import { decode } from "cbor-x";
-import { dataFromCbor } from "@harmoniclabs/plutus-data";
+import { bytestringHeaderHex } from "./bytestring.js";
 
 export function validatorToAddress(
   network: Network,
@@ -294,27 +288,26 @@ export function mintingPolicyToId(mintingPolicy: MintingPolicy): PolicyId {
  * Applies a list of parameters, in the form of the `Data` type, to a CBOR encoded script.
  *
  * The `plutusScript` must be double CBOR encoded(bytes). Ensure to use the `applyDoubleCborEncoding` function.
+ *
+ * Each parameter is applied as a data constant holding its `Data.to` encoding.
+ * Returns the applied script, double CBOR encoded.
  */
 export function applyParamsToScript<T extends unknown[] = Data[]>(
   plutusScript: string,
   params: Exact<[...T]>,
   type?: T,
 ): string {
-  const program = parseUPLC(
-    decode(decode(fromHex(applyDoubleCborEncoding(plutusScript)))),
-    "flat",
+  const flat: Uint8Array = decode(
+    decode(fromHex(applyDoubleCborEncoding(plutusScript))),
   );
   const parameters = (type ? Data.castTo<T>(params, type) : params) as Data[];
-  const appliedProgram = parameters.reduce((body, currentParameter) => {
-    const data = UPLCConst.data(dataFromCbor(Data.to(currentParameter)));
-    const appliedParameter = new Application(body, data);
-    return appliedParameter;
-  }, program.body);
-
-  return applyDoubleCborEncoding(
-    toHex(
-      encodeUPLC(new UPLCProgram(program.version, appliedProgram)).toBuffer()
-        .buffer,
-    ),
+  // An indefinite-length CBOR array of the parameters.
+  const parametersCbor = fromHex(
+    "9f" + parameters.map((parameter) => Data.to(parameter)).join("") + "ff",
   );
+  const applied = UPLC.apply_params_to_script(
+    parametersCbor,
+    fromHex(bytestringHeaderHex(flat.length) + toHex(flat)),
+  );
+  return bytestringHeaderHex(applied.length) + toHex(applied);
 }
