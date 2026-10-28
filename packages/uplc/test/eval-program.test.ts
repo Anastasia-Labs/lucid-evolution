@@ -157,6 +157,27 @@ for (const [build, uplc] of Object.entries({ speed, size })) {
       },
     );
 
+    test("decodes a general constr in a list up to its own break", () => {
+      const compare = (a: string, b: string) =>
+        uplc.eval_program_raw(
+          COMPARE_AND_SERIALISE,
+          [Buffer.from(a, "hex"), Buffer.from(b, "hex")],
+          PLUTUS_V3,
+          VAN_ROSSEM,
+          costModel,
+          BUDGET.cpu,
+          BUDGET.mem,
+          false,
+        ).error_kind;
+
+      // [Constr 128 [], 5], with the constructor in the indefinite and the
+      // definite form: the 5 after the constructor stays in the list.
+      expect(compare("9fd8669f188080ff05ff", "9fd8668218808005ff")).toBe(0);
+      expect(compare("9fd8669f188080ff05ff", "9fd86682188080ff")).toBe(2);
+      // {Constr 128 []: 5}: the 5 is the constructor's value.
+      expect(compare("a1d8669f188080ff05", "a1d8668218808005")).toBe(0);
+    });
+
     test("rejects an unknown Plutus version", () => {
       expect(() =>
         uplc.eval_program_raw(
