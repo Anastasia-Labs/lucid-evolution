@@ -3,6 +3,7 @@ import { CML } from "./core.js";
 import { Datum, DatumJson } from "@lucid-evolution/core-types";
 import { decode, encode } from "cbor-x";
 import { ScriptCache } from "./script-cache.js";
+import { bytestringHeaderHex } from "./bytestring.js";
 
 // 1st byte (58) 0101(major type 2) , 1000 (additional info)
 // 2n byte byte represents the lenght of the content
@@ -133,16 +134,6 @@ const bytestringLayers = (script: string): 0 | 1 | 2 | undefined => {
   if (inner === undefined) return undefined;
   return inner.span === length - outer.headerLength ? 2 : 1;
 };
-
-/** The header cbor-x writes in front of a bytestring of `length` bytes. */
-const bytestringHeaderHex = (length: number): string => {
-  if (length < 0x18) return byteHex(0x40 + length);
-  if (length < 0x100) return "58" + byteHex(length);
-  if (length < 0x10000) return "59" + length.toString(16).padStart(4, "0");
-  return "5a" + length.toString(16).padStart(8, "0");
-};
-
-const byteHex = (byte: number): string => byte.toString(16).padStart(2, "0");
 
 export const applySingleCborEncoding = (script: string) => {
   try {
