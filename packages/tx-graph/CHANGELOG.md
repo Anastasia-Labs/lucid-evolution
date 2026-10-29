@@ -1,5 +1,12 @@
 # @lucid-evolution/tx-graph
 
+## 0.1.7
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @lucid-evolution/utils@0.2.7
+
 ## 0.1.6
 
 ### Patch Changes
