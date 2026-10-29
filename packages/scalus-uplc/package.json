@@ -10,6 +10,17 @@
       "types": "./dist/index.d.ts",
       "require": "./dist/index.cjs",
       "import": "./dist/index.js"
+    },
+    "./emulator": {
+      "types": "./dist/emulator.d.ts",
+      "import": "./dist/emulator.js"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "emulator": [
+        "./dist/emulator.d.ts"
+      ]
     }
   },
   "files": [
@@ -19,7 +30,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean && tsup src/emulator.ts --format esm --dts",
     "lint": "tsc --noEmit",
     "test": "vitest run",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
@@ -34,11 +45,14 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@lucid-evolution/cml": "workspace:*",
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
-    "scalus": "^1.3.0"
+    "scalus": "^1.4.0"
   },
   "devDependencies": {
+    "@lucid-evolution/provider": "workspace:*",
+    "@lucid-evolution/utils": "workspace:*",
     "@types/node": "^20.12.8",
     "tsup": "^8.0.2",
     "typescript": "^5.4.5",

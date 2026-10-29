@@ -81,9 +81,11 @@ describe("scalus evaluator adapter", () => {
   });
 
   test("maps every redeemer tag Scalus can produce", () => {
-    expect(mapScalusTag("Spend")).toBe("spend");
-    expect(mapScalusTag("Cert")).toBe("publish");
-    expect(mapScalusTag("Reward")).toBe("withdraw");
+    expect(
+      ["Spend", "Mint", "Cert", "Reward", "Voting", "Proposing"].map(
+        mapScalusTag,
+      ),
+    ).toEqual(["spend", "mint", "publish", "withdraw", "vote", "propose"]);
     // An unknown tag is an error rather than a default, so a tag added upstream cannot silently
     // become a spend redeemer.
     expect(() => mapScalusTag("Nonsense")).toThrow(/Unknown Scalus redeemer/);

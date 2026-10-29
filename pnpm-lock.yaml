@@ -452,6 +452,9 @@ importers:
 
   packages/scalus-uplc:
     dependencies:
+      '@lucid-evolution/cml':
+        specifier: workspace:*
+        version: link:../cml
       '@lucid-evolution/core-types':
         specifier: workspace:*
         version: link:../core-types
@@ -459,9 +462,15 @@ importers:
         specifier: workspace:*
         version: link:../core-utils
       scalus:
-        specifier: ^1.3.0
-        version: 1.3.0
+        specifier: ^1.4.0
+        version: 1.4.0
     devDependencies:
+      '@lucid-evolution/provider':
+        specifier: workspace:*
+        version: link:../provider
+      '@lucid-evolution/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@types/node':
         specifier: ^20.12.8
         version: 20.17.58
@@ -5661,8 +5670,8 @@ packages:
   safer-buffer@2.1.2:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
 
-  scalus@1.3.0:
-    resolution: {integrity: sha512-D2Z+wuQS1hEr2r2nWRkhvI2If9n8PdKH8/PpnP+ijo+mkDDKOprU5GvjccH9F7LBEfj8uCY73wBc2wSWu+MA2w==}
+  scalus@1.4.0:
+    resolution: {integrity: sha512-KhXTqa7JphHot/WKGbeaw4/kmysuYbefkUdx7GU5K+hoqd4eQVInHKcPTk57wRipBwhRPWFOpBE9HuvQNCQvqQ==}
     engines: {node: '>=18'}
 
   scheduler@0.23.2:
@@ -12933,7 +12942,7 @@ snapshots:
 
   safer-buffer@2.1.2: {}
 
-  scalus@1.3.0: {}
+  scalus@1.4.0: {}
 
   scheduler@0.23.2:
     dependencies:

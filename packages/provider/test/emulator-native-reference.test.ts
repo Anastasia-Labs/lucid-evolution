@@ -6,6 +6,7 @@ import {
   Emulator,
   generateEmulatorAccountFromPrivateKey,
 } from "../src/index.js";
+import { addUtxo } from "./add-utxo.js";
 
 /*
   A native script supplied through a script reference (rather than the
@@ -36,18 +37,15 @@ const setup = (scriptSigner: "account" | "other") => {
     type: "Native",
     script: CML.NativeScript.new_script_pubkey(signerHash).to_cbor_hex(),
   };
-  emulator.ledger[SCRIPT_UTXO_HASH + 0] = {
-    utxo: {
-      txHash: SCRIPT_UTXO_HASH,
-      outputIndex: 0,
-      address: validatorToAddress("Custom", nativeScript),
-      assets: { lovelace: 10_000_000n },
-      datumHash: undefined,
-      datum: undefined,
-      scriptRef: nativeScript,
-    },
-    spent: false,
-  };
+  addUtxo(emulator, {
+    txHash: SCRIPT_UTXO_HASH,
+    outputIndex: 0,
+    address: validatorToAddress("Custom", nativeScript),
+    assets: { lovelace: 10_000_000n },
+    datumHash: undefined,
+    datum: undefined,
+    scriptRef: nativeScript,
+  });
 
   // Spends the account coin and the script coin; the native script is only
   // available as the script coin's reference script.
