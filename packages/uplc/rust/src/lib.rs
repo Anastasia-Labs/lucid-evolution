@@ -645,6 +645,56 @@ mod tests {
         assert!(compare("d86683008000", "d87980").is_err());
     }
 
+    /// Applies the parameters, given as a CBOR array of Data, to a program of
+    /// two parameters.
+    fn apply_params(params: &str) -> Vec<u8> {
+        let script = Program::<DeBruijn>::try_from(
+            uplc::parser::program("(program 1.1.0 (lam a (lam b (con unit ()))))").unwrap(),
+        )
+        .unwrap()
+        .to_cbor()
+        .unwrap();
+
+        apply_params_to_script(&hex::decode(params).unwrap(), &script).unwrap()
+    }
+
+    /// The program of two parameters applied to `arguments`, CBOR-wrapped.
+    fn applied_to(arguments: &str) -> Vec<u8> {
+        Program::<DeBruijn>::try_from(
+            uplc::parser::program(&format!(
+                "(program 1.1.0 {})",
+                arguments.split(" , ").fold(
+                    "(lam a (lam b (con unit ())))".to_string(),
+                    |program, argument| format!("[{program} (con data {argument})]")
+                )
+            ))
+            .unwrap(),
+        )
+        .unwrap()
+        .to_cbor()
+        .unwrap()
+    }
+
+    #[test]
+    fn applies_each_parameter_after_a_general_constr() {
+        // [Constr 128 [], 1], the constructor in the indefinite form: two
+        // parameters.
+        assert_eq!(
+            apply_params("9fd8669f188080ff01ff"),
+            applied_to("(Constr 128 []) , (I 1)")
+        );
+        // The same in the definite form.
+        assert_eq!(
+            apply_params("9fd8668218808001ff"),
+            applied_to("(Constr 128 []) , (I 1)")
+        );
+        // [[Constr 128 [], 5]]: one parameter, a list.
+        assert_eq!(
+            apply_params("9f9fd8669f188080ff05ffff"),
+            applied_to("(List [Constr 128 [], I 5])")
+        );
+    }
+
     #[test]
     fn tells_why_a_program_did_not_succeed() {
         let returns_true = flat("(program 1.1.0 (lam ctx (con bool True)))");

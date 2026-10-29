@@ -22,11 +22,15 @@ pallas-crypto = "0.35.0"
 # required for wasm usage of getrandom
 getrandom = { version = "0.2", features = ["js"] }
 
-# Flat big words in linear time (colll78/pallas midgard/codec-linear-big-word,
-# pallas-codec 0.35.1 plus txpipe/pallas#839). Remove once uplc depends on a
-# pallas-codec release that includes it.
+# pallas 0.35.1 plus flat big words in linear time (txpipe/pallas#839) and
+# tag 102 Plutus Data constrs decoded in the indefinite form (colll78/pallas
+# fix/plutus-data-tag-102-indefinite). pallas-crypto is patched with them so
+# that every pallas crate shares one pallas-codec. Remove once uplc depends on
+# a pallas release that includes both.
 [patch.crates-io]
-pallas-codec = { git = "https://github.com/colll78/pallas", rev = "5a798c20653ab99fc377fbbb2a2aeb88b4e1c616" }
+pallas-codec = { git = "https://github.com/colll78/pallas", rev = "50f208edcb127da3f6f63bc3e630f163f267c492" }
+pallas-crypto = { git = "https://github.com/colll78/pallas", rev = "50f208edcb127da3f6f63bc3e630f163f267c492" }
+pallas-primitives = { git = "https://github.com/colll78/pallas", rev = "50f208edcb127da3f6f63bc3e630f163f267c492" }
 
 [profile.release]
 codegen-units = 1
