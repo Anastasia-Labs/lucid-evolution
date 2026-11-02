@@ -2,6 +2,7 @@ import * as Record from "effect/Record";
 import { pipe } from "effect/Function";
 import * as CoreType from "@lucid-evolution/core-types";
 import { applySingleCborEncoding } from "@lucid-evolution/utils";
+import { toOgmiosQuantity } from "./ogmios.js";
 
 /**
  * Blockfrost only supports Ogmios 5.6
@@ -64,7 +65,7 @@ export const toAditionalUTXOs = (
     {
       address: utxo.address,
       value: {
-        ada: { lovelace: Number(utxo.assets["lovelace"]) },
+        ada: { lovelace: toOgmiosQuantity(utxo.assets["lovelace"]) },
         ...fromAssets(utxo.assets),
       },
       datumHash: utxo.datumHash,
@@ -97,7 +98,7 @@ export const fromAssets = (assets: CoreType.Assets) =>
       const policyId = unit.slice(0, 56);
       const assetName = unit.slice(56);
       result[policyId] ??= {};
-      result[policyId][assetName] = Number(amount);
+      result[policyId][assetName] = toOgmiosQuantity(amount);
     }
     return result;
   });

@@ -82,6 +82,22 @@ describe("Blockfrost transaction evaluation", () => {
     expect(txOut).toMatchObject({ datum: "d87980" });
   });
 
+  test.each([
+    ["lovelace", { lovelace: BigInt(Number.MAX_SAFE_INTEGER) + 1n }],
+    [
+      "native asset",
+      {
+        lovelace: 1n,
+        [`${"11".repeat(28)}${"4c75636964"}`]:
+          BigInt(Number.MAX_SAFE_INTEGER) + 1n,
+      },
+    ],
+  ])("rejects an unsafe %s quantity instead of rounding it", (_, assets) => {
+    expect(() =>
+      _Blockfrost.toAditionalUTXOs([{ ...nativeAssetUtxo, assets }]),
+    ).toThrow(/non-negative safe integers/);
+  });
+
   test("evaluates without additional UTxOs first when Blockfrost can resolve inputs", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(
       new Response(JSON.stringify(evaluationResult), {
@@ -138,6 +154,30 @@ describe("Blockfrost transaction evaluation", () => {
       ada: { lovelace: 1_500_000 },
       ["11".repeat(28)]: { "4c75636964": 7 },
     });
+  });
+});
+
+describe("Blockfrost refusals", () => {
+  test("names the reason when protocol parameters are refused", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          status_code: 403,
+          error: "Forbidden",
+          message: "Invalid project token.",
+        }),
+        { status: 403, headers: { "content-type": "application/json" } },
+      ),
+    );
+
+    await expect(
+      new Blockfrost(
+        "https://blockfrost.test",
+        "wrong",
+      ).getProtocolParameters(),
+    ).rejects.toThrow(
+      "Could not fetch protocol parameters from Blockfrost: Invalid project token.",
+    );
   });
 });
 
