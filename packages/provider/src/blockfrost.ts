@@ -31,10 +31,10 @@ import * as _Blockfrost from "./internal/blockfrost.js";
  * Default per-request timeout. Without one a stalled Blockfrost connection
  * waits for the runtime's own socket timeout, which is five minutes under Node.
  */
-const DEFAULT_REQUEST_TIMEOUT_MS = 30 000;
+const DEFAULT_REQUEST_TIMEOUT_MS = 30_000;
 
 export interface BlockfrostOptions {
-  /** Abort any single request after this many milliseconds. Defaults to 30000. */
+  /** Abort any single request after this many milliseconds. Defaults to 30 000. */
   readonly requestTimeoutMs?: number;
 }
 
