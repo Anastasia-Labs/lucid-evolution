@@ -1,0 +1,17 @@
+## Insight
+
+[Insight](https://insight.iagon.com) by Iagon serves the Blockfrost API on mainnet and preprod, so Lucid uses its Blockfrost provider with Insight's endpoints.
+
+Usage example to initialize Lucid with Insight:
+
+```typescript
+import { Lucid, Insight } from "@lucid-evolution/lucid";
+
+const lucid = await Lucid(
+  new Insight({
+    network: "Preprod", // For MAINNET: "Mainnet" (1)
+    apiKey: "<insight-api-key>", // Get yours at https://insight.iagon.com
+  }),
+  "Preprod" // For MAINNET: "Mainnet" (2)
+);
+```
