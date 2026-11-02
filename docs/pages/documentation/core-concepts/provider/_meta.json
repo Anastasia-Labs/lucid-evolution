@@ -2,6 +2,7 @@
   "blockfrost": "Blockfrost",
   "kupmios": "Kupmios",
   "koios": "Koios",
+  "insight": "Insight",
   "yaci-devkit": "YACI DevKit",
   "utxo-rpc": "UTxORPC",
   "common-queries": "Common Queries"
