@@ -34,7 +34,7 @@ import * as _Blockfrost from "./internal/blockfrost.js";
 const DEFAULT_REQUEST_TIMEOUT_MS = 30_000;
 
 export interface BlockfrostOptions {
-  /** Abort any single request after this many milliseconds. Defaults to 30 000. */
+  /** Abort any single request after this many milliseconds. Defaults to 30000. */
   readonly requestTimeoutMs?: number;
 }
 
@@ -85,6 +85,11 @@ export class Blockfrost implements Provider {
     const result = await this.fetch(`${this.url}/epochs/latest/parameters`, {
       headers: { project_id: this.projectId, lucid },
     }).then((res) => res.json());
+    if (!result || result.error) {
+      throw new Error(
+        `Could not fetch protocol parameters from Blockfrost: ${result?.message ?? result?.error ?? "no response"}`,
+      );
+    }
     return {
       protocolMajorVersion: parseInt(result.protocol_major_ver),
       protocolMinorVersion: parseInt(result.protocol_minor_ver),
