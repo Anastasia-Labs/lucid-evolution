@@ -288,7 +288,7 @@ export type UTxO = {
   script?: Script | null;
 };
 
-const toOgmiosQuantity = (amount: bigint): number => {
+export const toOgmiosQuantity = (amount: bigint): number => {
   const quantity = Number(amount);
   if (amount < 0n || !Number.isSafeInteger(quantity)) {
     throw new Error(
