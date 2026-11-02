@@ -69,11 +69,13 @@ Under `packages/provider`, create an `.env` file with the following variables:
 ```
 VITE_KUPO_URL="your_kupo_endpoint_url"
 VITE_OGMIOS_URL="your_ogmios_endpoint_url"
+VITE_INSIGHT_KEY_PREPROD="your_insight_preprod_key"
 ```
 
 #### Step 2: Obtain Required Keys
 
 - **Blockfrost**: Register at [blockfrost.io](https://blockfrost.io) to get API keys for both Preprod and Mainnet
+- **Insight**: Get an API key at [insight.iagon.com](https://insight.iagon.com), the same key works on mainnet and preprod
 - **Kupo & Ogmios**: For these services, you'll need the full authenticated HTTP endpoint URLs, not just API keys. You can run these services locally or use a provider that offers them.
 - **Test Wallet**: Create a test wallet with funds on the Preprod network for on-chain tests
 

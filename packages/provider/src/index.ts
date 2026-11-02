@@ -9,3 +9,4 @@ export * from "./blockfrost.js";
 export * from "./kupmios.js";
 export * from "./emulator.js";
 export * from "./koios.js";
+export * from "./insight.js";
