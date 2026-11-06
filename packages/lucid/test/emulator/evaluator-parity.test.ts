@@ -1,7 +1,12 @@
 import { describe, expect, test } from "vitest";
 import { Effect, Layer, pipe } from "effect";
 import { createScalusEvaluator } from "@lucid-evolution/scalus-uplc";
-import { EvaluationInput, EvaluatorAdapter, Lucid } from "../../src/index.js";
+import {
+  EvaluationInput,
+  EvaluatorAdapter,
+  Lucid,
+  makeAikenEvaluator,
+} from "../../src/index.js";
 import { HelloContract } from "../specs/services.js";
 import { User } from "./service/EmulatorUser.js";
 import { EmulatorInstance } from "./service/EmulatorInstance.js";
@@ -221,4 +226,42 @@ describe("emulator evaluator parity", () => {
       }
     },
   );
+});
+
+describe("transaction budget parity", () => {
+  test("Aiken and Scalus both reject scripts over the transaction budget", async () => {
+    const evaluated: EvaluationInput[] = [];
+    const exit = await runCase(
+      Effect.gen(function* () {
+        yield* HelloExecutor.depositFunds;
+        yield* HelloExecutor.collectFromReadFrom;
+      }),
+      makeScalusEnvironment(evaluated),
+      true,
+    );
+    expect(exit._tag).toBe("Success");
+    const input = evaluated.at(-1)!;
+    expect(input).toBeDefined();
+
+    // The same request, with a ledger budget far below what the Hello script spends.
+    const overBudget: EvaluationInput = {
+      ...input,
+      context: {
+        ...input.context,
+        protocolParameters: {
+          ...input.context.protocolParameters,
+          maxTxExMem: 1n,
+          maxTxExSteps: 1n,
+        },
+      },
+    };
+    await expect(makeAikenEvaluator().evaluate(input)).resolves.not.toEqual([]);
+    await expect(createScalusEvaluator().evaluate(input)).resolves.not.toEqual(
+      [],
+    );
+    await expect(makeAikenEvaluator().evaluate(overBudget)).rejects.toThrow();
+    await expect(
+      createScalusEvaluator().evaluate(overBudget),
+    ).rejects.toThrow();
+  });
 });

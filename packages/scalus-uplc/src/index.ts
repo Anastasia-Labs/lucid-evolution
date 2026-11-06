@@ -10,7 +10,7 @@ import {
   UTxO,
 } from "@lucid-evolution/core-types";
 import { fromHex } from "@lucid-evolution/core-utils";
-import type { Utxo, Value } from "scalus";
+import type { ScriptCache, TxEvaluator, Utxo, Value } from "scalus";
 
 type Scalus = typeof import("scalus");
 let scalusModule: Promise<Scalus> | undefined;
@@ -136,15 +136,25 @@ const sameCostModels = (
     );
   });
 
-type ScalusRequest = {
-  tx: Uint8Array;
-  utxos: readonly UTxO[];
+/** Everything a `TxEvaluator` is built from. */
+type EvaluationParameters = {
   costModels: CostModelsSnapshot;
   zeroTime: number;
   zeroSlot: number;
   slotLength: number;
   protocolMajorVersion: number;
+  maxTxExMem: bigint;
+  maxTxExSteps: bigint;
 };
+
+type ScalusRequest = {
+  tx: Uint8Array;
+  utxos: readonly UTxO[];
+  parameters: EvaluationParameters;
+};
+
+/** How many scripts an evaluator keeps decoded, across all its `TxEvaluator`s. */
+const SCRIPT_CACHE_SIZE = 64;
 
 const cloneRedeemers = (redeemers: readonly EvalRedeemer[]): EvalRedeemer[] =>
   redeemers.map((redeemer) => ({
@@ -156,10 +166,15 @@ const cloneRedeemers = (redeemers: readonly EvalRedeemer[]): EvalRedeemer[] =>
  * The Scalus evaluator. Like the built-in one, it remembers its last
  * successful request and returns that result again when the next request is
  * the same (transaction bytes, resolved UTxOs, cost models, slot
- * configuration and protocol version); evaluation is deterministic. Failures
- * are not remembered. It also keeps the Scalus `Utxo` of each resolved UTxO
- * of its latest request, since one completion evaluates the same inputs
- * repeatedly; those the latest request did not use are dropped.
+ * configuration, protocol version and transaction budget); evaluation is
+ * deterministic. Failures are not remembered. It also keeps the Scalus `Utxo`
+ * of each resolved UTxO of its latest request, since one completion evaluates
+ * the same inputs repeatedly; those the latest request did not use are
+ * dropped.
+ *
+ * It keeps one Scalus `TxEvaluator`, which prepares the cost models once, and
+ * builds a new one only when the parameters change. Its `TxEvaluator`s share
+ * one `ScriptCache`, so a script is hashed and decoded once.
  */
 export const createScalusEvaluator = (
   options: ScalusEvaluatorOptions = {},
@@ -167,6 +182,10 @@ export const createScalusEvaluator = (
   let previous:
     | { request: ScalusRequest; redeemers: EvalRedeemer[] }
     | undefined;
+  let current:
+    | { parameters: EvaluationParameters; evaluator: TxEvaluator }
+    | undefined;
+  let scriptCache: ScriptCache | undefined;
   // Conversions used by the latest request, by out-ref.
   let converted = new Map<string, { utxo: UTxO; handle: Utxo }>();
 
@@ -192,21 +211,72 @@ export const createScalusEvaluator = (
     };
   };
 
-  const sameRequest = (
-    request: ScalusRequest,
-    { tx, additionalUTxOs, context }: EvaluationBytesInput,
+  const sameParameters = (
+    parameters: EvaluationParameters,
+    { context }: EvaluationBytesInput,
     protocolMajorVersion: number,
   ): boolean =>
-    sameBytes(request.tx, tx) &&
-    request.utxos.length === additionalUTxOs.length &&
-    request.utxos.every((utxo, index) =>
-      sameUTxO(utxo, additionalUTxOs[index]),
+    sameCostModels(
+      parameters.costModels,
+      context.protocolParameters.costModels,
     ) &&
-    sameCostModels(request.costModels, context.protocolParameters.costModels) &&
-    request.zeroTime === context.slotConfig.zeroTime &&
-    request.zeroSlot === context.slotConfig.zeroSlot &&
-    request.slotLength === context.slotConfig.slotLength &&
-    request.protocolMajorVersion === protocolMajorVersion;
+    parameters.zeroTime === context.slotConfig.zeroTime &&
+    parameters.zeroSlot === context.slotConfig.zeroSlot &&
+    parameters.slotLength === context.slotConfig.slotLength &&
+    parameters.protocolMajorVersion === protocolMajorVersion &&
+    parameters.maxTxExMem === context.protocolParameters.maxTxExMem &&
+    parameters.maxTxExSteps === context.protocolParameters.maxTxExSteps;
+
+  const sameRequest = (
+    request: ScalusRequest,
+    input: EvaluationBytesInput,
+    protocolMajorVersion: number,
+  ): boolean =>
+    sameBytes(request.tx, input.tx) &&
+    request.utxos.length === input.additionalUTxOs.length &&
+    request.utxos.every((utxo, index) =>
+      sameUTxO(utxo, input.additionalUTxOs[index]),
+    ) &&
+    sameParameters(request.parameters, input, protocolMajorVersion);
+
+  /** The `TxEvaluator` for these parameters: the current one, or a new one. */
+  const txEvaluator = (
+    scalus: Scalus,
+    input: EvaluationBytesInput,
+    protocolMajorVersion: number,
+  ): { parameters: EvaluationParameters; evaluator: TxEvaluator } => {
+    if (
+      current &&
+      sameParameters(current.parameters, input, protocolMajorVersion)
+    )
+      return current;
+    const { slotConfig, protocolParameters } = input.context;
+    scriptCache ??= new scalus.ScriptCache(SCRIPT_CACHE_SIZE);
+    current = {
+      parameters: {
+        costModels: snapshotCostModels(protocolParameters.costModels),
+        zeroTime: slotConfig.zeroTime,
+        zeroSlot: slotConfig.zeroSlot,
+        slotLength: slotConfig.slotLength,
+        protocolMajorVersion,
+        maxTxExMem: protocolParameters.maxTxExMem,
+        maxTxExSteps: protocolParameters.maxTxExSteps,
+      },
+      evaluator: new scalus.TxEvaluator({
+        slotConfig,
+        costModels: protocolParameters.costModels,
+        protocolMajorVersion,
+        // The ledger limits a transaction's scripts together, so a transaction over the budget
+        // fails here rather than on submission.
+        maxBudget: {
+          memory: protocolParameters.maxTxExMem,
+          steps: protocolParameters.maxTxExSteps,
+        },
+        scriptCache,
+      }),
+    };
+    return current;
+  };
 
   const evaluateBytes = async (
     input: EvaluationBytesInput,
@@ -221,32 +291,21 @@ export const createScalusEvaluator = (
     previous = undefined;
     const scalus = await loadScalus();
     const { utxos, handles } = toScalusUtxos(scalus, additionalUTxOs);
-    // A copy, so later changes to the caller's bytes cannot alter the key.
-    const request: ScalusRequest = {
-      tx: tx.slice(),
-      utxos,
-      costModels: snapshotCostModels(context.protocolParameters.costModels),
-      zeroTime: context.slotConfig.zeroTime,
-      zeroSlot: context.slotConfig.zeroSlot,
-      slotLength: context.slotConfig.slotLength,
+    const { parameters, evaluator } = txEvaluator(
+      scalus,
+      input,
       protocolMajorVersion,
-    };
-    const redeemers = scalus.evaluator
-      .evaluateTx(
-        tx,
-        handles,
-        context.slotConfig,
-        context.protocolParameters.costModels,
-        protocolMajorVersion,
-      )
-      .map((redeemer) => ({
-        redeemer_tag: mapScalusTag(redeemer.tag),
-        redeemer_index: redeemer.index,
-        ex_units: {
-          mem: Number(redeemer.budget.memory),
-          steps: Number(redeemer.budget.steps),
-        },
-      }));
+    );
+    // A copy, so later changes to the caller's bytes cannot alter the key.
+    const request: ScalusRequest = { tx: tx.slice(), utxos, parameters };
+    const redeemers = evaluator.evaluate(tx, handles).map((redeemer) => ({
+      redeemer_tag: mapScalusTag(redeemer.tag),
+      redeemer_index: redeemer.index,
+      ex_units: {
+        mem: Number(redeemer.budget.memory),
+        steps: Number(redeemer.budget.steps),
+      },
+    }));
     previous = { request, redeemers: cloneRedeemers(redeemers) };
     return redeemers;
   };

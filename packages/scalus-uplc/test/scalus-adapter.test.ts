@@ -7,7 +7,8 @@ import {
 import { createScalusEvaluator, mapScalusTag } from "../src/index.js";
 
 const mocks = vi.hoisted(() => ({
-  evaluateTx: vi.fn((..._args: unknown[]): unknown[] => []),
+  evaluate: vi.fn((..._args: unknown[]): unknown[] => []),
+  evaluators: [] as { options: Record<string, unknown> }[],
   utxosBuilt: 0,
 }));
 
@@ -46,7 +47,18 @@ vi.mock("scalus", () => {
       readonly quantity: bigint,
     ) {}
   }
-  return { Utxo, Value, Asset, evaluator: { evaluateTx: mocks.evaluateTx } };
+  class ScriptCache {
+    constructor(readonly maxEntries: number) {}
+  }
+  class TxEvaluator {
+    constructor(readonly options: Record<string, unknown>) {
+      mocks.evaluators.push(this);
+    }
+    evaluate(...args: unknown[]) {
+      return mocks.evaluate(...args);
+    }
+  }
+  return { Utxo, Value, Asset, ScriptCache, TxEvaluator };
 });
 
 const COST_MODELS = {
@@ -58,7 +70,12 @@ const COST_MODELS = {
 const protocolParameters = (
   overrides: Partial<ProtocolParameters> = {},
 ): ProtocolParameters =>
-  ({ costModels: COST_MODELS, ...overrides }) as ProtocolParameters;
+  ({
+    costModels: COST_MODELS,
+    maxTxExMem: 14_000_000n,
+    maxTxExSteps: 10_000_000_000n,
+    ...overrides,
+  }) as ProtocolParameters;
 
 const input = (overrides: Partial<ProtocolParameters> = {}): EvaluationInput =>
   ({
@@ -70,13 +87,17 @@ const input = (overrides: Partial<ProtocolParameters> = {}): EvaluationInput =>
     },
   }) as unknown as EvaluationInput;
 
+/** The options of the `TxEvaluator` the adapter built last. */
+const lastOptions = () => mocks.evaluators.at(-1)?.options;
+
 /** The protocol major version the adapter handed to Scalus on its last call. */
-const versionPassed = () => mocks.evaluateTx.mock.calls.at(-1)?.[4];
+const versionPassed = () => lastOptions()?.protocolMajorVersion;
 
 describe("scalus evaluator adapter", () => {
   beforeEach(() => {
-    mocks.evaluateTx.mockReset();
-    mocks.evaluateTx.mockReturnValue([]);
+    mocks.evaluate.mockReset();
+    mocks.evaluate.mockReturnValue([]);
+    mocks.evaluators = [];
     mocks.utxosBuilt = 0;
   });
 
@@ -96,7 +117,7 @@ describe("scalus evaluator adapter", () => {
   });
 
   test("converts Scalus redeemer results into Lucid evaluator results", async () => {
-    mocks.evaluateTx.mockReturnValue([
+    mocks.evaluate.mockReturnValue([
       { tag: "Mint", index: 1, budget: { memory: 1000n, steps: 2000n } },
     ]);
     await expect(createScalusEvaluator().evaluate(input())).resolves.toEqual([
@@ -110,7 +131,7 @@ describe("scalus evaluator adapter", () => {
 
   test("passes the cost models through untouched", async () => {
     await createScalusEvaluator().evaluate(input());
-    expect(mocks.evaluateTx.mock.calls[0]?.[3]).toBe(COST_MODELS);
+    expect(lastOptions()?.costModels).toBe(COST_MODELS);
   });
 
   test("prefers the version the option names", async () => {
@@ -147,12 +168,12 @@ describe("scalus evaluator adapter", () => {
   const MINT = [{ tag: "Mint", index: 0, budget: { memory: 10n, steps: 20n } }];
 
   test("an identical request is evaluated once, and callers get their own copies", async () => {
-    mocks.evaluateTx.mockReturnValue(MINT);
+    mocks.evaluate.mockReturnValue(MINT);
     const evaluator = createScalusEvaluator();
     const first = await evaluator.evaluate(withUTxOs([utxo(5n)]));
     first[0].ex_units.mem = 0;
     const second = await evaluator.evaluate(withUTxOs([utxo(5n)]));
-    expect(mocks.evaluateTx).toHaveBeenCalledTimes(1);
+    expect(mocks.evaluate).toHaveBeenCalledTimes(1);
     expect(second).toEqual([
       {
         redeemer_tag: "mint",
@@ -190,11 +211,23 @@ describe("scalus evaluator adapter", () => {
         slotConfig: { zeroTime: 0, zeroSlot: 0, slotLength: 20 },
       },
     });
-    expect(mocks.evaluateTx).toHaveBeenCalledTimes(6);
+    const budget = withUTxOs([utxo(6n)], {
+      costModels: { ...COST_MODELS, PlutusV3: [7, 8, 10] },
+      protocolMajorVersion: 10,
+      maxTxExMem: 1n,
+    });
+    await evaluator.evaluate({
+      ...budget,
+      context: {
+        ...budget.context,
+        slotConfig: { zeroTime: 0, zeroSlot: 0, slotLength: 20 },
+      },
+    });
+    expect(mocks.evaluate).toHaveBeenCalledTimes(7);
   });
 
   test("a failed evaluation is not remembered", async () => {
-    mocks.evaluateTx.mockImplementationOnce(() => {
+    mocks.evaluate.mockImplementationOnce(() => {
       throw new Error("script failed");
     });
     const evaluator = createScalusEvaluator();
@@ -204,7 +237,7 @@ describe("scalus evaluator adapter", () => {
     await expect(evaluator.evaluate(withUTxOs([utxo(5n)]))).resolves.toEqual(
       [],
     );
-    expect(mocks.evaluateTx).toHaveBeenCalledTimes(2);
+    expect(mocks.evaluate).toHaveBeenCalledTimes(2);
   });
 
   test("reuses the Scalus Utxo of an unchanged UTxO and converts a changed one", async () => {
@@ -213,13 +246,13 @@ describe("scalus evaluator adapter", () => {
       ...withUTxOs([utxo(5n), utxo(7n, 1)]),
       tx: "01",
     });
-    const [, firstHandles] = mocks.evaluateTx.mock.calls[0] as unknown[][];
+    const [, firstHandles] = mocks.evaluate.mock.calls[0] as unknown[][];
     expect(mocks.utxosBuilt).toBe(2);
     await evaluator.evaluate({
       ...withUTxOs([utxo(5n), utxo(8n, 1)]),
       tx: "02",
     });
-    const [, secondHandles] = mocks.evaluateTx.mock.calls[1] as unknown[][];
+    const [, secondHandles] = mocks.evaluate.mock.calls[1] as unknown[][];
     expect(mocks.utxosBuilt).toBe(3);
     expect(secondHandles[0]).toBe(firstHandles[0]);
     expect(secondHandles[1]).not.toBe(firstHandles[1]);
@@ -231,8 +264,56 @@ describe("scalus evaluator adapter", () => {
     await evaluator.evaluate({ ...withUTxOs([mutable]), tx: "01" });
     mutable.assets.lovelace = 9n;
     await evaluator.evaluate({ ...withUTxOs([mutable]), tx: "01" });
-    expect(mocks.evaluateTx).toHaveBeenCalledTimes(2);
+    expect(mocks.evaluate).toHaveBeenCalledTimes(2);
     expect(mocks.utxosBuilt).toBe(2);
+  });
+
+  test("passes the transaction budget as the evaluator's maxBudget", async () => {
+    await createScalusEvaluator().evaluate(
+      input({ maxTxExMem: 5n, maxTxExSteps: 7n }),
+    );
+    expect(lastOptions()?.maxBudget).toEqual({ memory: 5n, steps: 7n });
+  });
+
+  test("keeps one TxEvaluator while the parameters stay the same", async () => {
+    const evaluator = createScalusEvaluator();
+    await evaluator.evaluate({ ...withUTxOs([utxo(5n)]), tx: "01" });
+    await evaluator.evaluate({ ...withUTxOs([utxo(6n)]), tx: "02" });
+    expect(mocks.evaluate).toHaveBeenCalledTimes(2);
+    expect(mocks.evaluators).toHaveLength(1);
+  });
+
+  test("builds a new TxEvaluator when a parameter changes, with the same ScriptCache", async () => {
+    const evaluator = createScalusEvaluator();
+    await evaluator.evaluate({ ...withUTxOs([utxo(5n)]), tx: "01" });
+    await evaluator.evaluate({
+      ...withUTxOs([utxo(5n)], {
+        costModels: { ...COST_MODELS, PlutusV3: [7, 8, 10] },
+      }),
+      tx: "01",
+    });
+    await evaluator.evaluate({
+      ...withUTxOs([utxo(5n)], {
+        costModels: { ...COST_MODELS, PlutusV3: [7, 8, 10] },
+        maxTxExSteps: 1n,
+      }),
+      tx: "01",
+    });
+    expect(mocks.evaluators).toHaveLength(3);
+    const [first, second, third] = mocks.evaluators;
+    expect(second.options.costModels).toEqual({
+      ...COST_MODELS,
+      PlutusV3: [7, 8, 10],
+    });
+    expect(first.options.scriptCache).toBeDefined();
+    expect(second.options.scriptCache).toBe(first.options.scriptCache);
+    expect(third.options.scriptCache).toBe(first.options.scriptCache);
+  });
+
+  test("two adapters do not share a TxEvaluator", async () => {
+    await createScalusEvaluator().evaluate(input());
+    await createScalusEvaluator().evaluate(input());
+    expect(mocks.evaluators).toHaveLength(2);
   });
 
   test("evaluateBytes passes the bytes through and is not enumerable", async () => {
@@ -241,6 +322,6 @@ describe("scalus evaluator adapter", () => {
     const tx = new Uint8Array([0x84, 0x01]);
     const { tx: _hex, ...rest } = input();
     await evaluator.evaluateBytes!({ ...rest, tx });
-    expect(mocks.evaluateTx.mock.calls[0]?.[0]).toBe(tx);
+    expect(mocks.evaluate.mock.calls[0]?.[0]).toBe(tx);
   });
 });
