@@ -88,6 +88,17 @@ export const AssetSchema = S.Struct({
 
 export interface Asset extends S.Schema.Type<typeof AssetSchema> {}
 
+// Koios usually returns `asset_list` as a JSON array, but for some fields it
+// returns the list as a JSON-encoded string instead — observed on the
+// collateral output of `tx_info` responses, where an empty list arrives as
+// the string "[]" and decoding the whole response fails:
+// https://github.com/Anastasia-Labs/lucid-evolution/issues/677
+// Accept both shapes; the decoded value is always an array.
+export const AssetListSchema = S.Union(
+  S.Array(AssetSchema),
+  S.parseJson(S.Array(AssetSchema)),
+);
+
 const ReferenceScriptSchema = S.Struct({
   hash: S.NullOr(S.String),
   size: S.NullOr(S.Number),
@@ -99,6 +110,34 @@ const ReferenceScriptSchema = S.Struct({
 export interface ReferenceScript
   extends S.Schema.Type<typeof ReferenceScriptSchema> {}
 
+// Koios returns `inline_datum` as an object with null fields when an output
+// carries a datum hash instead of an inline datum, e.g.
+// { "bytes": null, "value": null } in `tx_info` responses. Normalize that
+// shape to null, so the decoded value only ever describes a real inline
+// datum and consumers can fall back to `datum_hash`.
+const InlineDatumSchema = S.transform(
+  S.NullOr(
+    S.Struct({
+      bytes: S.NullOr(S.String),
+      value: S.NullOr(S.Object),
+    }),
+  ),
+  S.NullOr(
+    S.Struct({
+      bytes: S.String,
+      value: S.Object,
+    }),
+  ),
+  {
+    strict: true,
+    decode: (datum) =>
+      datum && datum.bytes !== null && datum.value !== null
+        ? { bytes: datum.bytes, value: datum.value }
+        : null,
+    encode: (datum) => datum,
+  },
+);
+
 export const UTxOSchema = S.Struct({
   tx_hash: S.String,
   tx_index: S.Number,
@@ -106,14 +145,9 @@ export const UTxOSchema = S.Struct({
   block_height: S.NullOr(S.Number),
   value: S.String,
   datum_hash: S.NullOr(S.String),
-  inline_datum: S.NullOr(
-    S.Struct({
-      bytes: S.String,
-      value: S.Object,
-    }),
-  ),
+  inline_datum: InlineDatumSchema,
   reference_script: S.NullOr(ReferenceScriptSchema),
-  asset_list: S.NullOr(S.Array(AssetSchema)),
+  asset_list: S.NullOr(AssetListSchema),
 });
 
 export interface UTxO extends S.Schema.Type<typeof UTxOSchema> {}
@@ -142,14 +176,9 @@ export const InputOutputSchema = S.Struct({
   tx_index: S.Number,
   value: S.String,
   datum_hash: S.NullOr(S.String),
-  inline_datum: S.NullOr(
-    S.Struct({
-      bytes: S.String,
-      value: S.Object,
-    }),
-  ),
+  inline_datum: InlineDatumSchema,
   reference_script: S.NullOr(ReferenceScriptSchema),
-  asset_list: S.Array(AssetSchema),
+  asset_list: AssetListSchema,
 });
 
 export interface InputOutput extends S.Schema.Type<typeof InputOutputSchema> {}
@@ -183,7 +212,7 @@ export const TxInfoSchema = S.Struct({
       }),
     ),
   ),
-  assets_minted: S.NullOr(S.Array(AssetSchema)),
+  assets_minted: S.NullOr(AssetListSchema),
   metadata: S.NullOr(S.Object),
   certificates: S.NullOr(
     S.Array(
